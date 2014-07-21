@@ -25,7 +25,7 @@ public partial class InputManager
             }
             if (Input.GetMouseButton(0))
             {
-                OnMouseClick(new MouseEventArgs(Input.mousePosition.x, Input.mousePosition.y, 1, MouseEventArgs.ButtonState.Hold));
+                OnMouseClick(new MouseEventArgs(Input.mousePosition.x, Input.mousePosition.y, 0, MouseEventArgs.ButtonState.Hold));
             }
 
             //right clicks
