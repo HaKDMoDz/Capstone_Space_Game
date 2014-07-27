@@ -8,16 +8,21 @@ public class AICube : MonoBehaviour
     bool moveLeft = true;
 
     Transform _trans;
+    Color originalColor;
+    Material _mat;
 
     void Start()
     {
         _trans = transform;
+        _mat = renderer.material;
+        originalColor = _mat.color;
     }
     public IEnumerator StartTurn()
     {
         Debug.Log("AI Start Turn");
-
+        _mat.color = Color.green;
         yield return StartCoroutine(Move());
+        _mat.color = originalColor;
     }
     IEnumerator Move()
     {

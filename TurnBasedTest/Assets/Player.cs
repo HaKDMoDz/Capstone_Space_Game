@@ -6,60 +6,96 @@ public class Player : MonoBehaviour
     public int groundLayer;
     public float movementEpsilon = 0.2f;
 
-    Vector3 destination;
-    bool moving = false;
+    public GameObject projectile;
+
     Transform _trans;
 
-    void Start()
+    public int maxActionPoints = 2;
+    int currentAP;
+
+    Color originalColor;
+    Material _mat;
+
+    bool active;
+
+    void Awake()
     {
         _trans = transform;
-        InputManager.Instance.OnMouseClick += MouseClick;
+        _mat = renderer.material;
+        originalColor = _mat.color;
     }
 
     public IEnumerator StartTurn()
     {
-        Debug.Log("Start turn");
-        while (!Input.GetKeyDown(KeyCode.Space))
-        {
-            if (moving)
-            {
-                Vector3 moveDir = destination - _trans.position;
-                if (Vector3.SqrMagnitude(moveDir) > movementEpsilon * movementEpsilon)
-                {
-                    _trans.Translate(moveDir * Time.deltaTime);
+        Debug.Log("Start Player Turn");
+        _mat.color = Color.green;
+        active = true;
+        currentAP = maxActionPoints;
 
-                }
-                else
-                {
-                    moving = false;
-                    Debug.Log("end move");
-                }
+        while(!Input.GetKeyDown(KeyCode.Space) && currentAP>0)
+        {
+            if(Input.GetMouseButtonDown(1))
+            {
+                currentAP--;
+                yield return StartCoroutine(Move(Input.mousePosition));
             }
+            else if(Input.GetMouseButtonDown(0))
+            {
+                currentAP--;
+                yield return StartCoroutine(Shoot(Input.mousePosition));
+            }
+            
             yield return null;
         }
-        moving = false;
+        _mat.color = originalColor;
+        active = false;
     }
 
-    void MouseClick(MouseEventArgs args)
+    IEnumerator Move(Vector3 mousePos)
     {
-        if (args.button == 1 && args.buttonState == MouseEventArgs.ButtonState.Down)
+        Vector3 dest = GetWorldCoordsFromMouse(mousePos);
+        Vector3 moveDir = dest - _trans.position;
+        while(Vector3.SqrMagnitude(moveDir)>movementEpsilon*movementEpsilon)
         {
-            MoveTo(args.x, args.y);
+            _trans.Translate(moveDir * Time.deltaTime);
+            moveDir = dest - _trans.position;
+            yield return null;
         }
+        Debug.Log("End Movement");
     }
-    void MoveTo(float x, float y)
-    {
-        Debug.Log("move");
 
-        Ray ray = Camera.main.ScreenPointToRay(new Vector3(x, y, 0f));
+    IEnumerator Shoot(Vector3 mousePos)
+    {
+        Vector3 aimPos = GetWorldCoordsFromMouse(mousePos);
+        Vector3 shootDir = aimPos - _trans.position;
+        shootDir.Normalize();
+        GameObject bullet = Instantiate(projectile, _trans.position + _trans.forward, Quaternion.identity) as GameObject;
+        bullet.rigidbody.AddForce(shootDir * 500f);
+        yield return new WaitForSeconds(1f);
+    }
+
+   
+
+    Vector3 GetWorldCoordsFromMouse(Vector3 mousePos)
+    {
+        Ray ray = Camera.main.ScreenPointToRay(new Vector3(mousePos.x, mousePos.y, 0f));
         RaycastHit hit;
+
+        Vector3 worldCoords = _trans.position;
+
         if (Physics.Raycast(ray, out hit, 1000f, 1 << groundLayer))
         {
-            destination = hit.point;
-            destination.y = _trans.position.y;
-            moving = true;
+            worldCoords = hit.point;
+            worldCoords.y = _trans.position.y;
         }
+        return worldCoords;
     }
 
-
+    void OnGUI()
+    {
+        if(active)
+        {
+            GUI.Label(new Rect(5f, Screen.height - 75f, 500f, 50f), "<size=24> Action Points: " + currentAP + "</size>");
+        }
+    }
 }
