@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Player : MonoBehaviour
+public class Player : TurnBasedEntity
 {
     public int groundLayer;
     public float movementEpsilon = 0.2f;
@@ -16,7 +16,7 @@ public class Player : MonoBehaviour
     Color originalColor;
     Material _mat;
 
-    bool active;
+    bool activated;
 
     void Awake()
     {
@@ -25,14 +25,14 @@ public class Player : MonoBehaviour
         originalColor = _mat.color;
     }
 
-    public IEnumerator StartTurn()
+    public override IEnumerator StartTurn()
     {
         Debug.Log("Start Player Turn");
         _mat.color = Color.green;
-        active = true;
+        activated = true;
         currentAP = maxActionPoints;
 
-        while(!Input.GetKeyDown(KeyCode.Space) && currentAP>0)
+        while(!Input.GetKeyUp(KeyCode.Space) && currentAP>0)
         {
             if(Input.GetMouseButtonDown(1))
             {
@@ -48,7 +48,8 @@ public class Player : MonoBehaviour
             yield return null;
         }
         _mat.color = originalColor;
-        active = false;
+        activated = false;
+        yield return new WaitForSeconds(0.5f);
     }
 
     IEnumerator Move(Vector3 mousePos)
@@ -93,9 +94,10 @@ public class Player : MonoBehaviour
 
     void OnGUI()
     {
-        if(active)
+        if(activated)
         {
             GUI.Label(new Rect(5f, Screen.height - 75f, 500f, 50f), "<size=24> Action Points: " + currentAP + "</size>");
+            GUI.Label(new Rect(5f, Screen.height - 45f, 500f, 50f), "<size=24> Initiative: " + initiative + "</size>");
         }
     }
 }

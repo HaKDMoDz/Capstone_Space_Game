@@ -46,11 +46,7 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\AICube.cs" />
-     <Compile Include="Assets\AITurnController.cs" />
-     <Compile Include="Assets\GameController.cs" />
-     <Compile Include="Assets\Player.cs" />
-     <Compile Include="Assets\PlayerTurnController.cs" />
+     <Compile Include="Assets\Scripts\AICube.cs" />
      <Compile Include="Assets\Scripts\CoreEngine\ExtensionMethods.cs" />
      <Compile Include="Assets\Scripts\CoreEngine\Input\InputManager.Keyboard.cs" />
      <Compile Include="Assets\Scripts\CoreEngine\Input\InputManager.Mouse.cs" />
@@ -61,6 +57,12 @@
      <Compile Include="Assets\Scripts\CoreEngine\Input\MovementAxisArgs.cs" />
      <Compile Include="Assets\Scripts\CoreEngine\ObjectPool.cs" />
      <Compile Include="Assets\Scripts\CoreEngine\SingletonComponent.cs" />
+     <Compile Include="Assets\Scripts\InitiativeBasedTurns\TurnBasedEntity.cs" />
+     <Compile Include="Assets\Scripts\InitiativeBasedTurns\TurnController.cs" />
+     <Compile Include="Assets\Scripts\Player.cs" />
+     <Compile Include="Assets\Scripts\TeamBasedTurns\AITurnController.cs" />
+     <Compile Include="Assets\Scripts\TeamBasedTurns\GameController.cs" />
+     <Compile Include="Assets\Scripts\TeamBasedTurns\PlayerTurnController.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

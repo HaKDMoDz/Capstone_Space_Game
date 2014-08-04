@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AICube : MonoBehaviour 
+public class AICube : TurnBasedEntity 
 {
     public float movementEpsilon = 0.2f;
     
@@ -11,18 +11,24 @@ public class AICube : MonoBehaviour
     Color originalColor;
     Material _mat;
 
+    bool activated;
+
     void Start()
     {
         _trans = transform;
         _mat = renderer.material;
         originalColor = _mat.color;
     }
-    public IEnumerator StartTurn()
+    public override IEnumerator StartTurn()
     {
         Debug.Log("AI Start Turn");
         _mat.color = Color.green;
+        activated = true;
+
         yield return StartCoroutine(Move());
         _mat.color = originalColor;
+        activated = false;
+        yield return new WaitForSeconds(0.5f);
     }
     IEnumerator Move()
     {
@@ -44,5 +50,11 @@ public class AICube : MonoBehaviour
         }
         moveLeft = !moveLeft;
     }
-
+    void OnGUI()
+    {
+        if (activated)
+        {
+            GUI.Label(new Rect(5f, Screen.height - 45f, 500f, 50f), "<size=24> Initiative: " + initiative + "</size>");
+        }
+    }
 }
