@@ -41,6 +41,11 @@ public class VoxelSystem : MonoBehaviour {
 				for (int z = 0; z < ZSize; ++z) {
 
 					blocks[x,y,z] = new Voxel();
+					if(x==0||y==0||z==0||x==XSize-1||y==YSize-1||z==ZSize-1)
+					{
+						blocks[x,y,z].locked = true;
+					}
+					else{ blocks[x,y,z].locked = false;}
 				}				
 			}
 		}
@@ -52,9 +57,12 @@ public class VoxelSystem : MonoBehaviour {
 	}
 	public void AddVoxel(VoxelPos voxel)
 	{
-		blocks [voxel.x, voxel.y, voxel.z].filled = true;
-
-		UpdateMesh ();
+		if (!blocks [voxel.x, voxel.y, voxel.z].locked) {
+			blocks [voxel.x, voxel.y, voxel.z].filled = true;
+			UpdateMesh ();
+		} else {
+			Debug.Log(".");
+		}	
 	}
 	public void RemoveVoxel(VoxelPos voxel)
 	{
