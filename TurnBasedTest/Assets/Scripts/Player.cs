@@ -18,33 +18,34 @@ public class Player : TurnBasedEntity
 
     bool activated;
 
-    void Awake()
+    public override void Awake()
     {
         _trans = transform;
         _mat = renderer.material;
         originalColor = _mat.color;
+        base.Awake();
     }
-
+    
     public override IEnumerator StartTurn()
     {
-        Debug.Log("Start Player Turn");
+        //Debug.Log("Start Player Turn");
         _mat.color = Color.green;
         activated = true;
         currentAP = maxActionPoints;
 
-        while(!Input.GetKeyUp(KeyCode.Space) && currentAP>0)
+        while (!Input.GetKeyUp(KeyCode.Space) && currentAP > 0)
         {
-            if(Input.GetMouseButtonDown(1))
+            if (Input.GetMouseButtonDown(1))
             {
                 currentAP--;
                 yield return StartCoroutine(Move(Input.mousePosition));
             }
-            else if(Input.GetMouseButtonDown(0))
+            else if (Input.GetMouseButtonDown(0))
             {
                 currentAP--;
                 yield return StartCoroutine(Shoot(Input.mousePosition));
             }
-            
+
             yield return null;
         }
         _mat.color = originalColor;
@@ -56,13 +57,13 @@ public class Player : TurnBasedEntity
     {
         Vector3 dest = GetWorldCoordsFromMouse(mousePos);
         Vector3 moveDir = dest - _trans.position;
-        while(Vector3.SqrMagnitude(moveDir)>movementEpsilon*movementEpsilon)
+        while (Vector3.SqrMagnitude(moveDir) > movementEpsilon * movementEpsilon)
         {
             _trans.Translate(moveDir * Time.deltaTime);
             moveDir = dest - _trans.position;
             yield return null;
         }
-        Debug.Log("End Movement");
+        //Debug.Log("End Movement");
     }
 
     IEnumerator Shoot(Vector3 mousePos)
@@ -75,7 +76,7 @@ public class Player : TurnBasedEntity
         yield return new WaitForSeconds(1f);
     }
 
-   
+
 
     Vector3 GetWorldCoordsFromMouse(Vector3 mousePos)
     {
@@ -94,10 +95,10 @@ public class Player : TurnBasedEntity
 
     void OnGUI()
     {
-        if(activated)
+        if (activated)
         {
             GUI.Label(new Rect(5f, Screen.height - 75f, 500f, 50f), "<size=24> Action Points: " + currentAP + "</size>");
-            GUI.Label(new Rect(5f, Screen.height - 45f, 500f, 50f), "<size=24> Initiative: " + initiative + "</size>");
+            GUI.Label(new Rect(5f, Screen.height - 45f, 500f, 50f), "<size=24> Initiative: " + turnDelay + "</size>");
         }
     }
 }

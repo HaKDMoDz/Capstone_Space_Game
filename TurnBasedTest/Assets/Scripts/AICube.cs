@@ -13,15 +13,16 @@ public class AICube : TurnBasedEntity
 
     bool activated;
 
-    void Start()
+    public override void Awake()
     {
         _trans = transform;
         _mat = renderer.material;
         originalColor = _mat.color;
+        base.Awake();
     }
     public override IEnumerator StartTurn()
     {
-        Debug.Log("AI Start Turn");
+        //Debug.Log("AI Start Turn");
         _mat.color = Color.green;
         activated = true;
 
@@ -54,7 +55,7 @@ public class AICube : TurnBasedEntity
     {
         if (activated)
         {
-            GUI.Label(new Rect(5f, Screen.height - 45f, 500f, 50f), "<size=24> Initiative: " + initiative + "</size>");
+            GUI.Label(new Rect(5f, Screen.height - 45f, 500f, 50f), "<size=24> turnDelay: " + turnDelay + "</size>");
         }
     }
 }

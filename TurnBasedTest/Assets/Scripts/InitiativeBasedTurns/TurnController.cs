@@ -20,7 +20,7 @@ public class TurnController : MonoBehaviour
         entities.AddRange(aiCubes);
 
         //sort turn list based on initiative
-        entities = entities.OrderBy(entity => entity.initiative).ToList<TurnBasedEntity>();
+        entities = entities.OrderBy(entity => entity.turnDelay).ToList<TurnBasedEntity>();
 
         StartCoroutine(PlayGame());
     }

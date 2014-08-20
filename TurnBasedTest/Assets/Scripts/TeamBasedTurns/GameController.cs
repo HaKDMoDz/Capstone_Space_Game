@@ -20,13 +20,13 @@ public class GameController : SingletonComponent<GameController>
     
     IEnumerator PlayerTurn()
     {
-        Debug.Log("player turn");
+        //Debug.Log("player turn");
         yield return StartCoroutine(PlayerTurnController.Instance.ExecutePlayerTurn());
     }
 
     IEnumerator AITurn()
     {
-        Debug.Log("AI turn");
+        //Debug.Log("AI turn");
         yield return StartCoroutine(AITurnController.Instance.ExecuteAITurn());
     }
 
