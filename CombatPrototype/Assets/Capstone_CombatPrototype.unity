@@ -2233,6 +2233,8 @@ GameObject:
   - 4: {fileID: 598279734}
   - 114: {fileID: 598279735}
   - 114: {fileID: 598279736}
+  - 114: {fileID: 598279737}
+  - 114: {fileID: 598279738}
   m_Layer: 0
   m_Name: OmegaFighter
   m_TagString: Untagged
@@ -2247,11 +2249,12 @@ Transform:
   m_PrefabInternal: {fileID: 781307973}
   m_GameObject: {fileID: 598279733}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.00457001, y: 33.3273773, z: 22.3982391}
+  m_LocalPosition: {x: -3.00457001, y: 0, z: 22.3982391}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 554167541}
   - {fileID: 494863025}
+  - {fileID: 1079631244}
   m_Father: {fileID: 0}
   m_RootOrder: 4
 --- !u!114 &598279735
@@ -2265,7 +2268,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98c444392284db345b762eb06d32c4d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  turnDelay: 3.45000005
+  turnDelay: 7.69000006
   unitName: OmegaFighter
 --- !u!114 &598279736
 MonoBehaviour:
@@ -2278,6 +2281,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6dc6e4382756df49b49f83bba5cc532, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveSpeed: 3
+  turnSpeed: 0
+  movementEpsilon: .300000012
+--- !u!114 &598279737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 598279733}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28331951f1e8e4d449e17e7eb2104827, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  projectilePrefab: {fileID: 100000, guid: a89e887428ebbf2458e6ecdf06484d1b, type: 2}
+  shootPoint: {fileID: 1079631244}
+--- !u!114 &598279738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 598279733}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a185fa1aabe471041a72b0f57e4907bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  components:
+  - {fileID: 11400000, guid: 87a82987c8ecbf8429def6157b94bfde, type: 2}
+  - {fileID: 11400000, guid: 87a82987c8ecbf8429def6157b94bfde, type: 2}
+  - {fileID: 11400000, guid: 8822c310e67f6ce49be216927de40dd7, type: 2}
+  - {fileID: 11400000, guid: 8822c310e67f6ce49be216927de40dd7, type: 2}
+  - {fileID: 11400000, guid: 3fc9364040c14734ab837f9ec437a468, type: 2}
+  weapons: []
 --- !u!1 &629838233
 GameObject:
   m_ObjectHideFlags: 0
@@ -2560,7 +2597,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: e0b6790f414d3c442a65972c4d398e36, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 33.3273773
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: e0b6790f414d3c442a65972c4d398e36, type: 2}
       propertyPath: m_LocalPosition.z
@@ -5197,6 +5234,33 @@ Prefab:
   m_RootGameObject: {fileID: 1910631698}
   m_IsPrefabParent: 0
   m_IsExploded: 1
+--- !u!1 &1079631243
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1079631244}
+  m_Layer: 0
+  m_Name: ShootPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1079631244
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1079631243}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 26.3456306}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 598279734}
+  m_RootOrder: 2
 --- !u!1 &1087347230
 GameObject:
   m_ObjectHideFlags: 0
@@ -7929,6 +7993,7 @@ GameObject:
   - 4: {fileID: 1837331108}
   - 114: {fileID: 1837331107}
   - 114: {fileID: 1837331109}
+  - 114: {fileID: 1837331110}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -7975,6 +8040,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   combatOn: 1
+--- !u!114 &1837331110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1837331106}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74a6614930714784aab8c6c4c216fcb8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  groundLayer: 8
 --- !u!1 &1854230510
 GameObject:
   m_ObjectHideFlags: 0

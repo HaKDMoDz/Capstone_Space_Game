@@ -181,6 +181,18 @@ public static class ExtensionMethods
     }
     #endregion
 
+    #region Coroutine extensions
+
+    //public static Coroutine WaitForKeyboardInput(this MonoBehaviour monobe KeyCode keyCode)
+    //{
+    //    while(!Input.GetKeyDown(keyCode))
+    //    {
+    //        yield return null;
+    //    }
+    //}
+
+
+    #endregion
 
 }
 

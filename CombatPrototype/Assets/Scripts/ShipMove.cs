@@ -11,7 +11,7 @@ public class ShipMove : MonoBehaviour
     public float turnSpeed;
 
     [SerializeField]
-    float movementEpsilon;
+    float movementEpsilon=0.2f;
 
     //cached components
     Transform trans;
@@ -33,6 +33,7 @@ public class ShipMove : MonoBehaviour
             yield return null;
 
         }
+        Debug.Log("Movement End");
 
     }
 

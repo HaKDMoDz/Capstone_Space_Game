@@ -8,7 +8,6 @@ public class TurnBasedUnit : MonoBehaviour
     public string unitName;
 
     private float timeLeftToTurn;
-
     public float TimeLeftToTurn
     {
         get { return timeLeftToTurn; }
@@ -26,12 +25,15 @@ public class TurnBasedUnit : MonoBehaviour
         }
     }
 
+    //cached components
     protected Projector projector;
-
+    protected Transform trans;
+    
     public virtual void Awake()
     {
         TimeLeftToTurn = turnDelay;
         projector = GetComponentInChildren<Projector>();
+        trans = transform;
 
     }
     public virtual IEnumerator ExecuteTurn()
