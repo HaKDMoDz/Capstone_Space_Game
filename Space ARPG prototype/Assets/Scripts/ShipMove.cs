@@ -8,7 +8,7 @@ public class MovementProperties
     public float moveForce = 10f;
     public float afterburnerForce = 25f;
     public float maxSpeed = 15f;
-    public float decelerationTime = 2.0f;
+    public float decelerationTime = 0.5f;
     public float brakeTime = 0.75f;
 }
 

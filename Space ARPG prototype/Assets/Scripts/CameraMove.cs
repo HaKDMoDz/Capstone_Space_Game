@@ -4,9 +4,9 @@ using System.Collections;
 public class CameraMove : MonoBehaviour 
 {
 
-    public float zoomSpeed = 8f;
-    public float minFov = 20.0f;
-    public float maxFov = 85.0f;
+    private float zoomSpeed = 1000.0f;
+    private float minSize = 8.0f;
+    private float maxSize = 30.0f;
 
     ShipMove shipMove;
     Transform _trans;
@@ -27,8 +27,10 @@ public class CameraMove : MonoBehaviour
 
     void OnMouseScroll(MouseScrollEventArgs args)
     {
-        _cam.fieldOfView -= args.scrollSpeed * zoomSpeed *Time.deltaTime;
-        _cam.fieldOfView = Mathf.Clamp(_cam.fieldOfView, minFov, maxFov);
+        //_cam.fieldOfView -= args.scrollSpeed * zoomSpeed *Time.deltaTime;
+        _cam.orthographicSize -= args.scrollSpeed * zoomSpeed * Time.deltaTime;
+        //_cam.fieldOfView = Mathf.Clamp(_cam.fieldOfView, minFov, maxFov);
+        _cam.orthographicSize = Mathf.Clamp(_cam.orthographicSize, minSize, maxSize);
     }
 
     void shipMove_OnShipMoved(Transform trans)
