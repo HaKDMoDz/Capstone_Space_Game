@@ -4,8 +4,9 @@ using System.Collections;
 public class Component_Weapon : ShipComponent 
 {
 
+    public float damage;
 
-    public IEnumerator Fire()
+    public virtual IEnumerator Fire()
     {
         yield return null;
     }

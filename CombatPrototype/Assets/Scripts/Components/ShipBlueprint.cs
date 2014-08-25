@@ -11,10 +11,9 @@ public class ShipBlueprint : MonoBehaviour
 
 
 
-    void Awake()
+    public void Init()
     {
         weapons = components.OfType<Component_Weapon>().ToList();
-
     }
 
 }

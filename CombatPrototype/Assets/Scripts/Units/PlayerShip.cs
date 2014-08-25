@@ -8,12 +8,20 @@ public class PlayerShip : TurnBasedUnit
     //cached components
     ShipMove shipMove;
     ShipAttack shipAttack;
+    ShipBlueprint shipBlueprint;
 
     public override void Awake()
     {
         base.Awake();
         shipMove = gameObject.GetSafeComponent<ShipMove>();
         shipAttack = gameObject.GetSafeComponent<ShipAttack>();
+        shipBlueprint = gameObject.GetSafeComponent<ShipBlueprint>();
+
+        //manual init to ensure correct intitialization order
+        shipBlueprint.Init();
+        shipMove.Init();
+        shipAttack.Init();
+
     }
 
 
