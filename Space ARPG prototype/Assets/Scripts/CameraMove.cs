@@ -31,6 +31,8 @@ public class CameraMove : MonoBehaviour
         _cam.orthographicSize -= args.scrollSpeed * zoomSpeed * Time.deltaTime;
         //_cam.fieldOfView = Mathf.Clamp(_cam.fieldOfView, minFov, maxFov);
         _cam.orthographicSize = Mathf.Clamp(_cam.orthographicSize, minSize, maxSize);
+
+        FatherTime.timeRate -= args.scrollSpeed;
     }
 
     void shipMove_OnShipMoved(Transform trans)

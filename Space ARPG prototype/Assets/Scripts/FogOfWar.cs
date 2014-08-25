@@ -12,6 +12,8 @@ public class FogOfWar : MonoBehaviour {
 	void Start () 
     {
         playerShip = GameObject.Find("PlayerShip").transform;
+
+
 	}
 	
 	// Update is called once per frame

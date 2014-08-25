@@ -24,8 +24,8 @@ public class CelestialObject : MonoBehaviour
 
         if (CheckReadyStatus())
         {
-            transform.RotateAround(orbitAroundThis.position, Vector3.up, rotateSpeed * Time.deltaTime);
-
+            transform.RotateAround(orbitAroundThis.position, Vector3.up, rotateSpeed * Time.deltaTime * FatherTime.timeRate);
+            //replace with proper celestial rotation code from ThrusterPrototype's galaxy code
         }
 	}
 
