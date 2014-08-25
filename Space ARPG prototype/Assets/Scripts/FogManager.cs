@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.IO;
 
 public class FogManager : MonoBehaviour 
 {
@@ -7,12 +8,22 @@ public class FogManager : MonoBehaviour
 
     public GameObject fog;
 
+    GameObject fogParent;
+
     float startX, startY, currX, currY;
 
     Transform topLeft, topRight, botLeft, botRight;
 
+    FogContainer fogData;
+
 	void Start () 
     {
+        fogData = FogContainer.Load(Path.Combine(Application.dataPath, "XML/fog.xml"));
+        string xmlData = @"<MonsterCollection><Monsters><Monster name=""a""><Health>5</Health></Monster></Monsters></MonsterCollection>";
+        fogData = FogContainer.LoadFromText(xmlData);
+
+        fogParent = GameObject.Find("FogOfWar");
+
         topLeft = GameObject.Find("TopLeft").transform;
         topRight = GameObject.Find("TopRight").transform;
         botLeft = GameObject.Find("BotLeft").transform;
@@ -24,7 +35,7 @@ public class FogManager : MonoBehaviour
         currX = startX;
         currY = startY;
 
-        Fogs = new GameObject[10000];
+        Fogs = new GameObject[2601];
 
         bool done = false;
         int numFog = 0;
@@ -36,6 +47,7 @@ public class FogManager : MonoBehaviour
                 numFog++;
 
                 Fogs[i] = GameObject.Instantiate(fog, new Vector3(currX, 5, currY), Quaternion.identity) as GameObject;
+                Fogs[i].transform.parent = fogParent.transform;
 
                 currX += fog.renderer.bounds.size.x;
                 if (currX >= topRight.position.x)
@@ -51,7 +63,9 @@ public class FogManager : MonoBehaviour
             }
             
         }
-        Debug.Log("numFog: " + numFog);
+        //Debug.Log("numFog: " + numFog); //shows number of fogs of war created
+
+        //fogData = 
 	}
 
 	void Update () 
