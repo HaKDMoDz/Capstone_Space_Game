@@ -64,7 +64,6 @@ public class TurnBasedCombatSystem : SingletonComponent<TurnBasedCombatSystem>
         units.AddRange(FindObjectsOfType<PlayerShip>().ToList<TurnBasedUnit>());
         //adds ai ships
         units.AddRange(FindObjectsOfType<AIShip>().ToList<TurnBasedUnit>());
-
     }
 
 

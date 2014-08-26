@@ -33,17 +33,20 @@ public class ShipAttack : MonoBehaviour
 
     public IEnumerator FireLasers(Vector3 aimPos)
     {
-
-        foreach (Comp_Weapon_Laser laser in lasers)
+        trans.LookAt(aimPos);
+        //foreach (Comp_Weapon_Laser laser in lasers)
+        for (int i = 0; i < lasers.Count; i++)
         {
-            laser.Fire(shootPoint);
+            lasers[i].Fire(shootPoint);
+            yield return new WaitForSeconds(0.1f);
         }
-
-        while (!firingComplete)
-        {
-            Debug.LogError("call back");
-            yield return null;
-        }
+        
+        
+        //while (!firingComplete)
+        //{
+        //    Debug.LogError("call back");
+        //    yield return null;
+        //}
 
 
         //Vector3 shootDir = aimPos - trans.position;
@@ -58,6 +61,12 @@ public class ShipAttack : MonoBehaviour
         yield return new WaitForSeconds(.75f);
         
     }
+
+    public void Hit()
+    {
+
+    }
+
     public IEnumerator FireMissiles(Vector3 aimPos)
     {
         Vector3 shootDir = aimPos - trans.position;

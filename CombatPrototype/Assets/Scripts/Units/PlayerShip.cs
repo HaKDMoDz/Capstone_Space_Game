@@ -67,7 +67,7 @@ public class PlayerShip : TurnBasedUnit
 
         Vector3 worldCoords = trans.position;
 
-        if (Physics.Raycast(ray, out hit, 1000f, 1 << GlobalConstants.Instance.groundLayer))
+        if (Physics.Raycast(ray, out hit, 1000f, 1 << GlobalTagsAndLayers.Instance.layers.groundLayer))
         {
             worldCoords = hit.point;
             worldCoords.y = trans.position.y;

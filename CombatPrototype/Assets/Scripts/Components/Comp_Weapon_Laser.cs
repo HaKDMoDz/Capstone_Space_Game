@@ -22,5 +22,12 @@ public class Comp_Weapon_Laser : Component_Weapon
         //return base.Fire();
         GameObject laserClone = Instantiate(projectilePrefab, shootPoint.position, shootPoint.rotation) as GameObject;
         laserClone.rigidbody.AddForce(shootPoint.forward * shootForce);
+        laserClone.GetComponent<Projectile_Laser>().ProjectileHitEvent += Comp_Weapon_Laser_ProjectileHitEvent;
     }
+
+    void Comp_Weapon_Laser_ProjectileHitEvent()
+    {
+        Debug.Log("proj hit");
+    }
+    
 }

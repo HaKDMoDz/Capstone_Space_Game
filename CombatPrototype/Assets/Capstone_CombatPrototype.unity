@@ -6854,7 +6854,7 @@ GameObject:
   - 136: {fileID: 1565147653}
   m_Layer: 0
   m_Name: Hades
-  m_TagString: Untagged
+  m_TagString: EnemyShip
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6895,7 +6895,7 @@ CapsuleCollider:
   m_PrefabInternal: {fileID: 1646385684}
   m_GameObject: {fileID: 1565147650}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 8.07999992
   m_Height: 39.3600006
@@ -6909,7 +6909,7 @@ CapsuleCollider:
   m_PrefabInternal: {fileID: 1646385684}
   m_GameObject: {fileID: 1565147650}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 8.07999992
   m_Height: 39.3600006
@@ -7343,6 +7343,18 @@ Prefab:
     - target: {fileID: 400000, guid: 01c3c8fd32b57e8478e4a146b1593c51, type: 2}
       propertyPath: m_RootMapOrder
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 13600000, guid: 01c3c8fd32b57e8478e4a146b1593c51, type: 2}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 13600002, guid: 01c3c8fd32b57e8478e4a146b1593c51, type: 2}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 01c3c8fd32b57e8478e4a146b1593c51, type: 2}
+      propertyPath: m_TagString
+      value: EnemyShip
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 01c3c8fd32b57e8478e4a146b1593c51, type: 2}
@@ -8051,7 +8063,7 @@ MonoBehaviour:
   gridWidth: 20
   gridLength: 20
   tilePrefab: {fileID: 100000, guid: 5ae3f688373dc78488cc8bace0a379bd, type: 2}
-  startPos: {x: -300, y: 0, z: 0}
+  startPos: {x: -300, y: -20, z: 0}
 --- !u!4 &1837331108
 Transform:
   m_ObjectHideFlags: 0
@@ -8087,7 +8099,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74a6614930714784aab8c6c4c216fcb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groundLayer: 8
+  layers:
+    groundLayer: 8
+  tags:
+    enemyShipTag: EnemyShip
 --- !u!1 &1854230510
 GameObject:
   m_ObjectHideFlags: 0
