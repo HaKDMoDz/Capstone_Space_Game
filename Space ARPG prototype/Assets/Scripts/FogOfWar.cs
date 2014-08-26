@@ -49,7 +49,7 @@ public class FogOfWar : MonoBehaviour {
             fadeTimer -= 25f;
 
             Color currColor = renderer.material.color;
-            currColor.a = (fadeTimer / 1000.0f);
+            currColor.a = (fadeTimer / 1000.0f) * renderer.material.color.a;
 
             renderer.material.color = currColor;
         }

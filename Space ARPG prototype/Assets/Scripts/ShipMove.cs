@@ -112,7 +112,7 @@ public class ShipMove : MonoBehaviour
                 if (Physics.Raycast(ray, out hit, 500, 1 << 8))
                 {
                     Vector3 target = new Vector3(hit.point.x, transform.position.y, hit.point.z);
-                    transform.position = Vector3.SmoothDamp(transform.position, target, ref velocity, moveProps.maxSpeed * Time.deltaTime * 10f);
+                    transform.position = Vector3.SmoothDamp(transform.position, target, ref velocity, moveProps.maxSpeed * Time.deltaTime * 20f);
                 }
                 break;
             case 2:
