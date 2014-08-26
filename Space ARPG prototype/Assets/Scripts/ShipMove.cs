@@ -16,6 +16,8 @@ public class MovementProperties
 public class ShipMove : MonoBehaviour
 {
 
+    Vector3 velocity = Vector3.zero;
+
     public MovementProperties moveProps;
     float camHeight;
 
@@ -97,7 +99,28 @@ public class ShipMove : MonoBehaviour
     }
     void MouseClick(MouseEventArgs args)
     {
+        switch (args.button)
+        {
+            case 0:
+                //Debug.Log("Left Mouse Button?");
+                break;
+            case 1:
+                //Debug.Log("Right Mouse Button?");
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
+                RaycastHit hit;
+                if (Physics.Raycast(ray, out hit, 500, 1 << 8))
+                {
+                    Vector3 target = new Vector3(hit.point.x, transform.position.y, hit.point.z);
+                    transform.position = Vector3.SmoothDamp(transform.position, target, ref velocity, moveProps.maxSpeed * Time.deltaTime * 10f);
+                }
+                break;
+            case 2:
+                //Debug.Log("Middle Mouse Button?");
+                break;
+            default:
+                break;
+        }
     }
     void KeyPress(KeyboardEventArgs args)
     {
