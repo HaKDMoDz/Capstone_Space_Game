@@ -1,24 +1,39 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class Projectile_Laser : Projectile
 {
+    Transform trans;
 
-
-    public override IEnumerator MoveProjectile()
+    void Awake()
     {
-        return base.MoveProjectile();
-
+        trans = transform;
     }
-
-    void OnTriggerEnter(Collider col)
+    public IEnumerator MoveProjectile(Vector3 destination, float period,Action OnComplete )
     {
-        if (col.tag == GlobalTagsAndLayers.Instance.tags.enemyShipTag)
+        float time = 0f;
+        Vector3 startPos = trans.position;
+        while(time<1f)
         {
-            OnProjectileHit();
-
+            trans.position = Vector3.Lerp(startPos, destination, time);
+            time += Time.deltaTime / period;
+            yield return null;
+        }
+        if(OnComplete!=null)
+        {
+            OnComplete();
         }
     }
+
+    //void OnTriggerEnter(Collider col)
+    //{
+    //    if (col.tag == GlobalTagsAndLayers.Instance.tags.enemyShipTag)
+    //    {
+    //        OnProjectileHit();
+
+    //    }
+    //}
 
 
 }

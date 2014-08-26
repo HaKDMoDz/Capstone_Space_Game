@@ -31,40 +31,30 @@ public class ShipAttack : MonoBehaviour
 
     
 
-    public IEnumerator FireLasers(Vector3 aimPos)
+    public IEnumerator Fire(Vector3 aimPos)
     {
+        firingComplete = false;
+        
         trans.LookAt(aimPos);
-        //foreach (Comp_Weapon_Laser laser in lasers)
+        Transform selectedTarget = GameObject.FindObjectOfType<AIShip>().transform;
+
         for (int i = 0; i < lasers.Count; i++)
         {
-            lasers[i].Fire(shootPoint);
+            lasers[i].Fire(shootPoint,selectedTarget, Hit);
             yield return new WaitForSeconds(0.1f);
         }
-        
-        
-        //while (!firingComplete)
-        //{
-        //    Debug.LogError("call back");
-        //    yield return null;
-        //}
 
 
-        //Vector3 shootDir = aimPos - trans.position;
-        //trans.LookAt(aimPos);
-        //shootDir.Normalize();
-        //for (int i = 0; i < 6; i++)
-        //{
-        //    GameObject projectile = Instantiate(projectilePrefab, shootPoint.position, shootPoint.rotation) as GameObject;
-        //    projectile.rigidbody.AddForce(shootDir * 7000f);
-        //    yield return new WaitForSeconds(0.1f);
-        //}
-        yield return new WaitForSeconds(.75f);
-        
+        while (!firingComplete)
+        {
+            yield return null;
+        }
+
     }
 
     public void Hit()
     {
-
+        firingComplete = true;
     }
 
     public IEnumerator FireMissiles(Vector3 aimPos)

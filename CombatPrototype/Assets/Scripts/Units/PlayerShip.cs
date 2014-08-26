@@ -40,15 +40,14 @@ public class PlayerShip : TurnBasedUnit
             {
                 yield return StartCoroutine(shipMove.Move(GetWorldCoordsFromMouse(Input.mousePosition)));
             }
-            //else if(Input.GetMouseButtonDown(0))
             else if(Input.GetKeyDown(KeyCode.Alpha1))
             {
-                yield return StartCoroutine(shipAttack.FireLasers(GetWorldCoordsFromMouse(Input.mousePosition)));
+                yield return StartCoroutine(shipAttack.Fire(GetWorldCoordsFromMouse(Input.mousePosition)));
             }
-            else if(Input.GetKeyDown(KeyCode.Alpha2))
-            {
-                yield return StartCoroutine(shipAttack.FireMissiles(GetWorldCoordsFromMouse(Input.mousePosition)));
-            }
+            //else if(Input.GetKeyDown(KeyCode.Alpha2))
+            //{
+            //    yield return StartCoroutine(shipAttack.FireMissiles(GetWorldCoordsFromMouse(Input.mousePosition)));
+            //}
             
             
             yield return null;

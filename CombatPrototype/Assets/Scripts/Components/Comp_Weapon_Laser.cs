@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class Comp_Weapon_Laser : Component_Weapon 
 {
@@ -8,26 +9,18 @@ public class Comp_Weapon_Laser : Component_Weapon
     [SerializeField]
     GameObject projectilePrefab;
     [SerializeField]
-    float shootForce = 7000f;
+    float projectileSpeed = 70f;
 
-    //public IEnumerator Fire(Transform shootPoint)
-    //{
-    //    //return base.Fire();
-    //    GameObject laserClone = Instantiate(projectilePrefab, shootPoint.position, shootPoint.rotation) as GameObject;
-    //    laserClone.rigidbody.AddForce(shootPoint.forward * shootForce);
-    //    yield return null;
-    //}
-    public void Fire(Transform shootPoint)
+    
+    public void Fire(Transform shootPoint,Transform target, Action OnHit )
     {
-        //return base.Fire();
         GameObject laserClone = Instantiate(projectilePrefab, shootPoint.position, shootPoint.rotation) as GameObject;
-        laserClone.rigidbody.AddForce(shootPoint.forward * shootForce);
-        laserClone.GetComponent<Projectile_Laser>().ProjectileHitEvent += Comp_Weapon_Laser_ProjectileHitEvent;
+        //laserClone.rigidbody.AddForce(shootPoint.forward * shootForce);
+        
+        float timeToImpact = Vector3.Distance(target.position, shootPoint.position) / projectileSpeed;
+        StartCoroutine(laserClone.GetComponent<Projectile_Laser>().MoveProjectile(target.position,timeToImpact,OnHit));
+
     }
 
-    void Comp_Weapon_Laser_ProjectileHitEvent()
-    {
-        Debug.Log("proj hit");
-    }
     
 }
