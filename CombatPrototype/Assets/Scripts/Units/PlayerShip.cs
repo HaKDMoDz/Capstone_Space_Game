@@ -10,6 +10,9 @@ public class PlayerShip : TurnBasedUnit
     ShipAttack shipAttack;
     ShipBlueprint shipBlueprint;
 
+    [SerializeField]
+    Camera componentCamera;
+
     public override void Awake()
     {
         base.Awake();
@@ -40,9 +43,11 @@ public class PlayerShip : TurnBasedUnit
             {
                 yield return StartCoroutine(shipMove.Move(GetWorldCoordsFromMouse(Input.mousePosition)));
             }
-            else if(Input.GetKeyDown(KeyCode.Alpha1))
+            //else if(Input.GetKeyDown(KeyCode.Alpha1))
+            if (Input.GetMouseButtonDown(0) && CheckClickOnComponent())
             {
-                yield return StartCoroutine(shipAttack.Fire(GetWorldCoordsFromMouse(Input.mousePosition)));
+                yield return StartCoroutine(ComponentSelectionSequence());
+                //yield return StartCoroutine(shipAttack.Fire(GetWorldCoordsFromMouse(Input.mousePosition)));
             }
             //else if(Input.GetKeyDown(KeyCode.Alpha2))
             //{
@@ -57,7 +62,16 @@ public class PlayerShip : TurnBasedUnit
         Debug.Log(unitName + " (PlayerShip) ends turn");
     }
 
+    IEnumerator ComponentSelectionSequence()
+    {
+        yield return null;
+    }
     
+    bool CheckClickOnComponent()
+    {
+        return Physics.Raycast(componentCamera.ScreenPointToRay(Input.mousePosition),
+            1000f,1<<GlobalTagsAndLayers.Instance.layers.componentsLayer);
+    }
 
     Vector3 GetWorldCoordsFromMouse(Vector3 mousePos)
     {

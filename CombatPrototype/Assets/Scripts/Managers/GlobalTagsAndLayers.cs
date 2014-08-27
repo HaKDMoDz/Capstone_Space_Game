@@ -11,7 +11,9 @@ public class GlobalTagsAndLayers : SingletonComponent<GlobalTagsAndLayers>
 [Serializable]
 public class Layers
 {
-    public int groundLayer;
+    public int groundLayer=8;
+    public int playerShipLayer=9;
+    public int componentsLayer=10;
 }
 [Serializable]
 public class Tags
