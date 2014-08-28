@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerShip : TurnBasedUnit
 {
@@ -13,6 +14,9 @@ public class PlayerShip : TurnBasedUnit
     [SerializeField]
     Camera componentCamera;
 
+    //book-keeping vars
+    List<ShipComponent> selectedComponents;
+
     public override void Awake()
     {
         base.Awake();
@@ -25,6 +29,7 @@ public class PlayerShip : TurnBasedUnit
         shipMove.Init();
         shipAttack.Init();
 
+        selectedComponents = new List<ShipComponent>();
     }
 
 
@@ -46,7 +51,10 @@ public class PlayerShip : TurnBasedUnit
             //else if(Input.GetKeyDown(KeyCode.Alpha1))
             if (Input.GetMouseButtonDown(0) && CheckClickOnComponent())
             {
+                selectedComponents.Clear();
                 yield return StartCoroutine(ComponentSelectionSequence());
+
+
                 //yield return StartCoroutine(shipAttack.Fire(GetWorldCoordsFromMouse(Input.mousePosition)));
             }
             //else if(Input.GetKeyDown(KeyCode.Alpha2))
@@ -64,13 +72,67 @@ public class PlayerShip : TurnBasedUnit
 
     IEnumerator ComponentSelectionSequence()
     {
-        yield return null;
+        bool dragging = true;
+        //List<Vector3> dragPoints = new List<Vector3>();
+        //List<Component> selectedComponents = new List<Component>();
+
+        while(!Input.GetKeyDown(KeyCode.Return))
+        {
+            //mouse down
+                //start drag
+                //record position
+           //mouse up
+                //stop drag
+
+            ShipComponent componentClickedOn = CheckClickOnComponent();
+
+            if (Input.GetMouseButtonDown(0) && componentClickedOn)
+            {
+                
+                dragging = true;
+                if(!selectedComponents.Contains(componentClickedOn))
+                {
+                    selectedComponents.Add(componentClickedOn);
+                }
+            }
+            //else
+            //{
+            //    dragging = false;
+            //}
+            if (dragging && Input.GetMouseButton(0) && componentClickedOn)
+            {
+                if (!selectedComponents.Contains(componentClickedOn))
+                {
+                    selectedComponents.Add(componentClickedOn);
+                }
+            }
+            //else
+            //{
+            //    dragging = false;
+            //}
+            if(Input.GetMouseButtonUp(0))
+            {
+                dragging = false;
+            }
+
+            yield return null;
+        }
+
     }
-    
-    bool CheckClickOnComponent()
+
+    ShipComponent CheckClickOnComponent()
     {
-        return Physics.Raycast(componentCamera.ScreenPointToRay(Input.mousePosition),
-            1000f,1<<GlobalTagsAndLayers.Instance.layers.componentsLayer);
+        ShipComponent componentClickedOn = null;
+        
+        Ray ray = componentCamera.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+
+        if(Physics.Raycast(ray,out hit, 1000f,1<<GlobalTagsAndLayers.Instance.layers.componentsLayer))
+        {
+            //Debug.Log(hit.collider.name);
+            componentClickedOn = hit.collider.gameObject.GetComponent<ShipComponent>();
+        }
+        return componentClickedOn;
     }
 
     Vector3 GetWorldCoordsFromMouse(Vector3 mousePos)
@@ -89,3 +151,4 @@ public class PlayerShip : TurnBasedUnit
     }
 
 }
+
