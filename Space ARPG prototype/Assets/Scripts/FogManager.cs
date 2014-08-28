@@ -35,7 +35,7 @@ public class FogManager : MonoBehaviour
         currX = startX;
         currY = startY;
 
-        Fogs = new GameObject[2601];
+        Fogs = new GameObject[1000000];
 
         bool done = false;
         int numFog = 0;
@@ -63,7 +63,7 @@ public class FogManager : MonoBehaviour
             }
             
         }
-        //Debug.Log("numFog: " + numFog); //shows number of fogs of war created
+        Debug.Log("numFog: " + numFog); //shows number of fogs of war created
 
         //fogData = 
 	}
