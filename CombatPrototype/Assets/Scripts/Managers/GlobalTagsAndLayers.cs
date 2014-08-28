@@ -2,7 +2,7 @@
 using System.Collections;
 using System;
 
-public class GlobalTagsAndLayers : SingletonComponent<GlobalTagsAndLayers> 
+public class GlobalTagsAndLayers : SingletonComponent<GlobalTagsAndLayers>
 {
 
     public Layers layers;
@@ -11,9 +11,10 @@ public class GlobalTagsAndLayers : SingletonComponent<GlobalTagsAndLayers>
 [Serializable]
 public class Layers
 {
-    public int groundLayer=8;
-    public int playerShipLayer=9;
-    public int componentsLayer=10;
+    public int groundLayer = 8;
+    public int playerShipLayer = 9;
+    public int componentsLayer = 10;
+    public int enemyShipLayer = 11;
 }
 [Serializable]
 public class Tags

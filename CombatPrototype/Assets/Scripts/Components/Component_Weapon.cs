@@ -5,10 +5,11 @@ public class Component_Weapon : ShipComponent
 {
 
     public float damage;
+    public float range;
 
-    public virtual IEnumerator Fire()
+    public virtual void Fire(Transform target, System.Action OnActivationComplete)
     {
-        yield return null;
+
     }
 
 }

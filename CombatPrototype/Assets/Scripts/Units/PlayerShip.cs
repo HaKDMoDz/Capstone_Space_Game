@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class PlayerShip : TurnBasedUnit
 {
@@ -43,24 +44,23 @@ public class PlayerShip : TurnBasedUnit
         //ends the player's turn only upon hitting Space
         while (!Input.GetKeyDown(KeyCode.Space))
         {
-
+            UnselectComponents();
             if (Input.GetMouseButtonDown(1))
             {
                 yield return StartCoroutine(shipMove.Move(GetWorldCoordsFromMouse(Input.mousePosition)));
             }
-            //else if(Input.GetKeyDown(KeyCode.Alpha1))
-            if (Input.GetMouseButtonDown(0) && CheckClickOnComponent())
+            
+            if (Input.GetMouseButtonDown(0))
             {
-                selectedComponents.Clear();
-                yield return StartCoroutine(ComponentSelectionSequence());
+                ShipComponent firstComponent =  CheckClickOnComponent();
+                if (firstComponent)
+                {
+                    UnselectComponents();
+                    yield return StartCoroutine(ComponentSelectionSequence(firstComponent));
+                    yield return StartCoroutine(shipAttack.ActivateComponents(selectedComponents));
+                }
 
-
-                //yield return StartCoroutine(shipAttack.Fire(GetWorldCoordsFromMouse(Input.mousePosition)));
             }
-            //else if(Input.GetKeyDown(KeyCode.Alpha2))
-            //{
-            //    yield return StartCoroutine(shipAttack.FireMissiles(GetWorldCoordsFromMouse(Input.mousePosition)));
-            //}
             
             
             yield return null;
@@ -70,46 +70,43 @@ public class PlayerShip : TurnBasedUnit
         Debug.Log(unitName + " (PlayerShip) ends turn");
     }
 
-    IEnumerator ComponentSelectionSequence()
+    IEnumerator ComponentSelectionSequence(ShipComponent firstComponent)
     {
+        Debug.Log("Selecting Components - [Enter] to confirm");
         bool dragging = true;
-        //List<Vector3> dragPoints = new List<Vector3>();
-        //List<Component> selectedComponents = new List<Component>();
+        ShipComponent componentClickedOn = firstComponent;
+        Type selectedCompType = componentClickedOn.GetType();
+        
+        SelectComponent(componentClickedOn);
+        yield return null;
 
         while(!Input.GetKeyDown(KeyCode.Return))
         {
-            //mouse down
-                //start drag
-                //record position
-           //mouse up
-                //stop drag
 
-            ShipComponent componentClickedOn = CheckClickOnComponent();
+            componentClickedOn = CheckClickOnComponent();
+
 
             if (Input.GetMouseButtonDown(0) && componentClickedOn)
             {
-                
                 dragging = true;
-                if(!selectedComponents.Contains(componentClickedOn))
+                if (componentClickedOn.GetType() == selectedCompType)
                 {
-                    selectedComponents.Add(componentClickedOn);
+                    SelectComponent(componentClickedOn);
                 }
+                else //start new selection
+                {
+                    UnselectComponents();
+                    SelectComponent(componentClickedOn);
+                    selectedCompType = componentClickedOn.GetType();
+                }
+                
             }
-            //else
-            //{
-            //    dragging = false;
-            //}
-            if (dragging && Input.GetMouseButton(0) && componentClickedOn)
+            
+            if (dragging && Input.GetMouseButton(0) && componentClickedOn && componentClickedOn.GetType() == selectedCompType)
             {
-                if (!selectedComponents.Contains(componentClickedOn))
-                {
-                    selectedComponents.Add(componentClickedOn);
-                }
+                SelectComponent(componentClickedOn);
             }
-            //else
-            //{
-            //    dragging = false;
-            //}
+            
             if(Input.GetMouseButtonUp(0))
             {
                 dragging = false;
@@ -119,7 +116,23 @@ public class PlayerShip : TurnBasedUnit
         }
 
     }
+    void SelectComponent(ShipComponent comp)
+    {
+        if (!selectedComponents.Contains(comp))
+        {
+            selectedComponents.Add(comp);
+            comp.Selected = true;
 
+        }
+    }
+    void UnselectComponents()
+    {
+        foreach (ShipComponent comp in selectedComponents)
+        {
+            comp.Selected = false;
+        }
+        selectedComponents.Clear();
+    }
     ShipComponent CheckClickOnComponent()
     {
         ShipComponent componentClickedOn = null;
