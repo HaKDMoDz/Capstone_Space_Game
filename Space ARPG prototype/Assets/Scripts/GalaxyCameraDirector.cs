@@ -7,16 +7,20 @@ public class GalaxyCameraDirector : MonoBehaviour
     public static float MED_ZOOM = 15.0f;
     public static float CLOSE_ZOOM = 8.0f;
 
-    private float targetZoom;
+    public static float targetZoom;
 
     Camera cam;
 
 	void Start () 
     {
-        cam = Camera.main;
+        cam = camera;
         targetZoom = cam.orthographicSize;
 
+        /*
+         * enable this to test procedurally triggered zoom
+         * 
         StartCoroutine(WaitFor(5f));
+         */
 	}
 	
 	void Update () 
@@ -28,7 +32,9 @@ public class GalaxyCameraDirector : MonoBehaviour
     {
         Debug.Log("tick");
         yield return new WaitForSeconds(seconds);
+        
         targetZoom = MED_ZOOM;
+        //this controls where the camera's zoom level "should" be
 
     }
 }

@@ -27,10 +27,13 @@ public class CameraMove : MonoBehaviour
 
     void OnMouseScroll(MouseScrollEventArgs args)
     {
+        //perspective camera
         //_cam.fieldOfView -= args.scrollSpeed * zoomSpeed *Time.deltaTime;
-        _cam.orthographicSize -= args.scrollSpeed * zoomSpeed * Time.deltaTime;
         //_cam.fieldOfView = Mathf.Clamp(_cam.fieldOfView, minFov, maxFov);
-        _cam.orthographicSize = Mathf.Clamp(_cam.orthographicSize, minSize, maxSize);
+
+        //ortho camera
+        //_cam.orthographicSize -= args.scrollSpeed * zoomSpeed * Time.deltaTime;
+        //_cam.orthographicSize = Mathf.Clamp(_cam.orthographicSize, minSize, maxSize);
 
         FatherTime.timeRate -= args.scrollSpeed;
     }
