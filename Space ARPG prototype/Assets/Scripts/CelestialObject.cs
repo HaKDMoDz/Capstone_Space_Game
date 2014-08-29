@@ -5,7 +5,7 @@ public enum CelestialObjectType {GALAXY, STAR, PLANET, MOON}
 
 public class CelestialObject : MonoBehaviour 
 {
-
+    public static bool inASystem = false;
     public Transform orbitAroundThis;
     public float rotateSpeed;
 
@@ -18,8 +18,8 @@ public class CelestialObject : MonoBehaviour
 
     private Camera cam;
 
-    private float medCamRange = 20.0f;
-    private float closeCamRange = 10.0f;
+    private float medCamRange = 50.0f;
+    private float closeCamRange = 20.0f;
 
     private Transform playerShipLocation;
 	void Start () 
@@ -41,18 +41,33 @@ public class CelestialObject : MonoBehaviour
         {
             case CelestialObjectType.STAR:
                 disableVisual = false;
-
+                
                 if (Vector3.SqrMagnitude(playerShipLocation.position - transform.position) < medCamRange * medCamRange)
                 {
                     GalaxyCameraDirector.targetZoom = GalaxyCameraDirector.MED_ZOOM;
+                    FatherTime.timeRate = FatherTime.MED_TIME_RATE;
+                    inASystem = true;
                 }
-                else
+
+                if (Vector3.SqrMagnitude(playerShipLocation.position - transform.position) > medCamRange * medCamRange * 1.5f)
                 {
                     GalaxyCameraDirector.targetZoom = GalaxyCameraDirector.FAR_ZOOM;
+                    FatherTime.timeRate = FatherTime.FAR_TIME_RATE;
+                    inASystem = false;
                 }
+                    
+                /*
+                    else
+                {
+                    GalaxyCameraDirector.targetZoom = GalaxyCameraDirector.FAR_ZOOM;
+                    FatherTime.timeRate = FatherTime.FAR_TIME_RATE;
+                    inASystem = false;
+                }
+                    */
+
                 break;
             case CelestialObjectType.PLANET:
-                if (Mathf.Abs(GalaxyCameraDirector.FAR_ZOOM - cam.orthographicSize) < 0.1f)
+                if (Mathf.Abs(GalaxyCameraDirector.FAR_ZOOM - cam.orthographicSize) < 0.9f)
                 {
                     disableVisual = true;
                 }
@@ -60,9 +75,23 @@ public class CelestialObject : MonoBehaviour
                 {
                     disableVisual = false;
                 }
+
+                if (inASystem)
+                {
+                    if (Vector3.SqrMagnitude(playerShipLocation.position - transform.position) < closeCamRange * closeCamRange)
+                    {
+                        GalaxyCameraDirector.targetZoom = GalaxyCameraDirector.CLOSE_ZOOM;
+                        FatherTime.timeRate = FatherTime.CLOSE_TIME_RATE;
+                    }
+                    else
+                    {
+                        GalaxyCameraDirector.targetZoom = GalaxyCameraDirector.MED_ZOOM;
+                        FatherTime.timeRate = FatherTime.MED_TIME_RATE;
+                    }
+                }
                 break;
             case CelestialObjectType.MOON:
-                if (Mathf.Abs(GalaxyCameraDirector.FAR_ZOOM - cam.orthographicSize) < 0.1f || Mathf.Abs(GalaxyCameraDirector.MED_ZOOM - cam.orthographicSize) < 0.1f)
+                if (Mathf.Abs(GalaxyCameraDirector.FAR_ZOOM - cam.orthographicSize) < 0.9f || Mathf.Abs(GalaxyCameraDirector.MED_ZOOM - cam.orthographicSize) < 0.9f)
                 {
                     disableVisual = true;
                 }

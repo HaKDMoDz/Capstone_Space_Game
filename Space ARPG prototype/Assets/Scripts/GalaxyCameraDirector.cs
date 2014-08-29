@@ -3,9 +3,9 @@ using System.Collections;
 
 public class GalaxyCameraDirector : MonoBehaviour 
 {
-    public static float FAR_ZOOM = 25.0f;
-    public static float MED_ZOOM = 15.0f;
-    public static float CLOSE_ZOOM = 8.0f;
+    public static float FAR_ZOOM = 40.0f;
+    public static float MED_ZOOM = 25.0f;
+    public static float CLOSE_ZOOM = 15.0f;
 
     public static float targetZoom;
 
@@ -14,7 +14,7 @@ public class GalaxyCameraDirector : MonoBehaviour
 	void Start () 
     {
         cam = camera;
-        targetZoom = cam.orthographicSize;
+        targetZoom = FAR_ZOOM;
 
         /*
          * enable this to test procedurally triggered zoom
@@ -26,6 +26,8 @@ public class GalaxyCameraDirector : MonoBehaviour
 	void Update () 
     {
         cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, targetZoom, 0.1f);
+
+        
 	}
 
     public IEnumerator WaitFor(float seconds)
