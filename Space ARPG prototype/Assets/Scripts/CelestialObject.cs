@@ -55,53 +55,46 @@ public class CelestialObject : MonoBehaviour
                     FatherTime.timeRate = FatherTime.FAR_TIME_RATE;
                     inASystem = false;
                 }
-                    
-                /*
-                    else
-                {
-                    GalaxyCameraDirector.targetZoom = GalaxyCameraDirector.FAR_ZOOM;
-                    FatherTime.timeRate = FatherTime.FAR_TIME_RATE;
-                    inASystem = false;
-                }
-                    */
 
                 break;
             case CelestialObjectType.PLANET:
-                if (Mathf.Abs(GalaxyCameraDirector.FAR_ZOOM - cam.orthographicSize) < 0.9f)
-                {
-                    disableVisual = true;
-                }
-                else 
+                if (GalaxyCameraDirector.targetZoom < GalaxyCameraDirector.FAR_ZOOM)
                 {
                     disableVisual = false;
+                }
+                else
+                {
+                    disableVisual = true;
                 }
 
                 if (inASystem)
                 {
                     if (Vector3.SqrMagnitude(playerShipLocation.position - transform.position) < closeCamRange * closeCamRange)
                     {
+                        
                         GalaxyCameraDirector.targetZoom = GalaxyCameraDirector.CLOSE_ZOOM;
                         FatherTime.timeRate = FatherTime.CLOSE_TIME_RATE;
-                    }
-                    else
-                    {
-                        GalaxyCameraDirector.targetZoom = GalaxyCameraDirector.MED_ZOOM;
-                        FatherTime.timeRate = FatherTime.MED_TIME_RATE;
                     }
                 }
                 break;
             case CelestialObjectType.MOON:
-                if (Mathf.Abs(GalaxyCameraDirector.FAR_ZOOM - cam.orthographicSize) < 0.9f || Mathf.Abs(GalaxyCameraDirector.MED_ZOOM - cam.orthographicSize) < 0.9f)
+
+
+                //There is a bug here if you set the if statement to GalaxyCameraDirector.targetZoom instead of cam.orthographicSize it doesnt show moons
+                if (cam.orthographicSize < GalaxyCameraDirector.MED_ZOOM)
+                // if (GalaxyCameraDirector.targetZoom < GalaxyCameraDirector.MED_ZOOM)
                 {
-                    disableVisual = true;
+                    disableVisual = false;
                 }
                 else
                 {
-                    disableVisual = false;
+                    disableVisual = true;
                 }
                 break;
             default:
                 break;
+
+                
         }
 
         if (disableVisual)

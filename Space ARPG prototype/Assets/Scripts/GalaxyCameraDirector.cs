@@ -3,9 +3,9 @@ using System.Collections;
 
 public class GalaxyCameraDirector : MonoBehaviour 
 {
-    public static float FAR_ZOOM = 40.0f;
-    public static float MED_ZOOM = 25.0f;
-    public static float CLOSE_ZOOM = 15.0f;
+    public static float FAR_ZOOM = 41.0f;
+    public static float MED_ZOOM = 26.0f;
+    public static float CLOSE_ZOOM = 14.0f;
 
     public static float targetZoom;
 

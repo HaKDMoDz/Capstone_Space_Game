@@ -35,7 +35,7 @@ public class FogManager : MonoBehaviour
         currX = startX;
         currY = startY;
 
-        Fogs = new GameObject[10000];
+        Fogs = new GameObject[100000];
 
         bool done = false;
         int numFog = 0;
