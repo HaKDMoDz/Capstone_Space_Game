@@ -11,23 +11,19 @@ public class ShipAttack : MonoBehaviour
     [SerializeField]
     Transform shootPoint;
 
-    //List<Comp_Weapon_Laser> lasers;
-    //List<Comp_Weapon_Missile> missiles;
-
     //cached components
     Transform trans;
-    ShipBlueprint shipBlueprint;
+    //ShipBlueprint shipBlueprint;
 
     //book-keeping vars
     bool activationComplete=false;
     AIShip targetShip;
 
+
     public void Init()
     {
         trans = transform;
-        shipBlueprint = gameObject.GetSafeComponent<ShipBlueprint>();
-        //lasers = shipBlueprint.weapons.OfType<Comp_Weapon_Laser>().ToList();
-        //missiles = shipBlueprint.weapons.OfType<Comp_Weapon_Missile>().ToList();
+        //shipBlueprint = gameObject.GetSafeComponent<ShipBlueprint>();
     }
 
     public IEnumerator ActivateComponents(List<ShipComponent> components)
@@ -38,19 +34,21 @@ public class ShipAttack : MonoBehaviour
         if(components[0] is Component_Weapon)
         {
             yield return StartCoroutine(WeaponTargetSelectionSequence(components));
-           // for (int i = 0; i < lasers.Count; i++)
-    //    {
-    //        lasers[i].Fire(shootPoint,selectedTarget, ActivationComplete);
-    //        yield return new WaitForSeconds(0.1f);
-    //    }
+
             if (targetShip)
             {
                 trans.LookAt(targetShip.transform);
                 foreach (Component_Weapon weapon in components)
                 {
                     Debug.Log("Firing on: " + targetShip.gameObject.name);
-                    weapon.Fire(targetShip.transform, ActivationComplete);
+                    weapon.Fire(targetShip.transform, 
+                        ()=>{
+                            activationComplete = true;
+                            targetShip.TakeDamage(weapon.damage);
+                        });
                 }
+
+
             }
         }
         else
@@ -58,16 +56,11 @@ public class ShipAttack : MonoBehaviour
             Debug.Log("not weapons");
             activationComplete = true;
         }
-        //foreach (ShipComponent comp in components)
-        //{
-        //    comp.Activate(ActivationComplete);
-        //}
-
+    
         while (!activationComplete)
         {
             yield return null;
         }
-
     }
 
     IEnumerator WeaponTargetSelectionSequence(List<ShipComponent> components)
@@ -101,39 +94,6 @@ public class ShipAttack : MonoBehaviour
     }
 
 
-    //public IEnumerator Fire(Vector3 aimPos)
-    //{
-    //    activationComplete = false;
-        
-    //    trans.LookAt(aimPos);
-    //    Transform selectedTarget = GameObject.FindObjectOfType<AIShip>().transform;
 
-    //    for (int i = 0; i < lasers.Count; i++)
-    //    {
-    //        lasers[i].Fire(shootPoint,selectedTarget, ActivationComplete);
-    //        yield return new WaitForSeconds(0.1f);
-    //    }
-
-
-    //    while (!activationComplete)
-    //    {
-    //        yield return null;
-    //    }
-
-    //}
-
-    public void ActivationComplete()
-    {
-        activationComplete = true;
-    }
-
-    //public IEnumerator FireMissiles(Vector3 aimPos)
-    //{
-    //    Vector3 shootDir = aimPos - trans.position;
-    //    trans.LookAt(aimPos);
-    //    shootDir.Normalize();
-    //    GameObject projectile = Instantiate(projectilePrefab, shootPoint.position, shootPoint.rotation) as GameObject;
-    //    projectile.rigidbody.AddForce(shootDir * 5000f);
-    //    yield return new WaitForSeconds(1f);
-    //}
+    
 }

@@ -11,7 +11,7 @@ public class TurnBasedCombatSystem : SingletonComponent<TurnBasedCombatSystem>
     float currentTime = 0f;
 
     List<TurnBasedUnit> turnHistory;
-    List<TurnBasedUnit> predictedTurnOrder;
+    //List<TurnBasedUnit> predictedTurnOrder;
 
     public bool combatOn = true;
 
@@ -58,7 +58,7 @@ public class TurnBasedCombatSystem : SingletonComponent<TurnBasedCombatSystem>
     {
         units = new List<TurnBasedUnit>();
         turnHistory = new List<TurnBasedUnit>();
-        predictedTurnOrder = new List<TurnBasedUnit>();
+        //predictedTurnOrder = new List<TurnBasedUnit>();
 
         //adds all player ships to the units list
         units.AddRange(FindObjectsOfType<PlayerShip>().ToList<TurnBasedUnit>());

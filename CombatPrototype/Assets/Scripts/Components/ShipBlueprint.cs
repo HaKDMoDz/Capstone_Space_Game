@@ -9,6 +9,7 @@ public class ShipBlueprint : MonoBehaviour
 
     public List<Component_Weapon> weapons;
 
+    public Hull hull;
 
 
     public void Init()
