@@ -15,7 +15,7 @@ public class ShipAttack : MonoBehaviour
     {
         if(args.button==0)
         {
-            weapon.Fire();
+            //weapon.Fire();
         }
     }
    

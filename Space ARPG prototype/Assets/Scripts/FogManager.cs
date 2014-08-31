@@ -64,8 +64,6 @@ public class FogManager : MonoBehaviour
             
         }
         Debug.Log("numFog: " + numFog); //shows number of fogs of war created
-
-        //fogData = 
 	}
 
 	void Update () 

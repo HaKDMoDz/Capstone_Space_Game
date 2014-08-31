@@ -10,7 +10,15 @@ public class CelestialObject : MonoBehaviour
     public float rotateSpeed;
 
     private static int numCelestialObjs;
+
+    public static CelestialObject currSelectedObject;
+
+    public Material glowMaterial;
+    public Material blankMaterial;
+
     private int ID;
+
+    public static bool objectSelected;
 
     public bool disableVisual = false;
 
@@ -18,10 +26,15 @@ public class CelestialObject : MonoBehaviour
 
     private Camera cam;
 
-    private float medCamRange = 50.0f;
-    private float closeCamRange = 20.0f;
+    private float medCamRange = 40.0f;
+    private float closeCamRange = 10.0f;
 
     private Transform playerShipLocation;
+
+    private CelestialObject thisScript;
+
+    public bool selectable = true;
+
 	void Start () 
     {
         ID = ++numCelestialObjs;
@@ -32,7 +45,13 @@ public class CelestialObject : MonoBehaviour
 
         playerShipLocation = GameObject.Find("PlayerShip").transform;
 
-        CheckReadyStatus();
+        objectSelected = false;
+
+        InputManager.Instance.OnMouseClick += OnMouseClick;
+
+        thisScript = gameObject.GetComponent<CelestialObject>();
+
+        //CheckReadyStatus(); //Debug - used to make sure all components are installed correctly
 	}
 	
 	void Update () 
@@ -96,6 +115,19 @@ public class CelestialObject : MonoBehaviour
 
                 
         }
+        if (objectSelected && selectable)
+        {
+            //print(currSelectedObject.ID + " vs. " + ID);
+
+            if (currSelectedObject.ID == ID)
+            {
+                renderer.material = glowMaterial;
+            }
+            else
+            {
+                renderer.material = blankMaterial;
+            }
+        }
 
         if (disableVisual)
         {
@@ -137,5 +169,24 @@ public class CelestialObject : MonoBehaviour
         }
 
         return ready;
+    }
+
+    void OnMouseClick(MouseEventArgs args)
+    {
+        if (args.button == 0)
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if(Physics.Raycast(ray,out hit))
+            {
+                if(hit.collider.tag == "CelestialObject")
+                {
+                    print(hit.collider.name);
+                    currSelectedObject = hit.collider.GetComponent<CelestialObject>();
+                    objectSelected = true;
+                }
+            }
+            
+        }
     }
 }
