@@ -16,6 +16,8 @@ public class CelestialObject : MonoBehaviour
     public Material glowMaterial;
     public Material blankMaterial;
 
+    private Texture texture;
+
     private int ID;
 
     public static bool objectSelected;
@@ -121,11 +123,14 @@ public class CelestialObject : MonoBehaviour
 
             if (currSelectedObject.ID == ID)
             {
+                texture = renderer.material.mainTexture;
                 renderer.material = glowMaterial;
+                renderer.material.mainTexture = texture;
             }
             else
             {
                 renderer.material = blankMaterial;
+
             }
         }
 
