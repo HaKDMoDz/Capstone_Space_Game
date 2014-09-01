@@ -49,11 +49,31 @@ public class TurnBasedCombatSystem : MonoBehaviour
             //records the current unit's time left to turn, to subtract from all units
             currentTime = firstEntity.TimeLeftToTurn;
 
-            //the first unit takes it's turn
-            yield return StartCoroutine(firstEntity.StartTurn());
+            //List<TurnBasedEntity> numUnitsWithSameTime = entities.Where(unit => unit.TimeLeftToTurn == currentTime);
 
+            //Debug.Log(numUnitsWithSameTime.Count);
+            int numUnitsWithSameTime = entities.Count(unit => unit.TimeLeftToTurn == currentTime);
+            if (numUnitsWithSameTime > 1)
+            {
+                List<TurnBasedEntity> unitsWithSameTime = entities.Where(unit => unit.TimeLeftToTurn == currentTime).ToList(); ;
+
+                for (int i = 0; i < numUnitsWithSameTime; i++)
+                {
+                    int unitToTakeTurn = Random.Range(0, numUnitsWithSameTime-i);
+                    yield return StartCoroutine(unitsWithSameTime[unitToTakeTurn].StartTurn());
+                    turnHistory.Add(unitsWithSameTime[unitToTakeTurn] );
+                    unitsWithSameTime.RemoveAt(unitToTakeTurn);
+                }
+
+            }
+            else
+            {
+                //the first unit takes it's turn
+                yield return StartCoroutine(firstEntity.StartTurn());
+                turnHistory.Add(firstEntity);
+
+            }
             //adds to the turn history - mainly for GUI purposes
-            turnHistory.Add(firstEntity);
 
             
             //while(!Input.GetKeyDown(KeyCode.Return))

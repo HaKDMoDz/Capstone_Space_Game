@@ -25,6 +25,7 @@ public class PlayerShip : TurnBasedUnit
         shipAttack = gameObject.GetSafeComponent<ShipAttack>();
         shipBlueprint = gameObject.GetSafeComponent<ShipBlueprint>();
 
+        componentCamera.enabled = false;
         //manual init to ensure correct intitialization order
         shipBlueprint.Init();
         shipMove.Init();
@@ -37,6 +38,7 @@ public class PlayerShip : TurnBasedUnit
     public override IEnumerator ExecuteTurn()
     {
         Debug.Log(unitName + " (PlayerShip) starts turn");
+        componentCamera.enabled = true;
         projector.enabled = true;
 
         yield return base.ExecuteTurn();
@@ -67,6 +69,7 @@ public class PlayerShip : TurnBasedUnit
         }
 
         projector.enabled = false;
+        componentCamera.enabled = false;
         Debug.Log(unitName + " (PlayerShip) ends turn");
     }
 

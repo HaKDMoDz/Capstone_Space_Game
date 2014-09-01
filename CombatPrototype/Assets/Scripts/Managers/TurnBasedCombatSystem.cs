@@ -6,14 +6,18 @@ using System.Linq;
 public class TurnBasedCombatSystem : SingletonComponent<TurnBasedCombatSystem>
 {
 
+    public bool combatOn = true;
+
     List<TurnBasedUnit> units;
-
-    float currentTime = 0f;
-
     List<TurnBasedUnit> turnHistory;
     //List<TurnBasedUnit> predictedTurnOrder;
 
-    public bool combatOn = true;
+    float currentTime = 0f;
+    int unitCount;
+    int numUnitsWithSameTime;
+    TurnBasedUnit firstUnit;
+    List<TurnBasedUnit> unitsWithSameTime; //used if 2 units end up with the same turnDelay
+    
 
     void Start()
     {
@@ -23,9 +27,8 @@ public class TurnBasedCombatSystem : SingletonComponent<TurnBasedCombatSystem>
     {
         Init();
 
-        int unitCount = units.Count; //caching list count
+        unitCount = units.Count; //caching list count
 
-        TurnBasedUnit firstUnit; //the first unit to move
 
         while (combatOn && unitCount > 0)
         {
@@ -37,21 +40,37 @@ public class TurnBasedCombatSystem : SingletonComponent<TurnBasedCombatSystem>
             //saves the current turnDelay for the unit that will execute it's turn, to subtract from all units
             currentTime = firstUnit.TimeLeftToTurn;
 
-            //the first unit takes it's turn
-            yield return StartCoroutine(firstUnit.ExecuteTurn());
+            numUnitsWithSameTime = units.Count(unit => unit.TimeLeftToTurn == currentTime);
 
-            //adds to the turn history - mainly for GUI purposes
-            turnHistory.Add(firstUnit);
+            if (numUnitsWithSameTime > 1)
+            {
+                //if more than 1 unit ends up with the same turnDelay, randomly select the order
+                unitsWithSameTime = units.Where(unit => unit.TimeLeftToTurn == currentTime).ToList();
 
+                for (int i = 0; i < numUnitsWithSameTime; i++)
+                {
+                    int unitToTakeTurn = Random.Range(0, numUnitsWithSameTime - i);
+                    yield return StartCoroutine(unitsWithSameTime[unitToTakeTurn].ExecuteTurn());
+                    turnHistory.Add(unitsWithSameTime[unitToTakeTurn]);
+                    unitsWithSameTime.RemoveAt(unitToTakeTurn);
+                }
+
+            }
+            else
+            {
+                //the first unit takes it's turn
+                yield return StartCoroutine(firstUnit.ExecuteTurn());
+                //adds to the turn history - mainly for GUI purposes
+                turnHistory.Add(firstUnit);
+            }
             //subtracts the currentTime from all units' timers
             for (int i = 0; i < unitCount; i++)
             {
                 units[i].TimeLeftToTurn -= currentTime;
             }
         }
-
-
-        yield return null;
+        
+        //yield return null;
     }
 
     void Init()
