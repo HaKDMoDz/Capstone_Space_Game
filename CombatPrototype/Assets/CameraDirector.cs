@@ -15,11 +15,6 @@ public class CameraDirector : SingletonComponent<CameraDirector>
     float initialAngleX;
     Transform trans;
 
-    //void Awake()
-    //{
-    //    trans = transform;
-        
-    //}
     protected override void Awake()
     {
         base.Awake();
@@ -46,9 +41,6 @@ public class CameraDirector : SingletonComponent<CameraDirector>
     {
         Vector3 targetPos = target.position;
         targetPos.y += heightAboveFocusTarget;
-        Debug.Log(initialAngleX);
-        Debug.Log(Mathf.Tan(initialAngleX));
-
         targetPos.z -= heightAboveFocusTarget / Mathf.Tan( initialAngleX);
 
         yield return StartCoroutine(MoveTo(targetPos, period));
