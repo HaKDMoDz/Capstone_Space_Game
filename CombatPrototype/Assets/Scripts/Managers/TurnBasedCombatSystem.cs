@@ -50,8 +50,8 @@ public class TurnBasedCombatSystem : SingletonComponent<TurnBasedCombatSystem>
                 for (int i = 0; i < numUnitsWithSameTime; i++)
                 {
                     int unitToTakeTurn = Random.Range(0, numUnitsWithSameTime - i);
-                    yield return StartCoroutine(unitsWithSameTime[unitToTakeTurn].ExecuteTurn());
-                    turnHistory.Add(unitsWithSameTime[unitToTakeTurn]);
+                    //the randomly select unit takes it's turn
+                    yield return StartCoroutine(UnitExecuteTurn(unitsWithSameTime[unitToTakeTurn]));
                     unitsWithSameTime.RemoveAt(unitToTakeTurn);
                 }
 
@@ -59,9 +59,7 @@ public class TurnBasedCombatSystem : SingletonComponent<TurnBasedCombatSystem>
             else
             {
                 //the first unit takes it's turn
-                yield return StartCoroutine(firstUnit.ExecuteTurn());
-                //adds to the turn history - mainly for GUI purposes
-                turnHistory.Add(firstUnit);
+                yield return StartCoroutine(UnitExecuteTurn(firstUnit));
             }
             //subtracts the currentTime from all units' timers
             for (int i = 0; i < unitCount; i++)
@@ -71,6 +69,14 @@ public class TurnBasedCombatSystem : SingletonComponent<TurnBasedCombatSystem>
         }
         
         //yield return null;
+    }
+
+    IEnumerator UnitExecuteTurn(TurnBasedUnit unit)
+    {
+        yield return StartCoroutine(CameraDirector.Instance.FocusOn(unit.transform, 1f));
+        yield return StartCoroutine(unit.ExecuteTurn());
+        //adds to the turn history - mainly for GUI purposes
+        turnHistory.Add(unit);
     }
 
     void Init()

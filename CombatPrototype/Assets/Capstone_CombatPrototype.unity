@@ -2916,7 +2916,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4293918719
+    m_Bits: 4293917695
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -2951,19 +2951,14 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 558152029}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1fccbb76b4f44fd46afa6f1977fdca28, type: 3}
+  m_Script: {fileID: 11500000, guid: 84fbac8c85bff224a94efe8141d66525, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  updateMode: 0
-  followMode: 0
-  target: {fileID: 0}
-  distance: 60
-  chaseHeight: 15
-  followDamping: .300000012
-  lookAtDamping: 4
-  freezeKey: 304
+  sceneStartPos: {fileID: 558152030}
+  movementEpsilon: .200000003
+  heightAboveFocusTarget: 100
 --- !u!1 &565889033
 GameObject:
   m_ObjectHideFlags: 0
@@ -9215,7 +9210,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98c444392284db345b762eb06d32c4d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  turnDelay: 4.55999994
+  turnDelay: 5.5
   unitName: SexyShip
   componentCamera: {fileID: 75062097}
 --- !u!1 &1079631243

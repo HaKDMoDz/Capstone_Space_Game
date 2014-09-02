@@ -54,7 +54,7 @@ public class PlayerShip : TurnBasedUnit
             
             if (Input.GetMouseButtonDown(0))
             {
-                ShipComponent firstComponent =  CheckClickOnComponent();
+                ShipComponent firstComponent = CheckClickOnComponent();
                 if (firstComponent)
                 {
                     UnselectComponents();
@@ -136,14 +136,15 @@ public class PlayerShip : TurnBasedUnit
         }
         selectedComponents.Clear();
     }
+
     ShipComponent CheckClickOnComponent()
     {
         ShipComponent componentClickedOn = null;
-        
+
         Ray ray = componentCamera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
-        if(Physics.Raycast(ray,out hit, 1000f,1<<GlobalTagsAndLayers.Instance.layers.componentsLayer))
+        if (Physics.Raycast(ray, out hit, 1000f, 1 << GlobalTagsAndLayers.Instance.layers.componentsLayer))
         {
             //Debug.Log(hit.collider.name);
             componentClickedOn = hit.collider.gameObject.GetComponent<ShipComponent>();
