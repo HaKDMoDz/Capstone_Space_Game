@@ -12,6 +12,11 @@ public class TurnBasedCombatSystem : SingletonComponent<TurnBasedCombatSystem>
     List<TurnBasedUnit> turnHistory;
     //List<TurnBasedUnit> predictedTurnOrder;
 
+    [HideInInspector]
+    public List<PlayerShip> playerShips;
+    [HideInInspector]
+    public List<AIShip> aiShips;
+
     float currentTime = 0f;
     int unitCount;
     int numUnitsWithSameTime;
@@ -86,9 +91,11 @@ public class TurnBasedCombatSystem : SingletonComponent<TurnBasedCombatSystem>
         //predictedTurnOrder = new List<TurnBasedUnit>();
 
         //adds all player ships to the units list
-        units.AddRange(FindObjectsOfType<PlayerShip>().ToList<TurnBasedUnit>());
+        playerShips = FindObjectsOfType<PlayerShip>().ToList<PlayerShip>();
+        units.AddRange(playerShips.Cast<TurnBasedUnit>());
         //adds ai ships
-        units.AddRange(FindObjectsOfType<AIShip>().ToList<TurnBasedUnit>());
+        aiShips = FindObjectsOfType<AIShip>().ToList<AIShip>();
+        units.AddRange(aiShips.Cast<TurnBasedUnit>());
     }
 
 

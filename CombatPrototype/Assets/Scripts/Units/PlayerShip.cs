@@ -47,11 +47,12 @@ public class PlayerShip : TurnBasedUnit
         while (!Input.GetKeyDown(KeyCode.Space))
         {
             UnselectComponents();
-            if (Input.GetMouseButtonDown(1))
+            if (Input.GetMouseButtonUp(1))
             {
                 yield return StartCoroutine(shipMove.Move(GetWorldCoordsFromMouse(Input.mousePosition)));
+                
             }
-            
+
             if (Input.GetMouseButtonDown(0))
             {
                 ShipComponent firstComponent = CheckClickOnComponent();
@@ -63,8 +64,11 @@ public class PlayerShip : TurnBasedUnit
                 }
 
             }
-            
-            
+            if (Input.GetMouseButton(2))
+            {
+                CameraDirector.Instance.OrbitAroundImmediate(trans, Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+            }
+
             yield return null;
         }
 
@@ -79,11 +83,11 @@ public class PlayerShip : TurnBasedUnit
         bool dragging = true;
         ShipComponent componentClickedOn = firstComponent;
         Type selectedCompType = componentClickedOn.GetType();
-        
+
         SelectComponent(componentClickedOn);
         yield return null;
 
-        while(!Input.GetKeyDown(KeyCode.Return))
+        while (!Input.GetKeyDown(KeyCode.Return))
         {
 
             componentClickedOn = CheckClickOnComponent();
@@ -102,19 +106,22 @@ public class PlayerShip : TurnBasedUnit
                     SelectComponent(componentClickedOn);
                     selectedCompType = componentClickedOn.GetType();
                 }
-                
+
             }
-            
+
             if (dragging && Input.GetMouseButton(0) && componentClickedOn && componentClickedOn.GetType() == selectedCompType)
             {
                 SelectComponent(componentClickedOn);
             }
-            
-            if(Input.GetMouseButtonUp(0))
+
+            if (Input.GetMouseButtonUp(0))
             {
                 dragging = false;
             }
-
+            if (Input.GetMouseButton(2))
+            {
+                CameraDirector.Instance.OrbitAroundImmediate(trans, Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+            }
             yield return null;
         }
 

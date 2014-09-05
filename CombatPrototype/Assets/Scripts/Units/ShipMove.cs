@@ -30,6 +30,8 @@ public class ShipMove : MonoBehaviour
         while (Vector3.SqrMagnitude(moveDir) > movementEpsilon * movementEpsilon)
         {
             trans.position = Vector3.Lerp(trans.position, destination, moveSpeed * Time.deltaTime);
+            
+            StartCoroutine(CameraDirector.Instance.FocusOn(trans, .1f));
             moveDir = destination - trans.position;
             yield return null;
 
