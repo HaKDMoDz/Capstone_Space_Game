@@ -4,12 +4,12 @@ using System;
 
 public class Projectile_Laser : Projectile
 {
-    Transform trans;
+    //Transform trans;
 
-    void Awake()
-    {
-        trans = transform;
-    }
+    //void Awake()
+    //{
+    //    trans = transform;
+    //}
     public IEnumerator MoveProjectile(Vector3 destination, float period,Action OnComplete )
     {
         float time = 0f;
@@ -24,6 +24,7 @@ public class Projectile_Laser : Projectile
         {
             OnComplete();
         }
+        Destroy(gameObject);
     }
 
     //void OnTriggerEnter(Collider col)
