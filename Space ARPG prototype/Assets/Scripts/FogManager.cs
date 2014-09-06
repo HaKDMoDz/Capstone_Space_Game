@@ -64,7 +64,6 @@ public class FogManager : MonoBehaviour
             
         }
         SystemLog.addMessage(numFog + " fog squares were created");
-        Debug.Log(numFog + " fog squares were created");
 	}
 
 	void Update () 

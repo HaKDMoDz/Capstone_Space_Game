@@ -13,21 +13,33 @@ public class SystemLog : MonoBehaviour {
         text = GameObject.Find("Log").GetComponent<Text>();
 
         messageLog = new List<string>();
+        StartCoroutine(removeMessage());
 	}
-	
-	void Update () 
+
+    void Update()
     {
-        for (int i = messageLog.Count - 1; i > 0; i--)
+        text.text = "";
+
+        foreach (string message in messageLog)
         {
-            text.text += messageLog[i]; //print each message
+            text.text += message; //print each message
             text.text += ".\n"; // add a period and newline
-            messageLog.Remove(messageLog[i]); //remove it from the messageLog
+
         }
-	}
+    }
 
     public static void addMessage(string message)
     {
-
         messageLog.Add(message);
     }
+
+    IEnumerator removeMessage()
+    {
+        yield return new WaitForSeconds(2.0f);
+        if (messageLog.Count > 0)
+        {
+            messageLog.Remove(messageLog[0]); //remove it from the messageLog
+            StartCoroutine(removeMessage());
+        }
+   }     
 }

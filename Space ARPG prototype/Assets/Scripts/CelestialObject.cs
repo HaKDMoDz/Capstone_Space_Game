@@ -186,9 +186,9 @@ public class CelestialObject : MonoBehaviour
             {
                 if(hit.collider.tag == "CelestialObject")
                 {
-                    print(hit.collider.name);
                     currSelectedObject = hit.collider.GetComponent<CelestialObject>();
                     objectSelected = true;
+                    SystemLog.addMessage(name + " was selected");
                 }
             }
             
