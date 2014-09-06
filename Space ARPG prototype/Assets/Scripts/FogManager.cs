@@ -63,7 +63,7 @@ public class FogManager : MonoBehaviour
             }
             
         }
-        Debug.Log("numFog: " + numFog); //shows number of fogs of war created
+        SystemLog.addMessage(numFog + " fog squares were created");
 	}
 
 	void Update () 
