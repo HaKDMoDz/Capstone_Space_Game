@@ -1,16 +1,18 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 
 public class SystemLog : MonoBehaviour {
 
-    private static ArrayList messageLog;
+    private static List<string> messageLog;
     private Text text;
 
-	void Start () 
+	void Awake () 
     {
         text = GameObject.Find("Log").GetComponent<Text>();
-        messageLog = new ArrayList();
+
+        messageLog = new List<string>();
 	}
 	
 	void Update () 
@@ -21,12 +23,11 @@ public class SystemLog : MonoBehaviour {
             text.text += ".\n"; // add a period and newline
             messageLog.Remove(messageLog[i]); //remove it from the messageLog
         }
-        
 	}
 
     public static void addMessage(string message)
     {
-        messageLog.Add(message);       
-    }
 
+        messageLog.Add(message);
+    }
 }

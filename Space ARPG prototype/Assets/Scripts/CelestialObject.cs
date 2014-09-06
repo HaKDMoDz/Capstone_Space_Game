@@ -42,7 +42,6 @@ public class CelestialObject : MonoBehaviour
         ID = ++numCelestialObjs;
 
         SystemLog.addMessage("Celestial Object " + ID + ":" + name + " has been initialized");
-
         cam = Camera.main;
 
         playerShipLocation = GameObject.Find("PlayerShip").transform;
@@ -102,6 +101,7 @@ public class CelestialObject : MonoBehaviour
 
 
                 //There is a bug here if you set the if statement to GalaxyCameraDirector.targetZoom instead of cam.orthographicSize it doesnt show moons
+                
                 if (cam.orthographicSize < GalaxyCameraDirector.MED_ZOOM)
                 // if (GalaxyCameraDirector.targetZoom < GalaxyCameraDirector.MED_ZOOM)
                 {
