@@ -41,7 +41,7 @@ public class CelestialObject : MonoBehaviour
     {
         ID = ++numCelestialObjs;
 
-        SystemLog.addMessage("Celestial Object " + ID + ":" + name + " has been initialized");
+        name = "Celestial Object " + ID;
 
         cam = Camera.main;
 

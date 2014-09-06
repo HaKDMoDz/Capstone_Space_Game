@@ -11,6 +11,8 @@ public class FogOfWar : MonoBehaviour {
 
     private float fadeTimer = 1000.0f;
 
+    private XmlDocument fogData = new XmlDocument();
+
 	void Start () 
     {
         playerShip = GameObject.Find("PlayerShip").transform;
