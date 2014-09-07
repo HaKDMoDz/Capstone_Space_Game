@@ -14,7 +14,7 @@ public class Info : MonoBehaviour
         text = GameObject.Find("Info").GetComponent<Text>();
         myCanvas = transform.parent.parent.parent.GetComponent<Canvas>();
         infoMessage = new List<string>();
-        disableMe();
+        DisableMe();
     }
 
     public static void SetInfoToWindow()
@@ -44,7 +44,18 @@ public class Info : MonoBehaviour
 
     }
 
-    public static void enableMe()
+    public static void DisableMe()
+    {
+        myCanvas.enabled = false;
+
+    }
+
+    public void enableMe()
+    {
+        myCanvas.enabled = true;
+    }
+
+    public static void EnableMe()
     {
         myCanvas.enabled = true;
     }

@@ -205,7 +205,7 @@ public class CelestialObject : MonoBehaviour
                             SystemLog.addMessage(name + " was selected");
                             DisplayInfo();
                             acceptInput = false;
-                            WaitBeforeInput(1.0f);
+                            StartCoroutine(WaitBeforeInput(1.0f));
                         }
                     }
                 }
@@ -221,7 +221,7 @@ public class CelestialObject : MonoBehaviour
 
     void DisplayInfo() 
     {
-        Info.enableMe();
+        Info.EnableMe();
         Info.ResetInfo();
         Info.addMessage("Celestial Object " + ID + ": of type: " + type + " named: " + myName + " has a mass of " + mass.ToString() + ".0 kg and a diameter of " + (radius * 2).ToString() + ".0 m. Discovered in the year " + discoveryDate + " it is composed mainly of " + composedOf + " and has attracted galactic attention because of " + whyInteresting);
         Info.SetInfoToWindow();
