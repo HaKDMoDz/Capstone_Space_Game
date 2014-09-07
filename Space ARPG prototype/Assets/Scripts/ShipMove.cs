@@ -37,6 +37,7 @@ public class ShipMove : MonoBehaviour
 
     void Start()
     {
+        SystemLog.addMessage("Ship Initialized...");
         InputManager.Instance.OnMovementAxis += OnMovementAxis;
         InputManager.Instance.OnMouseMove += OnMouseMove;
         InputManager.Instance.OnKeyboardPress += KeyPress;

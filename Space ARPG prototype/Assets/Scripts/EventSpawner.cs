@@ -13,7 +13,7 @@ public class EventSpawner : MonoBehaviour {
     IEnumerator MakeSomeNoiseEvent()
     {
         SystemLog.addMessage("tick");
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(30.0f);
         StartCoroutine(MakeSomeNoiseEvent());
     }
 	// Update is called once per frame
