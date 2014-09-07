@@ -36,6 +36,16 @@ public class CelestialObject : MonoBehaviour
     private CelestialObject thisScript;
 
     public bool selectable = true;
+    private bool acceptInput = true;
+
+    public string myName = "";
+    public string discoveryDate = "";
+    public string composedOf = "";
+    public string whyInteresting = "";
+
+
+    public int mass;
+    public int radius;
 
 	void Start () 
     {
@@ -178,20 +188,42 @@ public class CelestialObject : MonoBehaviour
 
     void OnMouseClick(MouseEventArgs args)
     {
-        if (args.button == 0)
+        if (acceptInput)
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if(Physics.Raycast(ray,out hit))
+            if (args.button == 0)
             {
-                if(hit.collider.tag == "CelestialObject")
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+                if (Physics.Raycast(ray, out hit))
                 {
-                    currSelectedObject = hit.collider.GetComponent<CelestialObject>();
-                    objectSelected = true;
-                    SystemLog.addMessage(name + " was selected");
+                    if (hit.collider.tag == "CelestialObject")
+                    {
+                        if (hit.collider.GetComponent<CelestialObject>().ID == ID)
+                        {
+                            currSelectedObject = hit.collider.GetComponent<CelestialObject>();
+                            objectSelected = true;
+                            SystemLog.addMessage(name + " was selected");
+                            DisplayInfo();
+                            acceptInput = false;
+                            WaitBeforeInput(1.0f);
+                        }
+                    }
                 }
             }
-            
-        }
+        } 
+    }
+
+    IEnumerator WaitBeforeInput(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        acceptInput = true;
+    }
+
+    void DisplayInfo() 
+    {
+        Info.enableMe();
+        Info.ResetInfo();
+        Info.addMessage("Celestial Object " + ID + ": of type: " + type + " named: " + myName + " has a mass of " + mass.ToString() + ".0 kg and a diameter of " + (radius * 2).ToString() + ".0 m. Discovered in the year " + discoveryDate + " it is composed mainly of " + composedOf + " and has attracted galactic attention because of " + whyInteresting);
+        Info.SetInfoToWindow();
     }
 }

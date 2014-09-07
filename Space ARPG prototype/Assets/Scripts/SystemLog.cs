@@ -53,7 +53,6 @@ public class SystemLog : MonoBehaviour
    
     public void disableMe()
     {
-        SystemLog.addMessage("X Button Pressed!");
         transform.parent.parent.parent.GetComponent<Canvas>().enabled = false;
 
     }
