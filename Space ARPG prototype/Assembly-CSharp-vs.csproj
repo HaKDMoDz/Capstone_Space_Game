@@ -46,6 +46,14 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Galaxy\Prefabs\Starfire.cs" />
+     <Compile Include="Assets\Galaxy\Scripts\Atmosphere.cs" />
+     <Compile Include="Assets\Galaxy\Scripts\Galaxy.cs" />
+     <Compile Include="Assets\Galaxy\Scripts\Orbit.cs" />
+     <Compile Include="Assets\Galaxy\Scripts\PhysicsObject.cs" />
+     <Compile Include="Assets\Galaxy\Scripts\changeTarget.cs" />
+     <Compile Include="Assets\Galaxy\Scripts\rotate.cs" />
+     <Compile Include="Assets\Galaxy\Scripts\rotateAround.cs" />
      <Compile Include="Assets\Scripts\CameraMove.cs" />
      <Compile Include="Assets\Scripts\CelestialObject.cs" />
      <Compile Include="Assets\Scripts\EventSpawner.cs" />
@@ -72,9 +80,17 @@
      <Compile Include="Assets\Scripts\SystemLog.cs" />
      <Compile Include="Assets\Scripts\Weapon.cs" />
      <Compile Include="Assets\Scripts\Weapon_Laser.cs" />
+     <Compile Include="Assets\iTween\Plugins\iTween.cs" />
+     <Compile Include="Assets\iTween\Sample\MoveSample.cs" />
+     <Compile Include="Assets\iTween\Sample\RotateSample.cs" />
+     <Compile Include="Assets\iTween\Sample\SampleInfo.cs" />
      <None Include="Assets\XML\galaxy.xml" />
+     <None Include="Assets\Standard Assets\Particles\Sources\Shaders\Particle Alpha Blend (Queue +100).shader" />
      <None Include="Assets\Shaders\GlowForSelectedPlanet.shader" />
      <None Include="Assets\XML\fog.xml" />
+ <Reference Include="Assembly-UnityScript-firstpass">
+ <HintPath>C:/Users/Alex/Documents/Capstone/Capstone_Space_Game/Space ARPG prototype/Library/ScriptAssemblies/Assembly-UnityScript-firstpass.dll</HintPath>
+ </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files (x86)/Unity460b17/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.0/UnityEngine.UI.dll</HintPath>
  </Reference>

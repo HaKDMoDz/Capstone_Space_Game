@@ -16,6 +16,8 @@ public class CelestialObject : MonoBehaviour
     public Material glowMaterial;
     public Material blankMaterial;
 
+    public GameObject Atmosphere;
+
     private Texture texture;
 
     private int ID;
@@ -101,7 +103,7 @@ public class CelestialObject : MonoBehaviour
                 {
                     if (Vector3.SqrMagnitude(playerShipLocation.position - transform.position) < closeCamRange * closeCamRange)
                     {
-                        
+
                         GalaxyCameraDirector.targetZoom = GalaxyCameraDirector.CLOSE_ZOOM;
                         FatherTime.timeRate = FatherTime.CLOSE_TIME_RATE;
                     }
@@ -113,7 +115,7 @@ public class CelestialObject : MonoBehaviour
                 //There is a bug here if you set the if statement to GalaxyCameraDirector.targetZoom instead of cam.orthographicSize it doesnt show moons
                 
                 if (cam.orthographicSize < GalaxyCameraDirector.MED_ZOOM)
-                // if (GalaxyCameraDirector.targetZoom < GalaxyCameraDirector.MED_ZOOM)
+                //if (GalaxyCameraDirector.targetZoom < GalaxyCameraDirector.CLOSE_ZOOM)
                 {
                     disableVisual = false;
                 }
@@ -147,10 +149,18 @@ public class CelestialObject : MonoBehaviour
         if (disableVisual)
         {
             renderer.enabled = false;
+            if (type == CelestialObjectType.PLANET)
+            {
+                Atmosphere.renderer.enabled = false;
+            }
         }
         else
         {
             renderer.enabled = true;
+            if (type == CelestialObjectType.PLANET)
+            {
+                Atmosphere.renderer.enabled = false;
+            }
         }
 
         transform.RotateAround(orbitAroundThis.position, Vector3.up, rotateSpeed * Time.deltaTime * FatherTime.timeRate);
