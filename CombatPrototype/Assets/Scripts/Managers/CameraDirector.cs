@@ -13,13 +13,18 @@ public class CameraDirector : SingletonComponent<CameraDirector>
     [SerializeField]
     float heightAboveFocusTarget = 200f;
     [SerializeField]
-    float heightAboveFocusWhileAiming = 50f;
+    float heightAboveFocusWhileAiming = 40f;
+    [SerializeField]
+    float distToFocusWhileAiming = 50f;
     [SerializeField]
     float cameraOrbitSpeed = 30f;
 
     Quaternion initialRot;
     float initialAngleX;
     Transform trans;
+
+    public delegate void CameraMoved();
+    public event CameraMoved OnCamerMove = new CameraMoved(delegate(){});
 
     protected override void Awake()
     {
@@ -36,6 +41,7 @@ public class CameraDirector : SingletonComponent<CameraDirector>
         {
             trans.position = Vector3.Lerp(startPos, destination, time);
             time += Time.deltaTime / period;
+            OnCamerMove();
             yield return null;
         }
     }
@@ -49,6 +55,7 @@ public class CameraDirector : SingletonComponent<CameraDirector>
             trans.position = Vector3.Lerp(startPos, destination, time);
             trans.rotation = Quaternion.Lerp(startRot, desiredRotation, time);
             time += Time.deltaTime / period;
+            OnCamerMove();
             yield return null;
         }
     }
@@ -68,6 +75,17 @@ public class CameraDirector : SingletonComponent<CameraDirector>
     }
     public IEnumerator AimAtTarget(Transform currentFocus, Transform target, float period)
     {
+
+        Vector3 targetToFocusDir = currentFocus.position - target.position;
+        float targetToFocusDist = targetToFocusDir.magnitude;
+        targetToFocusDir.Normalize();
+        Quaternion desiredCamRotation = Quaternion.LookRotation(-targetToFocusDir);
+        targetToFocusDir *= targetToFocusDist + distToFocusWhileAiming;
+        Vector3 desiredCamPos = target.position + targetToFocusDir + Vector3.up*heightAboveFocusWhileAiming;
+
+        yield return StartCoroutine(MoveAndRotateTo(desiredCamPos, desiredCamRotation, period));
+
+
         //Vector2 A, B, C, D, E, F, T;
         //A = new Vector2(currentFocus.position.x, currentFocus.position.z);
         //B = new Vector2(trans.position.x, trans.position.z);
@@ -101,27 +119,30 @@ public class CameraDirector : SingletonComponent<CameraDirector>
         ////desiredRotation = Quaternion.Euler(0, desiredRotation.eulerAngles.y+Alpha, desiredRotation.eulerAngles.z);
         //desiredRotation = Quaternion.Euler(0, Alpha, desiredRotation.eulerAngles.z);
 
-        Vector3 targetToFocus = target.position - currentFocus.position;
-        Vector3 camPosOnFocusPlane = trans.position;
-        camPosOnFocusPlane.y = currentFocus.position.y;
-        Vector3 camToFocus = currentFocus.position - camPosOnFocusPlane;
-        float angle = Vector3.Angle(targetToFocus, camToFocus);
-        Debug.Log("Angle: " + angle);
-        Vector3 relativePoint = transform.InverseTransformPoint(target.position);
-        if (relativePoint.x < 0.0)
-        {
-            print("Object is to the left");
-            angle *= -1f;
-        }
-        //else if (relativePoint.x > 0.0)
-        //    print("Object is to the right");
-        //else
-        //    print("Object is directly ahead");
+        //Vector3 targetToFocus = target.position - currentFocus.position;
+        //Vector3 camPosOnFocusPlane = trans.position;
+        //camPosOnFocusPlane.y = currentFocus.position.y;
+        //Vector3 camToFocus = currentFocus.position - camPosOnFocusPlane;
+        //float angle = Vector3.Angle(targetToFocus, camToFocus);
+        //Debug.Log("Angle: " + angle);
+        //Vector3 relativePoint = transform.InverseTransformPoint(target.position);
+        //if (relativePoint.x < 0.0)
+        //{
+        //    print("Object is to the left");
+        //    angle *= -1f;
+        //}
+        ////else if (relativePoint.x > 0.0)
+        ////    print("Object is to the right");
+        ////else
+        ////    print("Object is directly ahead");
 
 
-        OrbitAroundImmediate(currentFocus, angle, 0);
-        yield return null;
-        //yield return StartCoroutine(MoveAndRotateTo(targetPos, desiredRotation, period));
+        //OrbitAroundImmediate(currentFocus, angle, 0);
+
+
+        
+
+        //yield return null;
 
     }
     
@@ -130,6 +151,7 @@ public class CameraDirector : SingletonComponent<CameraDirector>
     {
         trans.RotateAround(target.position, Vector3.up, xAngle*cameraOrbitSpeed*Time.deltaTime);
         trans.RotateAround(target.position, Vector3.right, yAngle*cameraOrbitSpeed*Time.deltaTime);
+        OnCamerMove();
     }
 
 }

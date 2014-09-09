@@ -6,11 +6,7 @@ using System.Linq;
 
 public class ShipAttack : MonoBehaviour
 {
-    [SerializeField]
-    GameObject projectilePrefab;
-    [SerializeField]
-    Transform shootPoint;
-
+    
     //cached components
     Transform trans;
     //ShipBlueprint shipBlueprint;
@@ -61,6 +57,7 @@ public class ShipAttack : MonoBehaviour
         {
             yield return null;
         }
+        yield return StartCoroutine(CameraDirector.Instance.FocusOn(trans, 1.0f));
     }
 
     IEnumerator WeaponTargetSelectionSequence(List<ShipComponent> components)
@@ -68,12 +65,11 @@ public class ShipAttack : MonoBehaviour
         Debug.Log("Select Target to fire upon: [Click] to confirm, [Esc] to cancel");
         List<AIShip> aiShips = TurnBasedCombatSystem.Instance.aiShips;
         int numAIShips = aiShips.Count;
-
         if (numAIShips > 0)
         {
             bool targetConfirmed = false;
             int targetShipIndex = 0;
-            //yield return StartCoroutine(CameraDirector.Instance.AimAtTarget(trans, aiShips[targetShipIndex].transform, 1.0f));
+            yield return StartCoroutine(CameraDirector.Instance.AimAtTarget(trans, aiShips[targetShipIndex].transform, 1.0f));
 
             while (!targetConfirmed)
             {
@@ -83,11 +79,12 @@ public class ShipAttack : MonoBehaviour
                     targetConfirmed = true;
                     targetShip = null;
                 }
-                //if(Input.GetKeyDown(KeyCode.Tab))
-                //{
-                //    targetShipIndex = +targetShipIndex % numAIShips;
-                //    yield return StartCoroutine(CameraDirector.Instance.AimAtTarget(trans, aiShips[targetShipIndex].transform, 1.0f));
-                //}
+                if (Input.GetKeyDown(KeyCode.Tab))
+                {
+                    targetShipIndex = ++targetShipIndex % numAIShips;
+                    Debug.Log(targetShipIndex);
+                    yield return StartCoroutine(CameraDirector.Instance.AimAtTarget(trans, aiShips[targetShipIndex].transform, 1.0f));
+                }
                 if (Input.GetMouseButton(2))
                 {
                     CameraDirector.Instance.OrbitAroundImmediate(trans, Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
@@ -106,6 +103,7 @@ public class ShipAttack : MonoBehaviour
 
                 yield return null;
             }
+            
 
         }
         else

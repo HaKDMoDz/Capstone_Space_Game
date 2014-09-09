@@ -1,12 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class AIShip : TurnBasedUnit 
 {
-    [SerializeField] float hullHP;
+    [SerializeField] float maxHullHP;
+    [SerializeField]
+    Slider healthBarSlider;
 
-    
+    float hullHP;
 
+    public override void Awake()
+    {
+        base.Awake();
+        hullHP = maxHullHP;
+    }
     public override IEnumerator ExecuteTurn()
     {
         Debug.Log(unitName + " (AI Ship) starts turn");
@@ -24,6 +32,7 @@ public class AIShip : TurnBasedUnit
     {
         hullHP -= damage;
         Debug.Log("Hull HP: " + hullHP);
+        healthBarSlider.value -= damage/maxHullHP;
     }
 
 }
