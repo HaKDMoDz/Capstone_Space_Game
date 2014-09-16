@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public enum CelestialObjectType {GALAXY, STAR, PLANET, MOON}
 
 public class CelestialObject : MonoBehaviour 
 {
-    public static bool inASystem = false;
     public Transform orbitAroundThis;
     public float rotateSpeed;
 
@@ -28,11 +28,6 @@ public class CelestialObject : MonoBehaviour
 
     public CelestialObjectType type;
 
-    private Camera cam;
-
-    private float medCamRange = 40.0f;
-    private float closeCamRange = 10.0f;
-
     private Transform playerShipLocation;
 
     private CelestialObject thisScript;
@@ -45,6 +40,7 @@ public class CelestialObject : MonoBehaviour
     public string composedOf = "";
     public string whyInteresting = "";
 
+    public float myDistanceToShip;
 
     public int mass;
     public int radius;
@@ -52,9 +48,9 @@ public class CelestialObject : MonoBehaviour
 	void Start () 
     {
         ID = ++numCelestialObjs;
-
+        myDistanceToShip = 1000000000.0f;
         SystemLog.addMessage("Celestial Object " + ID + ":" + name + " has been initialized");
-        cam = Camera.main;
+
 
         playerShipLocation = GameObject.Find("PlayerShip").transform;
 
@@ -69,23 +65,24 @@ public class CelestialObject : MonoBehaviour
 	
 	void Update () 
     {
-        switch (type)
+        Vector3 diffVector = playerShipLocation.position - transform.position;
+        myDistanceToShip = diffVector.magnitude;
+
+        /*
+         switch (type)
         {
             case CelestialObjectType.STAR:
                 disableVisual = false;
-                
-                if (Vector3.SqrMagnitude(playerShipLocation.position - transform.position) < medCamRange * medCamRange)
+                if (myDistanceToShip < medCamRange)
                 {
                     GalaxyCameraDirector.targetZoom = GalaxyCameraDirector.MED_ZOOM;
                     FatherTime.timeRate = FatherTime.MED_TIME_RATE;
-                    inASystem = true;
                 }
 
-                if (Vector3.SqrMagnitude(playerShipLocation.position - transform.position) > medCamRange * medCamRange * 1.5f)
+                if (myDistanceToShip > medCamRange * 1.5f)
                 {
                     GalaxyCameraDirector.targetZoom = GalaxyCameraDirector.FAR_ZOOM;
                     FatherTime.timeRate = FatherTime.FAR_TIME_RATE;
-                    inASystem = false;
                 }
 
                 break;
@@ -99,18 +96,13 @@ public class CelestialObject : MonoBehaviour
                     disableVisual = true;
                 }
 
-                if (inASystem)
+                if (myDistanceToShip < closeCamRange)
                 {
-                    if (Vector3.SqrMagnitude(playerShipLocation.position - transform.position) < closeCamRange * closeCamRange)
-                    {
-
-                        GalaxyCameraDirector.targetZoom = GalaxyCameraDirector.CLOSE_ZOOM;
-                        FatherTime.timeRate = FatherTime.CLOSE_TIME_RATE;
-                    }
+                    GalaxyCameraDirector.targetZoom = GalaxyCameraDirector.CLOSE_ZOOM;
+                    FatherTime.timeRate = FatherTime.CLOSE_TIME_RATE;
                 }
                 break;
             case CelestialObjectType.MOON:
-
 
                 //There is a bug here if you set the if statement to GalaxyCameraDirector.targetZoom instead of cam.orthographicSize it doesnt show moons
                 
@@ -129,6 +121,8 @@ public class CelestialObject : MonoBehaviour
 
                 
         }
+         */
+
         if (objectSelected && selectable)
         {
             //print(currSelectedObject.ID + " vs. " + ID);
