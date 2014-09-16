@@ -86,7 +86,7 @@ GameObject:
   - 92: {fileID: 406321121}
   - 124: {fileID: 406321120}
   - 81: {fileID: 406321119}
-  - 114: {fileID: 406321124}
+  - 114: {fileID: 406321125}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -159,7 +159,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
---- !u!114 &406321124
+--- !u!114 &406321125
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
@@ -167,11 +167,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 406321118}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae81b8c2e2bb59b4194099b5449afc7f, type: 3}
+  m_Script: {fileID: 11500000, guid: 6e44368ac55490b4aa4e2ea3d327e925, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hex: {fileID: 100000, guid: 84710f90bdc63d34d8c4c2c41868e27c, type: 2}
-  Ground: {fileID: 1520947413}
+  tile: {fileID: 100000, guid: 84710f90bdc63d34d8c4c2c41868e27c, type: 2}
+  ship: {fileID: 422319241}
+  shipLayer: 8
 --- !u!1 &422319241
 GameObject:
   m_ObjectHideFlags: 0
@@ -243,7 +244,7 @@ Transform:
   m_PrefabInternal: {fileID: 1751038458}
   m_GameObject: {fileID: 422319241}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 28.7900009, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -389,7 +390,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1520947413}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -.893999994, z: 0}
+  m_LocalPosition: {x: 25.9190006, y: -.893999994, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -403,7 +404,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400000, guid: f8be63edd520032488cf5b981351615d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 28.7900009
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: f8be63edd520032488cf5b981351615d, type: 3}
       propertyPath: m_LocalPosition.y
