@@ -3,12 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 
-public class HexTileMapGenerator : MonoBehaviour
+public class HexTileMapGenerator : ScriptableWizard
 {
 
     public GameObject tile;
     public GameObject ship;
-    public int shipLayer=8;
+    public int shipLayer = 8;
 
     List<Transform> tiles;
 
@@ -22,12 +22,18 @@ public class HexTileMapGenerator : MonoBehaviour
     int tileGridHeight;
 
 
+    [MenuItem("Custom/Ship Hex Tilemap Wizard")]
+    static void CreateWizard()
+    {
+        ScriptableWizard.DisplayWizard<HexTileMapGenerator>("Ship Hex Tilemap Wizard", "Create");
 
-    void Start()
+    }
+
+    void OnWizardCreate()
     {
         Init();
-        CreatedHexTileGrid();
-        DeleteExtraTiles();
+        CreateHexTileGrid();
+         DeleteExtraTiles();
     }
 
     void Init()
@@ -39,14 +45,14 @@ public class HexTileMapGenerator : MonoBehaviour
         shipSize.x = ship.renderer.bounds.size.x;
         shipSize.y = ship.renderer.bounds.size.y;
         shipSize.z = ship.renderer.bounds.size.z;
-        
+
 
         CalculateGridSize();
 
         tileSpawnHeight = ship.transform.position.y - shipSize.y;
-        raycastHeight = ship.transform.position.y + shipSize.y*2f;
+        raycastHeight = ship.transform.position.y + shipSize.y * 2f;
 
-        startPos = new Vector3(ship.transform.position.x - shipSize.x / 2f, tileSpawnHeight ,
+        startPos = new Vector3(ship.transform.position.x - shipSize.x / 2f, tileSpawnHeight,
                                ship.transform.position.z + shipSize.z / 2f - hexTileSize.x / 2f);
 
     }
@@ -62,7 +68,7 @@ public class HexTileMapGenerator : MonoBehaviour
         tileGridWidth = Mathf.RoundToInt(shipSize.x / hexTileSize.x);
 
     }
-    void CreatedHexTileGrid()
+    void CreateHexTileGrid()
     {
         Transform shipTileMap = new GameObject("ShipTileMap").transform;
         shipTileMap.transform.position = ship.transform.position;
@@ -97,20 +103,51 @@ public class HexTileMapGenerator : MonoBehaviour
 
     void DeleteExtraTiles()
     {
+        Debug.Log(shipLayer);
         Vector3 rayOrigin;
-        Ray ray=new Ray();
-        for (int i = tiles.Count-1; i >= 0; i--)
+        Ray ray = new Ray();
+        for (int i = tiles.Count - 1; i >= 0; i--)
         {
             rayOrigin = tiles[i].position + Vector3.up * raycastHeight;
             ray.origin = rayOrigin;
             ray.direction = Vector3.down;
-            if(!Physics.Raycast(ray, 500f,1<<shipLayer))
+            if (!Physics.Raycast(ray, 500f, 1 << shipLayer))
             {
-                //DestroyImmediate(tiles[i], false);
-                Destroy(tiles[i].gameObject);
+                DestroyImmediate(tiles[i].gameObject, false);
+                //Destroy(tiles[i].gameObject);
                 tiles.RemoveAt(i);
             }
         }
+    }
+
+    void OnWizardUpdate()
+    {
+        helpString = "Generates a hex tilemap based on the provided mesh";
+        bool valid = true;
+
+
+        if (shipLayer < 8)
+        {
+            errorString = "please assign the ship layer";
+            valid = false;
+        }
+        if (!ship)
+        {
+            errorString = "please assign a ship object";
+            valid = false;
+        }
+
+        if (!tile)
+        {
+            errorString = "please assign a tile prefab";
+            valid = false;
+        }
+
+        if (valid)
+        {
+            errorString = "";
+        }
+        isValid = valid;
     }
 
 

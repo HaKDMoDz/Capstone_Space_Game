@@ -44,6 +44,7 @@ public class ShipTileMapWizard : ScriptableWizard
     //generates a tilemap for the entire ship mesh
     void CreateTileMap()
     {
+        Debug.Log("Create Tile map");
         GameObject shipTileMap = new GameObject("ShipTileMap");
         shipTileMap.transform.position = shipTransform.position;
 
@@ -60,6 +61,7 @@ public class ShipTileMapWizard : ScriptableWizard
     //deletes tiles that are outside the ship mesh
     void DeleteExtraTiles()
     {
+        Debug.Log("DeleteExtraTiles");
         for (int i = tiles.Count - 1; i >= 0; i--)
         {
             Vector3 rayOrigin = tiles[i].transform.position + Vector3.up * raycastHeight * 2f;
@@ -74,6 +76,7 @@ public class ShipTileMapWizard : ScriptableWizard
     //initializes vars
     void Init()
     {
+        
         tiles = new List<GameObject>();
 
         shipMesh = shipMeshFilter.sharedMesh;
