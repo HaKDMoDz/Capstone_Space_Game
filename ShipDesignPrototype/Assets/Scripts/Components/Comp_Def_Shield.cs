@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Component_Shield : ShipComponent 
+public class Comp_Def_Shield : Component_Defense 
 {
 
 

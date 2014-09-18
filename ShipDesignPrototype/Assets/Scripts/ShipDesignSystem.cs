@@ -9,7 +9,9 @@ public class ComponentPrefabs
     public GameObject laserCannon;
     public GameObject missileLauncher;
     public GameObject shieldGen;
+    public GameObject armour;
     public GameObject powerPlant;
+    public GameObject repairDrone;
 
 }
 
@@ -74,6 +76,14 @@ public class ShipDesignSystem : MonoBehaviour
                 return componentPrefabs.laserCannon;
             case "Missile":
                 return componentPrefabs.missileLauncher;
+            case "Armour":
+                return componentPrefabs.armour;
+            case "Shield":
+                return componentPrefabs.shieldGen;
+            case "PwrPlant":
+                return componentPrefabs.powerPlant;
+            case "Repair":
+                return componentPrefabs.repairDrone;
             default:
                 return null;
         }
