@@ -4,6 +4,11 @@ using System.Collections.Generic;
 using System;
 
 [Serializable]
+public class HullPrefabs
+{
+    public GameObject frigate;
+}
+[Serializable]
 public class ComponentPrefabs
 {
     public GameObject laserCannon;
@@ -19,7 +24,24 @@ public class ComponentPrefabs
 public class ShipDesignSystem : MonoBehaviour
 {
 
+    public Transform hullPlacementLoc;
+
+    public HullPrefabs hullPrefabs;
     public ComponentPrefabs componentPrefabs;
+
+    
+
+    public void BuildHull(string hullName)
+    {
+        switch (hullName)
+        {
+            case "Frigate":
+                Instantiate(hullPrefabs.frigate, hullPlacementLoc.position, hullPrefabs.frigate.transform.rotation);
+                break;
+            default:
+                break;
+        }
+    }
 
     public void BuildComponent(string compName)
     {
