@@ -44,88 +44,28 @@ public class CelestialObject : MonoBehaviour
 
     public int mass;
     public int radius;
+    private Camera cam;
 
 	void Start () 
     {
         ID = ++numCelestialObjs;
         myDistanceToShip = 1000000000.0f;
         SystemLog.addMessage("Celestial Object " + ID + ":" + name + " has been initialized");
-
-
+        cam = Camera.main;
         playerShipLocation = GameObject.Find("PlayerShip").transform;
-
         objectSelected = false;
-
         InputManager.Instance.OnMouseClick += OnMouseClick;
-
         thisScript = gameObject.GetComponent<CelestialObject>();
-
-        //CheckReadyStatus(); //Debug - used to make sure all components are installed correctly
 	}
+
 	
 	void Update () 
     {
-        Vector3 diffVector = playerShipLocation.position - transform.position;
-        myDistanceToShip = diffVector.magnitude;
-
-        /*
-         switch (type)
-        {
-            case CelestialObjectType.STAR:
-                disableVisual = false;
-                if (myDistanceToShip < medCamRange)
-                {
-                    GalaxyCameraDirector.targetZoom = GalaxyCameraDirector.MED_ZOOM;
-                    FatherTime.timeRate = FatherTime.MED_TIME_RATE;
-                }
-
-                if (myDistanceToShip > medCamRange * 1.5f)
-                {
-                    GalaxyCameraDirector.targetZoom = GalaxyCameraDirector.FAR_ZOOM;
-                    FatherTime.timeRate = FatherTime.FAR_TIME_RATE;
-                }
-
-                break;
-            case CelestialObjectType.PLANET:
-                if (GalaxyCameraDirector.targetZoom < GalaxyCameraDirector.FAR_ZOOM)
-                {
-                    disableVisual = false;
-                }
-                else
-                {
-                    disableVisual = true;
-                }
-
-                if (myDistanceToShip < closeCamRange)
-                {
-                    GalaxyCameraDirector.targetZoom = GalaxyCameraDirector.CLOSE_ZOOM;
-                    FatherTime.timeRate = FatherTime.CLOSE_TIME_RATE;
-                }
-                break;
-            case CelestialObjectType.MOON:
-
-                //There is a bug here if you set the if statement to GalaxyCameraDirector.targetZoom instead of cam.orthographicSize it doesnt show moons
-                
-                if (cam.orthographicSize < GalaxyCameraDirector.MED_ZOOM)
-                //if (GalaxyCameraDirector.targetZoom < GalaxyCameraDirector.CLOSE_ZOOM)
-                {
-                    disableVisual = false;
-                }
-                else
-                {
-                    disableVisual = true;
-                }
-                break;
-            default:
-                break;
-
-                
-        }
-         */
+        
 
         if (objectSelected && selectable)
         {
-            //print(currSelectedObject.ID + " vs. " + ID);
+            
 
             if (currSelectedObject.ID == ID)
             {
@@ -153,66 +93,27 @@ public class CelestialObject : MonoBehaviour
             renderer.enabled = true;
             if (type == CelestialObjectType.PLANET)
             {
-                Atmosphere.renderer.enabled = false;
+                Atmosphere.renderer.enabled = true;
             }
         }
 
         transform.RotateAround(orbitAroundThis.position, Vector3.up, rotateSpeed * Time.deltaTime * FatherTime.timeRate);
-        /*
-         * the following is debug code. replace the previous line of code with this to ensure components are correctly installed
-         * 
-        if (CheckReadyStatus())
-        {
-            transform.RotateAround(orbitAroundThis.position, Vector3.up, rotateSpeed * Time.deltaTime * FatherTime.timeRate);
-            //replace with proper celestial rotation code from ThrusterPrototype's galaxy code
-        }
-         */
 	}
-
-    //this is a debug method used to make sure all components are installed correctly
-    private bool CheckReadyStatus()
-    {
-        bool ready = false;
-
-        if (orbitAroundThis && rotateSpeed > 0.0f)
-        {
-            ready = true;
-        }
-        else if (!orbitAroundThis)
-        {
-            Debug.LogError("CelestialBody " + ID + " has nothing to rotate around. please set in editor");
-        }
-        else if (!(rotateSpeed > 0.0f))
-        {
-            Debug.LogError("CelestialBody " + ID + " has no rotation speed. please set in editor");
-        }
-
-        return ready;
-    }
 
     void OnMouseClick(MouseEventArgs args)
     {
-        if (acceptInput)
+        if (acceptInput && args.button == 0)
         {
-            if (args.button == 0)
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit) && hit.collider.tag == "CelestialObject" && hit.collider.GetComponent<CelestialObject>().ID == ID)
             {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-                if (Physics.Raycast(ray, out hit))
-                {
-                    if (hit.collider.tag == "CelestialObject")
-                    {
-                        if (hit.collider.GetComponent<CelestialObject>().ID == ID)
-                        {
-                            currSelectedObject = hit.collider.GetComponent<CelestialObject>();
-                            objectSelected = true;
-                            SystemLog.addMessage(name + " was selected");
-                            DisplayInfo();
-                            acceptInput = false;
-                            StartCoroutine(WaitBeforeInput(1.0f));
-                        }
-                    }
-                }
+                currSelectedObject = hit.collider.GetComponent<CelestialObject>();
+                objectSelected = true;
+                SystemLog.addMessage(name + " was selected");
+                DisplayInfo();
+                acceptInput = false;
+                StartCoroutine(WaitBeforeInput(1.0f));
             }
         } 
     }

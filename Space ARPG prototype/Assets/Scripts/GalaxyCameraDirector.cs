@@ -25,7 +25,7 @@ public class GalaxyCameraDirector : MonoBehaviour
 	
 	void Update () 
     {
-        cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, targetZoom, 0.1f);
+        cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, targetZoom, 0.02f);
 
         
 	}

@@ -2,18 +2,24 @@
 using System.Collections;
 using System.Collections.Generic;
 
+public enum shipSensorStates { OUTER_SPACE, STELLAR_ORBIT, PLANETARY_ORBIT}
+
 public class ShipSensors : MonoBehaviour 
 {
     private GameObject[] allStellarObjects;
     private List<GameObject> objectsNearMe;
     private GameObject closestObjectToMe;
+    private GameObject orbitting;
 
     public float sensorRange;
 
     private Camera cam;
-    private float medCamRange = 40.0f;
-    private float closeCamRange = 10.0f;
+    private float medCamRange = 50.0f;
+    private float closeCamRange = 20.0f;
+    private float timeBetweenSensorSweeps = 2.0f;
+    private float timeUntilSensorSweep = 0.0f;
 
+    private bool inASystem = false;
 	// Use this for initialization
 	void Start () 
     {
@@ -25,100 +31,80 @@ public class ShipSensors : MonoBehaviour
         allStellarObjects = GameObject.FindGameObjectsWithTag("CelestialObject");
 
         cam = Camera.main;
+
+        orbitting = null;
 	}
 	
 	// Update is called once per frame
 	void Update () 
     {
+        CelestialObject currCOScript;
         for (int i = objectsNearMe.Count - 1; i > 0; i--)
-			{
-                if (objectsNearMe[i].GetComponent<CelestialObject>().myDistanceToShip > sensorRange)
-                {
-                    objectsNearMe.Remove(objectsNearMe[i]);
-                }
+		{
+            currCOScript = objectsNearMe[i].GetComponent<CelestialObject>();
+            if (currCOScript.myDistanceToShip > sensorRange)
+            {
+                objectsNearMe.Remove(objectsNearMe[i]);
+            }
 	    }
 
         //sensor sweep
-        foreach (GameObject gObject in allStellarObjects)
+        if (timeUntilSensorSweep <= 0.000001f)
         {
-            float distance = (gObject.transform.position - transform.position).magnitude;
-            
-            if ( distance < sensorRange)
+            timeUntilSensorSweep = timeBetweenSensorSweeps;
+            foreach (GameObject gObject in allStellarObjects)
             {
-                objectsNearMe.Add(gObject);
-                if (!closestObjectToMe.activeInHierarchy)
+                float distance = (gObject.transform.position - transform.position).magnitude;
+                gObject.GetComponent<CelestialObject>().myDistanceToShip = distance;
+
+                if (distance < sensorRange)
                 {
-                    closestObjectToMe = gObject;
-                }
-                else
-                {
-                    if (gObject.GetComponent<CelestialObject>().myDistanceToShip < closestObjectToMe.GetComponent<CelestialObject>().myDistanceToShip)
+                    objectsNearMe.Add(gObject);
+                    if (!closestObjectToMe.activeInHierarchy)
                     {
                         closestObjectToMe = gObject;
-                        SystemLog.addMessage("tick");
-                        SystemLog.addMessage(closestObjectToMe.GetComponent<CelestialObject>().myName);
+                    }
+                    else
+                    {
+                        if (distance < closestObjectToMe.GetComponent<CelestialObject>().myDistanceToShip)
+                        {
+                            closestObjectToMe = gObject;
+
+                            //SystemLog.addMessage("tick");
+                            //SystemLog.addMessage(closestObjectToMe.GetComponent<CelestialObject>().myName);
+                        }
                     }
                 }
-                
             }
         }
-
-        CelestialObject closestObject = closestObjectToMe.GetComponent<CelestialObject>();
-        switch (closestObject.type)
+        else
         {
-            case CelestialObjectType.STAR:
-                closestObject.disableVisual = false;
-
-                if (closestObject.myDistanceToShip < medCamRange)
-                {
-                    GalaxyCameraDirector.targetZoom = GalaxyCameraDirector.MED_ZOOM;
-                    FatherTime.timeRate = FatherTime.MED_TIME_RATE;
-                }
-
-                if (closestObject.myDistanceToShip > medCamRange * 1.5f)
-                {
-                    GalaxyCameraDirector.targetZoom = GalaxyCameraDirector.FAR_ZOOM;
-                    FatherTime.timeRate = FatherTime.FAR_TIME_RATE;
-                }
-
-                break;
-            case CelestialObjectType.PLANET:
-                if (GalaxyCameraDirector.targetZoom < GalaxyCameraDirector.FAR_ZOOM)
-                {
-                    closestObject.disableVisual = false;
-                }
-                else
-                {
-                    closestObject.disableVisual = true;
-                }
-
-                if (closestObject.myDistanceToShip < closeCamRange)
-                {
-
-                    GalaxyCameraDirector.targetZoom = GalaxyCameraDirector.CLOSE_ZOOM;
-                    FatherTime.timeRate = FatherTime.CLOSE_TIME_RATE;
-                }
-                break;
-            case CelestialObjectType.MOON:
-
-                //There is a bug here if you set the if statement to GalaxyCameraDirector.targetZoom instead of cam.orthographicSize it doesnt show moons
-
-                if (cam.orthographicSize < GalaxyCameraDirector.MED_ZOOM)
-                //if (GalaxyCameraDirector.targetZoom < GalaxyCameraDirector.CLOSE_ZOOM)
-                {
-                    closestObject.disableVisual = false;
-                }
-                else
-                {
-                    closestObject.disableVisual = true;
-                }
-                break;
-            default:
-                break;
-
-
+            timeUntilSensorSweep -= Time.deltaTime;
         }
 
+        currCOScript = closestObjectToMe.GetComponent<CelestialObject>();
 
+        if (currCOScript.myDistanceToShip < medCamRange)
+        {
+            GalaxyCameraDirector.targetZoom = GalaxyCameraDirector.MED_ZOOM;
+            FatherTime.timeRate = FatherTime.MED_TIME_RATE;
+        }
+        else if (currCOScript.myDistanceToShip > medCamRange * 1.5f)
+        {
+            GalaxyCameraDirector.targetZoom = GalaxyCameraDirector.FAR_ZOOM;
+            FatherTime.timeRate = FatherTime.FAR_TIME_RATE;
+        }
+
+        if ((currCOScript.myDistanceToShip < closeCamRange) && (currCOScript.type == CelestialObjectType.PLANET))
+        {
+
+            GalaxyCameraDirector.targetZoom = GalaxyCameraDirector.CLOSE_ZOOM;
+            FatherTime.timeRate = FatherTime.CLOSE_TIME_RATE;
+        }
+        else if ((currCOScript.myDistanceToShip > medCamRange) && (currCOScript.type == CelestialObjectType.MOON || currCOScript.type == CelestialObjectType.PLANET))
+        {
+            GalaxyCameraDirector.targetZoom = GalaxyCameraDirector.MED_ZOOM;
+            FatherTime.timeRate = FatherTime.MED_TIME_RATE;
+        }
 	}
 }

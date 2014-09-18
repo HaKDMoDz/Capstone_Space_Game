@@ -61,4 +61,10 @@ public class SystemLog : MonoBehaviour
     {
         transform.parent.parent.parent.GetComponent<Canvas>().enabled = true;
     }
+
+    public void toggleEnable()
+    {
+        Canvas canvas = transform.parent.parent.parent.GetComponent<Canvas>();
+        canvas.enabled = !canvas.enabled;
+    }
 }

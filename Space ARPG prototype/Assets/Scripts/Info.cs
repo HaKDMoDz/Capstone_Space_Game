@@ -59,6 +59,10 @@ public class Info : MonoBehaviour
     {
         myCanvas.enabled = true;
     }
+    public void toggleEnable()
+    {
+        myCanvas.enabled = !myCanvas.enabled;
+    }
 
     void Update() { }
 }
