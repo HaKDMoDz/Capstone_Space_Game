@@ -21,16 +21,35 @@ public class ComponentPrefabs
 }
 
 
-public class ShipDesignSystem : MonoBehaviour
+public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
 {
 
     public Transform hullPlacementLoc;
-
     public HullPrefabs hullPrefabs;
     public ComponentPrefabs componentPrefabs;
 
+    public List<Hull> shipHulls;
+    public List<ShipComponent> availableComponents;
+    public List<ShipBlueprint> availableShips;
     
-
+    //List<ComponentBlueprint> componentBlueprints
+    //List<ComponentUpgrade> availableUpgrades
+    
+    void Start()
+    {
+        foreach (Hull hull in shipHulls)
+        {
+            if(hull)
+            {
+                hull.Init();
+            }
+            else
+            {
+                Debug.LogError("null Hull", this);
+            }
+        }
+    }
+    
     public void BuildHull(string hullName)
     {
         switch (hullName)
@@ -72,16 +91,13 @@ public class ShipDesignSystem : MonoBehaviour
                     Instantiate(compPrefab, hit.collider.transform.position, compPrefab.transform.rotation);
                     runSequence = false;
                 }
-                
             }
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 runSequence = false;
             }
             yield return null;
-
         }
-
     }
 
     public Vector3 GetBuildPos()

@@ -3,10 +3,11 @@ using System.Collections;
 
 public class ShipComponent : MonoBehaviour 
 {
+    public uint ID;
     public string componentName;
+    public bool unlocked;
 
     bool selected;
-
     public bool Selected
     {
         get { return selected; }
@@ -24,9 +25,6 @@ public class ShipComponent : MonoBehaviour
     {
         selectProjector = GetComponentInChildren<Projector>();
     }
-
-
-
 
     public virtual void Activate(System.Action onComplete)
     {
