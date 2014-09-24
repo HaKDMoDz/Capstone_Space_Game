@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 
 [Serializable]
 public class HullPrefabs
@@ -23,10 +24,18 @@ public class ComponentPrefabs
 
 public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
 {
+    //assigned from Editor
+    [SerializeField]
+    Transform hullPlacementLoc;
+    [SerializeField]
+    HullTable hullTableObject;
 
-    public Transform hullPlacementLoc;
+
+
     public HullPrefabs hullPrefabs;
     public ComponentPrefabs componentPrefabs;
+
+    Dictionary<int, GameObject> hullTable;
 
     public List<Hull> shipHulls;
     public List<ShipComponent> availableComponents;
@@ -37,17 +46,9 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
     
     void Start()
     {
-        foreach (Hull hull in shipHulls)
-        {
-            if(hull)
-            {
-                hull.Init();
-            }
-            else
-            {
-                Debug.LogError("null Hull", this);
-            }
-        }
+        hullTable = new Dictionary<int, GameObject>();
+        hullTableObject.HullTable1.ToDictionary(hull => hull.ID, hull => hull.hullPrefab);
+        Debug.Log(hullTable.Count);
     }
     
     public void BuildHull(string hullName)

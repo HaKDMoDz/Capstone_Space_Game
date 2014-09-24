@@ -19,8 +19,8 @@ public class HullTableEntry
 [Serializable]
 public class HullTable : ScriptableObject 
 {
-    //public int ID;
-    //public GameObject hullPrefab;
+    public int ID;
+    public GameObject hullPrefab;
 
     //[SerializeField]
     //List<int> IDs;
@@ -39,6 +39,7 @@ public class HullTable : ScriptableObject
     void Start()
     {
         //hullTable = new Dictionary<int, GameObject>();
+        Debug.Log("new list");
         hullTable = new List<HullTableEntry>();
     }
 

@@ -55,7 +55,7 @@ public class HullTableEditor : Editor
         }
         else if(hullTable.PrefabExists(hull))
         {
-            EditorGUILayout.HelpBox("Hull already exists in table", MessageType.Error, true);     
+            EditorGUILayout.HelpBox("Hull already exists in table", MessageType.Warning, true);     
         }
         //EditorGUILayout.EndHorizontal();
         if(GUILayout.Button("Add Entry"))
