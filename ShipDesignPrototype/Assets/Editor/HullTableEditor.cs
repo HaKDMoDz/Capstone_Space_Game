@@ -7,7 +7,7 @@ using System.Collections.Generic;
 public class HullTableEditor : Editor
 {
     int id;
-    GameObject hull;
+    Hull hull;
 
     [MenuItem("Data/Create Hull Table")]
     static void CreateHullTable()
@@ -43,13 +43,13 @@ public class HullTableEditor : Editor
             EditorGUILayout.HelpBox("ID already exists in table", MessageType.Error, true);     
         }
         EditorGUILayout.LabelField("Hull Prefab");
-        hull = EditorGUILayout.ObjectField(hull, typeof(GameObject), true) as GameObject;
+        hull = EditorGUILayout.ObjectField(hull, typeof(Hull), true) as Hull;
         
         if(!hull)
         {
             EditorGUILayout.HelpBox("Please assign a hull", MessageType.Info, true);
         }
-        else if(hullTable.PrefabExists(hull))
+        else if(hullTable.HullExists(hull))
         {
             EditorGUILayout.HelpBox("Hull already exists in table", MessageType.Warning, true);     
         }

@@ -8,11 +8,11 @@ using System.Linq;
 public class HullTableEntry
 {
     public int ID;
-    public GameObject hullPrefab;
-    public HullTableEntry(int _ID, GameObject _hullPrefab)
+    public Hull hull;
+    public HullTableEntry(int _ID, Hull _hull)
     {
         ID = _ID;
-        hullPrefab = _hullPrefab;
+        hull = _hull;
     }
 }
 
@@ -31,13 +31,13 @@ public class HullTable : ScriptableObject
         get { return hullTable; }
     }
 
-    public void AddEntry(int _ID, GameObject _hullPrefab)
+    public void AddEntry(int _ID, Hull _hull)
     {
         if(hullTable==null)
         {
             hullTable = new List<HullTableEntry>();
         }
-        hullTable.Add(new HullTableEntry(_ID, _hullPrefab));
+        hullTable.Add(new HullTableEntry(_ID, _hull));
     }
     public bool IDExists(int _id)
     {
@@ -48,14 +48,14 @@ public class HullTable : ScriptableObject
         //return hullTable.Contains(_id);
         return hullTable.Any(entry => entry.ID == _id);
     }
-    public bool PrefabExists(GameObject _hullPrefab)
+    public bool HullExists(Hull _hull)
     {
         if (hullTable == null)
         {
             return false;
         }
         //return hullTable.ContainsValue(_hullPrefab);
-        return hullTable.Any(entry => entry.hullPrefab == _hullPrefab);
+        return hullTable.Any(entry => entry.hull == _hull);
     }
     public void WipeTable()
     {

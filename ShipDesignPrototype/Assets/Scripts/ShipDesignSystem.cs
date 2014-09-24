@@ -53,7 +53,7 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
     //public HullPrefabs hullPrefabs;
     public ComponentPrefabs componentPrefabs;
 
-    Dictionary<int, GameObject> hullTable;
+    Dictionary<int, Hull> hullTable;
 
     public List<Hull> shipHulls;
     public List<ShipComponent> availableComponents;
@@ -62,12 +62,28 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
     //List<ComponentBlueprint> componentBlueprints
     //List<ComponentUpgrade> availableUpgrades
 
+    ShipBlueprint currentBlueprint;
+    bool buildingShip = false;
+
     void Start()
     {
         hullTable = hullTableObject.HullTable1
-            .ToDictionary(hull => hull.ID, hull => hull.hullPrefab);
-
+            .ToDictionary(hull => hull.ID, hull => hull.hull);
+        currentBlueprint = null;
         SetupGUI();
+    }
+
+    public void SaveBlueprint()
+    {
+        Debug.Log("SaveBlueprint");
+    }
+    public void LoadBlueprint()
+    {
+        Debug.Log("LoadBlueprint");
+    }
+    public void ClearBlueprint()
+    {
+        Debug.Log("ClearBlueprint");
     }
 
     void SetupGUI()
@@ -92,22 +108,17 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
     }
     public void BuildHull(int hullID)
     {
-        Instantiate(hullTable[hullID], hullPlacementLoc.position, hullPlacementLoc.rotation);
+        if (!buildingShip)
+        {
+            Instantiate(hullTable[hullID], hullPlacementLoc.position, hullPlacementLoc.rotation);
+            currentBlueprint = new ShipBlueprint(hullTable[hullID]);
+            buildingShip = true;
+        }
+        else
+        {
+            Debug.Log("Already building a ship");
+        }
     }
-    //public void BuildHull(string hullName)
-    //{
-    //    switch (hullName)
-    //    {
-    //        case "Frigate":
-    //            Instantiate(hullPrefabs.frigate, hullPlacementLoc.position, hullPrefabs.frigate.transform.rotation);
-    //            break;
-    //        case "New":
-    //            Debug.Log("Create new hull");
-    //            break;
-    //        default:
-    //            break;
-    //    }
-    //}
 
     public void BuildComponent(string compName)
     {
