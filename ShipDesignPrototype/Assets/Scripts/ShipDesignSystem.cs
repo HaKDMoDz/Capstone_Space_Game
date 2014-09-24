@@ -46,9 +46,9 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
     
     void Start()
     {
-        hullTable = new Dictionary<int, GameObject>();
-        hullTableObject.HullTable1.ToDictionary(hull => hull.ID, hull => hull.hullPrefab);
-        Debug.Log(hullTable.Count);
+        hullTable = hullTableObject.HullTable1
+            .ToDictionary(hull => hull.ID, hull => hull.hullPrefab);
+
     }
     
     public void BuildHull(string hullName)

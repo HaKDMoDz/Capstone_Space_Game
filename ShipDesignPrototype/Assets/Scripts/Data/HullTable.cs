@@ -19,13 +19,8 @@ public class HullTableEntry
 [Serializable]
 public class HullTable : ScriptableObject 
 {
-    public int ID;
-    public GameObject hullPrefab;
-
-    //[SerializeField]
-    //List<int> IDs;
-    //[SerializeField]
-    //List<GameObject> hullPrefabs;
+    //public int ID;
+    //public GameObject hullPrefab;
 
     //Dictionary<int, GameObject> hullTable;
     [SerializeField]
@@ -36,13 +31,6 @@ public class HullTable : ScriptableObject
         get { return hullTable; }
     }
 
-    void Start()
-    {
-        //hullTable = new Dictionary<int, GameObject>();
-        Debug.Log("new list");
-        hullTable = new List<HullTableEntry>();
-    }
-
     public void AddEntry(int _ID, GameObject _hullPrefab)
     {
         if(hullTable==null)
@@ -50,8 +38,6 @@ public class HullTable : ScriptableObject
             hullTable = new List<HullTableEntry>();
         }
         hullTable.Add(new HullTableEntry(_ID, _hullPrefab));
-        //IDs.Add(_ID);
-        //hullPrefabs.Add(_hullPrefab);
     }
     public bool IDExists(int _id)
     {

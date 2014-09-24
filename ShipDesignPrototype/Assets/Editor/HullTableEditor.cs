@@ -2,7 +2,6 @@
 using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditorInternal;
 
 [CustomEditor(typeof(HullTable))]
 public class HullTableEditor : Editor
@@ -13,7 +12,7 @@ public class HullTableEditor : Editor
     [MenuItem("Data/Create Hull Table")]
     static void CreateHullTable()
     {
-        string path = EditorUtility.SaveFilePanel("Create Hull Tabl", "Assets/", "default.asset", "asset");
+        string path = EditorUtility.SaveFilePanel("Create Hull Table", "Assets/", "HullTable.asset", "asset");
         if (path == "")
         {
             return;
@@ -23,16 +22,13 @@ public class HullTableEditor : Editor
         HullTable hullTable = CreateInstance<HullTable>();
         AssetDatabase.CreateAsset(hullTable, path);
         AssetDatabase.SaveAssets();
+        EditorUtility.FocusProjectWindow();
+        Selection.activeObject = hullTable;
     }
 
 
     public override void OnInspectorGUI()
     {
-        //if(Event.current.type==EventType.Layout)
-        //{
-        //    return;
-        //}
-
         DrawDefaultInspector();
 
         HullTable hullTable = target as HullTable;
@@ -63,6 +59,7 @@ public class HullTableEditor : Editor
             if (hull)
             {
                 hullTable.AddEntry(id, hull);
+                EditorUtility.SetDirty(hullTable);
             }
             else
             {
@@ -71,16 +68,17 @@ public class HullTableEditor : Editor
             }
             
         }
-        if(GUILayout.Button("Display Table"))
-        {
-            hullTable.DisplayTable();
-        }
+        //if(GUILayout.Button("Display Table"))
+        //{
+        //    hullTable.DisplayTable();
+        //}
 
         if(GUILayout.Button("Wipe Table"))
         {
             if(EditorUtility.DisplayDialog("Confirm Wipe", "Are you sure you want to wipe the hull table?", "Wipe", "Cancel"))
             {
                 hullTable.WipeTable();
+                EditorUtility.SetDirty(hullTable);
             }
         }
 
