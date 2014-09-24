@@ -1,14 +1,16 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using System;
 using System.Linq;
 
-[Serializable]
-public class HullPrefabs
-{
-    public GameObject frigate;
-}
+
+//[Serializable]
+//public class HullPrefabs
+//{
+//    public GameObject frigate;
+//}
 [Serializable]
 public class ComponentPrefabs
 {
@@ -30,9 +32,25 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
     [SerializeField]
     HullTable hullTableObject;
 
+    //GUI stuff
+    [SerializeField]
+    Canvas canvas;
+    [SerializeField]
+    RectTransform compButtonParent;
+    [SerializeField]
+    RectTransform hullButtonParent;
+    [SerializeField]
+    RectTransform defaultHullButtonPos;
+    [SerializeField]
+    RectTransform defaultCompButtonPos;
+    [SerializeField]
+    Button buttonPrefab;
+    [SerializeField]
+    float buttonYOffset = 20f;
 
 
-    public HullPrefabs hullPrefabs;
+
+    //public HullPrefabs hullPrefabs;
     public ComponentPrefabs componentPrefabs;
 
     Dictionary<int, GameObject> hullTable;
@@ -40,28 +58,56 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
     public List<Hull> shipHulls;
     public List<ShipComponent> availableComponents;
     public List<ShipBlueprint> availableShips;
-    
+
     //List<ComponentBlueprint> componentBlueprints
     //List<ComponentUpgrade> availableUpgrades
-    
+
     void Start()
     {
         hullTable = hullTableObject.HullTable1
             .ToDictionary(hull => hull.ID, hull => hull.hullPrefab);
 
+        SetupGUI();
     }
-    
-    public void BuildHull(string hullName)
+
+    void SetupGUI()
     {
-        switch (hullName)
+        Button buttonClone;
+        RectTransform buttonTrans;
+        for (int i = 0; i < hullTable.Count; i++)
         {
-            case "Frigate":
-                Instantiate(hullPrefabs.frigate, hullPlacementLoc.position, hullPrefabs.frigate.transform.rotation);
-                break;
-            default:
-                break;
+            buttonClone= Instantiate(buttonPrefab) as Button;
+            buttonTrans= buttonClone.GetComponent<RectTransform>();
+            buttonTrans.SetParent(hullButtonParent);
+            buttonTrans.CopyTransform(defaultHullButtonPos);
+            buttonTrans.SetPositionY(buttonTrans.position.y - buttonYOffset * i);
+            buttonClone.GetComponentInChildren<Text>().text = hullTable.ElementAt(i).Value.name;
+            int num = hullTable.ElementAt(i).Key;
+            buttonClone.onClick.AddListener(() =>
+                {
+                   // BuildHull((int)hullTable.ElementAt(i).Key);
+                    BuildHull(num);
+                });
         }
     }
+    public void BuildHull(int hullID)
+    {
+        Instantiate(hullTable[hullID], hullPlacementLoc.position, hullPlacementLoc.rotation);
+    }
+    //public void BuildHull(string hullName)
+    //{
+    //    switch (hullName)
+    //    {
+    //        case "Frigate":
+    //            Instantiate(hullPrefabs.frigate, hullPlacementLoc.position, hullPrefabs.frigate.transform.rotation);
+    //            break;
+    //        case "New":
+    //            Debug.Log("Create new hull");
+    //            break;
+    //        default:
+    //            break;
+    //    }
+    //}
 
     public void BuildComponent(string compName)
     {

@@ -16,6 +16,17 @@ public static class ExtensionMethods
         trans.localRotation = Quaternion.identity;
         trans.localScale = new Vector3(1f, 1f, 1f);
     }
+    /// <summary>
+    /// copy pos, rotation and scale from the target transform
+    /// </summary>
+    /// <param name="trans"></param>
+    /// <param name="targetTrans"></param>
+    public static void CopyTransform(this Transform trans, Transform targetTrans)
+    {
+        trans.position = targetTrans.position;
+        trans.rotation = targetTrans.rotation;
+        trans.localScale = targetTrans.localScale;
+    }
 
     /// <summary>
     /// Sets just the x coordinate of a transform's position
