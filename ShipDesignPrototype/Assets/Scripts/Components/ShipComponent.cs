@@ -7,6 +7,10 @@ public class ShipComponent : MonoBehaviour
     public string componentName;
     public bool unlocked;
 
+    public enum ComponentType { Weapon, Defense, Power, Engine, Support}
+    public ComponentType type;
+
+
     bool selected;
     public bool Selected
     {

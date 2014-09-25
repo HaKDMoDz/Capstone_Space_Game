@@ -62,11 +62,13 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
     //List<ComponentBlueprint> componentBlueprints
     //List<ComponentUpgrade> availableUpgrades
 
+    ShipBlueprintSaveSystem saveSystem;
     ShipBlueprint currentBlueprint;
     bool buildingShip = false;
 
     void Start()
     {
+        saveSystem = gameObject.GetSafeComponent<ShipBlueprintSaveSystem>();
         hullTable = hullTableObject.HullTable1
             .ToDictionary(hull => hull.ID, hull => hull.hull);
         currentBlueprint = null;
