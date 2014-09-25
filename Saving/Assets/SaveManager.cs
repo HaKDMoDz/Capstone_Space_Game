@@ -36,6 +36,7 @@ public class SaveManager : SingletonComponent<SaveManager>
             FileStream file = File.Open(Application.persistentDataPath + "/SaveData.dat", FileMode.Open);
             Debug.Log(Application.persistentDataPath + "/SaveData.dat");
             saveData = (SaveData)bf.Deserialize(file);
+            Debug.Log(saveData.CurrentState);
             file.Close();
             return true;
         }

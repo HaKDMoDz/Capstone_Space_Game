@@ -14,8 +14,8 @@ public class SaveData
         set { health = value; }
     }
 
+    
     List<SerializableVector3> positions;
-
     public List<Vector3> Positions
     {
         get 
@@ -38,12 +38,41 @@ public class SaveData
         }
     }
 
+    Dictionary<int, string> table;
+
+    public Dictionary<int, string> Table
+    {
+        get { return table; }
+        set { table = value; }
+    }
+
+    Player.State currentState;
+    public Player.State CurrentState
+    {
+        get { return currentState; }
+        set { currentState = value; }
+    }
+
+    //int currentState;
+    //public int CurrentState
+    //{
+    //    get
+    //    {
+    //        return (Player.State)currentState;
+    //    }
+    //    set
+    //    {
+    //        currentState = value;
+    //    }
+    //}
     
-    public SaveData(int health, List<Vector3> pos)
+    public SaveData(int _health, List<Vector3> _pos, Dictionary<int, string> _table, Player.State _currentState)
     {
         positions = new List<SerializableVector3>();
-        Health = health;
-        Positions = pos;
+        Health = _health;
+        Positions = _pos;
+        table = _table;
+        currentState = _currentState;
     }
 }
 
