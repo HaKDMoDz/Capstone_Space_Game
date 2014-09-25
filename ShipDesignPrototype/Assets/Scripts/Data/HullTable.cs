@@ -26,7 +26,7 @@ public class HullTable : ScriptableObject
     [SerializeField]
     List<HullTableEntry> hullTable;
 
-    public List<HullTableEntry> HullTable1
+    public List<HullTableEntry> HullTableProp
     {
         get { return hullTable; }
     }
@@ -39,14 +39,14 @@ public class HullTable : ScriptableObject
         }
         hullTable.Add(new HullTableEntry(_ID, _hull));
     }
-    public bool IDExists(int _id)
+    public bool IDExists(int id)
     {
         if(hullTable==null)
         {
             return false;
         }
         //return hullTable.Contains(_id);
-        return hullTable.Any(entry => entry.ID == _id);
+        return hullTable.Any(entry => entry.ID == id);
     }
     public bool HullExists(Hull _hull)
     {
@@ -65,11 +65,5 @@ public class HullTable : ScriptableObject
             
         }
     }
-    public void DisplayTable()
-    {
-        if (hullTable != null)
-        {
-            Debug.Log(hullTable);
-        }
-    }
+    
 }

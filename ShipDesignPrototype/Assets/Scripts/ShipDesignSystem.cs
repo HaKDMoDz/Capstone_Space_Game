@@ -26,6 +26,8 @@ public class ComponentPrefabs
 
 public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
 {
+
+    #region Fields
     //assigned from Editor
     [SerializeField]
     Transform hullPlacementLoc;
@@ -63,14 +65,20 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
     //List<ComponentUpgrade> availableUpgrades
 
     ShipBlueprintSaveSystem saveSystem;
+
     ShipBlueprint currentBlueprint;
+    Hull currentHull; 
     bool buildingShip = false;
+
+    #endregion
+
+    #region Methods
 
     void Start()
     {
         saveSystem = gameObject.GetSafeComponent<ShipBlueprintSaveSystem>();
-        hullTable = hullTableObject.HullTable1
-            .ToDictionary(hull => hull.ID, hull => hull.hull);
+        hullTable = hullTableObject.HullTableProp
+            .ToDictionary(h => h.ID, h => h.hull);
         currentBlueprint = null;
         SetupGUI();
     }
@@ -112,7 +120,7 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
     {
         if (!buildingShip)
         {
-            Instantiate(hullTable[hullID], hullPlacementLoc.position, hullPlacementLoc.rotation);
+            currentHull = Instantiate(hullTable[hullID], hullPlacementLoc.position, hullPlacementLoc.rotation) as Hull ;
             currentBlueprint = new ShipBlueprint(hullTable[hullID]);
             buildingShip = true;
         }
@@ -187,6 +195,6 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
         }
     }
 
-
+    #endregion
 
 }

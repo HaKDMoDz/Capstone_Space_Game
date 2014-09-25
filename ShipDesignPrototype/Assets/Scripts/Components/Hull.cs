@@ -5,8 +5,19 @@ using System.Collections.Generic;
 public class Hull : MonoBehaviour 
 {
     public uint ID;
-    public List<ComponentSlot> emptyComponentGrid;
-    public bool unlocked;
+    
+    List<ComponentSlot> emptyComponentGrid;
+    public List<ComponentSlot> EmptyComponentGrid
+    {
+        get { return emptyComponentGrid; }
+    }
+    
+    bool unlocked;
+    public bool Unlocked
+    {
+        get { return unlocked; }
+        set { unlocked = value; }
+    }
 
 
     public GameObject hullPrefab;

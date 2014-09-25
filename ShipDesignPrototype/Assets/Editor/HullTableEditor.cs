@@ -2,12 +2,38 @@
 using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditorInternal;
 
 [CustomEditor(typeof(HullTable))]
 public class HullTableEditor : Editor
 {
     int id;
     Hull hull;
+
+    //ReorderableList orderedList;
+    //SerializedProperty hullTable;
+    //private static readonly GUIContent HULL_LIST_HEADER = new GUIContent("Hull List", "List of hulls");
+
+
+    //void OnEnable()
+    //{
+    //    hullTable = serializedObject.FindProperty("hullTable");
+    //    orderedList = new ReorderableList(serializedObject, hullTable, true, true, true, true);
+    //    orderedList.drawHeaderCallback += rect => GUI.Label(rect, HULL_LIST_HEADER);
+    //    orderedList.drawElementCallback += (rect, index, active, focused) =>
+    //        {
+    //            rect.height = 16;
+    //            rect.y += 2;
+    //            if (index >= hullTable.arraySize) return;
+    //            var item = hullTable.GetArrayElementAtIndex(index).objectReferenceValue as HullTableEntry;
+    //            if (item == null)
+    //            {
+    //                EditorGUI.LabelField(rect, "null");
+    //                return;
+    //            }
+    //            EditorGUI.LabelField(rect, item.hull.name);
+    //        };
+    //}
 
     [MenuItem("Data/Create Hull Table")]
     static void CreateHullTable()
@@ -30,11 +56,18 @@ public class HullTableEditor : Editor
     public override void OnInspectorGUI()
     {
         DrawDefaultInspector();
+        //serializedObject.Update();
+        //orderedList.DoLayoutList();
+        //serializedObject.ApplyModifiedProperties();
 
         HullTable hullTable = target as HullTable;
 
         //EditorGUILayout.BeginHorizontal();
-
+        for (int i = 0; i < 5; i++)
+        {
+            EditorGUILayout.Space();
+        }
+        
         EditorGUILayout.LabelField("Add new entry to Hull Table");
         
         id = EditorGUILayout.IntField("ID", id);
@@ -60,18 +93,15 @@ public class HullTableEditor : Editor
             {
                 hullTable.AddEntry(id, hull);
                 EditorUtility.SetDirty(hullTable);
+                Clear();
             }
             else
             {
                 EditorGUILayout.HelpBox("No hull assigned", MessageType.Error, true);
-                Debug.LogError("no hull assigned", this);
+                Debug.LogError("No hull assigned", this);
             }
             
         }
-        //if(GUILayout.Button("Display Table"))
-        //{
-        //    hullTable.DisplayTable();
-        //}
 
         if(GUILayout.Button("Wipe Table"))
         {
@@ -79,9 +109,15 @@ public class HullTableEditor : Editor
             {
                 hullTable.WipeTable();
                 EditorUtility.SetDirty(hullTable);
+                Clear();
             }
         }
 
 
+    }
+    void Clear()
+    {
+        id = 0;
+        hull = null;
     }
 }
