@@ -39,6 +39,21 @@ public class HullTable : ScriptableObject
         }
         hullTable.Add(new HullTableEntry(_ID, _hull));
     }
+
+    public void AutoGenIDAndAdd(Hull hull)
+    {
+        AddEntry(GenNextID(), hull);
+    }
+    public int GenNextID()
+    {
+        int genID = 0;
+
+        while (hullTable.Any(entry => entry.ID == genID))
+        {
+            genID++;
+        }
+        return genID;
+    }
     public bool IDExists(int id)
     {
         if(hullTable==null)

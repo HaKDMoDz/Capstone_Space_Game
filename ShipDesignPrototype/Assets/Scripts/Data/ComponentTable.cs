@@ -26,6 +26,22 @@ public class ComponentTable : ScriptableObject
         get { return compTable; }
     }
 
+    public void AutoGenIDAndAdd(ShipComponent component)
+    {
+        AddEntry(GenNextID(), component);
+    }
+
+    public int GenNextID()
+    {
+        int genID = 0;
+
+        while (compTable.Any(entry => entry.ID == genID))
+        {
+            genID++;
+        }
+        return genID;
+    }
+
     public void AddEntry(int ID, ShipComponent component)
     {
         if(compTable==null)
