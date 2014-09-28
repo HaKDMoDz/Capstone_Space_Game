@@ -4,48 +4,22 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEditorInternal;
 
-[CustomEditor(typeof(TestData))]
-public class TestDataEditor : Editor 
+[CustomEditor(typeof(ComponentTable))]
+public class ComponentTableEditor : Editor 
 {
-    int num;
-
-    //ReorderableList list;
-    //SerializedProperty intList;
-    //private static readonly GUIContent INT_LIST_HEADER = new GUIContent("Int List", "List of ints");
-
-    //void OnEnable()
-    //{
-    //    intList = serializedObject.FindProperty("intList");
-    //    Debug.Log(intList);
-    //    list = new ReorderableList(serializedObject, intList, true, true, true, true);
-    //    list.drawHeaderCallback += rect => GUI.Label(rect, INT_LIST_HEADER);
-    //    list.drawElementCallback += (rect, index, active, focused) =>
-    //        {
-    //            rect.height = 16;
-    //            rect.y += 2;
-    //            if (index >= intList.arraySize) return;
-    //            var num = (intList.GetArrayElementAtIndex(index).objectReferenceValue);
-    //            if (num == null)
-    //            {
-    //                EditorGUI.LabelField(rect, "null");
-    //                return;
-    //            }
-    //            EditorGUI.LabelField(rect, num+"");
-    //        };
-    //}
-
-    [MenuItem("Data/Create Test Data")]
+    int id;
+    ShipComponent comp;
+    
+    [MenuItem("Data/Create Component Table")]
     static void CreateTestData()
     {
-        string path = EditorUtility.SaveFilePanel("Create Test Data", "Assets/", "TestData.asset", "asset");
+        string path = EditorUtility.SaveFilePanel("Create Component Table", "Assets/", "ComponentTable.asset", "asset");
         if(path=="")
         {
             return;
         }
         path = FileUtil.GetProjectRelativePath(path);
-        TestData testData = CreateInstance<TestData>();
-        testData.intList = new List<int>();
-        
+        ComponentTable testData = CreateInstance<ComponentTable>();
         AssetDatabase.CreateAsset(testData, path);
         AssetDatabase.SaveAssets();
         EditorUtility.FocusProjectWindow();
@@ -56,17 +30,68 @@ public class TestDataEditor : Editor
     public override void OnInspectorGUI()
     {
         DrawDefaultInspector();
+        ComponentTable compTable = target as ComponentTable;
 
-        //list.DoLayoutList();
+        EditorGUILayout.LabelField("Add entry to Component Table");
 
-        TestData testData = target as TestData;
-        num = EditorGUILayout.IntField("num", num);
-        if(GUILayout.Button("Add Entry"))
+        id = EditorGUILayout.IntField("num", id);
+        if(compTable.IDExists(id))
         {
-            testData.AddEntry(num);
-            EditorUtility.SetDirty(testData);
-
+            EditorGUILayout.HelpBox("ID already exists in table", MessageType.Error, true);
+        }
+        comp = EditorGUILayout.ObjectField("Component", comp, typeof(ShipComponent), true) as ShipComponent;
+        if(!comp)
+        {
+            EditorGUILayout.HelpBox("Please assign a component", MessageType.Info, true);
+        }
+        else if(compTable.ComponentExists(comp))
+        {
+            EditorGUILayout.HelpBox("Component already exists in table", MessageType.Warning, true);
+        }
+        if(GUILayout.Button("Auto Generate ID and Add"))
+        {
+            if(comp)
+            {
+                compTable.AutoGenIDandAdd(comp);
+                EditorUtility.SetDirty(compTable);
+                Clear();            
+            }
+            else
+            {
+                EditorGUILayout.HelpBox("No Component assigned", MessageType.Error, true);
+                Debug.LogError("No Component Assigned", this);
+            }
         }
 
+        if(GUILayout.Button("Add Entry"))
+        {
+            if (comp)
+            {
+                compTable.AddEntry(id, comp);
+                EditorUtility.SetDirty(compTable);
+                Clear();
+            }
+            else
+            {
+                EditorGUILayout.HelpBox("No Component assigned", MessageType.Error, true);
+                Debug.LogError("No Component Assigned", this);
+            }
+        }
+        if(GUILayout.Button("Wipe Table"))
+        {
+            if(EditorUtility.DisplayDialog("Confirm Wipe", "Are you sure you want to wipe the Component Table?","Wipe","Cancel"))
+            {
+                compTable.WipeTable();
+                EditorUtility.SetDirty(compTable);
+                Clear();
+            }
+        }
+
+    }
+    void Clear()
+    {
+        ComponentTable compTable = target as ComponentTable;
+        id = compTable.GenID();
+        comp = null;
     }
 }

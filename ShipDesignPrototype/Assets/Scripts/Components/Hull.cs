@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class Hull : MonoBehaviour 
 {
-    public uint ID;
+    public int ID;
     
     List<ComponentSlot> emptyComponentGrid;
     public List<ComponentSlot> EmptyComponentGrid

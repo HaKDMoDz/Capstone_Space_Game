@@ -47,7 +47,10 @@ public class HullTable : ScriptableObject
     public int GenNextID()
     {
         int genID = 0;
-
+        if(hullTable==null)
+        {
+            hullTable = new List<HullTableEntry>();
+        }
         while (hullTable.Any(entry => entry.ID == genID))
         {
             genID++;
