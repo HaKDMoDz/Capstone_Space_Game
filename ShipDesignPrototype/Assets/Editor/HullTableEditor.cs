@@ -10,30 +10,6 @@ public class HullTableEditor : Editor
     int id;
     Hull hull;
 
-    //ReorderableList orderedList;
-    //SerializedProperty hullTable;
-    //private static readonly GUIContent HULL_LIST_HEADER = new GUIContent("Hull List", "List of hulls");
-
-
-    //void OnEnable()
-    //{
-    //    hullTable = serializedObject.FindProperty("hullTable");
-    //    orderedList = new ReorderableList(serializedObject, hullTable, true, true, true, true);
-    //    orderedList.drawHeaderCallback += rect => GUI.Label(rect, HULL_LIST_HEADER);
-    //    orderedList.drawElementCallback += (rect, index, active, focused) =>
-    //        {
-    //            rect.height = 16;
-    //            rect.y += 2;
-    //            if (index >= hullTable.arraySize) return;
-    //            var item = hullTable.GetArrayElementAtIndex(index).objectReferenceValue as HullTableEntry;
-    //            if (item == null)
-    //            {
-    //                EditorGUI.LabelField(rect, "null");
-    //                return;
-    //            }
-    //            EditorGUI.LabelField(rect, item.hull.name);
-    //        };
-    //}
 
     [MenuItem("Data/Create Hull Table")]
     static void CreateHullTable()
