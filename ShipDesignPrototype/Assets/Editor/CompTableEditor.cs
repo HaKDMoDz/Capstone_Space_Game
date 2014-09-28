@@ -27,13 +27,26 @@ public class CompTableEditor : Editor
 
     public override void OnInspectorGUI()
     {
-        DrawDefaultInspector();
+        //DrawDefaultInspector();
         ComponentTable compTable = target as ComponentTable;
+        float PosY = 50f;
 
-        for (int i = 0; i < 5; i++)
+        EditorGUI.LabelField(new Rect(0f, PosY, Screen.width * .25f, EditorGUIUtility.singleLineHeight), "ID");
+        EditorGUI.LabelField(new Rect(Screen.width * .26f, PosY, Screen.width * .7f, EditorGUIUtility.singleLineHeight), "Hull");
+        foreach (CompTableEntry entry in compTable.CompTable)
+        {
+            PosY += EditorGUIUtility.singleLineHeight;
+            EditorGUI.IntField(new Rect(0f, PosY, Screen.width * .25f, EditorGUIUtility.singleLineHeight), entry.ID);
+            EditorGUI.ObjectField(new Rect(Screen.width * .26f, PosY, Screen.width * .70f, EditorGUIUtility.singleLineHeight), entry.component, typeof(ShipComponent));
+
+
+        }
+
+        for (int i = 0; i < 5 + compTable.CompTable.Count * EditorGUIUtility.singleLineHeight / 6; i++)
         {
             EditorGUILayout.Space();
         }
+        
 
         EditorGUILayout.LabelField("Add new entry");
         id = EditorGUILayout.IntField("ID", id);
@@ -51,6 +64,21 @@ public class CompTableEditor : Editor
         else if (compTable.ComponentExists(component))
         {
             EditorGUILayout.HelpBox("Component already exists in table", MessageType.Warning, true);
+        }
+
+        if (GUILayout.Button("Auto Generate ID and Add"))
+        {
+            if (component)
+            {
+                compTable.AutoGenIDAndAdd(component);
+                EditorUtility.SetDirty(compTable);
+                Clear();
+            }
+            else
+            {
+                EditorGUILayout.HelpBox("No hull assigned", MessageType.Error, true);
+                Debug.LogError("No hull assigned", this);
+            }
         }
         if(GUILayout.Button("Add Entry"))
         {
@@ -81,7 +109,8 @@ public class CompTableEditor : Editor
 
     void Clear()
     {
-        id = 0;
+        ComponentTable compTable = target as ComponentTable;
+        id = compTable.GenNextID(); ;
         component = null;
     }
 }
