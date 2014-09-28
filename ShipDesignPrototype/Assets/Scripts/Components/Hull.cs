@@ -25,14 +25,10 @@ public class Hull : MonoBehaviour
     public void Init()
     {
         emptyComponentGrid = new List<ComponentSlot>(GetComponentsInChildren<ComponentSlot>());
-        //if(hullPrefab)
-        //{
-        //    emptyComponentGrid = new List<ComponentSlot>(GetComponentsInChildren<ComponentSlot>());
-        //}
-        //else
-        //{
-        //    Debug.LogError("no hullPrefab assigned", this);
-        //}
+        for (int i = 0; i < emptyComponentGrid.Count; i++)
+        {
+            emptyComponentGrid[i].index = i;
+        }
     }
 
 }

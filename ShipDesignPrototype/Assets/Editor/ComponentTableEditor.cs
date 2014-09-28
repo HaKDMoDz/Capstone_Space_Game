@@ -86,7 +86,7 @@ public class ComponentTableEditor : Editor
             }
            
 
-            for (int i = 0; i < 5 + compTable.ComponentList.Count * EditorGUIUtility.singleLineHeight / 2; i++)
+            for (int i = 0; i < 15 + compTable.ComponentList.Count * EditorGUIUtility.singleLineHeight / 6; i++)
             {
                 EditorGUILayout.Space();
             }
