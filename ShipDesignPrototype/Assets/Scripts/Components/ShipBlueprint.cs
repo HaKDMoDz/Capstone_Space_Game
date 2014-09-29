@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
+
 public class ShipBlueprint
 {
 
@@ -11,7 +12,8 @@ public class ShipBlueprint
     {
         get { return hull; }
     }
-    List<ComponentSlot> componentGrid;
+    
+    //List<ComponentSlot> componentGrid;
 
     private Dictionary<ComponentSlot, ShipComponent> componentTable;
     public Dictionary<ComponentSlot, ShipComponent> ComponentTable
@@ -23,7 +25,7 @@ public class ShipBlueprint
     {
         componentTable = new Dictionary<ComponentSlot, ShipComponent>();
         hull = _hull;
-        componentGrid = hull.EmptyComponentGrid;
+      //  componentGrid = hull.EmptyComponentGrid;
     }
 
     #endregion

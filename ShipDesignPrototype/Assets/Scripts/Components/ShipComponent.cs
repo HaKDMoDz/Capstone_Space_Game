@@ -3,12 +3,19 @@ using System.Collections;
 
 public class ShipComponent : MonoBehaviour 
 {
-    public uint ID;
+    public int ID;
     public string componentName;
     public bool unlocked;
 
-    public enum ComponentType { Weapon, Defense, Power, Engine, Support}
-    public ComponentType type;
+    public enum ComponentType { Weapon, Defense, Power, Support}
+    [SerializeField]
+    protected ComponentType compType;
+
+    public ComponentType CompType
+    {
+        get { return compType; }
+        //set { compType = value; }
+    }
 
 
     bool selected;

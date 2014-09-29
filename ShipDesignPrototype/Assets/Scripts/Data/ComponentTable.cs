@@ -5,11 +5,11 @@ using System;
 using System.Linq;
 
 [Serializable]
-public class CompTableEntry
+public class ComponentTableEntry
 {
     public int ID;
     public ShipComponent component;
-    public CompTableEntry(int _ID, ShipComponent _component)
+    public ComponentTableEntry(int _ID, ShipComponent _component)
     {
         ID = _ID;
         component = _component;
@@ -20,58 +20,60 @@ public class CompTableEntry
 public class ComponentTable : ScriptableObject 
 {
     [SerializeField]
-    List<CompTableEntry> compTable;
-    public List<CompTableEntry> CompTable
+    List<ComponentTableEntry> componentList;
+    public List<ComponentTableEntry> ComponentList
     {
-        get { return compTable; }
+        get { return componentList; }
     }
 
-    public void AutoGenIDAndAdd(ShipComponent component)
-    {
-        AddEntry(GenNextID(), component);
-    }
 
-    public int GenNextID()
+    public void AddEntry(int ID, ShipComponent component)
+    {
+        if(componentList == null)
+        {
+            componentList = new List<ComponentTableEntry>();
+        }
+        componentList.Add((new ComponentTableEntry(ID, component)));
+    }
+    public void AutoGenIDandAdd(ShipComponent comp)
+    {
+        AddEntry(GenID(), comp);
+    }
+    public int GenID()
     {
         int genID = 0;
-
-        while (compTable.Any(entry => entry.ID == genID))
+        if(componentList == null)
+        {
+            componentList = new List<ComponentTableEntry>();
+        }
+        while(componentList.Any(entry=>entry.ID == genID))
         {
             genID++;
         }
         return genID;
     }
-
-    public void AddEntry(int ID, ShipComponent component)
-    {
-        if(compTable==null)
-        {
-            compTable = new List<CompTableEntry>();
-        }
-        compTable.Add(new CompTableEntry(ID, component));
-    }
-
     public bool IDExists(int id)
     {
-        if(compTable==null)
+        if(componentList==null)
         {
             return false;
         }
-        return compTable.Any(entry=>entry.ID==id);
+        return componentList.Any(entry => entry.ID == id);
     }
-    public bool ComponentExists(ShipComponent _component)
+    public bool ComponentExists(ShipComponent comp)
     {
-        if(compTable==null)
+        if(componentList==null)
         {
             return false;
         }
-        return compTable.Any(entry => entry.component = _component);
+        return componentList.Any(entry => entry.component == comp);
     }
     public void WipeTable()
     {
-        if(compTable!=null)
+        if(componentList!=null)
         {
-            compTable.Clear();
+            componentList.Clear();
         }
     }
+
 }
