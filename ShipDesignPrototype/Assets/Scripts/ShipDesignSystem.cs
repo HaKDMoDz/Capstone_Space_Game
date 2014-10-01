@@ -6,23 +6,6 @@ using System;
 using System.Linq;
 
 
-//[Serializable]
-//public class HullPrefabs
-//{
-//    public GameObject frigate;
-//}
-//[Serializable]
-//public class ComponentPrefabs
-//{
-//    public GameObject laserCannon;
-//    public GameObject missileLauncher;
-//    public GameObject shieldGen;
-//    public GameObject armour;
-//    public GameObject powerPlant;
-//    public GameObject repairDrone;
-
-//}
-
 
 public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
 {
@@ -62,8 +45,6 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
 
 
 
-    //public HullPrefabs hullPrefabs;
-    //public ComponentPrefabs componentPrefabs;
 
     Dictionary<int, Hull> hullTable;
     Dictionary<int, ShipComponent> compTable;
@@ -109,6 +90,7 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
         if (componentsDisplayed == null)
         {
             componentsDisplayed = new List<ShipComponent>();
+            Debug.Log(componentsDisplayed.Count);
         }
         else
         {
@@ -149,7 +131,7 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
             buttonTrans.SetPositionY(buttonTrans.position.y - buttonYOffset * i);
             buttonClone.GetComponentInChildren<Text>().text = hullTable.ElementAt(i).Value.name;
             int id = hullTable.ElementAt(i).Key;
-            Debug.Log("Hull ID: " + id);
+            //Debug.Log("Hull ID: " + id);
             buttonClone.onClick.AddListener(() =>
                 {
                     //BuildHull((int)hullTable.ElementAt(i).Key);
@@ -194,7 +176,7 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
 
             //id = compTable.ElementAt(i).Key;
             int id = compTable.ElementAt(i).Key;
-            Debug.Log("Comp ID: " + id);
+            //Debug.Log("Comp ID: " + id);
             buttonClone.onClick.AddListener(() =>
             {
                 BuildComponent(id);
@@ -206,7 +188,7 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
     }
     public void BuildHull(int hullID)
     {
-        Debug.Log("ID: " + hullID);
+        //Debug.Log("ID: " + hullID);
         if (!buildingShip)
         {
             currentHull = Instantiate(hullTable[hullID], hullPlacementLoc.position, hullPlacementLoc.rotation) as Hull;
@@ -250,13 +232,17 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
                     if (slot.installedComponent)
                     {
                         ShipComponent otherComp = componentsDisplayed.Find(comp => comp == slot.installedComponent);
+                        Debug.Log(slot.installedComponent.componentName);
+                       
                         componentsDisplayed.Remove(otherComp);
-                        Destroy(otherComp);
+                        Destroy(otherComp.gameObject);
                         slot.installedComponent = null;
                     }
-                    componentsDisplayed.Add(Instantiate(component, hit.collider.transform.position, component.transform.rotation) as ShipComponent);
-                    currentBlueprint.AddComponent(component, slot);
-                    slot.installedComponent = component;
+                    ShipComponent builtComp = Instantiate(component, hit.collider.transform.position, component.transform.rotation) as ShipComponent;
+                    componentsDisplayed.Add(builtComp);
+                    //Debug.Log("Components Displays count: " + componentsDisplayed.Count);
+                    currentBlueprint.AddComponent(builtComp, slot);
+                    slot.installedComponent = builtComp;
                     runSequence = false;
 
                 }
@@ -269,32 +255,6 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
         }
     }
 
-    //public Vector3 GetBuildPos()
-    //{
-
-    //    return Vector3.zero;
-    //}
-
-    //public GameObject GetCompPrefab(string compName)
-    //{
-    //    switch (compName)
-    //    {
-    //        case "Laser":
-    //            return componentPrefabs.laserCannon;
-    //        case "Missile":
-    //            return componentPrefabs.missileLauncher;
-    //        case "Armour":
-    //            return componentPrefabs.armour;
-    //        case "Shield":
-    //            return componentPrefabs.shieldGen;
-    //        case "PwrPlant":
-    //            return componentPrefabs.powerPlant;
-    //        case "Repair":
-    //            return componentPrefabs.repairDrone;
-    //        default:
-    //            return null;
-    //    }
-    //}
 
     #endregion
 
