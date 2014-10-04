@@ -56,8 +56,6 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
     //List<ComponentBlueprint> componentBlueprints
     //List<ComponentUpgrade> availableUpgrades
 
-    ShipBlueprintSaveSystem saveSystem;
-
     ShipBlueprint currentBlueprint;
     Hull currentHull;
     bool buildingShip = false;
@@ -67,24 +65,40 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
 
     #region Methods
 
+    void OnGUI()
+    {
+        if (currentBlueprint != null)
+        {
+            GUILayout.BeginVertical();
+            foreach (var item in currentBlueprint.ComponentTable)
+            {
+                GUILayout.Label(item.Key.index + ": " + item.Value.componentName);
+            }
+            GUILayout.EndVertical();
+        }
+    }
+
     void Start()
     {
-        saveSystem = gameObject.GetSafeComponent<ShipBlueprintSaveSystem>();
 
         hullTable = hullTableObject.HullTableProp
             .ToDictionary(h => h.ID, h => h.hull);
         compTable = compTableObject.ComponentList
             .ToDictionary(c => c.ID, c => c.component);
 
+        buttonYOffset = Screen.height * .055f;
+
         ResetScreen();
         SetupGUI();
     }
     void ResetScreen()
     {
+        buildingShip = false;
         currentBlueprint = null;
         if (currentHull)
         {
-            Destroy(currentHull);
+            Debug.Log("Destroying hull");
+            Destroy(currentHull.gameObject);
         }
         currentHull = null;
         if (componentsDisplayed == null)
@@ -96,7 +110,7 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
         {
             for (int i = 0; i < componentsDisplayed.Count; i++)
             {
-                Destroy(componentsDisplayed[i]);
+                Destroy(componentsDisplayed[i].gameObject);
             }
             componentsDisplayed.Clear();
         }
@@ -106,15 +120,40 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
     public void SaveBlueprint()
     {
         Debug.Log("SaveBlueprint");
+        if (currentBlueprint != null)
+        {
+            ShipBlueprintSaveSystem.Instance.Save(currentBlueprint);
+        }
+        else
+        {
+            Debug.Log("no ship being designed");
+        }
+
     }
     public void LoadBlueprint()
     {
         Debug.Log("LoadBlueprint");
+        ResetScreen();
+        if( ShipBlueprintSaveSystem.Instance.Load(out currentBlueprint))
+        {
+            AddHullToDisplay(currentBlueprint.Hull);
+            foreach (var item in currentBlueprint.ComponentTable)
+            {
+                AddCompToDisplay(item.Key, item.Value);
+            }
+        }
+        else
+        {
+            Debug.Log("No saved ship blueprints found");
+        }
     }
     public void ClearBlueprint()
     {
         Debug.Log("ClearBlueprint");
+        ResetScreen();
     }
+
+    
 
     void SetupGUI()
     {
@@ -191,7 +230,8 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
         //Debug.Log("ID: " + hullID);
         if (!buildingShip)
         {
-            currentHull = Instantiate(hullTable[hullID], hullPlacementLoc.position, hullPlacementLoc.rotation) as Hull;
+            
+            AddHullToDisplay(hullTable[hullID]);
             currentHull.Init();
             currentBlueprint = new ShipBlueprint(hullTable[hullID]);
             buildingShip = true;
@@ -214,6 +254,22 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
         }
     }
 
+    void AddHullToDisplay(Hull hull)
+    {
+        currentHull = Instantiate(hull, hullPlacementLoc.position, hullPlacementLoc.rotation) as Hull;
+    }
+
+    ShipComponent AddCompToDisplay(ShipComponent component, Vector3 pos, Quaternion rot)
+    {
+        ShipComponent builtComp = Instantiate(component, pos, rot) as ShipComponent;
+        componentsDisplayed.Add(builtComp);
+        return builtComp;
+    }
+    void AddCompToDisplay(ComponentSlot slot,  ShipComponent component)
+    {
+        ShipComponent builtComp = Instantiate(component, slot.transform.position, component.transform.rotation) as ShipComponent;
+        componentsDisplayed.Add(builtComp);
+    }
 
     IEnumerator StartPlacementSequence(ShipComponent component)
     {
@@ -238,11 +294,14 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
                         Destroy(otherComp.gameObject);
                         slot.installedComponent = null;
                     }
-                    ShipComponent builtComp = Instantiate(component, hit.collider.transform.position, component.transform.rotation) as ShipComponent;
-                    componentsDisplayed.Add(builtComp);
+                    //ShipComponent builtComp = Instantiate(component, hit.collider.transform.position, component.transform.rotation) as ShipComponent;
+
+                    ShipComponent builtComp = AddCompToDisplay(component, hit.collider.transform.position, component.transform.rotation);
+
+                    //componentsDisplayed.Add(builtComp);
                     //Debug.Log("Components Displays count: " + componentsDisplayed.Count);
                     currentBlueprint.AddComponent(builtComp, slot);
-                    slot.installedComponent = builtComp;
+                    //slot.installedComponent = builtComp;
                     runSequence = false;
 
                 }

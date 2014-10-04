@@ -11,6 +11,12 @@ public class Hull : MonoBehaviour
     {
         get { return emptyComponentGrid; }
     }
+
+    private Dictionary<int, ComponentSlot> slotTable;
+    public Dictionary<int, ComponentSlot> SlotTable
+    {
+        get { return slotTable; }
+    }
     
     bool unlocked;
     public bool Unlocked
@@ -25,9 +31,12 @@ public class Hull : MonoBehaviour
     public void Init()
     {
         emptyComponentGrid = new List<ComponentSlot>(GetComponentsInChildren<ComponentSlot>());
+        slotTable = new Dictionary<int, ComponentSlot>();
+
         for (int i = 0; i < emptyComponentGrid.Count; i++)
         {
             emptyComponentGrid[i].index = i;
+            slotTable.Add(i, emptyComponentGrid[i]);
         }
     }
 
