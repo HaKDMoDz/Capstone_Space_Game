@@ -7,8 +7,8 @@ public class Comp_Weapon_Missile : Component_Weapon
 
     [SerializeField]
     GameObject projectilePrefab;
-    [SerializeField]
-    float projectileSpeed = 60f;
+    //[SerializeField]
+    //float projectileSpeed = 60f;
 
     public override void Fire(Transform target, Action OnHit)
     {

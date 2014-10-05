@@ -65,6 +65,7 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
 
     #region Methods
 
+    #region Debug
     void OnGUI()
     {
         if (currentBlueprint != null)
@@ -77,6 +78,14 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
             GUILayout.EndVertical();
         }
     }
+    void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.F9))
+        {
+            LoadBlueprint();
+        }
+    }
+    #endregion
 
     void Start()
     {
@@ -104,7 +113,7 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
         if (componentsDisplayed == null)
         {
             componentsDisplayed = new List<ShipComponent>();
-            Debug.Log(componentsDisplayed.Count);
+            //Debug.Log(componentsDisplayed.Count);
         }
         else
         {
@@ -235,6 +244,7 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
             currentHull.Init();
             currentBlueprint = new ShipBlueprint(hullTable[hullID]);
             buildingShip = true;
+            currentBlueprint.OutputContents();
         }
         else
         {
@@ -246,11 +256,12 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
     {
         if (buildingShip)
         {
-            Debug.Log("ID: " + compID);
-            Debug.Log("Building " + compTable[compID].name);
+            //Debug.Log("ID: " + compID);
+            //Debug.Log("Building " + compTable[compID].name);
 
             ShipComponent compToBuild = compTable[compID];
             StartCoroutine(StartPlacementSequence(compToBuild));
+            
         }
     }
 
@@ -312,6 +323,7 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
             }
             yield return null;
         }
+        currentBlueprint.OutputContents();
     }
 
 

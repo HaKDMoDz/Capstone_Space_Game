@@ -8,8 +8,8 @@ public class Comp_Weapon_Laser : Component_Weapon
 
     [SerializeField]
     GameObject projectilePrefab;
-    [SerializeField]
-    float projectileSpeed = 70f;
+    //[SerializeField]
+    //float projectileSpeed = 70f;
 
     //public override void Activate(Action OnComplete)
     //{

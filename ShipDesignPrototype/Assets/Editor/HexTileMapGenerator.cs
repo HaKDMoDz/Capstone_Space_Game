@@ -10,7 +10,7 @@ public class HexTileMapGenerator : ScriptableWizard
     public GameObject ship;
     public int shipLayer = 8;
 
-    List<Transform> tiles;
+    List<ComponentSlot> tiles;
 
     Vector2 hexTileSize;
     Vector3 shipSize;
@@ -33,12 +33,13 @@ public class HexTileMapGenerator : ScriptableWizard
     {
         Init();
         CreateHexTileGrid();
-         DeleteExtraTiles();
+        DeleteExtraTiles();
+        AssignSlotIndices();
     }
 
     void Init()
     {
-        tiles = new List<Transform>();
+        tiles = new List<ComponentSlot>();
 
         hexTileSize.x = tile.renderer.bounds.size.x;
         hexTileSize.y = tile.renderer.bounds.size.z;
@@ -70,7 +71,7 @@ public class HexTileMapGenerator : ScriptableWizard
     }
     void CreateHexTileGrid()
     {
-        Transform shipTileMap = new GameObject("ShipTileMap").transform;
+        Transform shipTileMap = new GameObject("ComponentGrid").transform;
         shipTileMap.transform.position = ship.transform.position;
         Vector3 tilePos;
         for (int y = 0; y < tileGridHeight; y++)
@@ -80,7 +81,7 @@ public class HexTileMapGenerator : ScriptableWizard
                 tilePos = GetWorldCoords(x, y);
                 GameObject tileClone = Instantiate(tile, tilePos, tile.transform.rotation) as GameObject;
                 tileClone.transform.SetParent(shipTileMap.transform, true);
-                tiles.Add(tileClone.transform);
+                tiles.Add(tileClone.GetSafeComponent<ComponentSlot>());
                 tilePos.x += hexTileSize.x * 2f;
             }
         }
@@ -103,12 +104,11 @@ public class HexTileMapGenerator : ScriptableWizard
 
     void DeleteExtraTiles()
     {
-        Debug.Log(shipLayer);
         Vector3 rayOrigin;
         Ray ray = new Ray();
         for (int i = tiles.Count - 1; i >= 0; i--)
         {
-            rayOrigin = tiles[i].position + Vector3.up * raycastHeight;
+            rayOrigin = tiles[i].transform.position + Vector3.up * raycastHeight;
             ray.origin = rayOrigin;
             ray.direction = Vector3.down;
             if (!Physics.Raycast(ray, 500f, 1 << shipLayer))
@@ -117,6 +117,13 @@ public class HexTileMapGenerator : ScriptableWizard
                 //Destroy(tiles[i].gameObject);
                 tiles.RemoveAt(i);
             }
+        }
+    }
+    void AssignSlotIndices()
+    {
+        for (int i = 0; i < tiles.Count; i++)
+        {
+            tiles[i].index = i;
         }
     }
 

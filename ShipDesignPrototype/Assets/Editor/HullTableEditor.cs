@@ -42,7 +42,7 @@ public class HullTableEditor : Editor
         {
             PosY += EditorGUIUtility.singleLineHeight ;
             EditorGUI.IntField(new Rect(0f, PosY, Screen.width * .25f, EditorGUIUtility.singleLineHeight), entry.ID);
-            EditorGUI.ObjectField(new Rect(Screen.width * .26f, PosY, Screen.width * .70f, EditorGUIUtility.singleLineHeight), entry.hull, typeof(Hull));
+            EditorGUI.ObjectField(new Rect(Screen.width * .26f, PosY, Screen.width * .70f, EditorGUIUtility.singleLineHeight), entry.hull, typeof(Hull),true);
             
 
         }

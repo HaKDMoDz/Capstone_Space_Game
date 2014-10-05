@@ -38,6 +38,7 @@ public class HullTable : ScriptableObject
             hullTable = new List<HullTableEntry>();
         }
         hullTable.Add(new HullTableEntry(_ID, _hull));
+        _hull.ID = _ID;
     }
 
     public void AutoGenIDAndAdd(Hull hull)

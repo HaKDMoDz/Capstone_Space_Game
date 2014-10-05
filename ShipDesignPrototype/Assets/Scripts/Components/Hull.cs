@@ -6,6 +6,7 @@ public class Hull : MonoBehaviour
 {
     public int ID;
     
+    [SerializeField]
     List<ComponentSlot> emptyComponentGrid;
     public List<ComponentSlot> EmptyComponentGrid
     {
@@ -25,17 +26,14 @@ public class Hull : MonoBehaviour
         set { unlocked = value; }
     }
 
-
-    public GameObject hullPrefab;
-
     public void Init()
     {
-        emptyComponentGrid = new List<ComponentSlot>(GetComponentsInChildren<ComponentSlot>());
+        //emptyComponentGrid = new List<ComponentSlot>(GetComponentsInChildren<ComponentSlot>());
         slotTable = new Dictionary<int, ComponentSlot>();
 
         for (int i = 0; i < emptyComponentGrid.Count; i++)
         {
-            emptyComponentGrid[i].index = i;
+            //emptyComponentGrid[i].index = i;
             slotTable.Add(i, emptyComponentGrid[i]);
         }
     }
