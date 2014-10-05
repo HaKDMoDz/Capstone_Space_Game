@@ -24,6 +24,18 @@ public class ShipBlueprintSaveSystem : SingletonComponent<ShipBlueprintSaveSyste
         compTable = compTableObject.ComponentList
             .ToDictionary(c => c.ID, c => c.component);
 
+        Debug.Log("Component object table");
+        foreach (var item in compTableObject.ComponentList)
+        {
+            Debug.Log(item.component.ID + " : " + item.component.componentName);
+        }
+
+        Debug.Log("Comp dictionary");
+        foreach (var item in compTable)
+        {
+            Debug.Log(item.Value.ID + " : " + item.Value.componentName);
+        }
+
     }
 
     public void Save(ShipBlueprint shipBP)
@@ -81,7 +93,9 @@ public class ShipBlueprintSaveSystem : SingletonComponent<ShipBlueprintSaveSyste
     {
         Hull hull = hullTable[sz_shipBP.hull_ID];
         hull.Init();
+        //hull.OutputSlotTable();
         ShipBlueprint shipBP = new ShipBlueprint( hull);
+
         foreach (var item in sz_shipBP.componentTable)
         {
             ShipComponent comp = compTable[item.Value.ID];

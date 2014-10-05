@@ -33,8 +33,9 @@ public class ComponentTable : ScriptableObject
         {
             componentList = new List<ComponentTableEntry>();
         }
-        componentList.Add((new ComponentTableEntry(ID, component)));
         component.ID = ID;
+        componentList.Add((new ComponentTableEntry(ID, component)));
+        
     }
     public void AutoGenIDandAdd(ShipComponent comp)
     {

@@ -2,10 +2,10 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class Hull : MonoBehaviour 
+public class Hull : MonoBehaviour
 {
     public int ID;
-    
+
     [SerializeField]
     List<ComponentSlot> emptyComponentGrid;
     public List<ComponentSlot> EmptyComponentGrid
@@ -18,7 +18,7 @@ public class Hull : MonoBehaviour
     {
         get { return slotTable; }
     }
-    
+
     bool unlocked;
     public bool Unlocked
     {
@@ -34,7 +34,15 @@ public class Hull : MonoBehaviour
         for (int i = 0; i < emptyComponentGrid.Count; i++)
         {
             //emptyComponentGrid[i].index = i;
-            slotTable.Add(i, emptyComponentGrid[i]);
+            slotTable.Add(emptyComponentGrid[i].index, emptyComponentGrid[i]);
+        }
+    }
+    public void OutputSlotTable()
+    {
+        Debug.Log("Slottable");
+        foreach (var item in slotTable)
+        {
+            Debug.Log("index: " + item.Key + " slot: " + item.Value.index);
         }
     }
 

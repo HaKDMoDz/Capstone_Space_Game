@@ -106,7 +106,7 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
         currentBlueprint = null;
         if (currentHull)
         {
-            Debug.Log("Destroying hull");
+            //Debug.Log("Destroying hull");
             Destroy(currentHull.gameObject);
         }
         currentHull = null;
@@ -158,7 +158,7 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
     }
     public void ClearBlueprint()
     {
-        Debug.Log("ClearBlueprint");
+        //Debug.Log("ClearBlueprint");
         ResetScreen();
     }
 
