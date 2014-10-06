@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System;
 
+[Serializable]
 public class ShipComponent : MonoBehaviour 
 {
     public int ID;
@@ -9,37 +12,12 @@ public class ShipComponent : MonoBehaviour
 
     public enum ComponentType { Weapon, Defense, Power, Support}
     [SerializeField]
-    protected ComponentType compType;
+    private ComponentType compType;
 
     public ComponentType CompType
     {
         get { return compType; }
         //set { compType = value; }
     }
-
-
-    bool selected;
-    public bool Selected
-    {
-        get { return selected; }
-        set 
-        {
-            selected = value;
-            selectProjector.enabled = value;
-        }
-    }
-
-    //cached vars
-    Projector selectProjector;
-
-    public virtual void Init()
-    {
-        selectProjector = GetComponentInChildren<Projector>();
-    }
-
-    public virtual void Activate(System.Action onComplete)
-    {
-
-    }
-
+    
 }

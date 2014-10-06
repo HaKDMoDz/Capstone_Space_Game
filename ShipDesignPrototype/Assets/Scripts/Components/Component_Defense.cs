@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Component_Defense : ShipComponent 
+public class Component_Defense// : ShipComponent 
 {
 
 	

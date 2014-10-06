@@ -39,11 +39,12 @@ public class ComponentTableEditor : Editor
             EditorGUI.LabelField(new Rect(0f, posY, Screen.width * 0.25f, EditorGUIUtility.singleLineHeight), "ID");
             EditorGUI.LabelField(new Rect(Screen.width * 0.26f, posY, Screen.width * 0.7f, EditorGUIUtility.singleLineHeight), "Component");
 
-            if(compTable.ComponentList.Where(entry=>entry.component is Component_Weapon).Count()>0)
+            //if(compTable.ComponentList.Where(entry=>entry.component is Component_Weapon).Count()>0)
+            if (compTable.ComponentList.Where(entry => entry.component.CompType== ShipComponent.ComponentType.Weapon).Count() > 0)
             {
                 posY += EditorGUIUtility.singleLineHeight;
                 EditorGUI.LabelField(new Rect(0f, posY, Screen.width, EditorGUIUtility.singleLineHeight), "Weapons");
-                foreach (ComponentTableEntry entry in compTable.ComponentList.Where(entry=>entry.component is Component_Weapon))
+                foreach (ComponentTableEntry entry in compTable.ComponentList.Where(entry => entry.component.CompType == ShipComponent.ComponentType.Weapon))
                 {
                     posY+=EditorGUIUtility.singleLineHeight;
                     EditorGUI.IntField(new Rect(0f, posY, Screen.width*0.25f, EditorGUIUtility.singleLineHeight),entry.ID);
@@ -51,33 +52,33 @@ public class ComponentTableEditor : Editor
                 }
             }
 
-            if (compTable.ComponentList.Where(entry => entry.component is Component_Defense).Count() > 0)
+            if (compTable.ComponentList.Where(entry => entry.component.CompType == ShipComponent.ComponentType.Defense).Count() > 0)
             {
                 posY += EditorGUIUtility.singleLineHeight;
                 EditorGUI.LabelField(new Rect(0f, posY, Screen.width, EditorGUIUtility.singleLineHeight), "Defenses");
-                foreach (ComponentTableEntry entry in compTable.ComponentList.Where(entry => entry.component is Component_Defense))
+                foreach (ComponentTableEntry entry in compTable.ComponentList.Where(entry => entry.component.CompType == ShipComponent.ComponentType.Defense))
                 {
                     posY += EditorGUIUtility.singleLineHeight;
                     EditorGUI.IntField(new Rect(0f, posY, Screen.width * 0.25f, EditorGUIUtility.singleLineHeight), entry.ID);
                     EditorGUI.ObjectField(new Rect(Screen.width * .26f, posY, Screen.width, EditorGUIUtility.singleLineHeight), entry.component, typeof(ShipComponent), true);
                 }
             }
-            if (compTable.ComponentList.Where(entry => entry.component is Component_Power).Count() > 0)
+            if (compTable.ComponentList.Where(entry => entry.component.CompType == ShipComponent.ComponentType.Power).Count() > 0)
             {
                 posY += EditorGUIUtility.singleLineHeight;
                 EditorGUI.LabelField(new Rect(0f, posY, Screen.width, EditorGUIUtility.singleLineHeight), "Power");
-                foreach (ComponentTableEntry entry in compTable.ComponentList.Where(entry => entry.component is Component_Power))
+                foreach (ComponentTableEntry entry in compTable.ComponentList.Where(entry => entry.component.CompType == ShipComponent.ComponentType.Power))
                 {
                     posY += EditorGUIUtility.singleLineHeight;
                     EditorGUI.IntField(new Rect(0f, posY, Screen.width * 0.25f, EditorGUIUtility.singleLineHeight), entry.ID);
                     EditorGUI.ObjectField(new Rect(Screen.width * .26f, posY, Screen.width, EditorGUIUtility.singleLineHeight), entry.component, typeof(ShipComponent), true);
                 }
             }
-            if (compTable.ComponentList.Where(entry => entry.component is Component_Support).Count() > 0)
+            if (compTable.ComponentList.Where(entry => entry.component.CompType == ShipComponent.ComponentType.Support).Count() > 0)
             {
                 posY += EditorGUIUtility.singleLineHeight;
                 EditorGUI.LabelField(new Rect(0f, posY, Screen.width, EditorGUIUtility.singleLineHeight), "Support");
-                foreach (ComponentTableEntry entry in compTable.ComponentList.Where(entry => entry.component is Component_Support))
+                foreach (ComponentTableEntry entry in compTable.ComponentList.Where(entry => entry.component.CompType == ShipComponent.ComponentType.Support))
                 {
                     posY += EditorGUIUtility.singleLineHeight;
                     EditorGUI.IntField(new Rect(0f, posY, Screen.width * 0.25f, EditorGUIUtility.singleLineHeight), entry.ID);

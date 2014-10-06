@@ -150,6 +150,7 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
             {
                 AddCompToDisplay(item.Key, item.Value);
             }
+            buildingShip = true;
         }
         else
         {
@@ -197,18 +198,18 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
             buttonTrans = buttonClone.GetComponent<RectTransform>();
             buttonClone.gameObject.GetComponentInChildren<Text>().text = compTable.ElementAt(i).Value.componentName;
 
-            if (compTable[i] is Component_Weapon)
+            if (compTable[i].CompType==ShipComponent.ComponentType.Weapon)
             {
                 buttonTrans.SetParent(wpnButtonParent);
                 offsetCount = ++wpnCount;
             }
-            else if (compTable[i] is Component_Defense)
+            else if (compTable[i].CompType == ShipComponent.ComponentType.Defense)
             {
                 buttonTrans.SetParent(defButtonParent);
                 offsetCount = ++defCount;
 
             }
-            else if (compTable[i] is Component_Power)
+            else if (compTable[i].CompType == ShipComponent.ComponentType.Power)
             {
                 buttonTrans.SetParent(pwrButtonParent);
                 offsetCount = ++pwrCount;

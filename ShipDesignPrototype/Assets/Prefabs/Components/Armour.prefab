@@ -11,9 +11,24 @@ GameObject:
   - 33: {fileID: 3300000}
   - 65: {fileID: 6500000}
   - 23: {fileID: 2300000}
+  m_Layer: 0
+  m_Name: Cube
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &100002
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400002}
   - 114: {fileID: 11400000}
   m_Layer: 0
-  m_Name: Comp_Def_Shield
+  m_Name: Armour
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -26,9 +41,22 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.96499991, y: 0, z: -.299609989}
-  m_LocalScale: {x: 1.52239573, y: 1.52239597, z: 1.52239597}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.5765686, y: 1.57656825, z: 1.57656825}
   m_Children: []
+  m_Father: {fileID: 400002}
+  m_RootOrder: 0
+--- !u!4 &400002
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100002}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.87789989, y: 5.8908, z: -.348630011}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 400000}
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!23 &2300000
@@ -43,7 +71,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: edc5020122acc754ca1d60a8d10d61a0, type: 2}
+  - {fileID: 2100000, guid: cb1847966df6bde47b17a8187a7459e0, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -75,14 +103,14 @@ MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
+  m_GameObject: {fileID: 100002}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 70f0d0aa05bcde04fa030a3e0ca16328, type: 3}
+  m_Script: {fileID: 11500000, guid: 2309129c3ed091e44b71b973cfc7a2cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ID: 0
-  componentName: Shield Generator
+  ID: 2
+  componentName: Armour
   unlocked: 0
   compType: 1
 --- !u!1001 &100100000
@@ -94,6 +122,6 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 100000}
+  m_RootGameObject: {fileID: 100002}
   m_IsPrefabParent: 1
   m_IsExploded: 1

@@ -15,6 +15,7 @@ public class ShipBlueprintSaveSystem : SingletonComponent<ShipBlueprintSaveSyste
 
     Dictionary<int, Hull> hullTable;
     Dictionary<int, ShipComponent> compTable;
+    
 
     void Start()
     {
@@ -30,11 +31,11 @@ public class ShipBlueprintSaveSystem : SingletonComponent<ShipBlueprintSaveSyste
             Debug.Log(item.component.ID + " : " + item.component.componentName);
         }
 
-        Debug.Log("Comp dictionary");
-        foreach (var item in compTable)
-        {
-            Debug.Log(item.Value.ID + " : " + item.Value.componentName);
-        }
+        //Debug.Log("Comp dictionary");
+        //foreach (var item in compTable)
+        //{
+        //    Debug.Log(item.Value.ID + " : " + item.Value.componentName);
+        //}
 
     }
 
@@ -98,6 +99,7 @@ public class ShipBlueprintSaveSystem : SingletonComponent<ShipBlueprintSaveSyste
 
         foreach (var item in sz_shipBP.componentTable)
         {
+
             ShipComponent comp = compTable[item.Value.ID];
             //Debug.Log("Deserialzing - adding comp to slot " + item.Key);
             shipBP.AddComponent(item.Key, comp);
