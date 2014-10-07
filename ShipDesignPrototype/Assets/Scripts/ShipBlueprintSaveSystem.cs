@@ -54,8 +54,12 @@ public class ShipBlueprintSaveSystem : SingletonComponent<ShipBlueprintSaveSyste
         //Debug.Log("Sz_Shipblueprint: ");
         //sz_shipBP.OutputContents();
         BinaryFormatter bf = new BinaryFormatter();
-        Debug.Log("Saving file to: " + Application.persistentDataPath);
-        FileStream file = File.Create(Application.persistentDataPath + "/ShipBP1.sbp");
+        if (!Directory.Exists(Application.persistentDataPath + "/ShipBlueprints"))
+        {
+            Directory.CreateDirectory(Application.persistentDataPath + "/ShipBlueprints");
+        }
+        Debug.Log("Saving file to: " + Application.persistentDataPath + "/ShipBlueprints/ShipBP1.sbp");
+        FileStream file = File.Create(Application.persistentDataPath + "/ShipBlueprints/ShipBP1.sbp");
         bf.Serialize(file, sz_shipBP);
         file.Close();
 
@@ -63,10 +67,10 @@ public class ShipBlueprintSaveSystem : SingletonComponent<ShipBlueprintSaveSyste
     public bool Load(out ShipBlueprint shipBP)
     {
 
-        if (File.Exists(Application.persistentDataPath + "/ShipBP1.sbp"))
+        if (File.Exists(Application.persistentDataPath + "/ShipBlueprints/ShipBP1.sbp"))
         {
             BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Open(Application.persistentDataPath + "/ShipBP1.sbp", FileMode.Open);
+            FileStream file = File.Open(Application.persistentDataPath + "/ShipBlueprints/ShipBP1.sbp", FileMode.Open);
             SerializedShipBlueprint sz_shipBP = bf.Deserialize(file) as SerializedShipBlueprint;
             //Debug.Log("Sz_Shipblueprint: ");
             //sz_shipBP.OutputContents();
