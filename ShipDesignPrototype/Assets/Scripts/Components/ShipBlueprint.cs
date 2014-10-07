@@ -43,24 +43,25 @@ public class ShipBlueprint
 
     public void AddComponent(int slotIndex, ShipComponent component )
     {
-        if(componentTable == null)
-        {
-            Debug.Log("null table");
-        }
-        if(component == null)
-        {
-            Debug.Log("null component");
-        }
-        if(hull.SlotTable == null)
-        {
-            Debug.Log("slot table null");
-        }
-        Debug.Log("Adding comp: index: " + slotIndex + "slot: " + hull.SlotTable[slotIndex].index);
+        //if(componentTable == null)
+        //{
+        //    Debug.Log("null table");
+        //}
+        //if(component == null)
+        //{
+        //    Debug.Log("null component");
+        //}
+        //if(hull.SlotTable == null)
+        //{
+        //    Debug.Log("slot table null");
+        //}
+        //Debug.Log("Adding comp: index: " + slotIndex + "slot: " + hull.SlotTable[slotIndex].index);
         componentTable.Add(hull.SlotTable[slotIndex], component);
     }
-    public void RemoveComponent(ShipComponent component, ComponentSlot slot)
+    public void RemoveComponent(ComponentSlot slot)
     {
-
+        componentTable.Remove(slot);
+        slot.installedComponent = null;
     }
     public void OutputContents()
     {

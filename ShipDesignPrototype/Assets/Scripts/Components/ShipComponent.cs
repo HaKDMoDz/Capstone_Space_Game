@@ -17,7 +17,6 @@ public class ShipComponent : MonoBehaviour
     public ComponentType CompType
     {
         get { return compType; }
-        //set { compType = value; }
     }
     
 }

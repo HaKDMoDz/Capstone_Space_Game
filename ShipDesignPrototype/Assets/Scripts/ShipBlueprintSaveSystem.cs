@@ -15,6 +15,7 @@ public class ShipBlueprintSaveSystem : SingletonComponent<ShipBlueprintSaveSyste
 
     Dictionary<int, Hull> hullTable;
     Dictionary<int, ShipComponent> compTable;
+    Dictionary<ShipComponent, int> compIDTable;
     
 
     void Start()
@@ -24,13 +25,19 @@ public class ShipBlueprintSaveSystem : SingletonComponent<ShipBlueprintSaveSyste
             .ToDictionary(h => h.ID, h => h.hull);
         compTable = compTableObject.ComponentList
             .ToDictionary(c => c.ID, c => c.component);
+        compIDTable = compTableObject.ComponentList
+            .ToDictionary(c => c.component, c => c.ID);
 
-        Debug.Log("Component object table");
-        foreach (var item in compTableObject.ComponentList)
-        {
-            Debug.Log(item.component.ID + " : " + item.component.componentName);
-        }
-
+        //Debug.Log("Component object table");
+        //foreach (var item in compTableObject.ComponentList)
+        //{
+        //    Debug.Log(item.component.ID + " : " + item.component.componentName);
+        //}
+        //Debug.Log("Component ID table");
+        //foreach (var item in compIDTable)
+        //{
+        //    Debug.Log(item.Key + " : " + item.Value);
+        //}
         //Debug.Log("Comp dictionary");
         //foreach (var item in compTable)
         //{
@@ -41,11 +48,11 @@ public class ShipBlueprintSaveSystem : SingletonComponent<ShipBlueprintSaveSyste
 
     public void Save(ShipBlueprint shipBP)
     {
-        Debug.Log("Shipblueprint: ");
-        shipBP.OutputContents();
+        //Debug.Log("Shipblueprint: ");
+        //shipBP.OutputContents();
         SerializedShipBlueprint sz_shipBP = SerializeShipBP(shipBP);
-        Debug.Log("Sz_Shipblueprint: ");
-        sz_shipBP.OutputContents();
+        //Debug.Log("Sz_Shipblueprint: ");
+        //sz_shipBP.OutputContents();
         BinaryFormatter bf = new BinaryFormatter();
         Debug.Log("Saving file to: " + Application.persistentDataPath);
         FileStream file = File.Create(Application.persistentDataPath + "/ShipBP1.sbp");
@@ -61,11 +68,11 @@ public class ShipBlueprintSaveSystem : SingletonComponent<ShipBlueprintSaveSyste
             BinaryFormatter bf = new BinaryFormatter();
             FileStream file = File.Open(Application.persistentDataPath + "/ShipBP1.sbp", FileMode.Open);
             SerializedShipBlueprint sz_shipBP = bf.Deserialize(file) as SerializedShipBlueprint;
-            Debug.Log("Sz_Shipblueprint: ");
-            sz_shipBP.OutputContents();
+            //Debug.Log("Sz_Shipblueprint: ");
+            //sz_shipBP.OutputContents();
             shipBP = DeserializeShipBP(sz_shipBP);
-            Debug.Log("Shipblueprint: ");
-            shipBP.OutputContents();
+            //Debug.Log("Shipblueprint: ");
+            //shipBP.OutputContents();
             file.Close();
             return true;
         }
@@ -84,7 +91,8 @@ public class ShipBlueprintSaveSystem : SingletonComponent<ShipBlueprintSaveSyste
         sz_shipBP.componentTable = new Dictionary<int, SerializedComponent>();
         foreach (var item in ship.ComponentTable)
         {
-            SerializedComponent sz_comp = new SerializedComponent(item.Value.ID);
+
+            SerializedComponent sz_comp = new SerializedComponent(compIDTable[item.Value]);
             sz_shipBP.componentTable.Add(item.Key.index, sz_comp);
         }
         return sz_shipBP;

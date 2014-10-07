@@ -80,9 +80,17 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
     }
     void Update()
     {
+        if(Input.GetKeyDown(KeyCode.F5))
+        {
+            SaveBlueprint();
+        }
         if(Input.GetKeyDown(KeyCode.F9))
         {
             LoadBlueprint();
+        }
+        if(Input.GetKeyDown(KeyCode.F12))
+        {
+            ClearBlueprint();
         }
     }
     #endregion
@@ -128,7 +136,7 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
 
     public void SaveBlueprint()
     {
-        Debug.Log("SaveBlueprint");
+        //Debug.Log("SaveBlueprint");
         if (currentBlueprint != null)
         {
             ShipBlueprintSaveSystem.Instance.Save(currentBlueprint);
@@ -245,7 +253,7 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
             currentHull.Init();
             currentBlueprint = new ShipBlueprint(hullTable[hullID]);
             buildingShip = true;
-            currentBlueprint.OutputContents();
+            //currentBlueprint.OutputContents();
         }
         else
         {
@@ -272,15 +280,15 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
     }
 
     ShipComponent AddCompToDisplay(ShipComponent component, Vector3 pos, Quaternion rot)
-    {
+    {                   //clone
         ShipComponent builtComp = Instantiate(component, pos, rot) as ShipComponent;
-        componentsDisplayed.Add(builtComp);
-        return builtComp;
-    }
+        componentsDisplayed.Add(builtComp);//clone
+        return builtComp;//clone
+    }                                                       //original
     void AddCompToDisplay(ComponentSlot slot,  ShipComponent component)
-    {
+    {                   //clone
         ShipComponent builtComp = Instantiate(component, slot.transform.position, component.transform.rotation) as ShipComponent;
-        componentsDisplayed.Add(builtComp);
+        componentsDisplayed.Add(builtComp);//clone
     }
 
     IEnumerator StartPlacementSequence(ShipComponent component)
@@ -299,20 +307,24 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
                     ComponentSlot slot = hit.transform.GetComponent<ComponentSlot>();
                     if (slot.installedComponent)
                     {
-                        ShipComponent otherComp = componentsDisplayed.Find(comp => comp == slot.installedComponent);
-                        Debug.Log(slot.installedComponent.componentName);
+                        ShipComponent otherComp = componentsDisplayed.Find(comp => comp.componentName == slot.installedComponent.componentName);
+                        Debug.Log(slot.installedComponent);
                        
                         componentsDisplayed.Remove(otherComp);
                         Destroy(otherComp.gameObject);
-                        slot.installedComponent = null;
+                        //slot.installedComponent = null;
+                        currentBlueprint.RemoveComponent(slot);
+
                     }
                     //ShipComponent builtComp = Instantiate(component, hit.collider.transform.position, component.transform.rotation) as ShipComponent;
 
+                                //clone
                     ShipComponent builtComp = AddCompToDisplay(component, hit.collider.transform.position, component.transform.rotation);
 
                     //componentsDisplayed.Add(builtComp);
                     //Debug.Log("Components Displays count: " + componentsDisplayed.Count);
-                    currentBlueprint.AddComponent(builtComp, slot);
+                    currentBlueprint.AddComponent(component, slot);
+                    
                     //slot.installedComponent = builtComp;
                     runSequence = false;
 
@@ -324,7 +336,7 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
             }
             yield return null;
         }
-        currentBlueprint.OutputContents();
+        //currentBlueprint.OutputContents();
     }
 
 
