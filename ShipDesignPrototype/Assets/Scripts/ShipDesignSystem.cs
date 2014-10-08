@@ -319,7 +319,7 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
                     //ShipComponent builtComp = Instantiate(component, hit.collider.transform.position, component.transform.rotation) as ShipComponent;
 
                                 //clone
-                    ShipComponent builtComp = AddCompToDisplay(component, hit.collider.transform.position, component.transform.rotation);
+                    AddCompToDisplay(component, hit.collider.transform.position, component.transform.rotation);
 
                     //componentsDisplayed.Add(builtComp);
                     //Debug.Log("Components Displays count: " + componentsDisplayed.Count);

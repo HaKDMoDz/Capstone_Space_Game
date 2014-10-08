@@ -121,6 +121,15 @@ public class ShipBlueprintSaveSystem : SingletonComponent<ShipBlueprintSaveSyste
 
 }
 [Serializable]
+public class SavedShipBPList
+{
+    public int count;
+    public List<string> fileNames;
+
+}
+
+
+[Serializable]
 public class SerializedShipBlueprint
 {
     public int hull_ID;
