@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
 using System;
@@ -42,6 +43,8 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
     Button buttonPrefab;
     [SerializeField]
     float buttonYOffset = 20f;
+    [SerializeField]
+    DialogueBox dialogueBox;
 
 
 
@@ -82,7 +85,7 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
     {
         if(Input.GetKeyDown(KeyCode.F5))
         {
-            SaveBlueprint();
+            SaveBlueprint("");
         }
         if(Input.GetKeyDown(KeyCode.F9))
         {
@@ -102,6 +105,22 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
             .ToDictionary(h => h.ID, h => h.hull);
         compTable = compTableObject.ComponentList
             .ToDictionary(c => c.ID, c => c.component);
+        //inputField.validation = InputField.Validation.Alphanumeric;
+        //inputField.onSubmit.AddListener(
+        //    (value)=> { Debug.Log("submit: " + value); }
+        //    );
+
+        
+        //configure dialogue box
+        dialogueBox.inputField.validation = InputField.Validation.Alphanumeric;
+        dialogueBox.inputField.onSubmit.AddListener(
+            (value) => { SaveBlueprint(value); });
+        dialogueBox.confirmButton.onClick.AddListener(
+            () => { SaveBlueprint(dialogueBox.inputField.value); });
+        dialogueBox.cancelButton.onClick.AddListener(
+            () => { ShowSaveDialogueBox(false); });
+        ShowSaveDialogueBox(false);
+
 
         buttonYOffset = Screen.height * .055f;
 
@@ -133,19 +152,37 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
         }
 
     }
-
-    public void SaveBlueprint()
+    public void ShowSaveDialogueBox(bool showing)
     {
-        //Debug.Log("SaveBlueprint");
-        if (currentBlueprint != null)
+        if(!showing)
         {
-            ShipBlueprintSaveSystem.Instance.Save(currentBlueprint);
+            dialogueBox.gameObject.SetActive(false);
+        }
+            //showing dialogue box
+        else if (currentBlueprint != null)
+        {
+            dialogueBox.gameObject.SetActive(true);
+
+            //will not work after update
+            EventSystemManager.currentSystem.SetSelectedGameObject(dialogueBox.inputField.gameObject, null);
+            dialogueBox.inputField.OnPointerClick(null);
+
+            //may need to change above code to after update:
+            /*
+             * EventSystem.current.SetSelectedGameObject(input.gameObject, null);
+                input.OnPointerClick(null);*/
+
         }
         else
         {
             Debug.Log("no ship being designed");
         }
-
+    }
+    void SaveBlueprint(string fileName)
+    {
+        //Debug.Log("SaveBlueprint");
+            ShipBlueprintSaveSystem.Instance.Save(currentBlueprint, fileName);
+            ShowSaveDialogueBox(false);
     }
     public void LoadBlueprint()
     {
