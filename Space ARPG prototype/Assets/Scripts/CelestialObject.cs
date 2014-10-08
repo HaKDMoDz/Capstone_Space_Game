@@ -11,7 +11,7 @@ public class CelestialObject : MonoBehaviour
 
     private static int numCelestialObjs;
 
-    public static CelestialObject currSelectedObject;
+    public static CelestialObject currSelectedObject = null;
 
     public Material glowMaterial;
     public Material blankMaterial;
@@ -23,8 +23,6 @@ public class CelestialObject : MonoBehaviour
     private int ID;
 
     public static bool objectSelected;
-
-    public bool disableVisual = false;
 
     public CelestialObjectType type;
 
@@ -59,46 +57,11 @@ public class CelestialObject : MonoBehaviour
 	}
 
 	
-	void Update () 
+	void FixedUpdate () 
     {
-        
-
-        if (objectSelected && selectable)
-        {
-            
-
-            if (currSelectedObject.ID == ID)
-            {
-                texture = renderer.material.mainTexture;
-                renderer.material = glowMaterial;
-                renderer.material.mainTexture = texture;
-            }
-            else
-            {
-                renderer.material = blankMaterial;
-
-            }
-        }
-
-        if (disableVisual)
-        {
-            renderer.enabled = false;
-            if (type == CelestialObjectType.PLANET)
-            {
-                Atmosphere.renderer.enabled = false;
-            }
-        }
-        else
-        {
-            renderer.enabled = true;
-            if (type == CelestialObjectType.PLANET)
-            {
-                Atmosphere.renderer.enabled = true;
-            }
-        }
-
         transform.RotateAround(orbitAroundThis.position, Vector3.up, rotateSpeed * Time.deltaTime * FatherTime.timeRate);
 	}
+
 
     void OnMouseClick(MouseEventArgs args)
     {
@@ -108,11 +71,36 @@ public class CelestialObject : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit) && hit.collider.tag == "CelestialObject" && hit.collider.GetComponent<CelestialObject>().ID == ID)
             {
+                if (currSelectedObject != null)
+                {
+                    currSelectedObject.renderer.material = blankMaterial;
+                }
+
                 currSelectedObject = hit.collider.GetComponent<CelestialObject>();
                 objectSelected = true;
                 SystemLog.addMessage(name + " was selected");
                 DisplayInfo();
                 acceptInput = false;
+
+                texture = renderer.material.mainTexture;
+                renderer.material = glowMaterial;
+                renderer.material.mainTexture = texture;
+
+                switch (type)
+                {
+                    case CelestialObjectType.STAR:
+                        CameraManager.getInstance().changeZoomLevel(CameraManager.FAR_ZOOM);
+                        break;
+                    case CelestialObjectType.PLANET:
+                        CameraManager.getInstance().changeZoomLevel(CameraManager.MED_ZOOM);
+                        break;
+                    case CelestialObjectType.MOON:
+                        CameraManager.getInstance().changeZoomLevel(CameraManager.CLOSE_ZOOM);
+                        break;
+                    default:
+                        break;
+                }
+
                 StartCoroutine(WaitBeforeInput(1.0f));
             }
         } 

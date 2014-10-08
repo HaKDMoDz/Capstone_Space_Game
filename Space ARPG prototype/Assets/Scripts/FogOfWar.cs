@@ -5,20 +5,28 @@ using System.Xml.Serialization;
 
 public class FogOfWar : MonoBehaviour {
 
+    /// <summary>
+    /// the player ship's transform
+    /// </summary>
     private Transform playerShip;
     private float fogDistance = 10.0f;
     private bool foggy = true;
 
     private float fadeTimer = 1000.0f;
 
+    /// <summary>
+    /// the number of seconds between fog updates
+    /// </summary>
+    private const float FOG_UPDATE_DELAY = 1.0f;
+
 	void Start () 
     {
         playerShip = GameObject.Find("PlayerShip").transform;
-
+        StartCoroutine(fogTick());
         
 	}
-	
-	void FixedUpdate () 
+
+    IEnumerator fogTick()
     {
         if (foggy)
         {
@@ -29,20 +37,27 @@ public class FogOfWar : MonoBehaviour {
         }
         else
         {
-            FadeFog();
+            StartCoroutine(FadeFog());
         }
 
 
         if (Input.GetKey(KeyCode.F1))
         {
-            OutputFogToXML();
             Application.Quit();
         }
+        yield return new WaitForSeconds(0.25f);
+        StartCoroutine(fogTick());
+    }
+	
+	void FixedUpdate () 
+    {
+        
 	}
 
-    void FadeFog()
+    IEnumerator FadeFog()
     {
-        if (fadeTimer > 0.0f)
+        fadeTimer = 1000.0f;
+        while(fadeTimer > 0.0f)
         {
             fadeTimer -= 25f;
 
@@ -51,19 +66,8 @@ public class FogOfWar : MonoBehaviour {
 
             renderer.material.color = currColor;
         }
-        else
-        {
-            renderer.enabled = false;
-        }
-    }
 
-    void OutputFogToXML()
-    {
-
-    }
-
-    void InputFogFromXML()
-    {
-        
+        renderer.enabled = false;
+        yield return 0;
     }
 }

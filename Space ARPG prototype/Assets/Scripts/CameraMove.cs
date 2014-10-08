@@ -4,13 +4,8 @@ using System.Collections;
 public class CameraMove : MonoBehaviour 
 {
 
-    private float zoomSpeed = 1000.0f;
-    private float minSize = 8.0f;
-    private float maxSize = 30.0f;
-
     ShipMove shipMove;
     Transform _trans;
-    Camera _cam;
 
     void Awake()
     {
@@ -22,19 +17,10 @@ public class CameraMove : MonoBehaviour
         InputManager.Instance.OnMouseScroll += OnMouseScroll;
     
         _trans = transform;
-        _cam = camera;
     }
 
     void OnMouseScroll(MouseScrollEventArgs args)
     {
-        //perspective camera
-        //_cam.fieldOfView -= args.scrollSpeed * zoomSpeed *Time.deltaTime;
-        //_cam.fieldOfView = Mathf.Clamp(_cam.fieldOfView, minFov, maxFov);
-
-        //ortho camera
-        //_cam.orthographicSize -= args.scrollSpeed * zoomSpeed * Time.deltaTime;
-        //_cam.orthographicSize = Mathf.Clamp(_cam.orthographicSize, minSize, maxSize);
-
         FatherTime.timeRate -= args.scrollSpeed;
     }
 
