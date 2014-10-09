@@ -3,7 +3,6 @@ using System.Collections;
 
 public class CameraMove : MonoBehaviour 
 {
-
     ShipMove shipMove;
     Transform _trans;
 
@@ -11,6 +10,7 @@ public class CameraMove : MonoBehaviour
     {
         shipMove=GameObject.FindObjectOfType<ShipMove>();
     }
+
     void Start()
     {
         shipMove.OnShipMoved += shipMove_OnShipMoved;
@@ -21,7 +21,7 @@ public class CameraMove : MonoBehaviour
     
     void OnMouseScroll(MouseScrollEventArgs args)
     {
-        FatherTime.timeRate -= args.scrollSpeed;
+        //FatherTime.timeRate -= args.scrollSpeed;
     }
     
     void shipMove_OnShipMoved(Transform trans)
@@ -29,5 +29,4 @@ public class CameraMove : MonoBehaviour
         _trans.SetPositionX(trans.position.x);
         _trans.SetPositionZ(trans.position.z);
     }
-
 }

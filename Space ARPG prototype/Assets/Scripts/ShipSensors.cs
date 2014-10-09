@@ -38,8 +38,6 @@ public class ShipSensors : MonoBehaviour
 
     IEnumerator SensorSweep()
     {
-        CelestialObject currCOScript;
-
         foreach (GameObject gObject in objectsNearMe)
         {
             gObject.GetComponent<CelestialObject>().myDistanceToShip = (gObject.transform.position - playerShip.position).magnitude;
@@ -56,28 +54,6 @@ public class ShipSensors : MonoBehaviour
                 closestObjectToMe = gObject;
             }
 
-        }
-
-        if (objectsNearMe.Count != 0)
-        {
-            currCOScript = closestObjectToMe.GetComponent<CelestialObject>();
-
-            if (currCOScript.name == "Star")
-            {
-               // yield return StartCoroutine(CameraManager.Instance.changeZoomLevel(CameraManager.MED_FAR_ZOOM));
-            }
-            else if (currCOScript.name == "Planet")
-            {
-                //yield return StartCoroutine(CameraManager.Instance.changeZoomLevel(CameraManager.MED_ZOOM));
-            }
-            else if (currCOScript.name == "Moon")
-            {
-                //yield return StartCoroutine(CameraManager.Instance.changeZoomLevel(CameraManager.CLOSE_ZOOM));
-            }
-        }
-        else
-        {
-            //StartCoroutine(CameraManager.Instance.changeZoomLevel(CameraManager.FAR_ZOOM));
         }
 
         yield return new WaitForSeconds(timeBetweenSensorSweeps);
