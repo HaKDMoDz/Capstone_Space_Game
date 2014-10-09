@@ -22,11 +22,21 @@ public class ShipBlueprintSaveSystem : SingletonComponent<ShipBlueprintSaveSyste
     [SerializeField]
     string fileName_SaveList="ShipBPFileList";
 
+    SavedShipBPList savedBPList;
+    public SavedShipBPList SavedBPList
+    {
+        get
+        {
+            LoadSavesList();
+            return savedBPList;
+        }
+    }
+    
     Dictionary<int, Hull> hullTable;
     Dictionary<int, ShipComponent> compTable;
     Dictionary<ShipComponent, int> compIDTable;
 
-    SavedShipBPList savedBPList;
+    //book-keeping vars
     BinaryFormatter bf;
     FileStream file;
     StringBuilder sb;
@@ -45,6 +55,7 @@ public class ShipBlueprintSaveSystem : SingletonComponent<ShipBlueprintSaveSyste
         bf = new BinaryFormatter();
         sb = new StringBuilder();
 
+        LoadSavesList();
 
         //Debug.Log("Component object table");
         //foreach (var item in compTableObject.ComponentList)
@@ -80,19 +91,22 @@ public class ShipBlueprintSaveSystem : SingletonComponent<ShipBlueprintSaveSyste
         file.Close();
 
         //update file list
-        LoadSavesList();
+        
         savedBPList.Add(fileName);
-        for (int i = 0; i < savedBPList.count; i++)
-        {
-            Debug.Log(savedBPList.fileNames[i]);
-        }
+        //for (int i = 0; i < savedBPList.count; i++)
+        //{
+        //    Debug.Log(savedBPList.fileNames[i]);
+        //}
+        SaveSavesList();
     }
-    public bool Load(out ShipBlueprint shipBP)
-    {
 
-        if (File.Exists(Application.persistentDataPath + "/ShipBlueprints/ShipBP1.sbp"))
+    public bool Load(out ShipBlueprint shipBP, string fileName)
+    {
+        path = BuildPathString(fileName);
+        if(File.Exists(path))
+        //if (File.Exists(Application.persistentDataPath + "/ShipBlueprints/ShipBP1.sbp"))
         {
-            file = File.Open(Application.persistentDataPath + "/ShipBlueprints/ShipBP1.sbp", FileMode.Open);
+            file = File.Open(path, FileMode.Open);
             SerializedShipBlueprint sz_shipBP = bf.Deserialize(file) as SerializedShipBlueprint;
             shipBP = DeserializeShipBP(sz_shipBP);
             file.Close();
@@ -109,12 +123,15 @@ public class ShipBlueprintSaveSystem : SingletonComponent<ShipBlueprintSaveSyste
     void SaveSavesList()
     {
         CreateShipBPDirectory();
-
+        path = BuildPathString(fileName_SaveList);
+        file = File.Create(path);
+        bf.Serialize(file, savedBPList);
+        file.Close();
     }
     void LoadSavesList()
     {
-        string path = BuildPathString(fileName_SaveList);
-        if (!File.Exists(path))
+        path = BuildPathString(fileName_SaveList);
+        if (File.Exists(path))
         {
             file = File.Open(path, FileMode.Open);
             savedBPList = bf.Deserialize(file) as SavedShipBPList;
@@ -124,6 +141,18 @@ public class ShipBlueprintSaveSystem : SingletonComponent<ShipBlueprintSaveSyste
         {
             savedBPList = new SavedShipBPList();
         }
+    }
+
+    public void DeleteBlueprints()
+    {
+        LoadSavesList();
+        for (int i = 0; i < savedBPList.count; i++)
+        {
+            path = BuildPathString(savedBPList.fileNames[i]);
+            File.Delete(path);
+        }
+        savedBPList = new SavedShipBPList();
+        SaveSavesList();
     }
     string BuildPathString(string fileName)
     {
