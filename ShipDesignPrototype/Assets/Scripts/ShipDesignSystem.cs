@@ -232,6 +232,10 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
                     });
                 }
             }
+            else
+            {
+                Debug.Log("No blueprints to load");
+            }
         }
     }
     /*
