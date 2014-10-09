@@ -22,6 +22,7 @@ public class CameraMove : MonoBehaviour
     void OnMouseScroll(MouseScrollEventArgs args)
     {
         FatherTime.timeRate -= args.scrollSpeed;
+        
     }
 
     void shipMove_OnShipMoved(Transform trans)

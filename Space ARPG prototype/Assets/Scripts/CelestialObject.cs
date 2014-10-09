@@ -22,7 +22,7 @@ public class CelestialObject : MonoBehaviour
 
     private int ID;
 
-    public static bool objectSelected;
+    public bool objectSelected;
 
     public CelestialObjectType type;
 
@@ -56,12 +56,10 @@ public class CelestialObject : MonoBehaviour
         thisScript = gameObject.GetComponent<CelestialObject>();
 	}
 
-	
 	void FixedUpdate () 
     {
         transform.RotateAround(orbitAroundThis.position, Vector3.up, rotateSpeed * Time.deltaTime * FatherTime.timeRate);
 	}
-
 
     void OnMouseClick(MouseEventArgs args)
     {
@@ -78,28 +76,12 @@ public class CelestialObject : MonoBehaviour
 
                 currSelectedObject = hit.collider.GetComponent<CelestialObject>();
                 objectSelected = true;
-                SystemLog.addMessage(name + " was selected");
                 DisplayInfo();
                 acceptInput = false;
 
                 texture = renderer.material.mainTexture;
                 renderer.material = glowMaterial;
                 renderer.material.mainTexture = texture;
-
-                switch (type)
-                {
-                    case CelestialObjectType.STAR:
-                        CameraManager.getInstance().changeZoomLevel(CameraManager.FAR_ZOOM);
-                        break;
-                    case CelestialObjectType.PLANET:
-                        CameraManager.getInstance().changeZoomLevel(CameraManager.MED_ZOOM);
-                        break;
-                    case CelestialObjectType.MOON:
-                        CameraManager.getInstance().changeZoomLevel(CameraManager.CLOSE_ZOOM);
-                        break;
-                    default:
-                        break;
-                }
 
                 StartCoroutine(WaitBeforeInput(1.0f));
             }

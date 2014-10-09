@@ -6,102 +6,78 @@ public enum shipSensorStates { OUTER_SPACE, STELLAR_ORBIT, PLANETARY_ORBIT}
 
 public class ShipSensors : MonoBehaviour 
 {
-    private GameObject[] allStellarObjects;
     private List<GameObject> objectsNearMe;
-    private GameObject closestObjectToMe;
-    private GameObject orbitting;
+    private GameObject closestObjectToMe = null;
+    private float timeBetweenSensorSweeps = 0.25f;
+    private Transform playerShip;
 
-    public float sensorRange;
-
-    private Camera cam;
-    private float medCamRange = 50.0f;
-    private float closeCamRange = 20.0f;
-    private float timeBetweenSensorSweeps = 1.0f;
-    private float timeUntilSensorSweep = 0.0f;
-
-    private bool inASystem = false;
 	// Use this for initialization
 	void Start () 
     {
-        allStellarObjects = new GameObject[0];
+        GetComponent<SphereCollider>().radius = 20.0f;
         objectsNearMe = new List<GameObject>();
-        closestObjectToMe = new GameObject();
-        closestObjectToMe.SetActive(false);
-
-        allStellarObjects = GameObject.FindGameObjectsWithTag("CelestialObject");
-
-        cam = Camera.main;
-
-        orbitting = null;
-
+        playerShip = GameObject.Find("PlayerShip").transform;
         StartCoroutine(SensorSweep());
 	}
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "CelestialObject")
+        {
+            objectsNearMe.Add(other.gameObject);
+        }
+    }
+
+    void OnTriggerExit( Collider other)
+    {
+        if (other.tag == "CelestialObject")
+        {
+            objectsNearMe.Remove(other.gameObject);
+        }
+    }
 
     IEnumerator SensorSweep()
     {
         CelestialObject currCOScript;
-        for (int i = objectsNearMe.Count - 1; i > 0; i--)
+
+        foreach (GameObject gObject in objectsNearMe)
         {
-            currCOScript = objectsNearMe[i].GetComponent<CelestialObject>();
-            if (currCOScript.myDistanceToShip > sensorRange)
+            gObject.GetComponent<CelestialObject>().myDistanceToShip = (gObject.transform.position - playerShip.position).magnitude;
+
+            if (closestObjectToMe != null)
             {
-                objectsNearMe.Remove(objectsNearMe[i]);
-            }
-        }
-
-        foreach (GameObject gObject in allStellarObjects)
-        {
-            float distance = (gObject.transform.position - transform.position).magnitude;
-
-            gObject.GetComponent<CelestialObject>().myDistanceToShip = distance;
-
-            if (distance < sensorRange)
-            {
-                objectsNearMe.Add(gObject);
-                if (!closestObjectToMe.activeInHierarchy)
+                if (gObject.GetComponent<CelestialObject>().myDistanceToShip < closestObjectToMe.GetComponent<CelestialObject>().myDistanceToShip)
                 {
                     closestObjectToMe = gObject;
                 }
-                else
-                {
-                    if (distance < closestObjectToMe.GetComponent<CelestialObject>().myDistanceToShip)
-                    {
-                        closestObjectToMe = gObject;
+            }
+            else
+            {
+                closestObjectToMe = gObject;
+            }
 
-                        //SystemLog.addMessage("tick");
-                        //SystemLog.addMessage(closestObjectToMe.GetComponent<CelestialObject>().myName);
-                    }
-                }
+        }
+
+        if (objectsNearMe.Count != 0)
+        {
+            currCOScript = closestObjectToMe.GetComponent<CelestialObject>();
+
+            if (currCOScript.name == "Star")
+            {
+               // yield return StartCoroutine(CameraManager.Instance.changeZoomLevel(CameraManager.MED_FAR_ZOOM));
+            }
+            else if (currCOScript.name == "Planet")
+            {
+                //yield return StartCoroutine(CameraManager.Instance.changeZoomLevel(CameraManager.MED_ZOOM));
+            }
+            else if (currCOScript.name == "Moon")
+            {
+                //yield return StartCoroutine(CameraManager.Instance.changeZoomLevel(CameraManager.CLOSE_ZOOM));
             }
         }
-
-        currCOScript = closestObjectToMe.GetComponent<CelestialObject>();
-
-        if (currCOScript.myDistanceToShip < medCamRange)
+        else
         {
-            //GalaxyCameraDirector.targetZoom = GalaxyCameraDirector.MED_ZOOM;
-            //CameraManager.changeZoomLevel(CameraManager.MED_ZOOM);
-            FatherTime.timeRate = FatherTime.MED_TIME_RATE;
-        }
-        else if (currCOScript.myDistanceToShip > medCamRange * 1.5f)
-        {
-            // GalaxyCameraDirector.targetZoom = GalaxyCameraDirector.FAR_ZOOM;
-            //CameraManager.changeZoomLevel(CameraManager.FAR_ZOOM);
-            FatherTime.timeRate = FatherTime.FAR_TIME_RATE;
-        }
-
-        if ((currCOScript.myDistanceToShip < closeCamRange) && (currCOScript.type == CelestialObjectType.PLANET))
-        {
-
-            // GalaxyCameraDirector.targetZoom = GalaxyCameraDirector.CLOSE_ZOOM;
-            //CameraManager.changeZoomLevel(CameraManager.CLOSE_ZOOM);
-            FatherTime.timeRate = FatherTime.CLOSE_TIME_RATE;
-        }
-        else if ((currCOScript.myDistanceToShip > medCamRange) && (currCOScript.type == CelestialObjectType.MOON || currCOScript.type == CelestialObjectType.PLANET))
-        {
-            // GalaxyCameraDirector.targetZoom = GalaxyCameraDirector.MED_ZOOM;
-            //CameraManager.changeZoomLevel(CameraManager.MED_ZOOM);
-            FatherTime.timeRate = FatherTime.MED_TIME_RATE;
+            StartCoroutine(CameraManager.Instance.changeZoomLevel(CameraManager.FAR_ZOOM));
         }
 
         yield return new WaitForSeconds(timeBetweenSensorSweeps);

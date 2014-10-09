@@ -5,23 +5,13 @@ using System.IO;
 public class FogManager : MonoBehaviour 
 {
     GameObject[] Fogs;
-
     public GameObject fog;
-
     GameObject fogParent;
-
     float startX, startY, currX, currY;
-
     Transform topLeft, topRight, botLeft, botRight;
-
-    FogContainer fogData;
 
 	void Start () 
     {
-        fogData = FogContainer.Load(Path.Combine(Application.dataPath, "XML/fog.xml"));
-        string xmlData = @"<MonsterCollection><Monsters><Monster name=""a""><Health>5</Health></Monster></Monsters></MonsterCollection>";
-        fogData = FogContainer.LoadFromText(xmlData);
-
         fogParent = GameObject.Find("FogOfWar");
 
         topLeft = GameObject.Find("TopLeft").transform;
@@ -35,7 +25,7 @@ public class FogManager : MonoBehaviour
         currX = startX;
         currY = startY;
 
-        Fogs = new GameObject[100000];
+        Fogs = new GameObject[10000];
 
         bool done = false;
         int numFog = 0;
@@ -64,10 +54,5 @@ public class FogManager : MonoBehaviour
             
         }
         SystemLog.addMessage(numFog + " fog squares were created");
-	}
-
-	void Update () 
-    {
-	
 	}
 }

@@ -1,18 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CameraManager : MonoBehaviour 
+public class CameraManager : SingletonComponent<CameraManager> 
 {
-    public static float FAR_ZOOM = 41.0f;
-    public static float MED_ZOOM = 26.0f;
-    public static float CLOSE_ZOOM = 14.0f;
+    public static float FAR_ZOOM = 30.0f;
+    public static float MED_FAR_ZOOM = 20.0f;
+    public static float MED_ZOOM = 5.0f;
+    public static float CLOSE_ZOOM = 2.0f;
 
     public static float cameraTick = 0.125f;
 
     public static float zoomTarget;
     private static Camera cam;
-
-    private static CameraManager _instance = null;
 
     private CameraManager() { }
 
@@ -22,31 +21,16 @@ public class CameraManager : MonoBehaviour
         zoomTarget = FAR_ZOOM;
 	}
 
-    public static CameraManager getInstance()
-    {
-        if (_instance == null)
-        {
-            _instance = new CameraManager();
-        }
-
-        return _instance;
-    }
-
     public IEnumerator changeZoomLevel(float _target)
     {
         float epsilon = 1f;
         while (Mathf.Abs(cam.orthographicSize - _target) > epsilon)
         {
-            cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, _target, 500f);
+            cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, _target, 0.05f);
+            yield return null;
         }
 
-        if (Mathf.Abs(cam.orthographicSize - _target) <= epsilon)
-        {
-            yield return 0;
-        }
-       
-        yield return new WaitForSeconds(cameraTick);
-        StartCoroutine(changeZoomLevel(_target));
+        yield return null;
     }
 
     
