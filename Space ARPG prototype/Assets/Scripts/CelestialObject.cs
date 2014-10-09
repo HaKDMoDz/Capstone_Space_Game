@@ -44,6 +44,9 @@ public class CelestialObject : MonoBehaviour
     public int radius;
     private Camera cam;
 
+    private static int celestialObjectLayer = 10;
+    private static int fogLayer = 11;
+
 	void Start () 
     {
         ID = ++numCelestialObjs;
@@ -67,23 +70,32 @@ public class CelestialObject : MonoBehaviour
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit) && hit.collider.tag == "CelestialObject" && hit.collider.GetComponent<CelestialObject>().ID == ID)
+            if (Physics.Raycast(ray, out hit,10000.0f, 1 << celestialObjectLayer))
             {
-                if (currSelectedObject != null)
+                if (hit.collider.GetComponent<CelestialObject>().ID == ID)
                 {
-                    currSelectedObject.renderer.material = blankMaterial;
+                    if (currSelectedObject != null)
+                    {
+                        currSelectedObject.renderer.material = blankMaterial;
+                    }
+
+                    currSelectedObject = hit.collider.GetComponent<CelestialObject>();
+                    objectSelected = true;
+                    DisplayInfo();
+                    acceptInput = false;
+
+                    texture = renderer.material.mainTexture;
+                    renderer.material = glowMaterial;
+                    renderer.material.mainTexture = texture;
                 }
+                
 
-                currSelectedObject = hit.collider.GetComponent<CelestialObject>();
-                objectSelected = true;
-                DisplayInfo();
-                acceptInput = false;
+                StartCoroutine(WaitBeforeInput(0.5f));
+            }
 
-                texture = renderer.material.mainTexture;
-                renderer.material = glowMaterial;
-                renderer.material.mainTexture = texture;
-
-                StartCoroutine(WaitBeforeInput(1.0f));
+            if (Physics.Raycast(ray, out hit, 10000.0f, 1 << fogLayer))
+            {
+                Debug.Log(hit.collider.name);
             }
         } 
     }

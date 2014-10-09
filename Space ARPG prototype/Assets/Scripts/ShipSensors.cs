@@ -77,7 +77,7 @@ public class ShipSensors : MonoBehaviour
         }
         else
         {
-            StartCoroutine(CameraManager.Instance.changeZoomLevel(CameraManager.FAR_ZOOM));
+            //StartCoroutine(CameraManager.Instance.changeZoomLevel(CameraManager.FAR_ZOOM));
         }
 
         yield return new WaitForSeconds(timeBetweenSensorSweeps);

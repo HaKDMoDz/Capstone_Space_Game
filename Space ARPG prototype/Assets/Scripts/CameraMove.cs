@@ -18,13 +18,12 @@ public class CameraMove : MonoBehaviour
     
         _trans = transform;
     }
-
+    
     void OnMouseScroll(MouseScrollEventArgs args)
     {
         FatherTime.timeRate -= args.scrollSpeed;
-        
     }
-
+    
     void shipMove_OnShipMoved(Transform trans)
     {
         _trans.SetPositionX(trans.position.x);

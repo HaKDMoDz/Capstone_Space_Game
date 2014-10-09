@@ -13,20 +13,75 @@ public class CameraManager : SingletonComponent<CameraManager>
     public static float zoomTarget;
     private static Camera cam;
 
+    private float epsilon = 0.01f;
+
     private CameraManager() { }
 
 	void Start () 
     {
         cam = Camera.main;
         zoomTarget = FAR_ZOOM;
+        Debug.Log("Camera Manager Started");
+        InputManager.Instance.OnMouseScroll += OnMouseScroll;
 	}
+
+    void OnMouseScroll(MouseScrollEventArgs args)
+    {
+
+        Debug.Log(args.scrollSpeed);
+
+        if (args.scrollSpeed > 0.05)
+        {
+            moveUpOneZoomLevel();
+        }
+        else if (args.scrollSpeed < -0.05)
+        {
+            MoveDownOneZoomLevel();
+        }
+    }
+
+    void moveUpOneZoomLevel()
+    {
+        Debug.Log("zoom out");
+        if (zoomTarget == MED_FAR_ZOOM)
+        {
+            StartCoroutine(changeZoomLevel(FAR_ZOOM));
+        }
+        else if (zoomTarget == MED_ZOOM)
+        {
+            StartCoroutine(changeZoomLevel(MED_FAR_ZOOM));
+        }
+        else if (zoomTarget == CLOSE_ZOOM) 
+        {
+            StartCoroutine(changeZoomLevel(MED_ZOOM));
+        }
+    }
+
+    void MoveDownOneZoomLevel()
+    {
+        if (zoomTarget == MED_ZOOM)
+        {
+            StartCoroutine(changeZoomLevel(CLOSE_ZOOM));
+        }
+        else if (zoomTarget == MED_FAR_ZOOM)
+        {
+            StartCoroutine(changeZoomLevel(MED_ZOOM));
+        }
+        else if (zoomTarget == FAR_ZOOM)
+        {
+            StartCoroutine(changeZoomLevel(MED_FAR_ZOOM));
+        }
+        
+        
+    }
 
     public IEnumerator changeZoomLevel(float _target)
     {
-        float epsilon = 1f;
+        Debug.Log("I'm changing zoom to " + _target);
+        zoomTarget = _target;
         while (Mathf.Abs(cam.orthographicSize - _target) > epsilon)
         {
-            cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, _target, 0.05f);
+            cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, _target, 0.0005f);
             yield return null;
         }
 

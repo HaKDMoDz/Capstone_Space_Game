@@ -25,18 +25,20 @@ public class FogManager : MonoBehaviour
         currX = startX;
         currY = startY;
 
-        Fogs = new GameObject[10000];
+        Fogs = new GameObject[1000];
 
         bool done = false;
         int numFog = 0;
 
+        Vector3 fogStartPos = new Vector3(currX, 5, currY);
         for (int i = 0; i < Fogs.Length; i++)
         {
             if (!done)
             {
                 numFog++;
-
-                Fogs[i] = GameObject.Instantiate(fog, new Vector3(currX, 5, currY), Quaternion.identity) as GameObject;
+                fogStartPos.x = currX;
+                fogStartPos.z = currY;
+                Fogs[i] = GameObject.Instantiate(fog, fogStartPos, Quaternion.identity) as GameObject;
                 Fogs[i].transform.parent = fogParent.transform;
 
                 currX += fog.renderer.bounds.size.x;

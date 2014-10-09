@@ -151,11 +151,11 @@ public class ShipMove : MonoBehaviour
     void ShipLookAtMouse(float mouseX, float mouseY)
     {
         Vector3 worldPos = Camera.main.ScreenToWorldPoint(new Vector3(mouseX, mouseY, camHeight));
-        transform.LookAt(worldPos);
+       // transform.LookAt(worldPos);
 
         //making sure ship doesn't pitch or roll
-        _trans.SetEulerX(0.0f);
-        _trans.SetEulerZ(0.0f);
+       // _trans.SetEulerX(0.0f);
+       // _trans.SetEulerZ(0.0f);
     }
     void Brake(float brakeTime)
     {
