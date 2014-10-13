@@ -8,7 +8,9 @@ public class HexTileMapGenerator : ScriptableWizard
 
     public GameObject tile;
     public GameObject ship;
+    public Renderer rend;
     public int shipLayer = 8;
+    
 
     List<ComponentSlot> tiles;
 
@@ -20,6 +22,8 @@ public class HexTileMapGenerator : ScriptableWizard
     float raycastHeight;
     int tileGridWidth;
     int tileGridHeight;
+
+    
 
 
     [MenuItem("Custom/Ship Hex Tilemap Wizard")]
@@ -41,11 +45,16 @@ public class HexTileMapGenerator : ScriptableWizard
     {
         tiles = new List<ComponentSlot>();
 
+        //rend = ship.GetComponentInChildren<Renderer>();
+
         hexTileSize.x = tile.renderer.bounds.size.x;
         hexTileSize.y = tile.renderer.bounds.size.z;
-        shipSize.x = ship.renderer.bounds.size.x;
-        shipSize.y = ship.renderer.bounds.size.y;
-        shipSize.z = ship.renderer.bounds.size.z;
+        //shipSize.x = ship.renderer.bounds.size.x;
+        //shipSize.y = ship.renderer.bounds.size.y;
+        //shipSize.z = ship.renderer.bounds.size.z;
+        shipSize.x = rend.bounds.size.x;
+        shipSize.y = rend.bounds.size.y;
+        shipSize.z = rend.bounds.size.z;
 
 
         CalculateGridSize();

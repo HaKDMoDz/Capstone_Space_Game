@@ -17,7 +17,9 @@ public class LookAtCamera : MonoBehaviour
 
     void OnCameraMoved()
     {
-        trans.LookAt(mainCamera);
+        //trans.LookAt(mainCamera);
+        //Debug.Log(mainCamera.rotation);
+        trans.rotation = mainCamera.rotation;
     }
 	
 }
