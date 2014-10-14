@@ -11,7 +11,7 @@ namespace GeneticAlgorithm
     {
         static void Main(string[] args)
         {
-            Population pop1 = new Population(10);
+            Population pop1 = new Population(100);
             Console.Out.WriteLine("Press Enter to Continue...");
             Console.In.ReadLine();
         }

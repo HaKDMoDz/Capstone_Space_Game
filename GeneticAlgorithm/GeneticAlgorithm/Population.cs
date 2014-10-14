@@ -32,7 +32,9 @@ namespace GeneticAlgorithm
             //run generations
             while (!idealFound)
             {
+                
                 NextGeneration();
+                currentGen = nextGen;
             }
 
             //display result
@@ -89,20 +91,34 @@ namespace GeneticAlgorithm
         /// </summary>
 		public void NextGeneration()
         {
+            
             nextGen = new List<Organism>();
+
+            //Console.Clear();
+
             Console.WriteLine("//////////////////////////////////////");
-            Console.WriteLine("//Generation: " + ++numGenerations+"//");
+            Console.Write("//Generation: " + ++numGenerations+"//");
+            Console.WriteLine("ideal genetic info: " + ideal.ChromosomeData.TestGenetics.First<string>());
+            Console.WriteLine("current champ: " + GetChampion().ChromosomeData.TestGenetics.First<string>());
             Console.WriteLine("//////////////////////////////////////");
 
-            //select a champion
-            Organism champion = GetChampion();
+
+            //Console.Out.WriteLine("Press Enter to Continue...");
+            //Console.In.ReadLine();
+
 
             //breed it with the top 3 and add children to next population
             IComparer<Organism> sortByFitness = new CompareByFitness();
             currentGen.Sort(sortByFitness);
+
+
+            //select a champion
+            Organism champion = GetChampion();
+
             int numToTransfer = 3;
             int numTransferred;
 
+            
             while (currentGen.Count > 3)
             {
                 numTransferred = 0;
@@ -110,44 +126,47 @@ namespace GeneticAlgorithm
                 {
                     
                     Organism item = currentGen[j];
+                    item.testFitness(ideal);
+                    champion = GetChampion();
                     if (item.OrganismID != champion.OrganismID)
                     {
                         
                         if (numTransferred < numToTransfer)
                         {
-                            
                             //add the top 3 to next population
                             numTransferred++;
 
                             if (nextGen.Count < _populationSize)
                             {
+                                if (!nextGen.Contains(champion))
+                                {
+                                    nextGen.Add(champion);
+                                }
                                 nextGen.Add(item);
-                                nextGen.Add(item.Breed(champion));
+                                nextGen.Add(item.Breed(champion,ideal));
                             }
 
                             currentGen.Remove(item);
                         }
                     }
                 }
+          
+                //check for ideal else kill champ
+                if (champion.Fitness >= 0.8f)
+                {
+                    idealFound = true;
+                    Console.WriteLine("A champion has risen to ideal status!+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                    champion.DebugData();
+                    Console.Write("ideal: ");
+                    ideal.DebugData();
+                }
+                else
+                {
+                    currentGen.Remove(champion);
+                }
 
-                //kill the champion
-                currentGen.Remove(champion);
-                
+               
             }
-
-            //repeat until current gen pop count < 4
-            
-            currentGen = nextGen;
-            //test code to make sure we don't get an infinite loop 
-            if (numGenerations > (10 - 1))
-            {
-                idealFound = true;
-            }
-            if (currentGen.Count > 0)
-            {
-                GetChampion().DebugData();
-            }
-            
         }
     }
 }
