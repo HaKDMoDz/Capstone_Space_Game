@@ -11,7 +11,10 @@ namespace GeneticAlgorithm
     {
         static void Main(string[] args)
         {
-            Population pop1 = new Population(100);
+            DateTime start = DateTime.Now;
+            Population pop1 = new Population(300);
+            DateTime now = DateTime.Now;
+            Console.WriteLine("Time taken was: " + (now-start).TotalSeconds + " seconds");
             Console.Out.WriteLine("Press Enter to Continue...");
             Console.In.ReadLine();
         }

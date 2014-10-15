@@ -128,25 +128,33 @@ namespace GeneticAlgorithm
                     Organism item = currentGen[j];
                     item.testFitness(ideal);
                     champion = GetChampion();
-                    if (item.OrganismID != champion.OrganismID)
+
+                    if (item.Fitness < 0.1f)
                     {
-                        
-                        if (numTransferred < numToTransfer)
+                        nextGen.Add(item.Mutate(ideal));
+                        currentGen.Remove(item);
+                    }
+                    else
+                    {
+                        if (item.OrganismID != champion.OrganismID)
                         {
-                            //add the top 3 to next population
-                            numTransferred++;
-
-                            if (nextGen.Count < _populationSize)
+                            if (numTransferred < numToTransfer)
                             {
-                                if (!nextGen.Contains(champion))
-                                {
-                                    nextGen.Add(champion);
-                                }
-                                nextGen.Add(item);
-                                nextGen.Add(item.Breed(champion,ideal));
-                            }
+                                //add the top 3 to next population
+                                numTransferred++;
 
-                            currentGen.Remove(item);
+                                if (nextGen.Count < _populationSize)
+                                {
+                                    if (!nextGen.Contains(champion))
+                                    {
+                                        nextGen.Add(champion);
+                                        //currentGen.Remove(champion);
+                                    }
+                                    nextGen.Add(item);
+                                    nextGen.Add(item.Breed(champion, ideal));
+                                    currentGen.Remove(item);
+                                }
+                            }
                         }
                     }
                 }
@@ -159,6 +167,8 @@ namespace GeneticAlgorithm
                     champion.DebugData();
                     Console.Write("ideal: ");
                     ideal.DebugData();
+                    Console.WriteLine("generation reached: " + numGenerations);
+                    break;
                 }
                 else
                 {

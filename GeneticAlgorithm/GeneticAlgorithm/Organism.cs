@@ -56,7 +56,7 @@ namespace GeneticAlgorithm
         public Organism Breed(Organism _mate, Organism ideal)
         {
             float epsilon = 0.1f;
-            if (chromosome.TestGenetics.First<string>() == _mate.chromosome.TestGenetics.First<string>() || Math.Abs(Fitness - _mate.Fitness) < epsilon)
+            if (chromosome.TestGenetics.First<string>() == _mate.chromosome.TestGenetics.First<string>())// || Math.Abs(Fitness - _mate.Fitness) < epsilon)
             {
                 Mutate(ideal);
                 return this;
@@ -131,7 +131,7 @@ namespace GeneticAlgorithm
                 //make a randomized choice to either change or leave the DNA alone. TODO: tweak this value
                 if ((_random.Next(0, (int)TOTAL)) / (TOTAL) > (1 - percentChanceToChange))
                 {
-                    if (_random.NextDouble() > 0.5f)
+                    if (_random.NextDouble() > 0.9f)
                     {
                         dNAChars[k] = idealDNAChars[k];
                     }
@@ -190,7 +190,7 @@ namespace GeneticAlgorithm
             }
 
             fitness = (float)numMatching / total;
-            Console.WriteLine("organism " + OrganismID + ":" + Fitness);
+            Console.WriteLine("organism " + OrganismID + " with fitness " + Fitness);
         }
     }
 }
