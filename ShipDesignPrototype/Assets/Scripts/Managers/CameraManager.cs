@@ -31,6 +31,8 @@ public class CameraManager : Singleton<CameraManager>
     {
         //Debug.Log(hull);
         HullCamInfoEntry camInfo = hull_camInfoTable.Find(item => item.hull == hull);
+        float ratio = camInfo.orthoSize / cam.orthographicSize;
+        background.localScale *= ratio;
         cam.transform.position = camInfo.camPos;
         cam.orthographicSize = camInfo.orthoSize;
     }
