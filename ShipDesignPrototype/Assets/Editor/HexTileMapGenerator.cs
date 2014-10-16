@@ -159,6 +159,12 @@ public class HexTileMapGenerator : ScriptableWizard
             valid = false;
         }
 
+        if(!rend)
+        {
+            errorString = "please assign a renderer to use as the bounds";
+            valid = false;
+        }
+
         if (valid)
         {
             errorString = "";

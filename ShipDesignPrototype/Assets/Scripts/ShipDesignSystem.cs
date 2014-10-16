@@ -102,6 +102,10 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
         {
             ClearBlueprint();
         }
+        if(Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            BuildHull(0);
+        }
     }
     #endregion
 
@@ -368,7 +372,6 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
         //Debug.Log("ID: " + hullID);
         if (!buildingShip)
         {
-
             AddHullToDisplay(hullTable[hullID]);
             currentHull.Init();
             currentBlueprint = new ShipBlueprint(hullTable[hullID]);
@@ -400,15 +403,15 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
     }
 
     ShipComponent AddCompToDisplay(ShipComponent component, Vector3 pos, Quaternion rot)
-    {                   //clone
+    {
         ShipComponent builtComp = Instantiate(component, pos, rot) as ShipComponent;
-        componentsDisplayed.Add(builtComp);//clone
-        return builtComp;//clone
-    }                                                       //original
+        componentsDisplayed.Add(builtComp);
+        return builtComp;
+    }                                      
     void AddCompToDisplay(ComponentSlot slot, ShipComponent component)
-    {                   //clone
+    {                  
         ShipComponent builtComp = Instantiate(component, slot.transform.position, component.transform.rotation) as ShipComponent;
-        componentsDisplayed.Add(builtComp);//clone
+        componentsDisplayed.Add(builtComp);
     }
 
     IEnumerator StartPlacementSequence(ShipComponent component)
