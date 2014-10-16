@@ -7,7 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-public class ShipBlueprintSaveSystem : SingletonComponent<ShipBlueprintSaveSystem>
+public class ShipBlueprintSaveSystem : Singleton<ShipBlueprintSaveSystem>
 {
     [SerializeField]
     HullTable hullTableObject;
@@ -16,11 +16,11 @@ public class ShipBlueprintSaveSystem : SingletonComponent<ShipBlueprintSaveSyste
     [SerializeField]
     string fileExtension_shipBP = "sbp";
     [SerializeField]
-    string fileName_default= "ShipBP";
+    string fileName_default = "ShipBP";
     [SerializeField]
-    string saveFolder_shipBP="ShipBlueprints";
+    string saveFolder_shipBP = "ShipBlueprints";
     [SerializeField]
-    string fileName_SaveList="ShipBPFileList";
+    string fileName_SaveList = "ShipBPFileList";
 
     SavedShipBPList savedBPList;
     public SavedShipBPList SavedBPList
@@ -31,7 +31,7 @@ public class ShipBlueprintSaveSystem : SingletonComponent<ShipBlueprintSaveSyste
             return savedBPList;
         }
     }
-    
+
     Dictionary<int, Hull> hullTable;
     Dictionary<int, ShipComponent> compTable;
     Dictionary<ShipComponent, int> compIDTable;
@@ -44,7 +44,6 @@ public class ShipBlueprintSaveSystem : SingletonComponent<ShipBlueprintSaveSyste
 
     void Start()
     {
-
         hullTable = hullTableObject.HullTableProp
             .ToDictionary(h => h.ID, h => h.hull);
         compTable = compTableObject.ComponentList
@@ -80,7 +79,7 @@ public class ShipBlueprintSaveSystem : SingletonComponent<ShipBlueprintSaveSyste
         SerializedShipBlueprint sz_shipBP = SerializeShipBP(shipBP);
         CreateShipBPDirectory();
         fileName = fileName == "" ? fileName_default : fileName;
-        
+
         path = BuildPathString(fileName);
         Debug.Log("Saving file to: " + path);
         file = File.Create(path);
@@ -91,7 +90,7 @@ public class ShipBlueprintSaveSystem : SingletonComponent<ShipBlueprintSaveSyste
         file.Close();
 
         //update file list
-        
+
         savedBPList.Add(fileName);
         //for (int i = 0; i < savedBPList.count; i++)
         //{
@@ -103,7 +102,7 @@ public class ShipBlueprintSaveSystem : SingletonComponent<ShipBlueprintSaveSyste
     public bool Load(out ShipBlueprint shipBP, string fileName)
     {
         path = BuildPathString(fileName);
-        if(File.Exists(path))
+        if (File.Exists(path))
         //if (File.Exists(Application.persistentDataPath + "/ShipBlueprints/ShipBP1.sbp"))
         {
             file = File.Open(path, FileMode.Open);
@@ -193,7 +192,7 @@ public class ShipBlueprintSaveSystem : SingletonComponent<ShipBlueprintSaveSyste
         Hull hull = hullTable[sz_shipBP.hull_ID];
         hull.Init();
         //hull.OutputSlotTable();
-        ShipBlueprint shipBP = new ShipBlueprint( hull);
+        ShipBlueprint shipBP = new ShipBlueprint(hull);
 
         foreach (var item in sz_shipBP.componentTable)
         {
@@ -222,7 +221,7 @@ public class SavedShipBPList
         fileNames.Add(fileName);
     }
 
-    
+
 }
 
 

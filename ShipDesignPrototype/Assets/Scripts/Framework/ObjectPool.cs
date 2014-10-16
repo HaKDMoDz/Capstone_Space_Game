@@ -2,15 +2,15 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class ObjectPool : SingletonComponent<ObjectPool> {
+public class ObjectPool : Singleton<ObjectPool> {
 
-    public GameObject[] objectPrefabs;//the object prefabs that the object pool will create from
-    public List<GameObject>[] pooledObjects; //holds the pooled objects that can be used in game
-    public int[] amountToBuffer; //the number of each type of object to buffer
+    public GameObject[] objectPrefabs;
+    public List<GameObject>[] pooledObjects;
+    public int[] amountToBuffer; 
 
     public int defaultBufferAmount = 5;
 
-    Transform container; //an empty to parent pooled objects under
+    Transform container; 
 
     void Start()
     {
@@ -32,7 +32,6 @@ public class ObjectPool : SingletonComponent<ObjectPool> {
                 PoolObject(newObj);
             }
         }
-
     }
 
     /// <summary>

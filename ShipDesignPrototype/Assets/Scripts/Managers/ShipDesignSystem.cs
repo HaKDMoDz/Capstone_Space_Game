@@ -8,7 +8,7 @@ using System.Linq;
 
 
 
-public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
+public class ShipDesignSystem : Singleton<ShipDesignSystem>
 {
 
     #region Fields
@@ -103,11 +103,11 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
         {
             ClearBlueprint();
         }
-        if(Input.GetKeyDown(KeyCode.Alpha1))
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             BuildHull(0);
         }
-        if(Input.GetKeyDown(KeyCode.Alpha2))
+        if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             LoadBlueprint("frig1");
         }
@@ -116,7 +116,6 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
 
     void Start()
     {
-
         hullTable = hullTableObject.HullTableProp
             .ToDictionary(h => h.ID, h => h.hull);
         compTable = compTableObject.ComponentList
@@ -126,7 +125,7 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
         //    (value)=> { Debug.Log("submit: " + value); }
         //    );
 
-        
+
 
         saveFileButtons = new List<Button>();
 
@@ -147,7 +146,7 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
             {
                 ShowSaveDialogueBox(false);
             });
-        
+
 
         buttonYOffset = Screen.height * .055f;
 
@@ -213,7 +212,7 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
     {
         if (!showing)
         {
-            for (int i = saveFileButtons.Count-1; i >=0; i--)
+            for (int i = saveFileButtons.Count - 1; i >= 0; i--)
             {
                 Destroy(saveFileButtons[i].gameObject);
             }
@@ -227,7 +226,7 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
             {
                 Button buttonClone;
                 RectTransform buttonTrans;
-                
+
                 loadFilesTrans.gameObject.SetActive(true);
                 for (int i = 0; i < saveList.count; i++)
                 {
@@ -277,7 +276,7 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
     }
     public void LoadBlueprint(string fileName)
     {
-        Debug.Log("LoadBlueprint : "+fileName);
+        Debug.Log("LoadBlueprint : " + fileName);
         ResetScreen();
         if (ShipBlueprintSaveSystem.Instance.Load(out currentBlueprint, fileName))
         {
@@ -303,7 +302,7 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
     {
         ShipBlueprintSaveSystem.Instance.DeleteBlueprints();
         ShowShipBPsToLoad(false);
-        
+
     }
 
 
@@ -409,6 +408,7 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
     void AddHullToDisplay(Hull hull)
     {
         currentHull = Instantiate(hull, hullPlacementLoc.position, hull.transform.rotation) as Hull;
+        CameraManager.Instance.HullDisplayed(hull);
     }
 
     ShipComponent AddCompToDisplay(ShipComponent component, Vector3 pos, Quaternion rot)
@@ -416,12 +416,12 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
         ShipComponent builtComp = Instantiate(component, pos, rot) as ShipComponent;
         componentsDisplayed.Add(builtComp);
         return builtComp;
-    }                                      
+    }
     void AddCompToDisplay(ComponentSlot slot, ShipComponent component)
-    {                  
+    {
         ShipComponent builtComp = Instantiate(component, slot.transform.position, slot.transform.rotation) as ShipComponent;
         componentsDisplayed.Add(builtComp);
-        if(slotDisplayedObjectTable.ContainsKey(slot))
+        if (slotDisplayedObjectTable.ContainsKey(slot))
         {
             slotDisplayedObjectTable[slot] = builtComp;
         }

@@ -1197,6 +1197,7 @@ GameObject:
   - 92: {fileID: 406321121}
   - 124: {fileID: 406321120}
   - 81: {fileID: 406321119}
+  - 114: {fileID: 406321124}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1245,7 +1246,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 10
+  orthographic size: 13.3199997
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1264,12 +1265,34 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 406321118}
   m_LocalRotation: {x: .707106829, y: 0, z: 0, w: .707106829}
-  m_LocalPosition: {x: 0, y: 35, z: 0}
+  m_LocalPosition: {x: 2.89059997, y: 35, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2091376893}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!114 &406321124
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 406321118}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67b525aca0bfa2641a61e18bb10e7b9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  background: {fileID: 2091376893}
+  hull_camInfoTable:
+  - hull: {fileID: 11400000, guid: 467855f51479ded4190940e0358146e2, type: 2}
+    camPos: {x: 0, y: 35, z: -1.67540002}
+    orthoSize: 13.7299995
+  - hull: {fileID: 11400118, guid: 230daef941122004883997e6518874f5, type: 2}
+    camPos: {x: 0, y: 35, z: -1.67540002}
+    orthoSize: 14.3999996
+  - hull: {fileID: 11400000, guid: 90480912a76da4b46a9f74e4eed412b3, type: 2}
+    camPos: {x: 2.89059997, y: 35, z: 0}
+    orthoSize: 27
 --- !u!1 &453578642
 GameObject:
   m_ObjectHideFlags: 0
@@ -5283,9 +5306,9 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2091376891}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.40000003e-14, z: 48.9780006}
-  m_LocalScale: {x: -3, y: -3, z: -3}
+  m_LocalRotation: {x: 0, y: 0, z: 1, w: -4.37113883e-08}
+  m_LocalPosition: {x: 0, y: -1.49999997e-14, z: 48.9780006}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_Children: []
   m_Father: {fileID: 406321123}
   m_RootOrder: 0

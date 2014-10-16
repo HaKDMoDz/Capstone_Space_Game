@@ -2,11 +2,11 @@
 using System.Collections;
 using System;
 
-public class GlobalTagsAndLayers : SingletonComponent<GlobalTagsAndLayers>
+public class GlobalTagsAndLayers : Singleton<GlobalTagsAndLayers>
 {
-
     public Layers layers;
     public Tags tags;
+
 }
 [Serializable]
 public class Layers

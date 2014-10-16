@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public partial class InputManager : SingletonComponent<InputManager> {
+public partial class InputManager : Singleton<InputManager> {
 
     //delegates for input related actions
 
@@ -30,6 +30,5 @@ public partial class InputManager : SingletonComponent<InputManager> {
         CheckMouseClick();
         CheckKeyboardPress();
     }
-
     
 }
