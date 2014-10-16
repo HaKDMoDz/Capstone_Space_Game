@@ -70,6 +70,7 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
     Hull currentHull;
     bool buildingShip = false;
     List<ShipComponent> componentsDisplayed;
+    Dictionary<ComponentSlot, ShipComponent> slotDisplayedObjectTable;
 
     #endregion
 
@@ -106,6 +107,10 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
         {
             BuildHull(0);
         }
+        if(Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            LoadBlueprint("frig1");
+        }
     }
     #endregion
 
@@ -120,6 +125,8 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
         //inputField.onSubmit.AddListener(
         //    (value)=> { Debug.Log("submit: " + value); }
         //    );
+
+        
 
         saveFileButtons = new List<Button>();
 
@@ -163,6 +170,7 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
         if (componentsDisplayed == null)
         {
             componentsDisplayed = new List<ShipComponent>();
+            slotDisplayedObjectTable = new Dictionary<ComponentSlot, ShipComponent>();
             //Debug.Log(componentsDisplayed.Count);
         }
         else
@@ -172,6 +180,7 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
                 Destroy(componentsDisplayed[i].gameObject);
             }
             componentsDisplayed.Clear();
+            slotDisplayedObjectTable.Clear();
         }
 
     }
@@ -399,7 +408,7 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
 
     void AddHullToDisplay(Hull hull)
     {
-        currentHull = Instantiate(hull, hullPlacementLoc.position, hullPlacementLoc.rotation) as Hull;
+        currentHull = Instantiate(hull, hullPlacementLoc.position, hull.transform.rotation) as Hull;
     }
 
     ShipComponent AddCompToDisplay(ShipComponent component, Vector3 pos, Quaternion rot)
@@ -410,8 +419,16 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
     }                                      
     void AddCompToDisplay(ComponentSlot slot, ShipComponent component)
     {                  
-        ShipComponent builtComp = Instantiate(component, slot.transform.position, component.transform.rotation) as ShipComponent;
+        ShipComponent builtComp = Instantiate(component, slot.transform.position, slot.transform.rotation) as ShipComponent;
         componentsDisplayed.Add(builtComp);
+        if(slotDisplayedObjectTable.ContainsKey(slot))
+        {
+            slotDisplayedObjectTable[slot] = builtComp;
+        }
+        else
+        {
+            slotDisplayedObjectTable.Add(slot, builtComp);
+        }
     }
 
     IEnumerator StartPlacementSequence(ShipComponent component)
@@ -430,8 +447,9 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
                     ComponentSlot slot = hit.transform.GetComponent<ComponentSlot>();
                     if (slot.installedComponent)
                     {
-                        ShipComponent otherComp = componentsDisplayed.Find(comp => comp.componentName == slot.installedComponent.componentName);
-                        Debug.Log(slot.installedComponent);
+                        //ShipComponent otherComp = componentsDisplayed.Find(comp => comp.componentName == slot.installedComponent.componentName);
+                        ShipComponent otherComp = slotDisplayedObjectTable[slot];
+                        //Debug.Log(slot.installedComponent);
 
                         componentsDisplayed.Remove(otherComp);
                         Destroy(otherComp.gameObject);
@@ -442,7 +460,8 @@ public class ShipDesignSystem : SingletonComponent<ShipDesignSystem>
                     //ShipComponent builtComp = Instantiate(component, hit.collider.transform.position, component.transform.rotation) as ShipComponent;
 
                     //clone
-                    AddCompToDisplay(component, hit.collider.transform.position, component.transform.rotation);
+                    //AddCompToDisplay(component, hit.collider.transform.position, hit.collider.transform.rotation);
+                    AddCompToDisplay(slot, component);
 
                     //componentsDisplayed.Add(builtComp);
                     //Debug.Log("Components Displays count: " + componentsDisplayed.Count);
