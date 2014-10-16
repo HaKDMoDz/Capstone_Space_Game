@@ -41,22 +41,17 @@ namespace GeneticAlgorithm
 
             //give the organism some genetic data
             chromosome = new Chromosome();
-            
-            //print out the genetic data
-            DebugGeneticInfoDump();
 
         }
         public Organism(Chromosome _geneticInfo)
         {
             setupIDandFitness();
             chromosome = _geneticInfo;
-            DebugGeneticInfoDump();
         }
 
         public Organism Breed(Organism _mate, Organism ideal)
         {
-            float epsilon = 0.1f;
-            if (chromosome.TestGenetics.First<string>() == _mate.chromosome.TestGenetics.First<string>())// || Math.Abs(Fitness - _mate.Fitness) < epsilon)
+            if (chromosome.TestGenetics.First<string>() == _mate.chromosome.TestGenetics.First<string>())
             {
                 Mutate(ideal);
                 return this;
@@ -81,12 +76,10 @@ namespace GeneticAlgorithm
                     if (daddyDNAChars[l] == idealDNAChars[l])
                     {
                         babyDNAChars[l] = daddyDNAChars[l];
-                        Console.WriteLine("ideal gene passed by father");
                     }
                     else if (mommyDNAChars[l] == idealDNAChars[l])
                     {
                         babyDNAChars[l] = mommyDNAChars[l];
-                        Console.WriteLine("ideal gene passed by mother");
                     }
                     else
                     {
@@ -102,15 +95,6 @@ namespace GeneticAlgorithm
                 }
 
                 babyDNA.TestGenetics.Add(new string(babyDNAChars));
-                
-                //DNA Debug info
-                Console.WriteLine("--------------------------");
-                Console.WriteLine("Daddy DNA: " + _mate.ChromosomeData.TestGenetics.First<string>());
-                Console.WriteLine("Mommy DNA: " + chromosome.TestGenetics.First<string>());
-                Console.WriteLine("--------------------------");
-                Console.WriteLine("Baby DNA: " + babyDNA.TestGenetics.First<string>());
-                Console.WriteLine("--------------------------");
-                 
                 return new Organism(babyDNA);
             }
         }
@@ -137,12 +121,11 @@ namespace GeneticAlgorithm
                     }
                     else
                     {
-                        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~MUTATION OCCURED~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                        //Console.Write("A gene was mutated from: " + dNAChars[k]);
                         dNAChars[k] = Path.GetRandomFileName().Substring(0, 1).ToCharArray()[0];
+                        //Console.WriteLine(" to: " + dNAChars[k]);
                     }
-                    
                 }
-
             }
             mutantDNA.TestGenetics.RemoveRange(0, 1);
             mutantDNA.TestGenetics.Add(new string(dNAChars));
@@ -153,12 +136,11 @@ namespace GeneticAlgorithm
         private void setupIDandFitness()
         {
             organismID = ++id;
-            Console.WriteLine("organism " + organismID + " has been born");
             fitness = 0;
         }
         public void DebugData()
         {
-            Console.Write(OrganismID + ": ");
+            Console.Write("Organism with ID " + OrganismID + " ");
             DebugGeneticInfoDump();
         }
 
@@ -169,7 +151,7 @@ namespace GeneticAlgorithm
             {
                 chromosomeData = string.Concat(chromosomeData, item);
             }
-            Console.WriteLine("with genetic info: " + chromosomeData);
+            Console.WriteLine("has genetic info: " + chromosomeData);
         }
 
         public void testFitness(Organism _ideal)

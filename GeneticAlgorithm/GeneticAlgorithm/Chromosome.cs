@@ -25,7 +25,7 @@ namespace GeneticAlgorithm
         public void RandomizeGenome()
         {
             testGenetics.RemoveRange(0, 1);
-            testGenetics.Add(Path.GetRandomFileName());
+            testGenetics.Add(Path.GetRandomFileName().Replace(".", ""));
 
         }
 
