@@ -111,6 +111,10 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
         {
             LoadBlueprint("frig1");
         }
+        if(Input.GetKeyDown(KeyCode.Delete))
+        {
+            ShipBlueprintSaveSystem.Instance.DeleteBlueprint("test1");
+        }
     }
     #endregion
 
@@ -236,7 +240,7 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
                     buttonTrans.SetParent(loadFilesTrans);
                     buttonTrans.CopyTransform(defaultSaveFilePos);
                     buttonTrans.SetPositionY(buttonTrans.position.y - buttonYOffset * i);
-                    string fileName = saveList.fileNames[i];
+                    string fileName = saveList.FileNames[i];
                     buttonClone.GetComponentInChildren<Text>().text = fileName;
                     buttonClone.onClick.AddListener(() =>
                     {

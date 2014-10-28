@@ -81,7 +81,7 @@ public class ShipBlueprintSaveSystem : Singleton<ShipBlueprintSaveSystem>
         fileName = fileName == "" ? fileName_default : fileName;
 
         path = BuildPathString(fileName);
-        Debug.Log("Saving file to: " + path);
+        //Debug.Log("Saving file to: " + path);
         file = File.Create(path);
 
         //Debug.Log("Saving file to: " + Application.persistentDataPath + "/ShipBlueprints/ShipBP1.sbp");
@@ -101,6 +101,7 @@ public class ShipBlueprintSaveSystem : Singleton<ShipBlueprintSaveSystem>
 
     public bool Load(out ShipBlueprint shipBP, string fileName)
     {
+        //print("Loading " + fileName);
         path = BuildPathString(fileName);
         if (File.Exists(path))
         //if (File.Exists(Application.persistentDataPath + "/ShipBlueprints/ShipBP1.sbp"))
@@ -144,13 +145,26 @@ public class ShipBlueprintSaveSystem : Singleton<ShipBlueprintSaveSystem>
 
     public void DeleteBlueprints()
     {
+        print("deleting all bps");
         LoadSavesList();
         for (int i = 0; i < savedBPList.count; i++)
         {
-            path = BuildPathString(savedBPList.fileNames[i]);
+            path = BuildPathString(savedBPList.FileNames[i]);
             File.Delete(path);
         }
         savedBPList = new SavedShipBPList();
+        SaveSavesList();
+    }
+    public void DeleteBlueprint(string fileName)
+    {
+        //print("delete " + fileName);
+        LoadSavesList();
+        if(savedBPList.FileExists(fileName))
+        {
+            path = BuildPathString(fileName);
+            File.Delete(path);
+            savedBPList.Remove(fileName);
+        }
         SaveSavesList();
     }
     string BuildPathString(string fileName)
@@ -208,8 +222,14 @@ public class ShipBlueprintSaveSystem : Singleton<ShipBlueprintSaveSystem>
 [Serializable]
 public class SavedShipBPList
 {
-    public int count;
-    public List<string> fileNames;
+    public int count = 0;
+    
+    private List<string> fileNames;
+    public List<string> FileNames
+    {
+        get { return fileNames; }
+    }
+
     public SavedShipBPList()
     {
         count = 0;
@@ -219,6 +239,14 @@ public class SavedShipBPList
     {
         count++;
         fileNames.Add(fileName);
+    }
+    public void Remove(string fileName)
+    {
+        count--;
+    }
+    public bool FileExists(string fileName)
+    {
+        return (fileNames.Contains(fileName));
     }
 
 

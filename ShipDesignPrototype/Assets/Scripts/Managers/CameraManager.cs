@@ -13,7 +13,7 @@ public class CameraManager : Singleton<CameraManager>
 
     Camera cam;
 
-    void Start()
+    void Awake()
     {
         cam = camera;
         foreach (HullCamInfoEntry info in hull_camInfoTable)
