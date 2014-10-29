@@ -29,6 +29,7 @@ public class Hull : MonoBehaviour
     public void Init()
     {
         //emptyComponentGrid = new List<ComponentSlot>(GetComponentsInChildren<ComponentSlot>());
+        //Debug.Log("hull init");
         slotTable = new Dictionary<int, ComponentSlot>();
 
         for (int i = 0; i < emptyComponentGrid.Count; i++)

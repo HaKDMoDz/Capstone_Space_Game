@@ -30,7 +30,11 @@ public class ShipBlueprint
         hull = _hull;
         
     }
-
+    public ShipBlueprint(ShipBlueprint bp)
+    {
+        hull = bp.Hull;
+        componentTable = bp.ComponentTable;
+    }
     #endregion
 
     #region Methods
@@ -57,6 +61,10 @@ public class ShipBlueprint
         //}
         //Debug.Log("Adding comp: index: " + slotIndex + "slot: " + hull.SlotTable[slotIndex].index);
         componentTable.Add(hull.SlotTable[slotIndex], component);
+    }
+    public void AddComponent(ComponentSlot slot, ShipComponent component)
+    {
+        componentTable.Add(slot, component);
     }
     public void RemoveComponent(ComponentSlot slot)
     {

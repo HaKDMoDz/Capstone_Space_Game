@@ -20,6 +20,7 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
     [SerializeField]
     ComponentTable compTableObject;
 
+    #region GUI Fields
     //GUI stuff
     [SerializeField]
     Canvas canvas;
@@ -54,7 +55,7 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
     Button darkButton;
 
     List<Button> saveFileButtons;
-
+    #endregion
 
     Dictionary<int, Hull> hullTable;
     Dictionary<int, ShipComponent> compTable;
