@@ -457,7 +457,10 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
                     currentBlueprint.AddComponent(component, slot);
 
                     //slot.installedComponent = builtComp;
-                    runSequence = false;
+                    if (!Input.GetKey(KeyCode.LeftShift) && !Input.GetKey(KeyCode.RightShift))
+                    {
+                        runSequence = false;
+                    }
 
                 }
             }
