@@ -44,7 +44,7 @@ public class TileIndexGenerator : EditorWindow
             {
                 slots[i].index = i;
             }
-            Debug.Log("Assigned slot indices for " + go.name);
+            Debug.Log("Assigned "+slots.Count + " slot indices for " + go.name);
         }
 
     }

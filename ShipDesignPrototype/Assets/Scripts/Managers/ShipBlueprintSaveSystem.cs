@@ -82,7 +82,7 @@ public class ShipBlueprintSaveSystem : Singleton<ShipBlueprintSaveSystem>
         fileName = fileName == "" ? fileName_default : fileName;
 
         path = BuildPathString(fileName);
-        //Debug.Log("Saving file to: " + path);
+        Debug.Log("Saving file to: " + path);
         file = File.Create(path);
 
         //Debug.Log("Saving file to: " + Application.persistentDataPath + "/ShipBlueprints/ShipBP1.sbp");

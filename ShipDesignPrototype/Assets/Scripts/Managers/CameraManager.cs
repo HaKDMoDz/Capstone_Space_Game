@@ -26,7 +26,12 @@ public class CameraManager : Singleton<CameraManager>
             }
         }
     }
-
+    [ContextMenu("ResetToDetault")]
+    public void ResetToDefault()
+    {
+        camera.orthographicSize = 13.0f;
+        camera.transform.position = new Vector3(0.0f,35.0f,0.0f);
+    }
     public void HullDisplayed(Hull hull)
     {
         //Debug.Log(hull);

@@ -8,8 +8,9 @@ public class HexTileMapGenerator : ScriptableWizard
 
     public GameObject tile;
     public GameObject ship;
-    public Renderer rend;
+    public Renderer renderer;
     public int shipLayer = 8;
+    public bool deleteExtraTiles = true;
     
 
     List<ComponentSlot> tiles;
@@ -37,7 +38,10 @@ public class HexTileMapGenerator : ScriptableWizard
     {
         Init();
         CreateHexTileGrid();
-        DeleteExtraTiles();
+        if (deleteExtraTiles)
+        {
+            DeleteExtraTiles();
+        }
         AssignSlotIndices();
     }
 
@@ -52,9 +56,9 @@ public class HexTileMapGenerator : ScriptableWizard
         //shipSize.x = ship.renderer.bounds.size.x;
         //shipSize.y = ship.renderer.bounds.size.y;
         //shipSize.z = ship.renderer.bounds.size.z;
-        shipSize.x = rend.bounds.size.x;
-        shipSize.y = rend.bounds.size.y;
-        shipSize.z = rend.bounds.size.z;
+        shipSize.x = renderer.bounds.size.x;
+        shipSize.y = renderer.bounds.size.y;
+        shipSize.z = renderer.bounds.size.z;
 
 
         CalculateGridSize();
@@ -159,7 +163,7 @@ public class HexTileMapGenerator : ScriptableWizard
             valid = false;
         }
 
-        if(!rend)
+        if(!renderer)
         {
             errorString = "please assign a renderer to use as the bounds";
             valid = false;
