@@ -7,7 +7,7 @@ using System.Reflection;
 
 public class ShipDesignTester : MonoBehaviour
 {
-#if TESTING
+#if UNITY_EDITOR
     [SerializeField]
     Transform hullPlacementLoc;
     [SerializeField]
@@ -277,7 +277,7 @@ public class ShipDesignTester : MonoBehaviour
     //}
     void OnGUI()
     {
-        GUI.Label(new Rect(Screen.width - 100, Screen.height - 100, 100, 100), "<size=24><color=red>DEBUG BUILD</color></size>");
+        GUI.Label(new Rect(Screen.width - 200, Screen.height - 100, 200, 100), "<size=24><color=red>TESTING BUILD</color></size>");
     }
 #endif
 }

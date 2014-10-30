@@ -227,6 +227,7 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
         else
         {
             SavedShipBPList saveList = ShipBlueprintSaveSystem.Instance.SavedBPList;
+            //print(saveList.count);
             if (saveList.count > 0)
             {
                 Button buttonClone;

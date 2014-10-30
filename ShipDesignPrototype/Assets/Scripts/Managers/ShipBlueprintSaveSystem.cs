@@ -76,6 +76,7 @@ public class ShipBlueprintSaveSystem : Singleton<ShipBlueprintSaveSystem>
 
     public void Save(ShipBlueprint shipBP, string fileName)
     {
+        LoadSavesList();
         SerializedShipBlueprint sz_shipBP = SerializeShipBP(shipBP);
         CreateShipBPDirectory();
         fileName = fileName == "" ? fileName_default : fileName;
@@ -190,7 +191,6 @@ public class ShipBlueprintSaveSystem : Singleton<ShipBlueprintSaveSystem>
 
     SerializedShipBlueprint SerializeShipBP(ShipBlueprint ship)
     {
-
         SerializedShipBlueprint sz_shipBP = new SerializedShipBlueprint(ship.Hull.ID);
         sz_shipBP.componentTable = new Dictionary<int, SerializedComponent>();
         foreach (var item in ship.ComponentTable)
@@ -210,7 +210,6 @@ public class ShipBlueprintSaveSystem : Singleton<ShipBlueprintSaveSystem>
 
         foreach (var item in sz_shipBP.componentTable)
         {
-
             ShipComponent comp = compTable[item.Value.ID];
             //Debug.Log("Deserialzing - adding comp to slot " + item.Key);
             shipBP.AddComponent(item.Key, comp);
@@ -243,6 +242,7 @@ public class SavedShipBPList
     public void Remove(string fileName)
     {
         count--;
+        fileNames.Remove(fileName);
     }
     public bool FileExists(string fileName)
     {
