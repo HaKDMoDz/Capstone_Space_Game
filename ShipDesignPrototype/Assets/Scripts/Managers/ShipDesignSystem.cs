@@ -255,25 +255,8 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
             }
         }
     }
-    /*
-     * for (int i = 0; i < hullTable.Count; i++)
-        {
-            buttonClone = Instantiate(buttonPrefab) as Button;
-            buttonTrans = buttonClone.GetComponent<RectTransform>();
-            buttonTrans.SetParent(hullButtonParent);
-            buttonTrans.CopyTransform(defaultHullButtonPos);
-            buttonTrans.SetPositionY(buttonTrans.position.y - buttonYOffset * i);
-            buttonClone.GetComponentInChildren<Text>().text = hullTable.ElementAt(i).Value.name;
-            int id = hullTable.ElementAt(i).Key;
-            //Debug.Log("Hull ID: " + id);
-            buttonClone.onClick.AddListener(() =>
-                {
-                    //BuildHull((int)hullTable.ElementAt(i).Key);
-                    BuildHull(id);
-                });
-        }
-*/
-    void SaveBlueprint(string fileName)
+
+    public void SaveBlueprint(string fileName)
     {
         //Debug.Log("SaveBlueprint");
         ShipBlueprintSaveSystem.Instance.Save(currentBlueprint, fileName);
@@ -281,7 +264,7 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
     }
     public void LoadBlueprint(string fileName)
     {
-        Debug.Log("LoadBlueprint : " + fileName);
+        //Debug.Log("LoadBlueprint : " + fileName);
         ResetScreen();
         if (ShipBlueprintSaveSystem.Instance.Load(out currentBlueprint, fileName))
         {
@@ -294,12 +277,11 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
         }
         else
         {
-            Debug.Log("No saved ship blueprints found");
+            Debug.LogError("File "+fileName+"could not be found");
         }
     }
     public void ClearBlueprint()
     {
-        //Debug.Log("ClearBlueprint");
         ResetScreen();
     }
 
@@ -307,10 +289,13 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
     {
         ShipBlueprintSaveSystem.Instance.DeleteBlueprints();
         ShowShipBPsToLoad(false);
-
     }
-
-
+    public void DeleteBlueprint(string fileName)
+    {
+        ShipBlueprintSaveSystem.Instance.DeleteBlueprint(fileName);
+        ShowShipBPsToLoad(false);
+        ShowShipBPsToLoad(true);
+    }
     void SetupGUI()
     {
         Button buttonClone;
@@ -335,7 +320,6 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
         }
 
         //Components GUI
-
         int wpnCount = 0, defCount = 0, pwrCount = 0, supCount = 0;
         int offsetCount;
         for (int i = 0; i < compTable.Count; i++)
@@ -369,7 +353,6 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
             buttonTrans.CopyTransform(defaultCompButtonPos);
             buttonTrans.SetPositionY(buttonTrans.position.y - buttonYOffset * (offsetCount - 1));
 
-            //id = compTable.ElementAt(i).Key;
             int id = compTable.ElementAt(i).Key;
             //Debug.Log("Comp ID: " + id);
             buttonClone.onClick.AddListener(() =>
@@ -416,12 +399,12 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
         CameraManager.Instance.HullDisplayed(hull);
     }
 
-    ShipComponent AddCompToDisplay(ShipComponent component, Vector3 pos, Quaternion rot)
-    {
-        ShipComponent builtComp = Instantiate(component, pos, rot) as ShipComponent;
-        componentsDisplayed.Add(builtComp);
-        return builtComp;
-    }
+    //ShipComponent AddCompToDisplay(ShipComponent component, Vector3 pos, Quaternion rot)
+    //{
+    //    ShipComponent builtComp = Instantiate(component, pos, rot) as ShipComponent;
+    //    componentsDisplayed.Add(builtComp);
+    //    return builtComp;
+    //}
     void AddCompToDisplay(ComponentSlot slot, ShipComponent component)
     {
         ShipComponent builtComp = Instantiate(component, slot.transform.position, slot.transform.rotation) as ShipComponent;

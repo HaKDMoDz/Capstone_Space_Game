@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Reflection;
 
 public class ShipDesignTester : MonoBehaviour
 {
@@ -29,6 +30,7 @@ public class ShipDesignTester : MonoBehaviour
             .ToDictionary(c => c.ID, c => c.component);
         componentsDisplayed = new List<ShipComponent>();
         slotDisplayedObjectTable = new Dictionary<ComponentSlot, ShipComponent>();
+
         yield return StartCoroutine(RunTests());
         Debug.LogWarning("Tests Complete");
     }
@@ -42,10 +44,8 @@ public class ShipDesignTester : MonoBehaviour
             print("Running NoSlotsFilled Tests for " + hullEntry.Value.name);
             yield return StartCoroutine(NoSlotsFilled(hullEntry.Key));
         }
-        yield return StartCoroutine(ResetScreen());
         Debug.LogWarning("Test NoSlotsFilled complete");
-        //Debug.Break();
-
+        
         foreach (var hullEntry in hullTable)
         {
             print("Running FillUpWithSameComp Tests for " + hullEntry.Value.name);
@@ -60,35 +60,23 @@ public class ShipDesignTester : MonoBehaviour
         }
         Debug.LogWarning("Test RandomCompsAllSlots complete");
 
-        
     }
+
     IEnumerator NoSlotsFilled(int hullID)
     {
         print("Running Test: NoSlotsFilled");
-        yield return StartCoroutine(BuildHull(hullID));
-        string fileName = "Test_NoSlotsFilled_Hull" + hullTable[hullID].name;
-        ShipBlueprintSaveSystem.Instance.DeleteBlueprint(fileName);
-        ShipBlueprintSaveSystem.Instance.Save(currentBlueprint, fileName);
-        yield return StartCoroutine(ResetScreen());
-        for (int i = 0; i < 100000; i++)
-        {
 
-        }
-        if (ShipBlueprintSaveSystem.Instance.Load(out currentBlueprint, fileName))
-        {
-            yield return StartCoroutine(AddHullToDisplay(currentBlueprint.Hull));
-            foreach (var item in currentBlueprint.ComponentTable)
-            {
-                yield return StartCoroutine(AddCompToDisplay(item.Key, item.Value));
-            }
-        }
-        else
-        {
-            Debug.LogError("Error in Test: NoSlotsFilled - Could not find file " + fileName);
-            Debug.Break();
-        }
-        int _hullID = hullTable.FirstOrDefault(h => h.Value == currentBlueprint.Hull).Key;
-        if (_hullID == hullID && currentBlueprint.ComponentTable.Count == 0)
+        ShipDesignSystem.Instance.BuildHull(hullID);
+        string fileName = "Test_NoSlotsFilled_Hull_" + hullTable[hullID].name;
+        ShipDesignSystem.Instance.DeleteBlueprint(fileName);
+        ShipDesignSystem.Instance.SaveBlueprint(fileName);
+        ShipDesignSystem.Instance.ClearBlueprint();
+        yield return new WaitForSeconds(0.2f);
+        ShipDesignSystem.Instance.LoadBlueprint(fileName);
+        ShipBlueprint loadedBP = typeof(ShipDesignSystem).GetField("currentBlueprint", BindingFlags.Instance | BindingFlags.NonPublic)
+                .GetValue(ShipDesignSystem.Instance) as ShipBlueprint;
+        int _hullID = hullTable.FirstOrDefault(h => h.Value == loadedBP.Hull).Key;
+        if (_hullID == hullID && loadedBP.ComponentTable.Count == 0)
         {
             Debug.Log("Loaded Blueprint matches");
         }
@@ -97,49 +85,48 @@ public class ShipDesignTester : MonoBehaviour
             Debug.LogError("Error in Test: NoSlotsFilled - Loaded blueprint does not match ");
             Debug.Break();
         }
-        ShipBlueprintSaveSystem.Instance.DeleteBlueprint(fileName);
-        yield return StartCoroutine(ResetScreen());
+        ShipDesignSystem.Instance.DeleteBlueprint(fileName);
+        ShipDesignSystem.Instance.ClearBlueprint();
+        yield return null;
     }
-
     IEnumerator FillUpWithSameComp(int hullID)
     {
         print("Running Test: FillUpWithSameComp");
         Dictionary<int, int> slotVerificationTable = new Dictionary<int, int>();
+        MethodInfo AddCompMethod = typeof(ShipDesignSystem).GetMethod("AddCompToDisplay", BindingFlags.NonPublic | BindingFlags.Instance);
 
         foreach (var compEntry in compTable)
         {
             print("Testing " + compEntry.Value.componentName);
             slotVerificationTable.Clear();
-            yield return StartCoroutine(BuildHull(hullID));
+            ShipDesignSystem.Instance.BuildHull(hullID);
+            Hull buildingHull = typeof(ShipDesignSystem).GetField("currentHull", BindingFlags.NonPublic | BindingFlags.Instance)
+                .GetValue(ShipDesignSystem.Instance) as Hull;
             
-            foreach (var slotEntry in currentHull.SlotTable)
+            ShipBlueprint shipBP = typeof(ShipDesignSystem).GetField("currentBlueprint", BindingFlags.Instance | BindingFlags.NonPublic)
+                .GetValue(ShipDesignSystem.Instance) as ShipBlueprint;
+            foreach (var slotEntry in buildingHull.SlotTable)
             {
-                yield return StartCoroutine(BuildComponent(compEntry.Key, slotEntry.Value));
+                AddCompMethod.Invoke(ShipDesignSystem.Instance, new object[] { slotEntry.Value, compEntry.Value });
+                shipBP.AddComponent(compEntry.Value, slotEntry.Value);
                 slotVerificationTable.Add(slotEntry.Key, compEntry.Key);
+                yield return null;
             }
-            StringBuilder sb = new StringBuilder("Test_AllFilledWithOne_Hull");
+            StringBuilder sb = new StringBuilder("Test_FillUpWithSameComp_Hull_");
             sb.Append(hullTable[hullID].name);
             sb.Append("_Comp_");
-            sb.Append(compEntry.Value);
+            sb.Append(compEntry.Value.componentName);
             string fileName = sb.ToString();
-            ShipBlueprintSaveSystem.Instance.DeleteBlueprint(fileName);
-            ShipBlueprintSaveSystem.Instance.Save(currentBlueprint, fileName);
-            yield return StartCoroutine(ResetScreen());
-            if (ShipBlueprintSaveSystem.Instance.Load(out currentBlueprint, fileName))
-            {
-                yield return StartCoroutine(AddHullToDisplay(currentBlueprint.Hull));
-                foreach (var item in currentBlueprint.ComponentTable)
-                {
-                    yield return StartCoroutine(AddCompToDisplay(item.Key, item.Value));
-                }
-            }
-            else
-            {
-                Debug.LogError("Error in Test: FillUpWithSameComp - Could not find file " + fileName);
-                Debug.Break();
-            }
-
-            if (!VerifyLoadedBlueprint(currentBlueprint, slotVerificationTable, hullID))
+            
+            ShipDesignSystem.Instance.DeleteBlueprint(fileName);
+            ShipDesignSystem.Instance.SaveBlueprint(fileName);
+            ShipDesignSystem.Instance.ClearBlueprint();
+            yield return new WaitForSeconds(0.2f);
+            ShipDesignSystem.Instance.LoadBlueprint(fileName);
+            ShipBlueprint loadedBP = typeof(ShipDesignSystem).GetField("currentBlueprint", BindingFlags.Instance | BindingFlags.NonPublic)
+                .GetValue(ShipDesignSystem.Instance) as ShipBlueprint;
+            yield return new WaitForSeconds(0.2f);
+            if (!VerifyLoadedBlueprint(loadedBP, slotVerificationTable, hullID))
             {
                 Debug.LogError("Error in Test: FillUpWithSameComp - Loaded blueprint does not match ");
                 Debug.Break();
@@ -148,62 +135,57 @@ public class ShipDesignTester : MonoBehaviour
             {
                 Debug.Log("Loaded Blueprint matches");
             }
-            ShipBlueprintSaveSystem.Instance.DeleteBlueprint(fileName);
-            yield return StartCoroutine(ResetScreen());
+            ShipDesignSystem.Instance.DeleteBlueprint(fileName);
+            ShipDesignSystem.Instance.ClearBlueprint();
         }
     }
-    
     IEnumerator RandomCompsAllSlots(int hullID, int numTests)
     {
         print("Running Test: RandomCompsAllSlots");
         int[] compIDs = compTable.Keys.ToArray();
         Dictionary<int, int> slotVerificationTable = new Dictionary<int, int>();
+        MethodInfo AddCompMethod = typeof(ShipDesignSystem).GetMethod("AddCompToDisplay", BindingFlags.NonPublic | BindingFlags.Instance);
+
         for (int i = 0; i < numTests; i++)
         {
             slotVerificationTable.Clear();
-            yield return StartCoroutine(BuildHull(hullID));
-            foreach (var slotEntry in currentHull.SlotTable)
+            ShipDesignSystem.Instance.BuildHull(hullID);
+            Hull buildingHull = typeof(ShipDesignSystem).GetField("currentHull", BindingFlags.NonPublic | BindingFlags.Instance)
+                .GetValue(ShipDesignSystem.Instance) as Hull;
+            
+            ShipBlueprint shipBP = typeof(ShipDesignSystem).GetField("currentBlueprint", BindingFlags.Instance | BindingFlags.NonPublic)
+                .GetValue(ShipDesignSystem.Instance) as ShipBlueprint;
+            foreach (var slotEntry in buildingHull.SlotTable)
             {
                 int compID = compIDs[Random.Range(0, compIDs.Length)];
-                yield return StartCoroutine(BuildComponent(compID, slotEntry.Value));
+                AddCompMethod.Invoke(ShipDesignSystem.Instance, new object[] { slotEntry.Value, compTable[compID] });
+                shipBP.AddComponent(compTable[compID], slotEntry.Value);
                 slotVerificationTable.Add(slotEntry.Key, compID);
+                yield return null;
             }
             string fileName = "Test_RandomCompsAllSlots_Hull" + hullTable[hullID].name;
-            ShipBlueprintSaveSystem.Instance.DeleteBlueprint(fileName);
-            ShipBlueprintSaveSystem.Instance.Save(currentBlueprint, fileName);
-            yield return StartCoroutine(ResetScreen());
-            if (ShipBlueprintSaveSystem.Instance.Load(out currentBlueprint, fileName))
+            ShipDesignSystem.Instance.DeleteBlueprint(fileName);
+            ShipDesignSystem.Instance.SaveBlueprint(fileName);
+            ShipDesignSystem.Instance.ClearBlueprint();
+            yield return new WaitForSeconds(0.2f);
+            ShipDesignSystem.Instance.LoadBlueprint(fileName);
+            ShipBlueprint loadedBP = typeof(ShipDesignSystem).GetField("currentBlueprint", BindingFlags.Instance | BindingFlags.NonPublic)
+                .GetValue(ShipDesignSystem.Instance) as ShipBlueprint;
+            yield return new WaitForSeconds(0.2f);
+            if (!VerifyLoadedBlueprint(loadedBP, slotVerificationTable, hullID))
             {
-                yield return StartCoroutine(AddHullToDisplay(currentBlueprint.Hull));
-                foreach (var item in currentBlueprint.ComponentTable)
-                {
-                    yield return StartCoroutine(AddCompToDisplay(item.Key, item.Value));
-                }
-            }
-            else
-            {
-                Debug.LogError("Error in Test: RandomCompsAllSlots - Could not find file " + fileName);
-                Debug.Break();
-            }
-
-            if (!VerifyLoadedBlueprint(currentBlueprint, slotVerificationTable, hullID))
-            {
-                Debug.LogError("Error in Test: RandomCompsAllSlots - Loaded blueprint does not match ");
+                Debug.LogError("Error in Test: FillUpWithSameComp - Loaded blueprint does not match ");
                 Debug.Break();
             }
             else
             {
                 Debug.Log("Loaded Blueprint matches");
             }
-            ShipBlueprintSaveSystem.Instance.DeleteBlueprint(fileName);
-            yield return StartCoroutine(ResetScreen());
+            ShipDesignSystem.Instance.DeleteBlueprint(fileName);
+            ShipDesignSystem.Instance.ClearBlueprint();
         }
     }
-    IEnumerator FillUpSequentialComps(int hullID)
-    {
-        print("Running Test: FillUpSequentialComps");
-        yield return null;
-    }
+    
     bool VerifyLoadedBlueprint(ShipBlueprint loadedBlueprint, Dictionary<int, int> slotVerificationTable, int _hullID)
     {
         int hullID = hullTable.FirstOrDefault(h => h.Value == loadedBlueprint.Hull).Key;
@@ -227,76 +209,74 @@ public class ShipDesignTester : MonoBehaviour
         }
         return true;
     }
-    IEnumerator ResetScreen()
-    {
-        currentBlueprint = null;
-        if (currentHull)
-        {
-            Destroy(currentHull.gameObject);
-        }
-        else
-        {
-            print("no current Hull found");
-        }
-        if (componentsDisplayed == null)
-        {
-            componentsDisplayed = new List<ShipComponent>();
-            slotDisplayedObjectTable = new Dictionary<ComponentSlot, ShipComponent>();
-        }
-        else
-        {
-            for (int i = 0; i < componentsDisplayed.Count; i++)
-            {
-                Destroy(componentsDisplayed[i].gameObject);
-            }
-            componentsDisplayed.Clear();
-            slotDisplayedObjectTable.Clear();
-        }
-        yield return null;
-    }
+    //IEnumerator ResetScreen()
+    //{
+    //    currentBlueprint = null;
+    //    if (currentHull)
+    //    {
+    //        Destroy(currentHull.gameObject);
+    //    }
+    //    else
+    //    {
+    //        print("no current Hull found");
+    //    }
+    //    if (componentsDisplayed == null)
+    //    {
+    //        componentsDisplayed = new List<ShipComponent>();
+    //        slotDisplayedObjectTable = new Dictionary<ComponentSlot, ShipComponent>();
+    //    }
+    //    else
+    //    {
+    //        for (int i = 0; i < componentsDisplayed.Count; i++)
+    //        {
+    //            Destroy(componentsDisplayed[i].gameObject);
+    //        }
+    //        componentsDisplayed.Clear();
+    //        slotDisplayedObjectTable.Clear();
+    //    }
+    //    yield return null;
+    //}
 
+    //IEnumerator BuildHull(int hullID)
+    //{
+    //    //print("build hull " + hullTable[hullID]);
+    //    yield return StartCoroutine(AddHullToDisplay(hullTable[hullID]));
+    //    currentBlueprint = new ShipBlueprint(hullTable[hullID]);
+    //}
+    //IEnumerator AddHullToDisplay(Hull hull)
+    //{
+    //    currentHull = Instantiate(hull, hullPlacementLoc.position, hull.transform.rotation) as Hull;
+    //    currentHull.Init();
+    //    CameraManager.Instance.HullDisplayed(hull);
+    //    yield return null;
+    //}
+    //IEnumerator BuildComponent(int compID, ComponentSlot slot)
+    //{
+    //    if (slot.installedComponent)
+    //    {
+    //        ShipComponent otherComp = slotDisplayedObjectTable[slot];
+    //        componentsDisplayed.Remove(otherComp);
+    //        Destroy(otherComp.gameObject);
+    //        currentBlueprint.RemoveComponent(slot);
+    //    }
+    //    yield return StartCoroutine(AddCompToDisplay(slot, compTable[compID]));
+    //    currentBlueprint.AddComponent(compTable[compID], slot);
+    //}
+    //IEnumerator AddCompToDisplay(ComponentSlot slot, ShipComponent component)
+    //{
 
-
-    IEnumerator BuildHull(int hullID)
-    {
-        //print("build hull " + hullTable[hullID]);
-        yield return StartCoroutine(AddHullToDisplay(hullTable[hullID]));
-        currentBlueprint = new ShipBlueprint(hullTable[hullID]);
-    }
-    IEnumerator AddHullToDisplay(Hull hull)
-    {
-        currentHull = Instantiate(hull, hullPlacementLoc.position, hull.transform.rotation) as Hull;
-        currentHull.Init();
-        CameraManager.Instance.HullDisplayed(hull);
-        yield return null;
-    }
-    IEnumerator BuildComponent(int compID, ComponentSlot slot)
-    {
-        if (slot.installedComponent)
-        {
-            ShipComponent otherComp = slotDisplayedObjectTable[slot];
-            componentsDisplayed.Remove(otherComp);
-            Destroy(otherComp.gameObject);
-            currentBlueprint.RemoveComponent(slot);
-        }
-        yield return StartCoroutine(AddCompToDisplay(slot, compTable[compID]));
-        currentBlueprint.AddComponent(compTable[compID], slot);
-    }
-    IEnumerator AddCompToDisplay(ComponentSlot slot, ShipComponent component)
-    {
-
-        ShipComponent builtComp = Instantiate(component, slot.transform.position, slot.transform.rotation) as ShipComponent;
-        componentsDisplayed.Add(builtComp);
-        if (slotDisplayedObjectTable.ContainsKey(slot))
-        {
-            slotDisplayedObjectTable[slot] = builtComp;
-        }
-        else
-        {
-            slotDisplayedObjectTable.Add(slot, builtComp);
-        }
-        yield return null;
-    }
+    //    ShipComponent builtComp = Instantiate(component, slot.transform.position, slot.transform.rotation) as ShipComponent;
+    //    componentsDisplayed.Add(builtComp);
+    //    if (slotDisplayedObjectTable.ContainsKey(slot))
+    //    {
+    //        slotDisplayedObjectTable[slot] = builtComp;
+    //    }
+    //    else
+    //    {
+    //        slotDisplayedObjectTable.Add(slot, builtComp);
+    //    }
+    //    yield return null;
+    //}
     void OnGUI()
     {
         GUI.Label(new Rect(Screen.width - 100, Screen.height - 100, 100, 100), "<size=24><color=red>DEBUG BUILD</color></size>");
