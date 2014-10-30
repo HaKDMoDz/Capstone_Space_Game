@@ -7,6 +7,7 @@ using System.Reflection;
 
 public class ShipDesignTester : MonoBehaviour
 {
+#if TESTING
     [SerializeField]
     Transform hullPlacementLoc;
     [SerializeField]
@@ -17,19 +18,16 @@ public class ShipDesignTester : MonoBehaviour
     Dictionary<int, Hull> hullTable;
     Dictionary<int, ShipComponent> compTable;
 
-    ShipBlueprint currentBlueprint;
-    Hull currentHull;
-    List<ShipComponent> componentsDisplayed;
-    Dictionary<ComponentSlot, ShipComponent> slotDisplayedObjectTable;
-
     IEnumerator Start()
     {
         hullTable = hullTableObj.HullTableProp
           .ToDictionary(h => h.ID, h => h.hull);
         compTable = compTableObj.ComponentList
             .ToDictionary(c => c.ID, c => c.component);
-        componentsDisplayed = new List<ShipComponent>();
-        slotDisplayedObjectTable = new Dictionary<ComponentSlot, ShipComponent>();
+
+
+
+
 
         yield return StartCoroutine(RunTests());
         Debug.LogWarning("Tests Complete");
@@ -281,4 +279,5 @@ public class ShipDesignTester : MonoBehaviour
     {
         GUI.Label(new Rect(Screen.width - 100, Screen.height - 100, 100, 100), "<size=24><color=red>DEBUG BUILD</color></size>");
     }
+#endif
 }
