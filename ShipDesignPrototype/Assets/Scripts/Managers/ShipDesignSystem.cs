@@ -423,46 +423,97 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
     IEnumerator StartPlacementSequence(ShipComponent component)
     {
         bool runSequence = true;
+        bool dragging=false;
         Ray ray;
         RaycastHit hit;
-
+        //List<ComponentSlot> selectedSlots = new List<ComponentSlot>();
+        yield return null;
         while (runSequence)
         {
-            if (Input.GetMouseButtonDown(0))
+            //if (Input.GetMouseButtonDown(0))
+            //{
+            //    ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            //    if (Physics.Raycast(ray, out hit, 1000f, 1 << GlobalTagsAndLayers.Instance.layers.componentTileLayer))
+            //    {
+            //        ComponentSlot slot = hit.transform.GetComponent<ComponentSlot>();
+            //        if (slot.installedComponent)
+            //        {
+            //            //ShipComponent otherComp = componentsDisplayed.Find(comp => comp.componentName == slot.installedComponent.componentName);
+            //            ShipComponent otherComp = slotDisplayedObjectTable[slot];
+            //            //Debug.Log(slot.installedComponent);
+
+            //            componentsDisplayed.Remove(otherComp);
+            //            Destroy(otherComp.gameObject);
+            //            //slot.installedComponent = null;
+            //            currentBlueprint.RemoveComponent(slot);
+
+            //        }
+            //        //ShipComponent builtComp = Instantiate(component, hit.collider.transform.position, component.transform.rotation) as ShipComponent;
+
+            //        //clone
+            //        //AddCompToDisplay(component, hit.collider.transform.position, hit.collider.transform.rotation);
+            //        AddCompToDisplay(slot, component);
+
+            //        //componentsDisplayed.Add(builtComp);
+            //        //Debug.Log("Components Displays count: " + componentsDisplayed.Count);
+            //        currentBlueprint.AddComponent(component, slot);
+
+            //        //slot.installedComponent = builtComp;
+            //        if (!Input.GetKey(KeyCode.LeftShift) && !Input.GetKey(KeyCode.RightShift))
+            //        {
+            //            runSequence = false;
+            //        }
+
+            //    }
+            //}
+            
+            //if(Input.GetMouseButtonDown(0))
+            //{
+            //    dragging = true;
+            //}
+            
+
+            if (Input.GetMouseButtonDown(0) || dragging)
             {
                 ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(ray, out hit, 1000f, 1 << GlobalTagsAndLayers.Instance.layers.componentTileLayer))
+                if(Physics.Raycast(ray, out hit, 1000f,1<<GlobalTagsAndLayers.Instance.layers.componentTileLayer))
                 {
+                    dragging = true;
+                    //print("collider: "+hit.collider.name);
                     ComponentSlot slot = hit.transform.GetComponent<ComponentSlot>();
-                    if (slot.installedComponent)
-                    {
-                        //ShipComponent otherComp = componentsDisplayed.Find(comp => comp.componentName == slot.installedComponent.componentName);
-                        ShipComponent otherComp = slotDisplayedObjectTable[slot];
-                        //Debug.Log(slot.installedComponent);
+                     if (slot.installedComponent)
+                     {
+                         //ShipComponent otherComp = componentsDisplayed.Find(comp => comp.componentName == slot.installedComponent.componentName);
+                         ShipComponent otherComp = slotDisplayedObjectTable[slot];
+                         //Debug.Log(slot.installedComponent);
 
-                        componentsDisplayed.Remove(otherComp);
-                        Destroy(otherComp.gameObject);
-                        //slot.installedComponent = null;
-                        currentBlueprint.RemoveComponent(slot);
+                         componentsDisplayed.Remove(otherComp);
+                         Destroy(otherComp.gameObject);
+                         //slot.installedComponent = null;
+                         currentBlueprint.RemoveComponent(slot);
 
-                    }
-                    //ShipComponent builtComp = Instantiate(component, hit.collider.transform.position, component.transform.rotation) as ShipComponent;
+                     }
+                     //ShipComponent builtComp = Instantiate(component, hit.collider.transform.position, component.transform.rotation) as ShipComponent;
 
-                    //clone
-                    //AddCompToDisplay(component, hit.collider.transform.position, hit.collider.transform.rotation);
-                    AddCompToDisplay(slot, component);
+                     //clone
+                     //AddCompToDisplay(component, hit.collider.transform.position, hit.collider.transform.rotation);
+                     AddCompToDisplay(slot, component);
 
-                    //componentsDisplayed.Add(builtComp);
-                    //Debug.Log("Components Displays count: " + componentsDisplayed.Count);
-                    currentBlueprint.AddComponent(component, slot);
+                     //componentsDisplayed.Add(builtComp);
+                     //Debug.Log("Components Displays count: " + componentsDisplayed.Count);
+                     currentBlueprint.AddComponent(component, slot);
 
                     //slot.installedComponent = builtComp;
-                    if (!Input.GetKey(KeyCode.LeftShift) && !Input.GetKey(KeyCode.RightShift))
-                    {
-                        runSequence = false;
-                    }
-
                 }
+            }
+            //if(dragging && Input.GetMouseButtonUp(0))
+            //{
+            //    dragging = false;
+            //}
+            print(dragging);
+            if (Input.GetMouseButtonUp(0) && !Input.GetKey(KeyCode.LeftShift) && !Input.GetKey(KeyCode.RightShift))
+            {
+                runSequence = false;
             }
             if (Input.GetKeyDown(KeyCode.Escape))
             {
