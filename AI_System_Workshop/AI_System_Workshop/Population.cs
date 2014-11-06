@@ -102,7 +102,7 @@ namespace GeneticAlgorithm
             Console.WriteLine("current champ: " + GetChampion().ChromosomeData.TestGenetics.First<string>());
             Console.WriteLine("//////////////////////////////////////");
             */
-            GeneticAlgorithmStats.CurrGenerationNumber = numGenerations;
+            //GeneticAlgorithmStats.CurrGenerationNumber = numGenerations;
             numGenerations++;
             Console.Write(".");
 

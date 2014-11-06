@@ -52,7 +52,7 @@ namespace GeneticAlgorithm
 
         public Organism Breed(Organism _mate, Organism ideal)
         {
-            GeneticAlgorithmStats.addBaby();
+            //GeneticAlgorithmStats.addBaby();
             if (chromosome.TestGenetics.First<string>() == _mate.chromosome.TestGenetics.First<string>())
             {
                 Mutate(ideal);
@@ -103,7 +103,7 @@ namespace GeneticAlgorithm
 
         public Organism Mutate(Organism _ideal)
         {
-            GeneticAlgorithmStats.AddMutant();
+            //GeneticAlgorithmStats.AddMutant();
             Chromosome mutantDNA = chromosome;
             float percentChanceToChange = 0.7f;
             const float TOTAL = 100.0f;

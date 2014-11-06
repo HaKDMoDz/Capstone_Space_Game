@@ -77,7 +77,6 @@ namespace GeneticAlgorithm
             chr1.TestGenetics.Add(geneticInfo);
             Console.WriteLine(chr1.TestGenetics.First<string>());
             Console.WriteLine();
-            Console.WriteLine();
         }
     }
 
@@ -125,6 +124,14 @@ namespace GeneticAlgorithm
             baby.DebugData();
             Console.WriteLine();
 
+            //test Fitness
+            Console.WriteLine("test fitness against ideal");
+            baby.testFitness(ideal);
+            Console.WriteLine("baby fitness is: " + baby.Fitness);
+            Console.WriteLine();
+            Console.Write("ideal: ");
+            ideal.DebugData();
+            Console.WriteLine();
 
         }
     }
