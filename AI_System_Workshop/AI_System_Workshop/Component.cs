@@ -11,5 +11,10 @@ namespace AI_System_Workshop
     /// </summary>
     class Component
     {
+        public Component()
+        {
+            Console.WriteLine("Component Created");
+            Console.WriteLine("This should hook into Unity's ShipComponent class");
+        }
     }
 }

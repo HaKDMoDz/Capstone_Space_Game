@@ -8,5 +8,9 @@ namespace AI_System_Workshop
 {
     class MissionObjective
     {
+        public MissionObjective()
+        {
+            Console.WriteLine("MissionObjective Created");
+        }
     }
 }

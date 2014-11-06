@@ -8,5 +8,9 @@ namespace AI_System_Workshop
 {
     class AI_Objective
     {
+        public AI_Objective()
+        {
+            Console.WriteLine("AI_Objective created");
+        }
     }
 }

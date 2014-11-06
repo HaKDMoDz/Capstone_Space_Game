@@ -10,5 +10,7 @@ namespace AI_System_Workshop
     {
         General general = new General();
         Commander commander = new Commander();
+
+
     }
 }

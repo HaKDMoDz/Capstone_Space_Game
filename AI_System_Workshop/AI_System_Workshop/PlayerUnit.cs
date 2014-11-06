@@ -8,5 +8,10 @@ namespace AI_System_Workshop
 {
     class PlayerUnit
     {
+        public PlayerUnit()
+        {
+            Console.WriteLine("PlayerUnit Created");
+            Console.WriteLine("this will hook into Unity's PlayerUnit class");
+        }
     }
 }

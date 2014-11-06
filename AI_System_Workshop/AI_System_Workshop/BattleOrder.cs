@@ -13,6 +13,16 @@ namespace AI_System_Workshop
 
     class BattleOrder : Order
     {
-        BattleOrderType type;
+        private BattleOrderType type;
+        public AI_System_Workshop.BattleOrderType Type
+        {
+            get { return type; }
+            set { type = value; }
+        }
+
+        public BattleOrder()
+        {
+            Console.WriteLine("BattleOrder created");
+        }
     }
 }

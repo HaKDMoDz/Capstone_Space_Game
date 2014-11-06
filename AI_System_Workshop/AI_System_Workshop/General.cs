@@ -8,8 +8,21 @@ namespace AI_System_Workshop
 {
     class General
     {
-        public List<ShipBlueprint> availableShips;
-        public List<ShipBlueprint> currentFleet;
-
+        private List<ShipBlueprint> availableShips;
+        public List<ShipBlueprint> AvailableShips
+        {
+            get { return availableShips; }
+            set { availableShips = value; }
+        }
+        private List<ShipBlueprint> currentFleet;
+        public List<ShipBlueprint> CurrentFleet
+        {
+            get { return currentFleet; }
+            set { currentFleet = value; }
+        }
+        public General()
+        {
+            Console.WriteLine("General Created");
+        }
     }
 }

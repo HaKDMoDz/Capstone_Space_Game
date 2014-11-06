@@ -10,6 +10,16 @@ namespace AI_System_Workshop
 
     class MovementOrder : Order
     {
+        private MovementOrderType type;
+        public AI_System_Workshop.MovementOrderType Type
+        {
+            get { return type; }
+            set { type = value; }
+        }
 
+        public MovementOrder()
+        {
+            Console.WriteLine("MovementOrder Created");
+        }
     }
 }

@@ -11,5 +11,10 @@ namespace AI_System_Workshop
     /// </summary>
     class ShipBlueprint
     {
+        public ShipBlueprint()
+        {
+            Console.WriteLine("ShipBlueprint Created");
+            Console.WriteLine("This should hook into Unity's ShipBlueprint class");
+        }
     }
 }

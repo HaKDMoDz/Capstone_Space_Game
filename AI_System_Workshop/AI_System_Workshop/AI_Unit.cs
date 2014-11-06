@@ -9,8 +9,24 @@ namespace AI_System_Workshop
     public enum Archetype { TANK, SUPPORT, SCOUT, SNIPER, SHOTGUN, DISABLER, BROADSIDER }
     class AI_Unit
     {
-        Archetype archetype;
-        Order currentOrder;
+        private Archetype archetype;
+        public Archetype Archetype
+        {
+            get { return archetype; }
+            set { archetype = value; }
+        }
+
+        private Order currentOrder;
+        public Order CurrentOrder
+        {
+            get { return currentOrder; }
+            set { currentOrder = value; }
+        }
+
+        public AI_Unit()
+        {
+            Console.WriteLine("AI_Unit created");
+        }
 
         public float DetermineOrderExecutionViability(Order o)
         {

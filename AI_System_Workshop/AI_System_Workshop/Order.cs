@@ -8,5 +8,9 @@ namespace AI_System_Workshop
 {
     class Order
     {
+        public Order()
+        {
+            Console.WriteLine("Order Created");
+        }
     }
 }

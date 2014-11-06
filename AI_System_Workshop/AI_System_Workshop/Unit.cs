@@ -11,5 +11,10 @@ namespace AI_System_Workshop
     /// </summary>
     class Unit
     {
+        public Unit()
+        {
+            Console.WriteLine("Unit Created");
+            Console.WriteLine("This should hook into Unity's Unit class");
+        }
     }
 }

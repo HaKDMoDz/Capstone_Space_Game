@@ -11,5 +11,10 @@ namespace AI_System_Workshop
     /// </summary>
     class Vector3
     {
+        public Vector3()
+        {
+            Console.WriteLine("Vector3 Created");
+            Console.WriteLine("This should hook into Unity's Vector3 class");
+        }
     }
 }

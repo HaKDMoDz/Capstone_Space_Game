@@ -10,6 +10,16 @@ namespace AI_System_Workshop
 
     class BattleEvent
     {
-        EventType eventType;
+        private EventType eventType;
+        public EventType EventType
+        {
+            get { return eventType; }
+            set { eventType = value; }
+        }
+
+        public BattleEvent()
+        {
+            Console.WriteLine("BattleEvent created");
+        }
     }
 }
