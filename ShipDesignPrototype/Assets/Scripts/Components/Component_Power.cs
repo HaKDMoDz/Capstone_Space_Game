@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Component_Power// : ShipComponent 
+public class Component_Power : ShipComponent 
 {
 
 	

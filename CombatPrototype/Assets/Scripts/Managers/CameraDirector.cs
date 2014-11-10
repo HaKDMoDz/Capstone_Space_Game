@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class CameraDirector : SingletonComponent<CameraDirector>
-//public class CameraDirector : MonoBehaviour
 {
 
     [SerializeField]
@@ -53,16 +52,22 @@ public class CameraDirector : SingletonComponent<CameraDirector>
         while (time < 1f)
         {
             trans.position = Vector3.Lerp(startPos, destination, time);
-            trans.rotation = Quaternion.Lerp(startRot, desiredRotation, time);
+            trans.rotation = Quaternion.Slerp(startRot, desiredRotation, time);
             time += Time.deltaTime / period;
             OnCamerMove();
             yield return null;
         }
     }
 
-    public IEnumerator LerpTo(Vector3 destination, float period)
+    public IEnumerator LerpTo(Vector3 destination, float speed)
     {
-        yield return null;
+        Vector3 destDir = destination-trans.position;
+        while(Vector3.SqrMagnitude(destDir)>movementEpsilon*movementEpsilon)
+        {
+            trans.position = Vector3.Lerp(trans.position, destination, speed * Time.deltaTime);
+            yield return null;
+            OnCamerMove();
+        }
     }
 
     public IEnumerator FocusOn(Transform target, float period)
@@ -84,66 +89,6 @@ public class CameraDirector : SingletonComponent<CameraDirector>
         Vector3 desiredCamPos = target.position + targetToFocusDir + Vector3.up*heightAboveFocusWhileAiming;
 
         yield return StartCoroutine(MoveAndRotateTo(desiredCamPos, desiredCamRotation, period));
-
-
-        //Vector2 A, B, C, D, E, F, T;
-        //A = new Vector2(currentFocus.position.x, currentFocus.position.z);
-        //B = new Vector2(trans.position.x, trans.position.z);
-        //T = new Vector2(target.position.x, target.position.z);
-        //float focusToCamDist_AB = Vector2.Distance(A, B);
-        //C = new Vector2(trans.position.x, trans.position.z);
-        //C.x = (A.x - T.x) * (B.y - T.y) / (A.y - T.y) + T.x;
-        //float BC = Vector2.Distance(B, C);
-        //float AC = Mathf.Sqrt(focusToCamDist_AB * focusToCamDist_AB + BC * BC);
-        //float DC = AC - focusToCamDist_AB;
-        //float Theta = Mathf.Atan2(focusToCamDist_AB, BC);
-        //float EC = Mathf.Cos(Theta) * DC;
-        //float DE = Mathf.Tan(Theta) * EC;
-        //float EB = BC - EC;
-        //Debug.Log("BC: " + BC);
-        //Debug.Log("EC: " + EC);
-
-        //Debug.Log("B " + B);
-        //Debug.Log("EB " + EB);
-        //D = new Vector3(B.x + EB, heightAboveFocusWhileAiming, B.y + DE);
-        //Vector3 targetPos = D;
-
-        //float Alpha = 180 - Mathf.Rad2Deg * Theta;
-
-        //Debug.Log(targetPos);
-
-        ////Vector3 targetPos = currentFocus.position;
-        ////targetPos.y += heightAboveFocusWhileAiming;
-        ////targetPos.z -= heightAboveFocusWhileAiming / Mathf.Tan(initialAngleX);
-        //Quaternion desiredRotation = trans.rotation;
-        ////desiredRotation = Quaternion.Euler(0, desiredRotation.eulerAngles.y+Alpha, desiredRotation.eulerAngles.z);
-        //desiredRotation = Quaternion.Euler(0, Alpha, desiredRotation.eulerAngles.z);
-
-        //Vector3 targetToFocus = target.position - currentFocus.position;
-        //Vector3 camPosOnFocusPlane = trans.position;
-        //camPosOnFocusPlane.y = currentFocus.position.y;
-        //Vector3 camToFocus = currentFocus.position - camPosOnFocusPlane;
-        //float angle = Vector3.Angle(targetToFocus, camToFocus);
-        //Debug.Log("Angle: " + angle);
-        //Vector3 relativePoint = transform.InverseTransformPoint(target.position);
-        //if (relativePoint.x < 0.0)
-        //{
-        //    print("Object is to the left");
-        //    angle *= -1f;
-        //}
-        ////else if (relativePoint.x > 0.0)
-        ////    print("Object is to the right");
-        ////else
-        ////    print("Object is directly ahead");
-
-
-        //OrbitAroundImmediate(currentFocus, angle, 0);
-
-
-        
-
-        //yield return null;
-
     }
     
 

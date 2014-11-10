@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Component_Weapon// : ShipComponent 
+public class Component_Weapon : ShipComponent 
 {
 
     public float damage;
