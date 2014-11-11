@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class ObjectPool : SingletonComponent<ObjectPool> {
+public class ObjectPool : Singleton<ObjectPool> {
 
     public GameObject[] objectPrefabs;//the object prefabs that the object pool will create from
     public List<GameObject>[] pooledObjects; //holds the pooled objects that can be used in game
@@ -36,7 +36,7 @@ public class ObjectPool : SingletonComponent<ObjectPool> {
     }
 
     /// <summary>
-    /// returns a new GameObject based on the name (objectType) provided. Will return null if object is not found.
+    /// Returns a new GameObject based on the name (objectType) provided. Will return null if object is not found.
     /// </summary>
     /// <param name="objectName">Name of the game object to instantiate</param>
     /// <param name="onlyPooled">
