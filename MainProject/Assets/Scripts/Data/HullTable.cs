@@ -16,7 +16,6 @@ public class HullTableEntry
     }
 }
 
-[Serializable]
 public class HullTable : ScriptableObject 
 {
     //public int ID;
