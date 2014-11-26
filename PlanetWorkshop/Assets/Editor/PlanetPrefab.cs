@@ -8,7 +8,7 @@ public class PlanetPrefab : EditorWindow
     bool ringEnabled = true;
     float ringScale = 30.0f;
     bool atmosphereEnabled = true;
-    float atmosphereScale = 1.0f;
+    float atmosphereScale = 1.12f;
     GameObject planet;
     GameObject ring;
     GameObject atmosphere;
@@ -26,14 +26,14 @@ public class PlanetPrefab : EditorWindow
 
     void Awake()
     {
-        Debug.Log("Awake totally happens");
+        //Debug.Log("Awake totally happens");
         
     }
 
     void OnGUI()
     {
         //Debug.Log("OnGUI totally happens"); //it's true!
-        planet = GameObject.Find("HighPolyPlanet");
+        planet = GameObject.Find("Planet");
         ring = GameObject.Find("Ring");
         ring.SetActive(true);
         atmosphere = GameObject.Find("Atmosphere");
@@ -48,11 +48,20 @@ public class PlanetPrefab : EditorWindow
         {
             ringScale = EditorGUILayout.Slider("Ring Size", ringScale, 15, 40);
             ring.transform.localScale = new Vector3(ringScale, ringScale, ringScale);
-            ring.SetActive(true);
+
+            foreach (Renderer ring_renderer in ring.GetComponentsInChildren<Renderer>())
+            {
+                ring_renderer.enabled = true;
+            }
+
+            EditorGUILayout.ObjectField(ringTexture, typeof(Texture2D));
         }
         else
         {
-            ring.SetActive(false);
+            foreach (Renderer ring_renderer in ring.GetComponentsInChildren<Renderer>())
+            {
+                ring_renderer.enabled = false;
+            }
         }
         EditorGUILayout.EndToggleGroup();
 
@@ -63,11 +72,18 @@ public class PlanetPrefab : EditorWindow
             atmosphereScale = EditorGUILayout.Slider("Atmosphere Scale", atmosphereScale, 1.0f, 1.5f);
 
             atmosphere.transform.localScale = new Vector3(atmosphereScale, atmosphereScale, atmosphereScale);
-            atmosphere.SetActive(true);
+            
+            foreach (Renderer atmo_renderer in atmosphere.GetComponentsInChildren<Renderer>())
+            {
+                atmo_renderer.enabled = true;
+            }
         }
         else
         {
-            atmosphere.SetActive(false);
+            foreach (Renderer atmo_renderer in atmosphere.GetComponentsInChildren<Renderer>())
+            {
+                atmo_renderer.enabled = false;
+            }
         }
 
         EditorGUILayout.EndToggleGroup();
@@ -76,8 +92,26 @@ public class PlanetPrefab : EditorWindow
         {
             Debug.Log(planetName);
 
+            GameObject planetCopy = GameObject.Instantiate(planet) as GameObject;
+
+            // ORDER IS IMPORTANT HERE. if you delete index 0 first it screws over
+            // all the other deletes. there's a better way to do this but for now 
+            // this'll do
+            if (!ringEnabled)
+            {
+                DestroyImmediate(planetCopy.transform.GetChild(2).gameObject);
+                //Debug.Log(planetCopy.transform.GetChild(2).gameObject.name);
+            }
+
+            if (!atmosphereEnabled)
+            {
+                //Debug.Log(planetCopy.transform.GetChild(0).gameObject.name);
+                DestroyImmediate(planetCopy.transform.GetChild(0).gameObject);
+            }
+
             Object prefab = PrefabUtility.CreateEmptyPrefab("Assets/Prefabs/Planets/" + planetName + ".prefab");
-            PrefabUtility.ReplacePrefab(planet, prefab, ReplacePrefabOptions.ConnectToPrefab);
+            PrefabUtility.ReplacePrefab(planetCopy, prefab, ReplacePrefabOptions.ConnectToPrefab);
+            GameObject.DestroyImmediate(GameObject.Find("Planet(Clone)"));
         }
 
     }
