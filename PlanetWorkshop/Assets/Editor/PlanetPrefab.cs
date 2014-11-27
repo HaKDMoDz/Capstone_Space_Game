@@ -12,14 +12,14 @@ public class PlanetPrefab : EditorWindow
     GameObject planet;
     GameObject ring;
     GameObject atmosphere;
-    Texture2D ringTexture;
+    public Texture2D ringTexture;
 
 
-    [MenuItem("PlanetWorkshop/Create Planet Prefab...")]
+    [MenuItem("Window/PlanetWorkshop")]
 
     public static void ShowWindow()
     {
-        //EditorWindow.GetWindow(typeof(createPlanetPrefab)); // simple window
+        //EditorWindow.GetWindow(typeof(PlanetPrefab)); // simple window
         EditorWindow.GetWindowWithRect(typeof(PlanetPrefab), new Rect(0.0f, 0.0f, 100.0f, 200.0f)); // window based on any Rect
 
     }
@@ -54,7 +54,7 @@ public class PlanetPrefab : EditorWindow
                 ring_renderer.enabled = true;
             }
 
-            EditorGUILayout.ObjectField(ringTexture, typeof(Texture2D));
+            ringTexture = EditorGUILayout.ObjectField(ringTexture, typeof(Texture2D)) as Texture2D;
         }
         else
         {
@@ -90,7 +90,7 @@ public class PlanetPrefab : EditorWindow
 
         if (GUILayout.Button("CreatePrefab"))
         {
-            Debug.Log(planetName);
+            //Debug.Log(planetName);
 
             GameObject planetCopy = GameObject.Instantiate(planet) as GameObject;
 
@@ -106,11 +106,12 @@ public class PlanetPrefab : EditorWindow
             if (!atmosphereEnabled)
             {
                 //Debug.Log(planetCopy.transform.GetChild(0).gameObject.name);
-                DestroyImmediate(planetCopy.transform.GetChild(0).gameObject);
+                DestroyImmediate(planetCopy.transform.GetChild(0).gameObject); // must be the LAST one deleted
             }
 
             Object prefab = PrefabUtility.CreateEmptyPrefab("Assets/Prefabs/Planets/" + planetName + ".prefab");
             PrefabUtility.ReplacePrefab(planetCopy, prefab, ReplacePrefabOptions.ConnectToPrefab);
+
             GameObject.DestroyImmediate(GameObject.Find("Planet(Clone)"));
         }
 
