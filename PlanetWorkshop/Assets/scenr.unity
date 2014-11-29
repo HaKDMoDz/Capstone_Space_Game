@@ -149,6 +149,26 @@ Prefab:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2300006, guid: d39afe40bb9e73d4ba69768186d626f8, type: 2}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2078088288}
+    - target: {fileID: 2300002, guid: d39afe40bb9e73d4ba69768186d626f8, type: 2}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 1173831180}
+    - target: {fileID: 2300000, guid: d39afe40bb9e73d4ba69768186d626f8, type: 2}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 150028246}
+    - target: {fileID: 100006, guid: d39afe40bb9e73d4ba69768186d626f8, type: 2}
+      propertyPath: m_Name
+      value: Planet
+      objectReference: {fileID: 0}
+    - target: {fileID: 100010, guid: d39afe40bb9e73d4ba69768186d626f8, type: 2}
+      propertyPath: m_Name
+      value: PlanetObject
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d39afe40bb9e73d4ba69768186d626f8, type: 2}
   m_RootGameObject: {fileID: 1653205524}
@@ -492,6 +512,47 @@ Light:
   m_ShadowAngle: 0
   m_IndirectIntensity: 1
   m_AreaSize: {x: 1, y: 1}
+--- !u!21 &150028246
+Material:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Riinus_[11]_1024_Ringmap (Instance)
+  m_Shader: {fileID: 203, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: []
+  m_CustomRenderQueue: -1
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+      data:
+        first:
+          name: _MainTex
+        second:
+          m_Texture: {fileID: 2800000, guid: 830637f5f0e7c4f44a5e8b6f20e0985a, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 1, y: 2.98023224e-08}
+      data:
+        first:
+          name: _BumpMap
+        second:
+          m_Texture: {fileID: 2800000, guid: ba7b81e12d2b6b445990a2dd2ef43755, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: _InvFade
+        second: .00999999978
+    m_Colors:
+      data:
+        first:
+          name: _Color
+        second: {r: 0, g: 0, b: 0, a: 1}
+      data:
+        first:
+          name: _TintColor
+        second: {r: .467398316, g: .555422962, b: .977941155, a: 1}
 --- !u!1001 &193963182
 Prefab:
   m_ObjectHideFlags: 0
@@ -610,7 +671,7 @@ GameObject:
   - 114: {fileID: 215270768}
   - 135: {fileID: 215270767}
   m_Layer: 20
-  m_Name: PlanetObject
+  m_Name: Planet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1020,7 +1081,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: 81c25c83067ef484b9b0953c6badc995, type: 2}
+  - {fileID: 2078088288}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -2797,7 +2858,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: 183b95a68d1ed2b4ba6f4ccfa1a22f50, type: 2}
+  - {fileID: 1173831180}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -2990,6 +3051,47 @@ MeshFilter:
   m_PrefabInternal: {fileID: 49960803}
   m_GameObject: {fileID: 1156164481}
   m_Mesh: {fileID: 4300000, guid: 810181cad882d5c41b65f7f7a815125e, type: 3}
+--- !u!21 &1173831180
+Material:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Riinus_[11]_1024_Ringmap (Instance)
+  m_Shader: {fileID: 203, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: []
+  m_CustomRenderQueue: -1
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+      data:
+        first:
+          name: _MainTex
+        second:
+          m_Texture: {fileID: 2800000, guid: 830637f5f0e7c4f44a5e8b6f20e0985a, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 1, y: 2.98023224e-08}
+      data:
+        first:
+          name: _BumpMap
+        second:
+          m_Texture: {fileID: 2800000, guid: ba7b81e12d2b6b445990a2dd2ef43755, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: _InvFade
+        second: .00999999978
+    m_Colors:
+      data:
+        first:
+          name: _Color
+        second: {r: 0, g: 0, b: 0, a: 1}
+      data:
+        first:
+          name: _TintColor
+        second: {r: .467398316, g: .555422962, b: .977941155, a: 1}
 --- !u!1 &1212508192
 GameObject:
   m_ObjectHideFlags: 0
@@ -3032,7 +3134,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: 183b95a68d1ed2b4ba6f4ccfa1a22f50, type: 2}
+  - {fileID: 150028246}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -3725,7 +3827,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1653205525}
   m_Layer: 20
-  m_Name: Planet
+  m_Name: PlanetObject
   m_TagString: SpaceScene_Planet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6725,6 +6827,60 @@ ParticleSystem:
     subEmitterCollision1: {fileID: 0}
     subEmitterDeath: {fileID: 0}
     subEmitterDeath1: {fileID: 0}
+--- !u!21 &2078088288
+Material:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Atmosphere-Purple-Medium (Instance)
+  m_Shader: {fileID: 203, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: []
+  m_CustomRenderQueue: -1
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+      data:
+        first:
+          name: _MainTex
+        second:
+          m_Texture: {fileID: 2800000, guid: b7a494b04593bd8428d95a3918cb2c88, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: _InvFade
+        second: 3
+      data:
+        first:
+          name: _Size
+        second: 2
+      data:
+        first:
+          name: _Falloff
+        second: 6
+      data:
+        first:
+          name: _Transparency
+        second: 50
+    m_Colors:
+      data:
+        first:
+          name: _Color
+        second: {r: 0, g: 0, b: 0, a: 1}
+      data:
+        first:
+          name: _TintColor
+        second: {r: 0, g: 1, b: .462068796, a: .109803922}
+      data:
+        first:
+          name: _AtmoColor
+        second: {r: .448529422, g: .07255622, b: .07255622, a: 1}
+      data:
+        first:
+          name: _EmisColor
+        second: {r: 1, g: 0, b: 0, a: 0}
 --- !u!1001 &2107677880
 Prefab:
   m_ObjectHideFlags: 0
