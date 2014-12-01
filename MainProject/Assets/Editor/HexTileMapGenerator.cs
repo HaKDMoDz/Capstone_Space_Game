@@ -7,7 +7,7 @@ public class HexTileMapGenerator : ScriptableWizard
 {
 
     public GameObject tile;
-    public GameObject ship;
+    public Transform shipTransform;
     public Renderer renderer;
     public int shipLayer = 8;
     public bool deleteExtraTiles = true;
@@ -63,11 +63,11 @@ public class HexTileMapGenerator : ScriptableWizard
 
         CalculateGridSize();
 
-        tileSpawnHeight = ship.transform.position.y - shipSize.y;
-        raycastHeight = ship.transform.position.y + shipSize.y * 2f;
+        tileSpawnHeight = shipTransform.transform.position.y - shipSize.y;
+        raycastHeight = shipTransform.transform.position.y + shipSize.y * 2f;
 
-        startPos = new Vector3(ship.transform.position.x - shipSize.x / 2f, tileSpawnHeight,
-                               ship.transform.position.z + shipSize.z / 2f - hexTileSize.x / 2f);
+        startPos = new Vector3(shipTransform.transform.position.x - shipSize.x / 2f, tileSpawnHeight,
+                               shipTransform.transform.position.z + shipSize.z / 2f - hexTileSize.x / 2f);
 
     }
 
@@ -85,7 +85,7 @@ public class HexTileMapGenerator : ScriptableWizard
     void CreateHexTileGrid()
     {
         Transform shipTileMap = new GameObject("ComponentGrid").transform;
-        shipTileMap.transform.position = ship.transform.position;
+        shipTileMap.transform.position = shipTransform.transform.position;
         Vector3 tilePos;
         for (int y = 0; y < tileGridHeight; y++)
         {
@@ -121,7 +121,7 @@ public class HexTileMapGenerator : ScriptableWizard
         Ray ray = new Ray();
         for (int i = tiles.Count - 1; i >= 0; i--)
         {
-            rayOrigin = tiles[i].transform.position + Vector3.up * raycastHeight;
+            rayOrigin = tiles[i].transform.position + Vector3.up * raycastHeight*3.0f;
             ray.origin = rayOrigin;
             ray.direction = Vector3.down;
             if (!Physics.Raycast(ray, 500f, 1 << shipLayer))
@@ -151,7 +151,7 @@ public class HexTileMapGenerator : ScriptableWizard
             errorString = "please assign the ship layer";
             valid = false;
         }
-        if (!ship)
+        if (!shipTransform)
         {
             errorString = "please assign a ship object";
             valid = false;
