@@ -2,8 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class ComponentSlot : MonoBehaviour 
+public class ComponentSlot : MonoBehaviour
 {
+    #region Fields
+
     public int index;
     
     private ShipComponent installedComponent = null;
@@ -12,5 +14,7 @@ public class ComponentSlot : MonoBehaviour
         get { return installedComponent; }
         set { installedComponent = value; }
     }
-	
+
+    #endregion Fields
+
 }

@@ -4,35 +4,9 @@ using System.Collections.Generic;
 
 public partial class InputManager
 {
+    #region Methods
 
-    private void CheckKeyboardPress()
-    {
-        foreach (KeyCode key in keysToCheck)
-        {
-            if (Input.GetKeyDown(key))
-            {
-                KeyDown(key);
-            }
-            if (Input.GetKeyUp(key))
-            {
-                KeyUp(key);
-            }
-            if (Input.GetKey(key))
-            {
-                KeyHold(key);
-            }
-        }
-    }
-    private void CheckKeyboardAxes()
-    {
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
-        if (Mathf.Abs(horizontal) > 0.0f || Mathf.Abs(vertical) > 0.0f)
-        {
-            OnKeyboardAxisEvent(new Vector2(horizontal, vertical));
-        }
-    }
-
+    #region Public
     /// <summary>
     /// Register a method to hook up to KeyDown events and the KeyCodes to listen for
     /// </summary>
@@ -141,7 +115,36 @@ public partial class InputManager
             DeregisterKeyHold(key, keyEvent);
         }
     }
+    #endregion //Public Methods
 
+    #region Private
+    private void CheckKeyboardPress()
+    {
+        foreach (KeyCode key in keysToCheck)
+        {
+            if (Input.GetKeyDown(key))
+            {
+                KeyDown(key);
+            }
+            if (Input.GetKeyUp(key))
+            {
+                KeyUp(key);
+            }
+            if (Input.GetKey(key))
+            {
+                KeyHold(key);
+            }
+        }
+    }
+    private void CheckKeyboardAxes()
+    {
+        float horizontal = Input.GetAxis("Horizontal");
+        float vertical = Input.GetAxis("Vertical");
+        if (Mathf.Abs(horizontal) > 0.0f || Mathf.Abs(vertical) > 0.0f)
+        {
+            OnKeyboardAxisEvent(new Vector2(horizontal, vertical));
+        }
+    }
     private void RegisterKeyDown(KeyPressEvent keyEvent, KeyCode key)
     {
         if (keyDownEvents.ContainsKey(key))
@@ -284,4 +287,6 @@ public partial class InputManager
             }
         }
     }
+    #endregion //Private Methods
+    #endregion //Methods
 }

@@ -4,28 +4,38 @@ using System.Collections.Generic;
 
 public class Hull : MonoBehaviour
 {
-    public int ID;
 
+    #region Fields
+    
+    #region EditorExposed
     [SerializeField]
     List<ComponentSlot> emptyComponentGrid;
     public List<ComponentSlot> EmptyComponentGrid
     {
         get { return emptyComponentGrid; }
     }
+    public int ID;
+    #endregion EditorExposed
 
+    #region PublicFields
     private Dictionary<int, ComponentSlot> slotTable;
     public Dictionary<int, ComponentSlot> SlotTable
     {
         get { return slotTable; }
     }
-
+    
     bool unlocked;
     public bool Unlocked
     {
         get { return unlocked; }
         set { unlocked = value; }
     }
+    #endregion PublicFields
 
+    #endregion Fields
+
+    #region Methods
+    #region Public
     public void Init()
     {
         //emptyComponentGrid = new List<ComponentSlot>(GetComponentsInChildren<ComponentSlot>());
@@ -46,5 +56,14 @@ public class Hull : MonoBehaviour
             Debug.Log("index: " + item.Key + " slot: " + item.Value.index);
         }
     }
+    #endregion Public
+
+    #region Private
+
+    #endregion Private
+
+    #endregion Methods
+
+    
 
 }

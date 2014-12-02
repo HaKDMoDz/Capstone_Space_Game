@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 
-#region AdditionalStructures
+#region AdditionalData
 public enum GameScene { MainMenu, GalaxyMap, CombatScene, ShipDesignScene }
 
 [Serializable]
@@ -13,12 +13,11 @@ public struct SceneNameEntry
     public GameScene gameScene;
     public string sceneName;
 }
-#endregion//Additional Structures
+#endregion//Additional Data
 
 public class GameController : Singleton<GameController>
 {
     #region Fields
-
     #region EditorExposed
     [SerializeField]
     private GameScene defaultStartScene = GameScene.MainMenu;
@@ -49,24 +48,7 @@ public class GameController : Singleton<GameController>
     #endregion //Fields
 
     #region Methods
-    void Awake()
-    {
-#if FULL_DEBUG
-        Debug.Log("GameController Awake");
-#endif
-#if FULL_DEBUG || LOW_DEBUG || RELEASE
-        if(sceneEntryList.Count == 0)
-        {
-            Debug.LogError("No Scene Name Entries provided");
-            return;
-        }
-#endif
-        currentScene = defaultStartScene;
-        sceneEnumToNameTable = sceneEntryList.ToDictionary(s => s.gameScene, s => s.sceneName);
-        //need this for now - until Button's onClick event can pass in enums
-        sceneNameToEnumTable = sceneEntryList.ToDictionary(s => s.sceneName, s => s.gameScene);
-    }
-
+    #region Public
     //need this for now - until Button's onClick event can pass in enums
     public void ChangeScene(string sceneName)
     {
@@ -89,6 +71,27 @@ public class GameController : Singleton<GameController>
 
         //OnPostSceneChange(new SceneChangeArgs(currentScene, nextScene));
     }
+    #endregion //Public
+
+    #region Private
+    void Awake()
+    {
+#if FULL_DEBUG
+        Debug.Log("GameController Awake");
+#endif
+#if FULL_DEBUG || LOW_DEBUG || RELEASE
+        if(sceneEntryList.Count == 0)
+        {
+            Debug.LogError("No Scene Name Entries provided");
+            return;
+        }
+#endif
+        currentScene = defaultStartScene;
+        sceneEnumToNameTable = sceneEntryList.ToDictionary(s => s.gameScene, s => s.sceneName);
+        //need this for now - until Button's onClick event can pass in enums
+        sceneNameToEnumTable = sceneEntryList.ToDictionary(s => s.sceneName, s => s.gameScene);
+    }
+    #endregion //Private methods
 
     #endregion //Methods
 }

@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+
 public enum MouseButton { Left = 0, Right = 1, Middle = 2 }
 
 public partial class InputManager : Singleton<InputManager>
 {
+    #region Fields
+    #region Events
     //mouse events
     public delegate void MouseClickEvent(MouseButton mouseButton);
     public delegate void MouseMoveEvent(Vector2 direction);
@@ -12,15 +15,12 @@ public partial class InputManager : Singleton<InputManager>
     /// This event is raised whenever the mouse is moved - the argument is a vector of the horizontal and vertical movement of the mouse
     /// </summary>
     public event MouseMoveEvent OnMouseMoveEvent = new MouseMoveEvent((Vector2) => { });
+
     public delegate void MouseScrollEvent(float scrollSpeed);
     /// <summary>
     /// This event is raised whenever the mouse scroll wheel is spun - the argument is the speed in which it was spun (-ve means down)
     /// </summary>
     public event MouseScrollEvent OnMouseScrollEvent = new MouseScrollEvent((float scrollSpeed) => { });
-
-
-    private List<MouseButton> buttonsToCheck;
-    private Dictionary<MouseButton, MouseClickEvent> mouseDownEvents, mouseUpEvents, mouseHoldEvents;
 
     //keyboard events
     public delegate void KeyPressEvent(KeyCode key);
@@ -29,13 +29,19 @@ public partial class InputManager : Singleton<InputManager>
     /// This event is raised whenever the keyboard axis is activated - the argument is a vector of the horizontal and vertical axes
     /// </summary>
     public event KeyboardAxisEvent OnKeyboardAxisEvent = new KeyboardAxisEvent((Vector2) => { });
+    #endregion //Events
 
-
+    #region InternalFields
+    private List<MouseButton> buttonsToCheck;
+    private Dictionary<MouseButton, MouseClickEvent> mouseDownEvents, mouseUpEvents, mouseHoldEvents;
     private List<KeyCode> keysToCheck;
     private Dictionary<KeyCode, KeyPressEvent> keyDownEvents, keyUpEvents, keyHoldEvents;
-
     private bool initialized = false;
 
+    #endregion //Internal
+    #endregion //Fields
+
+    #region Methods
     void Awake()
     {
         Init();
@@ -62,4 +68,5 @@ public partial class InputManager : Singleton<InputManager>
         CheckKeyboardAxes();
         CheckKeyboardPress();
     }
+    #endregion //Methods
 }

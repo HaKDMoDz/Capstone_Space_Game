@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 
+#region AdditionalData
 [Serializable]
 public class ComponentTableEntry
 {
@@ -15,18 +16,24 @@ public class ComponentTableEntry
         component = _component;
     }
 }
+#endregion//Additional Data
 
-[Serializable]
-public class ComponentTable : ScriptableObject 
+public class ComponentTable : ScriptableObject
 {
+    #region Fields
+    #region EditorExposed
     [SerializeField]
     List<ComponentTableEntry> componentList;
     public List<ComponentTableEntry> ComponentList
     {
         get { return componentList; }
     }
+    #endregion //EditorExposed
+    #endregion //Fields
 
 
+    #region Methods
+    #region GUI
     public void AddEntry(int ID, ShipComponent component)
     {
         if(componentList == null)
@@ -77,5 +84,6 @@ public class ComponentTable : ScriptableObject
             componentList.Clear();
         }
     }
-
+    #endregion //GUI
+    #endregion //Methods
 }

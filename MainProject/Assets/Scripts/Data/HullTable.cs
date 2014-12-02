@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 
+#region AdditionalData
 [Serializable]
 public class HullTableEntry
 {
@@ -15,28 +16,31 @@ public class HullTableEntry
         hull = _hull;
     }
 }
+#endregion //Additional Data
 
-public class HullTable : ScriptableObject 
+public class HullTable : ScriptableObject
 {
-    //public int ID;
-    //public GameObject hullPrefab;
-
-    //Dictionary<int, GameObject> hullTable;
+    #region Fields
+    #region EditorExposed
     [SerializeField]
-    List<HullTableEntry> hullTable;
-
+    List<HullTableEntry> hullTableEntryList;
     public List<HullTableEntry> HullTableProp
     {
-        get { return hullTable; }
+        get { return hullTableEntryList; }
     }
+    #endregion //EditorExposed
+    #endregion //Fields
 
+    #region Methods
+
+    #region GUI
     public void AddEntry(int _ID, Hull _hull)
     {
-        if(hullTable==null)
+        if(hullTableEntryList==null)
         {
-            hullTable = new List<HullTableEntry>();
+            hullTableEntryList = new List<HullTableEntry>();
         }
-        hullTable.Add(new HullTableEntry(_ID, _hull));
+        hullTableEntryList.Add(new HullTableEntry(_ID, _hull));
         _hull.ID = _ID;
     }
 
@@ -47,11 +51,11 @@ public class HullTable : ScriptableObject
     public int GenNextID()
     {
         int genID = 0;
-        if(hullTable==null)
+        if(hullTableEntryList==null)
         {
-            hullTable = new List<HullTableEntry>();
+            hullTableEntryList = new List<HullTableEntry>();
         }
-        while (hullTable.Any(entry => entry.ID == genID))
+        while (hullTableEntryList.Any(entry => entry.ID == genID))
         {
             genID++;
         }
@@ -59,29 +63,28 @@ public class HullTable : ScriptableObject
     }
     public bool IDExists(int id)
     {
-        if(hullTable==null)
+        if(hullTableEntryList==null)
         {
             return false;
         }
-        //return hullTable.Contains(_id);
-        return hullTable.Any(entry => entry.ID == id);
+        return hullTableEntryList.Any(entry => entry.ID == id);
     }
     public bool HullExists(Hull _hull)
     {
-        if (hullTable == null)
+        if (hullTableEntryList == null)
         {
             return false;
         }
-        //return hullTable.ContainsValue(_hullPrefab);
-        return hullTable.Any(entry => entry.hull == _hull);
+        return hullTableEntryList.Any(entry => entry.hull == _hull);
     }
     public void WipeTable()
     {
-        if (hullTable != null)
+        if (hullTableEntryList != null)
         {
-            hullTable.Clear();
-            
+            hullTableEntryList.Clear();
         }
     }
-    
+    #endregion //GUI
+    #endregion //Methods
+
 }

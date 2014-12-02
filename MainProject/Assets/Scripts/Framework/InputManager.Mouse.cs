@@ -4,6 +4,119 @@ using System.Collections.Generic;
 
 public partial class InputManager
 {
+    #region Methods
+
+    #region Public
+    /// <summary>
+    /// Register a method to hook up to MouseDown events and the Mouse Buttons to listen for
+    /// </summary>
+    /// <param name="mouseClickEvent"></param>
+    /// Method to call when the Mouse down event occurs
+    /// <param name="buttons">
+    /// The Mouse Buttons to listen for (pass in multiple buttons separated by commas)
+    /// </param>
+    public void RegisterMouseButtonsDown(MouseClickEvent mouseClickEvent, params MouseButton[] buttons)
+    {
+        if (!initialized)
+        {
+            Init();
+        }
+        foreach (MouseButton button in buttons)
+        {
+            RegisterMouseButtonDown(mouseClickEvent, button);
+        }
+    }
+    /// <summary>
+    /// Register a method to hook up to Mouse Up events and the Mouse Buttons to listen for
+    /// </summary>
+    /// <param name="mouseClickEvent">
+    /// Method to call when the Mouse up event occurs
+    /// </param>
+    /// <param name="buttons">
+    /// The Mouse Buttons to listen for (pass in multiple buttons separated by commas)
+    /// </param>
+    public void RegisterMouseButtonsUp(MouseClickEvent mouseClickEvent, params MouseButton[] buttons)
+    {
+        if (!initialized)
+        {
+            Init();
+        }
+        foreach (MouseButton button in buttons)
+        {
+            RegisterMouseButtonUp(mouseClickEvent, button);
+        }
+    }
+    /// <summary>
+    /// Register a method to hook up to Mouse Hold events and the Mouse Buttons to listen for
+    /// </summary>
+    /// <param name="mouseClickEvent">
+    /// Method to call when the Mouse Hold event occurs
+    /// </param>
+    /// <param name="buttons">
+    /// The Mouse Buttons to listen for (pass in multiple buttons separated by commas)
+    /// </param>
+    public void RegisterMouseButtonsHold(MouseClickEvent mouseClickEvent, params MouseButton[] buttons)
+    {
+        if (!initialized)
+        {
+            Init();
+        }
+        foreach (MouseButton button in buttons)
+        {
+            RegisterMouseButtonHold(mouseClickEvent, button);
+        }
+    }
+    /// <summary>
+    /// De-register methods from the event for the passed Mouse Buttons
+    /// </summary>
+    /// <param name="mouseClickEvent"></param>
+    /// <param name="buttons"></param>
+    public void DeRegisterMouseButtonsDown(MouseClickEvent mouseClickEvent, params MouseButton[] buttons)
+    {
+        if (!initialized)
+        {
+            Init();
+        }
+        foreach (MouseButton button in buttons)
+        {
+            DeRegisterMouseButtonDown(mouseClickEvent, button);
+        }
+    }
+    /// <summary>
+    /// De-register methods from the event for the passed Mouse Buttons
+    /// </summary>
+    /// <param name="mouseClickEvent"></param>
+    /// <param name="buttons"></param>
+    public void DeRegisterMouseButtonsUp(MouseClickEvent mouseClickEvent, params MouseButton[] buttons)
+    {
+        if (!initialized)
+        {
+            Init();
+        }
+        foreach (MouseButton button in buttons)
+        {
+            DeRegisterMouseButtonUp(mouseClickEvent, button);
+        }
+    }
+    /// <summary>
+    /// De-register methods from the event for the passed Mouse Buttons
+    /// </summary>
+    /// <param name="mouseClickEvent"></param>
+    /// <param name="buttons"></param>
+    public void DeRegisterMouseButtonsHold(MouseClickEvent mouseClickEvent, params MouseButton[] buttons)
+    {
+        if (!initialized)
+        {
+            Init();
+        }
+        foreach (MouseButton button in buttons)
+        {
+            DeRegisterMouseButtonHold(mouseClickEvent, button);
+        }
+    }
+    #endregion //Public Methods
+
+    #region Private
     private void CheckMouseClick()
     {
         foreach (MouseButton button in buttonsToCheck)
@@ -27,7 +140,7 @@ public partial class InputManager
     {
         float mouseXAxis = Input.GetAxis("Mouse X");
         float mouseYAxis = Input.GetAxis("Mouse Y");
-        if(Mathf.Abs(mouseXAxis)>0.0f || Mathf.Abs(mouseYAxis)>0.0f)
+        if (Mathf.Abs(mouseXAxis) > 0.0f || Mathf.Abs(mouseYAxis) > 0.0f)
         {
             OnMouseMoveEvent(new Vector2(mouseXAxis, mouseYAxis));
         }
@@ -35,81 +148,14 @@ public partial class InputManager
     private void CheckMouseScroll()
     {
         float scrollSpeed = Input.GetAxis("Mouse ScrollWheel");
-        if(scrollSpeed != 0.0f)
+        if (scrollSpeed != 0.0f)
         {
             OnMouseScrollEvent(scrollSpeed);
         }
     }
-    public void RegisterMouseButtonsDown(MouseClickEvent mouseClickEvent, params MouseButton[] buttons)
-    {
-        if(!initialized)
-        {
-            Init();
-        }
-        foreach (MouseButton button in buttons)
-        {
-            RegisterMouseButtonDown(mouseClickEvent, button);
-        }
-    }
-    public void RegisterMouseButtonsUp(MouseClickEvent mouseClickEvent, params MouseButton[] buttons)
-    {
-        if (!initialized)
-        {
-            Init();
-        }
-        foreach (MouseButton button in buttons)
-        {
-            RegisterMouseButtonUp(mouseClickEvent, button);
-        }
-    }
-    public void RegisterMouseButtonsHold(MouseClickEvent mouseClickEvent, params MouseButton[] buttons)
-    {
-        if (!initialized)
-        {
-            Init();
-        }
-        foreach (MouseButton button in buttons)
-        {
-            RegisterMouseButtonHold(mouseClickEvent, button);
-        }
-    }
-    public void DeRegisterMouseButtonsDown(MouseClickEvent mouseClickEvent, params MouseButton[] buttons)
-    {
-        if (!initialized)
-        {
-            Init();
-        }
-        foreach (MouseButton button in buttons)
-        {
-            DeRegisterMouseButtonDown(mouseClickEvent, button);
-        }
-    }
-    public void DeRegisterMouseButtonsUp(MouseClickEvent mouseClickEvent, params MouseButton[] buttons)
-    {
-        if (!initialized)
-        {
-            Init();
-        }
-        foreach (MouseButton button in buttons)
-        {
-            DeRegisterMouseButtonUp(mouseClickEvent, button);
-        }
-    }
-    public void DeRegisterMouseButtonsHold(MouseClickEvent mouseClickEvent, params MouseButton[] buttons)
-    {
-        if (!initialized)
-        {
-            Init();
-        }
-        foreach (MouseButton button in buttons)
-        {
-            DeRegisterMouseButtonHold(mouseClickEvent, button);
-        }
-    }
-
     private void RegisterMouseButtonDown(MouseClickEvent mouseClickEvent, MouseButton button)
     {
-        if(mouseDownEvents.ContainsKey(button))
+        if (mouseDownEvents.ContainsKey(button))
         {
             mouseDownEvents[button] += mouseClickEvent;
         }
@@ -129,7 +175,7 @@ public partial class InputManager
         {
             AddButtonToCheck(button);
             mouseUpEvents.Add(button, mouseClickEvent);
-        } 
+        }
     }
     private void RegisterMouseButtonHold(MouseClickEvent mouseClickEvent, MouseButton button)
     {
@@ -141,14 +187,14 @@ public partial class InputManager
         {
             AddButtonToCheck(button);
             mouseHoldEvents.Add(button, mouseClickEvent);
-        } 
+        }
     }
     private void DeRegisterMouseButtonDown(MouseClickEvent mouseClickEvent, MouseButton button)
     {
-        if(mouseDownEvents.ContainsKey(button))
+        if (mouseDownEvents.ContainsKey(button))
         {
             mouseDownEvents[button] -= mouseClickEvent;
-            if(mouseDownEvents[button]==null)
+            if (mouseDownEvents[button] == null)
             {
                 mouseDownEvents.Remove(button);
             }
@@ -193,14 +239,14 @@ public partial class InputManager
     }
     private void AddButtonToCheck(MouseButton button)
     {
-        if(!buttonsToCheck.Contains(button))
+        if (!buttonsToCheck.Contains(button))
         {
             buttonsToCheck.Add(button);
         }
     }
     private void CheckAndRemoveButton(MouseButton button)
     {
-        if(!mouseDownEvents.ContainsKey(button)
+        if (!mouseDownEvents.ContainsKey(button)
             && !mouseUpEvents.ContainsKey(button)
             && !mouseHoldEvents.ContainsKey(button))
         {
@@ -210,9 +256,9 @@ public partial class InputManager
     private void MouseDown(MouseButton button)
     {
         MouseClickEvent mouseClickEvent = null;
-        if(mouseDownEvents.TryGetValue(button, out mouseClickEvent))
+        if (mouseDownEvents.TryGetValue(button, out mouseClickEvent))
         {
-            if(mouseClickEvent!=null)
+            if (mouseClickEvent != null)
             {
                 mouseClickEvent(button);
             }
@@ -240,4 +286,7 @@ public partial class InputManager
             }
         }
     }
+    #endregion //Private Methods
+    #endregion//Methods
+
 }
