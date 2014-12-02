@@ -4,8 +4,17 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 
-
+#region AdditionalStructures
 public enum GameScene { MainMenu, GalaxyMap, CombatScene, ShipDesignScene }
+
+[Serializable]
+public struct SceneNameEntry
+{
+    public GameScene gameScene;
+    public string sceneName;
+}
+#endregion//Additional Structures
+
 public class GameController : Singleton<GameController>
 {
     #region Fields
@@ -24,7 +33,9 @@ public class GameController : Singleton<GameController>
     {
         get { return currentScene; }
     }
-    private Dictionary<GameScene, string> sceneNameTable;
+    private Dictionary<GameScene, string> sceneEnumToNameTable;
+    //need this for now - until Button's onClick event can pass in enums
+    private Dictionary<string, GameScene> sceneNameToEnumTable;
     #endregion //Internal
 
     #region Events
@@ -50,27 +61,34 @@ public class GameController : Singleton<GameController>
             return;
         }
 #endif
-        sceneNameTable = sceneEntryList.ToDictionary(s => s.gameScene, s => s.sceneName);
+        currentScene = defaultStartScene;
+        sceneEnumToNameTable = sceneEntryList.ToDictionary(s => s.gameScene, s => s.sceneName);
+        //need this for now - until Button's onClick event can pass in enums
+        sceneNameToEnumTable = sceneEntryList.ToDictionary(s => s.sceneName, s => s.gameScene);
+    }
 
+    //need this for now - until Button's onClick event can pass in enums
+    public void ChangeScene(string sceneName)
+    {
+        ChangeScene(sceneNameToEnumTable[sceneName]);
     }
 
     public void ChangeScene(GameScene nextScene)
     {
-#if FULL_DEBUG
+
+#if FULL_DEBUG || LOW_DEBUG || RELEASE
         Debug.Log("Scene changing from " + currentScene + " to " + nextScene);
 #endif
+#if FULL_DEBUG || LOW_DEBUG
+        Debug.Log("PreSceneChange event raised");
+#endif
+
         OnPreSceneChange(new SceneChangeArgs(currentScene, nextScene));
 
-        Application.LoadLevel(sceneNameTable[nextScene]);
+        Application.LoadLevel(sceneEnumToNameTable[nextScene]);
 
         //OnPostSceneChange(new SceneChangeArgs(currentScene, nextScene));
     }
 
     #endregion //Methods
-}
-[Serializable]
-public class SceneNameEntry
-{
-    public GameScene gameScene;
-    public string sceneName;
 }
