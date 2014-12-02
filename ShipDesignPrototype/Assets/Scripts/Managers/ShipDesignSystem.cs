@@ -77,7 +77,7 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
 
     #region Methods
 
-    #region Debug
+#if FULL_DEBUG
     void OnGUI()
     {
         if (currentBlueprint != null)
@@ -117,7 +117,8 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
             ShipBlueprintSaveSystem.Instance.DeleteBlueprint("test1");
         }
     }
-    #endregion
+#endif
+
 
     void Start()
     {
