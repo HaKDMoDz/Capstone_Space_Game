@@ -27,7 +27,11 @@ public class SceneSelector : Editor
     {
         OpenScene("CombatScene");
     }
-
+    [MenuItem(menuName + "/Test Scene")]
+    public static void OpenTestScene()
+    {
+        OpenScene("TestScene");
+    }
     static void OpenScene(string name)
     {
         if(EditorApplication.SaveCurrentSceneIfUserWantsTo())

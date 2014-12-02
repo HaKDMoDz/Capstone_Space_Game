@@ -27,6 +27,8 @@ public class ObjectPool : Singleton<ObjectPool>
     //private List<GameObject> pooledObjects;
     private Dictionary<GameObject, Queue<GameObject>> pooledObjectTable;
     private Transform container; //an empty to parent pooled objects under
+    private Queue<GameObject> requiredPool;
+    private GameObject requiredObject;
     #endregion //InternalFields
 
     #endregion//Fields
@@ -41,7 +43,7 @@ public class ObjectPool : Singleton<ObjectPool>
     /// <param name="onlyPooled">
     /// If true, will only return a pooled object, if false, will instantiate a new object if out of pooled objects
     /// </param>
-    public GameObject GetPooledObject(string objectName, bool onlyPooled)
+    public GameObject GetPooledObject(GameObject obj, bool onlyPooled)
     {
         //for (int i = 0; i < objectPrefabs.Length; i++)
         //{
@@ -64,6 +66,30 @@ public class ObjectPool : Singleton<ObjectPool>
         //    }
         //}
 
+        if(pooledObjectTable.TryGetValue(obj, out requiredPool))
+        {
+             if(requiredPool.Count > 0)
+             {
+                 requiredObject = requiredPool.Dequeue();
+                 requiredObject.transform.SetParent(null);
+                 requiredObject.SetActive(true);
+                 return requiredObject;
+             }
+             else if(!onlyPooled)
+             {
+#if FULL_DEBUG
+                 Debug.Log("Out of Pooled objects - instantiating new object and adding to pool");
+#endif
+                 requiredObject = Instantiate(obj) as GameObject;
+                 requiredPool.Enqueue(obj);
+                 return requiredObject;
+             }
+        }
+        else
+        {
+
+        }
+
 #if !NO_DEBUG
         Debug.LogError("Object not found or out of pooled objects");
 #endif
@@ -83,6 +109,29 @@ public class ObjectPool : Singleton<ObjectPool>
         //        return;
         //    }
         //}
+
+        
+
+        if(pooledObjectTable.TryGetValue(obj, out requiredPool))
+        {
+            obj.SetActive(false);
+            obj.transform.SetParent(container);
+            obj.transform.position = Vector3.zero;
+            requiredPool.Enqueue(obj);
+        }
+        else
+        {
+#if FULL_DEBUG
+            Debug.LogWarning("Object to pool not found in pool - adding new entry");
+#endif
+            pooledObjectTable.Add(obj, new Queue<GameObject>());
+            pooledObjectTable[obj].Enqueue(obj);
+
+
+        }
+
+
+
     }
     #endregion //Public Methods
 
@@ -90,7 +139,7 @@ public class ObjectPool : Singleton<ObjectPool>
     private void Start()
     {
 
-#if UNITY_EDITOR
+#if LOW_DEBUG || FULL_DEBUG
 
         for (int i = 0; i < prefabList.Count; i++)
         {
