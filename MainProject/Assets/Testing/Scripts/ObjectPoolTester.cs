@@ -9,7 +9,6 @@ public class ObjectPoolTester : MonoBehaviour
 
 
     //internal fields
-    //private GameObject currentBullet;
     private Transform trans;
     
     private void Start()
@@ -23,7 +22,6 @@ public class ObjectPoolTester : MonoBehaviour
        GameObject currentBullet = ObjectPool.Instance.GetPooledObject(bulletPrefab, false);
         currentBullet.transform.position = trans.position;
         currentBullet.rigidbody.AddForce(trans.forward * 100.0f);
-        //currentBullet.GetSafeComponent<TimedAction>().StopAllCoroutines();
         StartCoroutine(currentBullet.GetSafeComponent<TimedAction>().SetTimedAction(2.0f,
             () =>
             {

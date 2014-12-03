@@ -35,6 +35,8 @@ public class GameController : Singleton<GameController>
     private Dictionary<GameScene, string> sceneEnumToNameTable;
     //need this for now - until Button's onClick event can pass in enums
     private Dictionary<string, GameScene> sceneNameToEnumTable;
+
+    static int count = 0;
     #endregion //Internal
 
     #region Events
@@ -58,12 +60,12 @@ public class GameController : Singleton<GameController>
     public void ChangeScene(GameScene nextScene)
     {
 
-#if FULL_DEBUG || LOW_DEBUG || RELEASE
+        #if FULL_DEBUG || LOW_DEBUG || RELEASE
         Debug.Log("Scene changing from " + currentScene + " to " + nextScene);
-#endif
-#if FULL_DEBUG || LOW_DEBUG
+        #endif
+        #if FULL_DEBUG || LOW_DEBUG
         Debug.Log("PreSceneChange event raised");
-#endif
+        #endif
 
         OnPreSceneChange(new SceneChangeArgs(currentScene, nextScene));
 
@@ -76,21 +78,37 @@ public class GameController : Singleton<GameController>
     #region Private
     void Awake()
     {
-#if FULL_DEBUG
+        DontDestroyOnLoad(gameObject);
+        count++;
+        if(count > 1)
+        {
+            #if FULL_DEBUG
+            Debug.Log("More than 1 Game Controller found - destroying");
+            #endif
+            Destroy(gameObject);
+        }
+        #if FULL_DEBUG
         Debug.Log("GameController Awake");
-#endif
-#if FULL_DEBUG || LOW_DEBUG || RELEASE
-        if(sceneEntryList.Count == 0)
+        #endif
+        #if FULL_DEBUG || LOW_DEBUG || RELEASE
+        if (sceneEntryList.Count == 0)
         {
             Debug.LogError("No Scene Name Entries provided");
             return;
         }
-#endif
+        #endif
         currentScene = defaultStartScene;
         sceneEnumToNameTable = sceneEntryList.ToDictionary(s => s.gameScene, s => s.sceneName);
         //need this for now - until Button's onClick event can pass in enums
         sceneNameToEnumTable = sceneEntryList.ToDictionary(s => s.sceneName, s => s.gameScene);
     }
+    void OnLevelWasLoaded(int levelID)
+    {
+        #if FULL_DEBUG          
+        Debug.Log("Level loaded " + Application.loadedLevelName);
+        #endif
+    }
+
     #endregion //Private methods
 
     #endregion //Methods
