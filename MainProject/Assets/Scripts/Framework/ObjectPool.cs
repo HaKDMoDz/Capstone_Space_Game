@@ -43,95 +43,61 @@ public class ObjectPool : Singleton<ObjectPool>
     /// <param name="onlyPooled">
     /// If true, will only return a pooled object, if false, will instantiate a new object if out of pooled objects
     /// </param>
-    public GameObject GetPooledObject(GameObject obj, bool onlyPooled)
+    public GameObject GetPooledObject(GameObject prefab, bool onlyPooled)
     {
-        //for (int i = 0; i < objectPrefabs.Length; i++)
-        //{
-        //    if (objectPrefabs[i].name == objectName)
-        //    {
-        //        if (pooledObjects[i].Count > 0)
-        //        {
-        //            GameObject pooledObject = pooledObjects[i][0];
-        //            pooledObjects[i].RemoveAt(0);
-        //            pooledObject.transform.parent = null;
-        //            pooledObject.SetActive(true);
-        //            return pooledObject;
-        //        }
-        //        else if (!onlyPooled)
-        //        {
-        //            Debug.LogError("Out of Pooled objects - instantiating new object");
-        //            return Instantiate(objectPrefabs[i]) as GameObject;
-        //        }
-        //        break;
-        //    }
-        //}
-
-        if(pooledObjectTable.TryGetValue(obj, out requiredPool))
+        //if a pool exists for the prefab
+        if (pooledObjectTable.TryGetValue(prefab, out requiredPool))
         {
-             if(requiredPool.Count > 0)
-             {
-                 requiredObject = requiredPool.Dequeue();
-                 requiredObject.transform.SetParent(null);
-                 requiredObject.SetActive(true);
-                 return requiredObject;
-             }
-             else if(!onlyPooled)
-             {
-#if FULL_DEBUG
-                 Debug.Log("Out of Pooled objects - instantiating new object and adding to pool");
-#endif
-                 requiredObject = Instantiate(obj) as GameObject;
-                 requiredPool.Enqueue(obj);
-                 return requiredObject;
-             }
-        }
-        else
-        {
-
-        }
-
+            //out of pooled objects
+            if (requiredPool.Count <= 0)
+            {
+                //cannot spawn more on demand
+                if (onlyPooled)
+                {
 #if !NO_DEBUG
-        Debug.LogError("Object not found or out of pooled objects");
+                    Debug.LogError("Out of pooled objects");
 #endif
-        return null; //object was not found
+                    return null;
+                }
+                else //can spawn more objects if out
+                {
+#if FULL_DEBUG || LOW_DEBUG
+                    Debug.LogWarning("Out of Pooled objects - instantiating new object and adding to pool");
+#endif
+                    InstantiateAndPoolObject(prefab);
+                }
+            }
+            requiredObject = requiredPool.Dequeue();
+            requiredObject.transform.SetParent(null);
+            requiredObject.SetActive(true);
+            return requiredObject;
+        }
+        else //the prefab was not found in the pool
+        {
+#if !NO_DEBUG
+            Debug.LogError("Object not found or out of pooled objects");
+#endif
+            return null; //object was not found
+        }
     }
 
-    public void PoolObject(GameObject obj)
+    public void PoolObject(GameObject prefab, GameObject spawnedObject)
     {
-        //for (int i = 0; i < objectPrefabs.Length; i++)
-        //{
-        //    if (objectPrefabs[i].name == obj.name)
-        //    {
-        //        obj.SetActive(false);
-        //        obj.transform.position = container.position;
-        //        obj.transform.parent = container;
-        //        pooledObjects[i].Add(obj);
-        //        return;
-        //    }
-        //}
-
-        
-
-        if(pooledObjectTable.TryGetValue(obj, out requiredPool))
+        if (pooledObjectTable.TryGetValue(prefab, out requiredPool))
         {
-            obj.SetActive(false);
-            obj.transform.SetParent(container);
-            obj.transform.position = Vector3.zero;
-            requiredPool.Enqueue(obj);
+            spawnedObject.SetActive(false);
+            spawnedObject.transform.SetParent(container);
+            spawnedObject.transform.position = Vector3.zero;
+            requiredPool.Enqueue(spawnedObject);
         }
         else
         {
 #if FULL_DEBUG
             Debug.LogWarning("Object to pool not found in pool - adding new entry");
 #endif
-            pooledObjectTable.Add(obj, new Queue<GameObject>());
-            pooledObjectTable[obj].Enqueue(obj);
-
-
+            pooledObjectTable.Add(prefab, new Queue<GameObject>());
+            pooledObjectTable[prefab].Enqueue(spawnedObject);
         }
-
-
-
     }
     #endregion //Public Methods
 
@@ -162,12 +128,17 @@ public class ObjectPool : Singleton<ObjectPool>
 
             for (int j = 0; j < prefabList[i].amountToBuffer; j++)
             {
-                GameObject newObj = Instantiate(prefabList[i].gameObject) as GameObject;
-                newObj.name = prefabList[i].gameObject.name;
-                PoolObject(newObj);
+                InstantiateAndPoolObject(prefabList[i].gameObject);
             }
         }
     }
+    private void InstantiateAndPoolObject(GameObject prefab)
+    {
+        GameObject newObj = Instantiate(prefab) as GameObject;
+        newObj.name = prefab.name;
+        PoolObject(prefab, newObj);
+    }
+    
     #endregion //private methods
     #endregion //Methods
 }
