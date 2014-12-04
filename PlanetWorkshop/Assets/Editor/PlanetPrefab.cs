@@ -44,6 +44,7 @@ public class PlanetPrefab : EditorWindow
         ring = GameObject.Find("Ring");
         ring.SetActive(true);
         atmosphere = GameObject.Find("Atmosphere");
+
         atmosphere.SetActive(true);
         GUILayout.Label("Base Settings", EditorStyles.boldLabel);
         planetName = EditorGUILayout.TextField("Planet Name: ", planetName);
