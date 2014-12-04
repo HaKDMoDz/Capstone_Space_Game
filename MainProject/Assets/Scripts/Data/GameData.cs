@@ -10,4 +10,9 @@ public class GameData
     {
         this.currentScene = currentScene;
     }
+
+    //public SerializedGameData Serialized()
+    //{
+    //    sz_gameData = new SerializedGameData(gameData.currentScene);
+    //}
 }

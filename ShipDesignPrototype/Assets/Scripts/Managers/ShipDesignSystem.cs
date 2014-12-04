@@ -154,7 +154,7 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
             });
 
 
-        buttonYOffset = Screen.height * .055f;
+        buttonYOffset = Screen.height * .075f;
 
         ResetScreen();
         SetupGUI();

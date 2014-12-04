@@ -27,7 +27,14 @@ public class GameController : Singleton<GameController>
 
     //save game related
     [SerializeField]
-    private string fileExtension, saveDirectory, fileName_SavesList;
+    private string fileExtension;
+    [SerializeField]
+    string saveDirectory;
+    [SerializeField]
+    string fileName_SavesList;
+    [SerializeField]
+    string autosaveFileName;
+    
 
     #endregion //EditorExposed
 
@@ -40,7 +47,7 @@ public class GameController : Singleton<GameController>
     private Dictionary<GameScene, string> sceneEnumToNameTable;
     //need this for now - until Button's onClick event can pass in enums
     private Dictionary<string, GameScene> sceneNameToEnumTable;
-    
+
     private GameData gameData; //will hold the current game state
 
     //static int count = 0;
@@ -77,7 +84,7 @@ public class GameController : Singleton<GameController>
         #endif
 
         OnPreSceneChange(new SceneChangeArgs(gameData.currentScene, nextScene));
-        saveSystem.Save(gameData, "save1");
+        saveSystem.Save(gameData, autosaveFileName);
         Application.LoadLevel(sceneEnumToNameTable[nextScene]);
 
         //OnPostSceneChange(new SceneChangeArgs(currentScene, nextScene));
@@ -106,9 +113,9 @@ public class GameController : Singleton<GameController>
 
         //currentScene = defaultStartScene;
 
-        saveSystem = new GameSaveSystem(fileExtension, saveDirectory, fileName_SavesList);
-
-        if(saveSystem.Load(out gameData, "save1"))
+        saveSystem = new GameSaveSystem(fileExtension, saveDirectory, fileName_SavesList, autosaveFileName);
+        Debug.Log("autosave: " + autosaveFileName);
+        if (saveSystem.Load(out gameData, autosaveFileName))
         {
             #if FULL_DEBUG
             Debug.Log("Game Data loaded successfully");
@@ -117,14 +124,14 @@ public class GameController : Singleton<GameController>
         else
         {
             #if !NO_DEBUG
-            Debug.LogError("No Save game \"save1\" found, new game data created");
+            Debug.LogError("No Save game " +autosaveFileName +" found, new autosave created");
             #endif
             gameData = new GameData(defaultStartScene);
         }
     }
     void OnLevelWasLoaded(int levelID)
     {
-        #if !NO_DEBUG          
+        #if !NO_DEBUG
         Debug.Log("Post Scene Change: from " + gameData.currentScene + " to " + sceneNameToEnumTable[Application.loadedLevelName]);
         #endif
         OnPostSceneChange(new SceneChangeArgs(gameData.currentScene, sceneNameToEnumTable[Application.loadedLevelName]));

@@ -13,8 +13,7 @@ public class GameSaveSystem
 {
     #region Fields
 
-    //set at start
-    public string fileExtension, saveDirectory, fileName_SavesList;
+    
 
     private GameSavesList gameSavesList;
     public GameSavesList GameSavesList
@@ -23,10 +22,10 @@ public class GameSaveSystem
     }
 
     #region Internal
+    private string fileExtension, saveDirectory, fileName_SavesList, autosaveFileName;
+
     BinaryFormatter binFormatter;
     FileStream fileStream;
-    StringBuilder strBuilder;
-    //string savePath;
     string path;
 
     //GameData gameData;
@@ -38,15 +37,15 @@ public class GameSaveSystem
     #region Methods
 
     #region Public
-    public GameSaveSystem(string fileExtension, string saveDirectory, string fileName_SavesList)
+    public GameSaveSystem(string fileExtension, string saveDirectory, string fileName_SavesList, string autosaveFileName)
     {
         this.fileExtension = fileExtension;
         this.saveDirectory = saveDirectory;
         this.fileName_SavesList = fileName_SavesList;
+        this.autosaveFileName = autosaveFileName;
 
         binFormatter = new BinaryFormatter();
-        strBuilder = new StringBuilder();
-        //savePath = Application.persistentDataPath;
+        
         CreateSaveGameDirectory();
         LoadSavesList();
     }
@@ -73,6 +72,7 @@ public class GameSaveSystem
         path = BuildPathString(fileName);
         
         #if FULL_DEBUG
+        Debug.Log("filename: "+fileName);
         Debug.Log("Loading game data from "+ path);
         #endif
 
