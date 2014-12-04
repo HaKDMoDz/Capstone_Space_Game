@@ -6,7 +6,7 @@ public class GameData
 {
     public GameScene currentScene;
 
-    GameData(GameScene currentScene)
+    public GameData(GameScene currentScene)
     {
         this.currentScene = currentScene;
     }

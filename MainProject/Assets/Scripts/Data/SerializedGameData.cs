@@ -3,11 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
+[Serializable]
 public class SerializedGameData
 {
     public GameScene currentScene;
 
-    SerializedGameData(GameScene currentScene)
+    public SerializedGameData(GameScene currentScene)
     {
         this.currentScene = currentScene;
     }
