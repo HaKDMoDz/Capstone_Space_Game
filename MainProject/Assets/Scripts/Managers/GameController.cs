@@ -13,6 +13,20 @@ public struct SceneNameEntry
     public GameScene gameScene;
     public string sceneName;
 }
+//for prettier inspector window
+[Serializable]
+public struct SaveFields
+{
+    public string fileExtension;
+    public string saveDirectory;
+    public string fileName_SavesList;
+    public string autoSaveFileName;
+    public int numAutoSaves;
+    public string quickSaveName;
+    public int numQuickSaves;
+    public int numNormalSaves;
+}
+
 #endregion//Additional Data
 
 
@@ -24,18 +38,8 @@ public class GameController : Singleton<GameController>
     private GameScene defaultStartScene = GameScene.MainMenu;
     [SerializeField]
     private List<SceneNameEntry> sceneEntryList;
-
-    //save game related
     [SerializeField]
-    private string fileExtension;
-    [SerializeField]
-    string saveDirectory;
-    [SerializeField]
-    string fileName_SavesList;
-    [SerializeField]
-    string autosaveFileName;
-    
-
+    SaveFields saveFields;
     #endregion //EditorExposed
 
     #region References
@@ -84,7 +88,7 @@ public class GameController : Singleton<GameController>
         #endif
 
         OnPreSceneChange(new SceneChangeArgs(gameData.currentScene, nextScene));
-        saveSystem.Save(gameData, autosaveFileName);
+        saveSystem.Save(gameData, saveFields.autoSaveFileName);
         Application.LoadLevel(sceneEnumToNameTable[nextScene]);
 
         //OnPostSceneChange(new SceneChangeArgs(currentScene, nextScene));
@@ -113,9 +117,13 @@ public class GameController : Singleton<GameController>
 
         //currentScene = defaultStartScene;
 
-        saveSystem = new GameSaveSystem(fileExtension, saveDirectory, fileName_SavesList, autosaveFileName);
-        Debug.Log("autosave: " + autosaveFileName);
-        if (saveSystem.Load(out gameData, autosaveFileName))
+        saveSystem = new GameSaveSystem(
+            saveFields.fileExtension, saveFields.saveDirectory, saveFields.fileName_SavesList, 
+            saveFields.autoSaveFileName,saveFields.quickSaveName,
+            saveFields.numAutoSaves, saveFields.numQuickSaves, saveFields.numNormalSaves);
+
+        //Debug.Log("autosave: " + autosaveFileName);
+        if (saveSystem.Load(out gameData, saveFields.autoSaveFileName))
         {
             #if FULL_DEBUG
             Debug.Log("Game Data loaded successfully");
@@ -124,7 +132,7 @@ public class GameController : Singleton<GameController>
         else
         {
             #if !NO_DEBUG
-            Debug.LogError("No Save game " +autosaveFileName +" found, new autosave created");
+            Debug.LogError("No Save game " + saveFields.autoSaveFileName + " found, new autosave created");
             #endif
             gameData = new GameData(defaultStartScene);
         }

@@ -13,17 +13,16 @@ public class GameSaveSystem
 {
     #region Fields
 
-    
-
-    private GameSavesList gameSavesList;
-    public GameSavesList GameSavesList
+    private SaveGameList gameSavesList;
+    public SaveGameList GameSavesList
     {
         get { return gameSavesList; }
     }
 
     #region Internal
-    private string fileExtension, saveDirectory, fileName_SavesList, autosaveFileName;
-
+    private string fileExtension, saveDirectory, fileName_SavesList, autosaveFileName, quickSaveName;
+    private int numAutoSaves, numQuickSaves, numNormalSaves;
+    
     BinaryFormatter binFormatter;
     FileStream fileStream;
     string path;
@@ -37,15 +36,21 @@ public class GameSaveSystem
     #region Methods
 
     #region Public
-    public GameSaveSystem(string fileExtension, string saveDirectory, string fileName_SavesList, string autosaveFileName)
+    public GameSaveSystem(string fileExtension, string saveDirectory, string fileName_SavesList, 
+        string autosaveFileName, string quickSaveName,
+        int numAutoSaves, int numQuickSaves, int numNormalSaves)
     {
         this.fileExtension = fileExtension;
         this.saveDirectory = saveDirectory;
         this.fileName_SavesList = fileName_SavesList;
         this.autosaveFileName = autosaveFileName;
+        this.quickSaveName = quickSaveName;
+        this.numAutoSaves = numAutoSaves;
+        this.numQuickSaves = numQuickSaves;
+        this.numNormalSaves = numNormalSaves;
 
         binFormatter = new BinaryFormatter();
-        
+
         CreateSaveGameDirectory();
         LoadSavesList();
     }
@@ -131,35 +136,65 @@ public class GameSaveSystem
 }
 
 #region AdditionalData
+
+public enum SaveType { AutoSave, QuickSave, NormalSave}
+
 [Serializable]
-public class GameSavesList
+public class SaveGameList
 {
-    private int count = 0;
-    public int Count
+    private Queue<SaveGame> autoSaves;
+    public Queue<SaveGame> AutoSaves
     {
-        get { return count; }
+        get { return autoSaves; }
     }
 
-    private List<string> fileNameList;
-    public List<string> FileNameList
+    private Queue<SaveGame> quickSaves;
+    public Queue<SaveGame> QuickSaves
     {
-        get { return fileNameList; }
+        get { return quickSaves; }
     }
 
-    public GameSavesList()
+    private Queue<SaveGame> normalSaves;
+    public Queue<SaveGame> NormalSaves
     {
-        count = 0;
-        fileNameList = new List<string>();
+        get { return normalSaves; }
     }
-    public void Add(string fileName)
+    
+    public SaveGameList()
     {
-        count++;
-        fileNameList.Add(fileName);
+        autoSaves = new Queue<SaveGame>();
+        quickSaves = new Queue<SaveGame>();
+        normalSaves = new Queue<SaveGame>();
     }
-    public bool FileExists(string fileName)
+    //public void Add(string fileName)
+    //{
+    //    count++;
+    //    fileNameList.Add(fileName);
+    //}
+    
+    //public bool FileExists(string fileName)
+    //{
+    //    //return fileNameList.Contains(fileName);
+    //}
+    public void AddSave(SaveType saveType, string fileName, string saveTime)
     {
-        return fileNameList.Contains(fileName);
-    }
 
+    }
 }
+
+[Serializable]
+public class SaveGame
+{
+    public SaveType saveType;
+    public string fileName;
+    public string saveTime;
+
+    public SaveGame(SaveType saveType, string fileName, string saveTime)
+    {
+        this.saveType = saveType;
+        this.fileName = fileName;
+        this.saveTime = saveTime;
+    }
+}
+
 #endregion AdditionalData

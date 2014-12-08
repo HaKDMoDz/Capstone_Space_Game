@@ -49,10 +49,15 @@ MonoBehaviour:
     sceneName: CombatScene
   - gameScene: 3
     sceneName: ShipDesignScene
-  fileExtension: sav
-  saveDirectory: SaveGames
-  fileName_SavesList: SaveFileList
-  autosaveFileName: autosave
+  saveFields:
+    fileExtension: sav
+    saveDirectory: SaveGames
+    fileName_SavesList: SaveList
+    autoSaveFileName: AutoSave
+    numAutoSaves: 3
+    quickSaveName: QuickSave
+    numQuickSaves: 3
+    numNormalSaves: 20
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
