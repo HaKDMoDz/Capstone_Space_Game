@@ -59,7 +59,8 @@ public class GameSaveSystem
         #endif
 
         fileStream = File.Create(path);
-        SerializeGameData(gameData, out sz_gameData);
+        //SerializeGameData(gameData, out sz_gameData);
+        sz_gameData = gameData.Serialized();
         binFormatter.Serialize(fileStream, sz_gameData);
         fileStream.Close();
 
@@ -80,7 +81,8 @@ public class GameSaveSystem
         {
             fileStream = File.Open(path, FileMode.Open);
             sz_gameData = binFormatter.Deserialize(fileStream) as SerializedGameData;
-            DeSerializeGameData(sz_gameData, out gameData);
+            //DeSerializeGameData(sz_gameData, out gameData);
+            gameData = sz_gameData.DeSerialized();
             fileStream.Close();
             return true;
         }
@@ -94,14 +96,7 @@ public class GameSaveSystem
     #endregion Public
 
     #region Private
-    private void SerializeGameData(GameData gameData, out SerializedGameData sz_gameData)
-    {
-       sz_gameData= new SerializedGameData(gameData.currentScene);
-    }
-    private void DeSerializeGameData(SerializedGameData sz_gameData, out GameData gameData)
-    {
-        gameData = new GameData(sz_gameData.currentScene);
-    }
+    
     private void LoadSavesList()
     {
 
