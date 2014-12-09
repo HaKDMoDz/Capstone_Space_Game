@@ -65,7 +65,7 @@ public class GameSaveSystem
 
         fileStream = File.Create(path);
         //SerializeGameData(gameData, out sz_gameData);
-        sz_gameData = gameData.Serialized();
+        gameData.Serialize(ref sz_gameData);
         binFormatter.Serialize(fileStream, sz_gameData);
         fileStream.Close();
 
@@ -73,12 +73,12 @@ public class GameSaveSystem
         //gameSavesList.Add(fileName);
         SaveSavesList();
     }
-    public bool Load(out GameData gameData, string fileName)
+    public bool Load(ref GameData gameData, string fileName)
     {
         path = BuildPathString(fileName);
         
         #if FULL_DEBUG
-        Debug.Log("filename: "+fileName);
+        //Debug.Log("filename: "+fileName);
         Debug.Log("Loading game data from "+ path);
         #endif
 
@@ -87,7 +87,7 @@ public class GameSaveSystem
             fileStream = File.Open(path, FileMode.Open);
             sz_gameData = binFormatter.Deserialize(fileStream) as SerializedGameData;
             //DeSerializeGameData(sz_gameData, out gameData);
-            gameData = sz_gameData.DeSerialized();
+            sz_gameData.DeSerialize(ref gameData);
             fileStream.Close();
             return true;
         }

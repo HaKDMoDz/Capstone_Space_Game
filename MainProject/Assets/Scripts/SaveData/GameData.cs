@@ -12,14 +12,19 @@ public class GameData
     public AI_Data kTaeran_AI_Data;
     public AI_Data pirates_AI_Data;
 
+
+    public GameData()
+    {
+
+    }
     public GameData(GameScene currentScene)
     {
         this.currentScene = currentScene;
     }
 
-    public SerializedGameData Serialized()
+    public void Serialize(ref SerializedGameData sz_gameData)
     {
-        return new SerializedGameData(currentScene);
+        sz_gameData.currentScene = currentScene;
     }
     
 }

@@ -19,8 +19,8 @@ public class SerializedGameData
         this.currentScene = currentScene;
     }
 
-    public GameData DeSerialized()
+    public void DeSerialize(ref GameData gameData)
     {
-        return new GameData(currentScene);
+        gameData.currentScene = currentScene;
     }
 }

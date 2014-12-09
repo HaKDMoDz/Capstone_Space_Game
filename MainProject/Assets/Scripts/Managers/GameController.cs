@@ -122,8 +122,10 @@ public class GameController : Singleton<GameController>
             saveFields.autoSaveFileName,saveFields.quickSaveName,
             saveFields.numAutoSaves, saveFields.numQuickSaves, saveFields.numNormalSaves);
 
+        gameData = new GameData();
+
         //Debug.Log("autosave: " + autosaveFileName);
-        if (saveSystem.Load(out gameData, saveFields.autoSaveFileName))
+        if (saveSystem.Load(ref gameData, saveFields.autoSaveFileName))
         {
             #if FULL_DEBUG
             Debug.Log("Game Data loaded successfully");
@@ -132,7 +134,7 @@ public class GameController : Singleton<GameController>
         else
         {
             #if !NO_DEBUG
-            Debug.LogError("No Save game " + saveFields.autoSaveFileName + " found, new autosave created");
+            Debug.LogError("No Save game " + saveFields.autoSaveFileName + " found, new Autosave created");
             #endif
             gameData = new GameData(defaultStartScene);
         }
