@@ -59,10 +59,12 @@ public class GameSaveSystem
     /// Creates an autosave. For use during scene trasitions, etc.
     /// If the max number of autosaves is reached, the oldest one will be deleted
     /// </summary>
+    /// <param name="gameData">
+    /// the gameData to serialize and store for the quickSave
+    /// </param>
     public void AutoSave(GameData gameData)
     {
         timeStamp = DateTime.Now;
-
         string fileName;
         int autoSaveCounter = savesList.autoSaveCount;
         
@@ -78,10 +80,7 @@ public class GameSaveSystem
             fileName = savesList.autoSaves.Dequeue().fileName;
             File.Delete(fileName);
         }
-        //autoSaveCounter = ++autoSaveCounter % maxAutoSaves;
-        
         Save(gameData, fileName);
-
         //update file list
         savesList.AddSave(SaveType.AutoSave, fileName, timeStamp);
         SaveSavesList();
@@ -102,10 +101,60 @@ public class GameSaveSystem
         {
             return false;
         }
-        string lastAutoSaveName = savesList.autoSaves.Last().fileName;
-        return (Load(ref gameData, lastAutoSaveName));
+        #if FULL_DEBUG
+        //Debug.Log("AutoSave was timestamped at " + savesList.autoSaves.Last().saveTime.ToString());
+        #endif
+        string latestAutoSaveName = savesList.autoSaves.Last().fileName;
+        return (Load(ref gameData, latestAutoSaveName));
     }
-
+    /// <summary>
+    /// Creates a quickSave that the user can use on demand
+    /// If the max number of quickSaves is reached, the oldest one will be deleted
+    /// </summary>
+    /// <param name="gameData">
+    /// the gameData to serialize and store for the quickSave
+    /// </param>
+    public void QuickSave(GameData gameData)
+    {
+        timeStamp = DateTime.Now;
+        string fileName;
+        int quickSaveCounter = savesList.quickSaveCount;
+        //not at max
+        if(quickSaveCounter < maxQuickSaves)
+        {
+            quickSaveCounter++;
+            fileName = quickSaveName + quickSaveCounter;
+        }
+        else //at max limit
+        {
+            //delete first, and add a new one
+            fileName = savesList.quickSaves.Dequeue().fileName;
+            File.Delete(fileName);
+        }
+        Save(gameData, fileName);
+        //update file list
+        savesList.AddSave(SaveType.QuickSave, fileName, timeStamp);
+        SaveSavesList();
+    }
+    /// <summary>
+    /// Attemps to loads the latest quickSave and populates gameData if one is found
+    /// </summary>
+    /// <param name="gameData">
+    /// will be populated based on the latest quickSave, if found
+    /// </param>
+    /// <returns>
+    /// true if an autosave is found
+    /// </returns>
+    /// 
+    public bool LoadQuickSave(ref GameData gameData)
+    {
+        if(savesList.quickSaveCount <=0)
+        {
+            return false;
+        }
+        string latestQuickSaveName = savesList.quickSaves.Last().fileName;
+        return Load(ref gameData, latestQuickSaveName);
+    }
 
     #endregion Public
 
@@ -289,7 +338,17 @@ public class SaveGameList //keeps track of the various save files being handled 
                 autoSaves.Enqueue(new SaveGameMetaData(saveType, fileName, saveTime));
                 break;
             case SaveType.QuickSave:
-                quickSaveCount++;
+                if(quickSaveCount > maxQuickSaves)
+                {
+                    #if !NO_DEBUG
+                    Debug.LogError("Beyond max quickSaves -- NumQuicksaves: " + quickSaveCount + " max: " + maxQuickSaves);
+                    #endif
+                }
+                else if(quickSaveCount < maxQuickSaves)
+                {
+                    quickSaveCount++;
+                }
+                quickSaves.Enqueue(new SaveGameMetaData(saveType, fileName, saveTime));
                 break;
             case SaveType.NormalSave:
                 normalSaveCount++;

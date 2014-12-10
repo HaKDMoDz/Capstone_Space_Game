@@ -111,7 +111,6 @@ public class GameController : Singleton<GameController>
             return;
         }
         #endif
-
         //create scene name table
         sceneEnumToNameTable = sceneEntryList.ToDictionary(s => s.gameScene, s => s.sceneName);
         //need this for now - until Button's onClick event can pass in enums
