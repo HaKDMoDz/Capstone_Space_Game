@@ -9,28 +9,16 @@ public class Hull : MonoBehaviour
     
     #region EditorExposed
     [SerializeField]
-    List<ComponentSlot> emptyComponentGrid;
-    public List<ComponentSlot> EmptyComponentGrid
-    {
-        get { return emptyComponentGrid; }
-    }
+    public List<ComponentSlot> EmptyComponentGrid { get; private set; }
     public int ID;
     #endregion EditorExposed
 
-    #region PublicFields
-    private Dictionary<int, ComponentSlot> slotTable;
-    public Dictionary<int, ComponentSlot> SlotTable
-    {
-        get { return slotTable; }
-    }
+    #region Internal
     
-    bool unlocked;
-    public bool Unlocked
-    {
-        get { return unlocked; }
-        set { unlocked = value; }
-    }
-    #endregion PublicFields
+    public Dictionary<int, ComponentSlot> SlotTable { get; private set; }
+    public bool unlocked { get; private set; }
+
+    #endregion Internal
 
     #endregion Fields
 
@@ -40,18 +28,18 @@ public class Hull : MonoBehaviour
     {
         //emptyComponentGrid = new List<ComponentSlot>(GetComponentsInChildren<ComponentSlot>());
         //Debug.Log("Hull Init");
-        slotTable = new Dictionary<int, ComponentSlot>();
+        SlotTable = new Dictionary<int, ComponentSlot>();
 
-        for (int i = 0; i < emptyComponentGrid.Count; i++)
+        for (int i = 0; i < EmptyComponentGrid.Count; i++)
         {
             //emptyComponentGrid[i].index = i;
-            slotTable.Add(emptyComponentGrid[i].index, emptyComponentGrid[i]);
+            SlotTable.Add(EmptyComponentGrid[i].index, EmptyComponentGrid[i]);
         }
     }
     public void OutputSlotTable()
     {
         Debug.Log("Slot Table");
-        foreach (var item in slotTable)
+        foreach (var item in SlotTable)
         {
             Debug.Log("index: " + item.Key + " slot: " + item.Value.index);
         }

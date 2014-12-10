@@ -23,11 +23,7 @@ public class ComponentTable : ScriptableObject
     #region Fields
     #region EditorExposed
     [SerializeField]
-    List<ComponentTableEntry> componentList;
-    public List<ComponentTableEntry> ComponentList
-    {
-        get { return componentList; }
-    }
+    public List<ComponentTableEntry> ComponentList { get; private set; }
     #endregion //EditorExposed
     #endregion //Fields
 
@@ -36,12 +32,12 @@ public class ComponentTable : ScriptableObject
     #region GUI
     public void AddEntry(int ID, ShipComponent component)
     {
-        if(componentList == null)
+        if(ComponentList == null)
         {
-            componentList = new List<ComponentTableEntry>();
+            ComponentList = new List<ComponentTableEntry>();
         }
         component.ID = ID;
-        componentList.Add((new ComponentTableEntry(ID, component)));
+        ComponentList.Add((new ComponentTableEntry(ID, component)));
         
     }
     public void AutoGenIDandAdd(ShipComponent comp)
@@ -51,11 +47,11 @@ public class ComponentTable : ScriptableObject
     public int GenID()
     {
         int genID = 0;
-        if(componentList == null)
+        if(ComponentList == null)
         {
-            componentList = new List<ComponentTableEntry>();
+            ComponentList = new List<ComponentTableEntry>();
         }
-        while(componentList.Any(entry=>entry.ID == genID))
+        while(ComponentList.Any(entry=>entry.ID == genID))
         {
             genID++;
         }
@@ -63,25 +59,25 @@ public class ComponentTable : ScriptableObject
     }
     public bool IDExists(int id)
     {
-        if(componentList==null)
+        if(ComponentList==null)
         {
             return false;
         }
-        return componentList.Any(entry => entry.ID == id);
+        return ComponentList.Any(entry => entry.ID == id);
     }
     public bool ComponentExists(ShipComponent comp)
     {
-        if(componentList==null)
+        if(ComponentList==null)
         {
             return false;
         }
-        return componentList.Any(entry => entry.component == comp);
+        return ComponentList.Any(entry => entry.component == comp);
     }
     public void WipeTable()
     {
-        if(componentList!=null)
+        if(ComponentList!=null)
         {
-            componentList.Clear();
+            ComponentList.Clear();
         }
     }
     #endregion //GUI

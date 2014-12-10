@@ -24,7 +24,6 @@ public class ObjectPool : Singleton<ObjectPool>
     #endregion //EditorExposed
 
     #region InternalFields
-    //private List<GameObject> pooledObjects;
     private Dictionary<GameObject, Queue<GameObject>> pooledObjectTable;
     private Transform container; //an empty to parent pooled objects under
     private Queue<GameObject> requiredPool;

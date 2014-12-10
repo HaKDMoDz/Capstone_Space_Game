@@ -88,7 +88,8 @@ public class GameController : Singleton<GameController>
         #endif
 
         OnPreSceneChange(new SceneChangeArgs(gameData.currentScene, nextScene));
-        saveSystem.Save(gameData, saveFields.autoSaveFileName);
+        //saveSystem.Save(gameData, SaveType.AutoSave, saveFields.autoSaveFileName);
+        saveSystem.AutoSave(gameData);
         Application.LoadLevel(sceneEnumToNameTable[nextScene]);
 
         //OnPostSceneChange(new SceneChangeArgs(currentScene, nextScene));
@@ -125,7 +126,8 @@ public class GameController : Singleton<GameController>
         gameData = new GameData();
 
         //Debug.Log("autosave: " + autosaveFileName);
-        if (saveSystem.Load(ref gameData, saveFields.autoSaveFileName))
+        //if (saveSystem.Load(ref gameData, saveFields.autoSaveFileName))
+        if(saveSystem.LoadAutoSave(ref gameData))
         {
             #if FULL_DEBUG
             Debug.Log("Game Data loaded successfully");

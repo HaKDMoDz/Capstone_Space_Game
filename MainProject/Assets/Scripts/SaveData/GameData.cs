@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class GameData 
+public class GameData
 {
     public GameScene currentScene;
     public GalaxyMapData galaxyMapData;
@@ -13,10 +13,7 @@ public class GameData
     public AI_Data pirates_AI_Data;
 
 
-    public GameData()
-    {
-
-    }
+    public GameData() { }
     public GameData(GameScene currentScene)
     {
         this.currentScene = currentScene;
@@ -26,5 +23,5 @@ public class GameData
     {
         sz_gameData.currentScene = currentScene;
     }
-    
+
 }

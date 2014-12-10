@@ -14,6 +14,8 @@ public class SerializedGameData
     public SerializedAI_Data sz_kTaeran_AI_Data;
     public SerializedAI_Data sz_pirates_AI_Data;
 
+    public SerializedGameData() { }
+
     public SerializedGameData(GameScene currentScene)
     {
         this.currentScene = currentScene;
