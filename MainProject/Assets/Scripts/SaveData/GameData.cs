@@ -14,11 +14,18 @@ public class GameData
 
 
     public GameData() { }
+
     public GameData(GameScene currentScene)
     {
         this.currentScene = currentScene;
     }
 
+    /// <summary>
+    /// Generates a serializable version of the gameData
+    /// </summary>
+    /// <param name="sz_gameData">
+    /// gets populated with a seriazable version of the gameData
+    /// </param>
     public void Serialize(ref SerializedGameData sz_gameData)
     {
         sz_gameData.currentScene = currentScene;

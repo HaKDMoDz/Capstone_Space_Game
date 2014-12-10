@@ -20,7 +20,12 @@ public class SerializedGameData
     {
         this.currentScene = currentScene;
     }
-
+    /// <summary>
+    /// Generates a deSerialized version of the serializedGameData
+    /// </summary>
+    /// <param name="gameData">
+    /// gets populated with a concrete version of the serializedGameData
+    /// </param>
     public void DeSerialize(ref GameData gameData)
     {
         gameData.currentScene = currentScene;

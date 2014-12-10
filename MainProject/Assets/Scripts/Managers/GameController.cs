@@ -13,7 +13,7 @@ public struct SceneNameEntry
     public GameScene gameScene;
     public string sceneName;
 }
-//for prettier inspector window
+//for a prettier inspector window
 [Serializable]
 public struct SaveFields
 {
@@ -70,6 +70,7 @@ public class GameController : Singleton<GameController>
 
     #region Methods
     #region Public
+
     //need this for now - until Button's onClick event can pass in enums
     public void ChangeScene(string sceneName)
     {
@@ -87,17 +88,17 @@ public class GameController : Singleton<GameController>
         Debug.Log("PreSceneChange event raised: " + gameData.currentScene + " to " + nextScene);
         #endif
 
+        //notifies all other systems that the scene is about to change
+        //they should all update their "data" structures so they can be persisted
         OnPreSceneChange(new SceneChangeArgs(gameData.currentScene, nextScene));
-        //saveSystem.Save(gameData, SaveType.AutoSave, saveFields.autoSaveFileName);
         saveSystem.AutoSave(gameData);
         Application.LoadLevel(sceneEnumToNameTable[nextScene]);
+    }//ChangeScene
 
-        //OnPostSceneChange(new SceneChangeArgs(currentScene, nextScene));
-    }
     #endregion //Public
 
     #region Private
-    void Awake()
+    private void Awake()
     {
         #if FULL_DEBUG
         //Debug.Log("GameController Awake");
@@ -116,17 +117,17 @@ public class GameController : Singleton<GameController>
         //need this for now - until Button's onClick event can pass in enums
         sceneNameToEnumTable = sceneEntryList.ToDictionary(s => s.sceneName, s => s.gameScene);
 
-        //currentScene = defaultStartScene;
-
         saveSystem = new GameSaveSystem(
             saveFields.fileExtension, saveFields.saveDirectory, saveFields.fileName_SavesList, 
             saveFields.autoSaveFileName,saveFields.quickSaveName,
             saveFields.numAutoSaves, saveFields.numQuickSaves, saveFields.numNormalSaves);
 
+        //empty game data - will be filled up upon loading an autosave
         gameData = new GameData();
 
         //Debug.Log("autosave: " + autosaveFileName);
-        //if (saveSystem.Load(ref gameData, saveFields.autoSaveFileName))
+        
+        //attempt to load the latest autosave
         if(saveSystem.LoadAutoSave(ref gameData))
         {
             #if FULL_DEBUG
@@ -136,16 +137,25 @@ public class GameController : Singleton<GameController>
         else
         {
             #if !NO_DEBUG
-            Debug.LogError("No Save game " + saveFields.autoSaveFileName + " found, new Autosave created");
+            Debug.LogWarning("No AutoSave found, default GameData created");
             #endif
             gameData = new GameData(defaultStartScene);
         }
-    }
-    void OnLevelWasLoaded(int levelID)
+
+    }//Awake
+
+    /// <summary>
+    /// Unity call back after a scene is loaded
+    /// Raises the PostSceneChange event
+    /// </summary>
+    /// <param name="levelID"></param>
+    private void OnLevelWasLoaded(int levelID)
     {
         #if !NO_DEBUG
         Debug.Log("Post Scene Change: from " + gameData.currentScene + " to " + sceneNameToEnumTable[Application.loadedLevelName]);
         #endif
+
+        //notifies all systems that a new scene has loaded
         OnPostSceneChange(new SceneChangeArgs(gameData.currentScene, sceneNameToEnumTable[Application.loadedLevelName]));
         gameData.currentScene = sceneNameToEnumTable[Application.loadedLevelName];
     }

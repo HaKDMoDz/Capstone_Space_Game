@@ -13,17 +13,16 @@ public class GameSaveSystem
 {
     #region Fields
 
-    public SaveGameList savesList { get; private set; }
+    public SaveGameList savesList { get; private set; }//keeps track of all saves created by the save system
 
     #region Internal
     private string fileExtension, saveDirectory, fileName_SavesList, autosaveFileName, quickSaveName;
     private int maxAutoSaves, maxQuickSaves, maxNormalSaves;
 
+    //caching common objects
     private BinaryFormatter binFormatter;
     private FileStream fileStream;
     private string path;
-
-    //GameData gameData;
     private SerializedGameData sz_gameData;
     private DateTime timeStamp;
 
@@ -33,6 +32,9 @@ public class GameSaveSystem
     #region Methods
 
     #region Public
+    /// <summary>
+    /// Initializes the save system. Will assign variables related to saves, create the save game directory, and attempt to load the saves list file.
+    /// </summary>
     public GameSaveSystem(string fileExtension, string saveDirectory, string fileName_SavesList,
         string autosaveFileName, string quickSaveName,
         int numAutoSaves, int numQuickSaves, int numNormalSaves)
@@ -51,7 +53,12 @@ public class GameSaveSystem
 
         CreateSaveGameDirectory();
         LoadSavesList();
-    }
+    }//Ctor
+
+    /// <summary>
+    /// Creates an autosave. For use during scene trasitions, etc.
+    /// If the max number of autosaves is reached, the oldest one will be deleted
+    /// </summary>
     public void AutoSave(GameData gameData)
     {
         timeStamp = DateTime.Now;
@@ -78,24 +85,17 @@ public class GameSaveSystem
         //update file list
         savesList.AddSave(SaveType.AutoSave, fileName, timeStamp);
         SaveSavesList();
-    }
+    }//AutoSave
 
-    private void Save(GameData gameData, string fileName)
-    {
-        path = BuildPathString(fileName);
-
-        #if FULL_DEBUG
-        Debug.Log("Saving GameData to " + path + " at time: "+timeStamp.ToString());
-        #endif
-
-        fileStream = File.Create(path);
-        //SerializeGameData(gameData, out sz_gameData);
-        gameData.Serialize(ref sz_gameData);
-        binFormatter.Serialize(fileStream, sz_gameData);
-        fileStream.Close();
-
-
-    }
+    /// <summary>
+    /// Attemps to loads the latest autosave and populates gameData if one is found
+    /// </summary>
+    /// <param name="gameData">
+    /// will be populated based on the latest autosave, if found
+    /// </param>
+    /// <returns>
+    /// true if an autosave is found
+    /// </returns>
     public bool LoadAutoSave(ref GameData gameData)
     {
         if(savesList.autoSaveCount <= 0)
@@ -106,6 +106,45 @@ public class GameSaveSystem
         return (Load(ref gameData, lastAutoSaveName));
     }
 
+
+    #endregion Public
+
+    #region Private
+
+    /// <summary>
+    /// does the actual file writing
+    /// </summary>
+    /// <param name="gameData"></param>
+    /// <param name="fileName"></param>
+    private void Save(GameData gameData, string fileName)
+    {
+        path = BuildPathString(fileName);
+
+#if FULL_DEBUG
+        Debug.Log("Saving GameData to " + path + " at time: " + timeStamp.ToString());
+#endif
+
+        fileStream = File.Create(path);
+        //SerializeGameData(gameData, out sz_gameData);
+        gameData.Serialize(ref sz_gameData);
+        binFormatter.Serialize(fileStream, sz_gameData);
+        fileStream.Close();
+
+
+    }//Save
+
+    /// <summary>
+    /// Attempts to load a file from HDD
+    /// </summary>
+    /// <param name="gameData">
+    /// will be populated if the provided file is found
+    /// </param>
+    /// <param name="fileName">
+    /// name of the file to load (do not include an extension nor a path - a full path will be generated within the method)
+    /// </param>
+    /// <returns>
+    /// true if the provided filename is found within the standard directory
+    /// </returns>
     private bool Load(ref GameData gameData, string fileName)
     {
         path = BuildPathString(fileName);
@@ -128,12 +167,11 @@ public class GameSaveSystem
             gameData = null;
             return false;
         }
-    }
+    }//Load
 
-    #endregion Public
-
-    #region Private
-
+    /// <summary>
+    /// Loads the latest list of files - used to keep track of all saves being managed by the save system
+    /// </summary>
     private void LoadSavesList()
     {
         path = BuildPathString(fileName_SavesList);
@@ -148,6 +186,9 @@ public class GameSaveSystem
             savesList = new SaveGameList(maxAutoSaves, maxQuickSaves, maxNormalSaves);
         }
     }
+    /// <summary>
+    /// Save the current save file list
+    /// </summary>
     private void SaveSavesList()
     {
         path = BuildPathString(fileName_SavesList);
@@ -157,6 +198,9 @@ public class GameSaveSystem
     }
 
     #region Helper
+    /// <summary>
+    /// Helper method to generate the save game directory within the application's data path
+    /// </summary>
     private void CreateSaveGameDirectory()
     {
         if (!Directory.Exists(Application.persistentDataPath + '/' + saveDirectory))
@@ -171,6 +215,7 @@ public class GameSaveSystem
         //Debug.Log("Directory exists: " + Application.persistentDataPath + '/' + saveDirectory);
 #endif
     }
+    //returns a string that represents that full path for a save file, including the save directory and extension
     private string BuildPathString(string fileName)
     {
         return Application.persistentDataPath + '/' + saveDirectory + '/' + fileName + '.' + fileExtension;
@@ -182,36 +227,49 @@ public class GameSaveSystem
 
 #region AdditionalData
 
-public enum SaveType { AutoSave, QuickSave, NormalSave }
+public enum SaveType { AutoSave, QuickSave, NormalSave } //the types of saves that the savesystem can handle
+
 
 [Serializable]
-public class SaveGameList
+public class SaveGameList //keeps track of the various save files being handled by the save system
 {
     //autoSaves
     public int maxAutoSaves { get; private set; }
     public int autoSaveCount { get; private set; }
-    public Queue<SaveGame> autoSaves { get; private set; }
+    public Queue<SaveGameMetaData> autoSaves { get; private set; }
 
     //quickSaves
     public int maxQuickSaves { get; private set; }
     public int quickSaveCount { get; private set; }
-    public Queue<SaveGame> quickSaves { get; private set; }
+    public Queue<SaveGameMetaData> quickSaves { get; private set; }
 
     //normal Saves
     public int maxNormalSaves { get; private set; }
     public int normalSaveCount { get; private set; }
-    public Queue<SaveGame> normalSaves { get; private set; }
+    public Queue<SaveGameMetaData> normalSaves { get; private set; }
 
     public SaveGameList(int maxAutoSaves, int maxQuickSaves, int maxNormalSaves)
     {
-        autoSaves = new Queue<SaveGame>();
-        quickSaves = new Queue<SaveGame>();
-        normalSaves = new Queue<SaveGame>();
+        autoSaves = new Queue<SaveGameMetaData>();
+        quickSaves = new Queue<SaveGameMetaData>();
+        normalSaves = new Queue<SaveGameMetaData>();
         this.maxAutoSaves = maxAutoSaves;
         this.maxQuickSaves = maxQuickSaves;
         this.maxNormalSaves = maxNormalSaves;   
     }
-    
+
+    /// <summary>
+    /// Adds a save file to be included in the file list
+    /// </summary>
+    /// <param name="saveType">
+    /// the type of save (Auto / Quick / Normal)
+    /// </param>
+    /// <param name="fileName">
+    /// the name of the file (not including path)
+    /// </param>
+    /// <param name="saveTime">
+    /// a timestamp for when the save file was created
+    /// </param>
     public void AddSave(SaveType saveType, string fileName, DateTime saveTime)
     {
         switch (saveType)
@@ -228,7 +286,7 @@ public class SaveGameList
                 {
                     autoSaveCount++;
                 }
-                autoSaves.Enqueue(new SaveGame(saveType, fileName, saveTime));
+                autoSaves.Enqueue(new SaveGameMetaData(saveType, fileName, saveTime));
                 break;
             case SaveType.QuickSave:
                 quickSaveCount++;
@@ -239,17 +297,17 @@ public class SaveGameList
             default:
                 break;
         }
-    }
+    }//AddSave
 }
 
 [Serializable]
-public class SaveGame
+public class SaveGameMetaData //represents MetaData regarding a save file
 {
     public SaveType saveType;
     public string fileName;
     public DateTime saveTime;
 
-    public SaveGame(SaveType saveType, string fileName, DateTime saveTime)
+    public SaveGameMetaData(SaveType saveType, string fileName, DateTime saveTime)
     {
         this.saveType = saveType;
         this.fileName = fileName;
