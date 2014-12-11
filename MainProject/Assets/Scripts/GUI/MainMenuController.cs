@@ -17,6 +17,34 @@ public class MainMenuController : MonoBehaviour
     #endregion Fields
 
     #region Methods
+    #region Public
+    #region GUI_Callbacks
+    public void Continue()
+    {
+        Debug.Log("Continue");
+    }
+    public void NewGame()
+    {
+        Debug.Log("new game");
+    }
+    public void LoadGame()
+    {
+        Debug.Log("Load Game");
+    }
+    public void Options()
+    {
+        Debug.Log("options");
+    }
+    public void Credits()
+    {
+        Debug.Log("Credits");
+    }
+    public void Quit()
+    {
+        Debug.Log("Quit");
+    }
+    #endregion GUI_Callbacks
+    #endregion Public
     #region Private
     private void Start()
     {
@@ -25,16 +53,10 @@ public class MainMenuController : MonoBehaviour
     #region GUI
     private void SetupMainMenuButtons()
     {
-        //Button newGame = Instantiate(guiFields.mainMenuButtonPrefab) as Button;
-        //newGame.transform.SetParent(guiFields.buttonLayout.transform);
-        //Text newGameText = newGame.GetComponentInChildren<Text>();
-        //if(!newGameText)
-        //{
-        //    Debug.LogError("text not found");
-        //}
-        //newGameText.text  = "New Game";
-        //Button options = Instantiate(guiFields.mainMenuButtonPrefab) as Button;
-        //options.transform.SetParent(guiFields.buttonLayout.transform);
+        if(GameController.Instance.AnySavesExist())
+        {
+            guiFields.continueButton.SetActive(true);
+        }
     }
     #endregion GUI
     #endregion Private

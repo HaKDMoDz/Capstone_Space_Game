@@ -156,6 +156,18 @@ public class GameSaveSystem
         return Load(ref gameData, latestQuickSaveName);
     }
 
+    /// <summary>
+    /// Will return true if any saves exist - essentially if a game has been started and can be continued/loaded.
+    /// This method is accessible via the GameControllers AnySavesExist method
+    /// </summary>
+    /// <returns>
+    /// true if any saves exist
+    /// </returns>
+    public bool AnySavesExist()
+    {
+        return (savesList.autoSaveCount > 0 || savesList.quickSaveCount > 0 || savesList.normalSaveCount > 0);
+    }
+
     #endregion Public
 
     #region Private
@@ -169,9 +181,9 @@ public class GameSaveSystem
     {
         path = BuildPathString(fileName);
 
-#if FULL_DEBUG
+        #if FULL_DEBUG
         Debug.Log("Saving GameData to " + path + " at time: " + timeStamp.ToString());
-#endif
+        #endif
 
         fileStream = File.Create(path);
         //SerializeGameData(gameData, out sz_gameData);
@@ -198,10 +210,10 @@ public class GameSaveSystem
     {
         path = BuildPathString(fileName);
 
-#if FULL_DEBUG
+        #if FULL_DEBUG
         //Debug.Log("filename: "+fileName);
         Debug.Log("Loading game data from " + path);
-#endif
+        #endif
 
         if (File.Exists(path))
         {
@@ -256,13 +268,13 @@ public class GameSaveSystem
         {
             Directory.CreateDirectory(Application.persistentDataPath + '/' + saveDirectory);
 
-#if FULL_DEBUG
+            #if FULL_DEBUG
             //Debug.Log("Create Directory: " + Application.persistentDataPath + '/' + saveDirectory);
-#endif
+            #endif
         }
-#if FULL_DEBUG
+        #if FULL_DEBUG
         //Debug.Log("Directory exists: " + Application.persistentDataPath + '/' + saveDirectory);
-#endif
+        #endif
     }
     //returns a string that represents that full path for a save file, including the save directory and extension
     private string BuildPathString(string fileName)

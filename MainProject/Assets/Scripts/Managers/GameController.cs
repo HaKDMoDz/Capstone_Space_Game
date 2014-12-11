@@ -33,6 +33,7 @@ public struct SaveFields
 public class GameController : Singleton<GameController>
 {
     #region Fields
+    
     #region EditorExposed
     [SerializeField]
     private GameScene defaultStartScene = GameScene.MainMenu;
@@ -46,16 +47,13 @@ public class GameController : Singleton<GameController>
     private GameSaveSystem saveSystem;
 
     #endregion References
+
     #region InternalFields
     //private GameScene currentScene;
     private Dictionary<GameScene, string> sceneEnumToNameTable;
     //need this for now - until Button's onClick event can pass in enums
     private Dictionary<string, GameScene> sceneNameToEnumTable;
-
     private GameData gameData; //will hold the current game state
-
-    //static int count = 0;
-
     #endregion //Internal
 
     #region Events
@@ -71,13 +69,26 @@ public class GameController : Singleton<GameController>
     #region Methods
     #region Public
 
-    //need this for now - until Button's onClick event can pass in enums
+    /// <summary>
+    /// Called by the change scene button 
+    /// need this for now - until Button's onClick event can pass in enums
+    /// </summary>
+    /// <param name="sceneName">
+    /// verify the string using the GameController inspector
+    /// </param>
     public void ChangeScene(string sceneName)
     {
         //Debug.Log("Change Scene Button");
         ChangeScene(sceneNameToEnumTable[sceneName]);
     }
-
+    /// <summary>
+    /// Call this method to change the scene
+    /// Raises a PreSceneChange event, autosaves, and then triggers a Unity scene change
+    /// Once a new scene is loaded, the last autosave is loaded and a PostSceneChange event is raised
+    /// </summary>
+    /// <param name="nextScene">
+    /// pass in the enum representing the scene to change to
+    /// </param>
     public void ChangeScene(GameScene nextScene)
     {
 
@@ -94,6 +105,15 @@ public class GameController : Singleton<GameController>
         saveSystem.AutoSave(gameData);
         Application.LoadLevel(sceneEnumToNameTable[nextScene]);
     }//ChangeScene
+
+    /// <summary>
+    /// Will return true if any saves exist - essentially if a game has been started and can be continued/loaded
+    /// </summary>
+    /// <returns></returns>
+    public bool AnySavesExist()
+    {
+        return saveSystem.AnySavesExist();
+    }
 
     #endregion //Public
 
