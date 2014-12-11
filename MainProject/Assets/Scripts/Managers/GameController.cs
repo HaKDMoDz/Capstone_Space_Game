@@ -106,6 +106,7 @@ public class GameController : Singleton<GameController>
         Application.LoadLevel(sceneEnumToNameTable[nextScene]);
     }//ChangeScene
 
+    #region SaveSystemInterface
     /// <summary>
     /// Will return true if any saves exist - essentially if a game has been started and can be continued/loaded
     /// </summary>
@@ -114,7 +115,15 @@ public class GameController : Singleton<GameController>
     {
         return saveSystem.AnySavesExist();
     }
+    /// <summary>
+    /// Loads the latest savegame
+    /// </summary>
+    public void LoadLatestSave()
+    {
+        Debug.Log("Load latest save");
+    }
 
+    #endregion SaveSystemInterface
     #endregion //Public
 
     #region Private
@@ -160,6 +169,8 @@ public class GameController : Singleton<GameController>
             #endif
             gameData = new GameData(defaultStartScene);
         }
+        //saveSystem.LoadLatestSave(ref gameData);
+
 
     }//Awake
 

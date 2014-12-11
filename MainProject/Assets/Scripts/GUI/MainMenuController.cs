@@ -22,6 +22,7 @@ public class MainMenuController : MonoBehaviour
     public void Continue()
     {
         Debug.Log("Continue");
+        GameController.Instance.LoadLatestSave();
     }
     public void NewGame()
     {

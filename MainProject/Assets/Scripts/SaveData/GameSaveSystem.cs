@@ -107,6 +107,24 @@ public class GameSaveSystem
         string latestAutoSaveName = savesList.autoSaves.Last().fileName;
         return (Load(ref gameData, latestAutoSaveName));
     }
+
+    /// <summary>
+    /// Loads the latest save game.
+    /// Should call AnySavesExist first, to validate
+    /// </summary>
+    /// <param name="gameData"></param>
+    public void LoadLatestSave(ref GameData gameData)
+    {
+        #if FULL_DEBUG || LOW_DEBUG
+        if(!AnySavesExist())
+        {
+            Debug.LogError("No saves exist");
+            return;
+        }
+	    #endif
+        Load(ref gameData, savesList.latestSaveGame.fileName);
+    }
+
     /// <summary>
     /// Creates a quickSave that the user can use on demand
     /// If the max number of quickSaves is reached, the oldest one will be deleted
@@ -155,6 +173,7 @@ public class GameSaveSystem
         string latestQuickSaveName = savesList.quickSaves.Last().fileName;
         return Load(ref gameData, latestQuickSaveName);
     }
+
 
     /// <summary>
     /// Will return true if any saves exist - essentially if a game has been started and can be continued/loaded.
@@ -309,6 +328,9 @@ public class SaveGameList //keeps track of the various save files being handled 
     public int normalSaveCount { get; private set; }
     public Queue<SaveGameMetaData> normalSaves { get; private set; }
 
+    //records the latest save game for quick retreival
+    public SaveGameMetaData latestSaveGame { get; private set; }
+
     public SaveGameList(int maxAutoSaves, int maxQuickSaves, int maxNormalSaves)
     {
         autoSaves = new Queue<SaveGameMetaData>();
@@ -316,7 +338,8 @@ public class SaveGameList //keeps track of the various save files being handled 
         normalSaves = new Queue<SaveGameMetaData>();
         this.maxAutoSaves = maxAutoSaves;
         this.maxQuickSaves = maxQuickSaves;
-        this.maxNormalSaves = maxNormalSaves;   
+        this.maxNormalSaves = maxNormalSaves;
+        latestSaveGame = null;
     }
 
     /// <summary>
@@ -347,7 +370,8 @@ public class SaveGameList //keeps track of the various save files being handled 
                 {
                     autoSaveCount++;
                 }
-                autoSaves.Enqueue(new SaveGameMetaData(saveType, fileName, saveTime));
+                latestSaveGame = new SaveGameMetaData(saveType, fileName, saveTime);
+                autoSaves.Enqueue(latestSaveGame);
                 break;
             case SaveType.QuickSave:
                 if(quickSaveCount > maxQuickSaves)
@@ -360,7 +384,8 @@ public class SaveGameList //keeps track of the various save files being handled 
                 {
                     quickSaveCount++;
                 }
-                quickSaves.Enqueue(new SaveGameMetaData(saveType, fileName, saveTime));
+                latestSaveGame = new SaveGameMetaData(saveType, fileName, saveTime);
+                quickSaves.Enqueue(latestSaveGame);
                 break;
             case SaveType.NormalSave:
                 normalSaveCount++;
