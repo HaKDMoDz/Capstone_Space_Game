@@ -13,9 +13,9 @@ public abstract class Singleton<T> : MonoBehaviour where T : Singleton<T>
                 instance = FindObjectOfType<T>() as T;
                 if(FindObjectsOfType<T>().Length > 1)
                 {
-#if !NO_DEBUG
+                    #if !NO_DEBUG
                     Debug.LogError("More than 1 singleton found");
-#endif
+                    #endif
                     return instance;
                 }
                 if(instance == null)
@@ -23,9 +23,9 @@ public abstract class Singleton<T> : MonoBehaviour where T : Singleton<T>
                     GameObject singleton = new GameObject();
                     instance = singleton.AddComponent<T>();
                     singleton.name = "(Singleton) " + typeof(T).ToString();
-#if FULL_DEBUG
-                    Debug.Log("Created " + singleton.name);
-#endif
+                    #if FULL_DEBUG
+                    Debug.LogWarning("Created " + singleton.name);
+                    #endif
                 }
             }
             return instance;

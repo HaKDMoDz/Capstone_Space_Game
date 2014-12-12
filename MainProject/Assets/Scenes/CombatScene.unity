@@ -285,10 +285,10 @@ RectTransform:
   - {fileID: 455239692}
   m_Father: {fileID: 823768117}
   m_RootOrder: 0
-  m_AnchorMin: {x: .5, y: .5}
-  m_AnchorMax: {x: .5, y: .5}
-  m_AnchoredPosition: {x: 868, y: 398}
-  m_SizeDelta: {x: 126, y: 154.699997}
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -132, y: -124}
+  m_SizeDelta: {x: 126, y: 154.700012}
   m_Pivot: {x: .5, y: .5}
 --- !u!114 &410577127
 MonoBehaviour:
@@ -907,11 +907,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22400000, guid: b92b13eb87f472b41960f400b28a8ad5, type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 868
+      value: -132
       objectReference: {fileID: 0}
     - target: {fileID: 22400000, guid: b92b13eb87f472b41960f400b28a8ad5, type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: 398
+      value: -124
       objectReference: {fileID: 0}
     - target: {fileID: 22400000, guid: b92b13eb87f472b41960f400b28a8ad5, type: 2}
       propertyPath: m_SizeDelta.x
@@ -919,23 +919,23 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22400000, guid: b92b13eb87f472b41960f400b28a8ad5, type: 2}
       propertyPath: m_SizeDelta.y
-      value: 154.699997
+      value: 154.700012
       objectReference: {fileID: 0}
     - target: {fileID: 22400000, guid: b92b13eb87f472b41960f400b28a8ad5, type: 2}
       propertyPath: m_AnchorMin.x
-      value: .5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 22400000, guid: b92b13eb87f472b41960f400b28a8ad5, type: 2}
       propertyPath: m_AnchorMin.y
-      value: .5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 22400000, guid: b92b13eb87f472b41960f400b28a8ad5, type: 2}
       propertyPath: m_AnchorMax.x
-      value: .5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 22400000, guid: b92b13eb87f472b41960f400b28a8ad5, type: 2}
       propertyPath: m_AnchorMax.y
-      value: .5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 22400000, guid: b92b13eb87f472b41960f400b28a8ad5, type: 2}
       propertyPath: m_Pivot.x
@@ -1083,20 +1083,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c89a2620bd7d378489f4677aeca7b696, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultStartScene: 0
+  defaultStartScene: 1
   sceneEntryList:
   - gameScene: 0
-    sceneName: MainMenu
-  - gameScene: 1
     sceneName: GalaxyMap
-  - gameScene: 2
+  - gameScene: 1
     sceneName: CombatScene
-  - gameScene: 3
+  - gameScene: 2
     sceneName: ShipDesignScene
-  fileExtension: sav
-  saveDirectory: SaveGames
-  fileName_SavesList: SaveFileList
-  autosaveFileName: autosave
+  saveFields:
+    fileExtension: sav
+    saveDirectory: SaveGames
+    fileName_SavesList: SaveList
+    autoSaveFileName: AutoSave
+    numAutoSaves: 3
+    quickSaveName: QuickSave
+    numQuickSaves: 3
+    numNormalSaves: 20
 --- !u!4 &1374355561
 Transform:
   m_ObjectHideFlags: 0

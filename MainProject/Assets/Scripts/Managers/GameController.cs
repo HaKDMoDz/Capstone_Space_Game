@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 
 #region AdditionalData
-public enum GameScene { MainMenu, GalaxyMap, CombatScene, ShipDesignScene }
+public enum GameScene {MainMenu, GalaxyMap, CombatScene, ShipDesignScene }
 
 [Serializable]
 public struct SceneNameEntry
@@ -36,7 +36,7 @@ public class GameController : Singleton<GameController>
     
     #region EditorExposed
     [SerializeField]
-    private GameScene defaultStartScene = GameScene.MainMenu;
+    private GameScene defaultStartScene = GameScene.GalaxyMap;
     [SerializeField]
     private List<SceneNameEntry> sceneEntryList;
     [SerializeField]
@@ -58,9 +58,11 @@ public class GameController : Singleton<GameController>
 
     #region Events
     public delegate void PreSceneChange(SceneChangeArgs args);
+    //raised before a Unity scene change is triggered - a hint for all systems to prepare to save whatever they are doing and prepare to be shut down
     public event PreSceneChange OnPreSceneChange = new PreSceneChange((SceneChangeArgs) => { });
 
     public delegate void PostSceneChange(SceneChangeArgs args);
+    //raised after Unity has completed loading a new scene - systems should load up the latest save file and prepare to resume activity
     public event PostSceneChange OnPostSceneChange = new PostSceneChange((SceneChangeArgs) => { });
     #endregion //Events
 
@@ -121,16 +123,19 @@ public class GameController : Singleton<GameController>
     public void LoadLatestSave()
     {
         Debug.Log("Load latest save");
+        saveSystem.LoadLatestSave(ref gameData);
+        ChangeScene(gameData.currentScene);
     }
-
+    
     #endregion SaveSystemInterface
     #endregion //Public
 
     #region Private
+    #region UnityCallbacks
     private void Awake()
     {
         #if FULL_DEBUG
-        //Debug.Log("GameController Awake");
+       // Debug.Log("GameController Awake");
         #endif
 
         #if !NO_DEBUG
@@ -181,6 +186,10 @@ public class GameController : Singleton<GameController>
     /// <param name="levelID"></param>
     private void OnLevelWasLoaded(int levelID)
     {
+        #if FULL_DEBUG
+        //Debug.Log("GameController level loaded");
+        #endif
+
         #if !NO_DEBUG
         Debug.Log("Post Scene Change: from " + gameData.currentScene + " to " + sceneNameToEnumTable[Application.loadedLevelName]);
         #endif
@@ -189,7 +198,63 @@ public class GameController : Singleton<GameController>
         OnPostSceneChange(new SceneChangeArgs(gameData.currentScene, sceneNameToEnumTable[Application.loadedLevelName]));
         gameData.currentScene = sceneNameToEnumTable[Application.loadedLevelName];
     }
+    private void OnApplicationQuit()
+    {
+        #if FULL_DEBUG
+        Debug.Log("app quit");
+        #endif
+        saveSystem.AutoSave(gameData);
+    }
+    private void Start()
+    {
+        #if FULL_DEBUG
+        //Debug.Log("GameController Start");
+        #endif
+        InputManager.Instance.RegisterKeysDown(KeyDown, KeyCode.F5, KeyCode.F9);
+    }
+    #endregion UnityCallbacks
 
+    private void KeyDown(KeyCode key)
+    {
+        switch (key)
+        {
+            case KeyCode.F5:
+                QuickSave();
+                break;
+            case KeyCode.F9:
+                QuickLoad();
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Performs a quicksave of the current game state
+    /// </summary>
+    private void QuickSave()
+    {
+        #if FULL_DEBUG
+        Debug.Log("quick save");
+        #endif
+
+        saveSystem.QuickSave(gameData);
+
+    }
+    private void QuickLoad()
+    {
+        #if FULL_DEBUG
+        Debug.Log("quick load");
+        #endif
+        if(saveSystem.LoadQuickSave(ref gameData))
+        {
+            
+        }
+        else
+        {
+            #if FULL_DEBUG
+            Debug.Log("no quick saves found");
+            #endif
+        }
+    }
     #endregion //Private methods
 
     #endregion //Methods

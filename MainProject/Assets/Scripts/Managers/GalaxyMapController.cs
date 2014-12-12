@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-public class GalaxyMapController : MonoBehaviour 
+public class GalaxyMapController : MonoBehaviour
 {
-
+    
 }
