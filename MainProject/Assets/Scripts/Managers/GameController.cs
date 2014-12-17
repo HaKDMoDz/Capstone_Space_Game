@@ -54,6 +54,7 @@ public class GameController : Singleton<GameController>
     //need this for now - until Button's onClick event can pass in enums
     private Dictionary<string, GameScene> sceneNameToEnumTable;
     private GameData gameData; //will hold the current game state
+    private GameScene currentScene;
     #endregion //Internal
 
     #region Events
@@ -93,7 +94,6 @@ public class GameController : Singleton<GameController>
     /// </param>
     public void ChangeScene(GameScene nextScene)
     {
-
         #if !NO_DEBUG
         Debug.LogWarning("Scene changing from " + gameData.currentScene + " to " + nextScene);
         #endif
@@ -159,24 +159,30 @@ public class GameController : Singleton<GameController>
         gameData = new GameData();
 
         //Debug.Log("autosave: " + autosaveFileName);
-        
-        //attempt to load the latest autosave
-        if(saveSystem.LoadAutoSave(ref gameData))
+
+        if (Application.loadedLevelName == sceneEnumToNameTable[GameScene.MainMenu])
         {
             #if FULL_DEBUG
-            Debug.Log("Game Data loaded successfully");
+            Debug.Log("In Main Menu - not loading");
             #endif
         }
         else
         {
-            #if !NO_DEBUG
-            Debug.LogWarning("No AutoSave found, default GameData created");
-            #endif
-            gameData = new GameData(defaultStartScene);
+            //attempt to load the latest autosave
+            if (saveSystem.LoadAutoSave(ref gameData))
+            {
+                #if FULL_DEBUG
+                Debug.Log("Game Data loaded successfully");
+                #endif
+            }
+            else
+            {
+                #if !NO_DEBUG
+                Debug.LogWarning("No AutoSave found, default GameData created");
+                #endif
+                gameData = new GameData(defaultStartScene);
+            }
         }
-        //saveSystem.LoadLatestSave(ref gameData);
-
-
     }//Awake
 
     /// <summary>
