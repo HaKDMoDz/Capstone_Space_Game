@@ -6,7 +6,8 @@ using System;
 [Serializable]
 public class SerializedGameData
 {
-    public GameScene currentScene;
+    public GameScene prevScene;
+    public GameScene nextScene;
     public SerializedGalaxyMapData sz_galaxyMapData;
     public SerializedEconomyData sz_economyData;
     public SerializedMissionData sz_missionData;
@@ -16,9 +17,10 @@ public class SerializedGameData
 
     public SerializedGameData() { }
 
-    public SerializedGameData(GameScene currentScene)
+    public SerializedGameData(GameScene prevScene, GameScene nextScene)
     {
-        this.currentScene = currentScene;
+        this.prevScene = prevScene;
+        this.nextScene = nextScene;
     }
     /// <summary>
     /// Generates a deSerialized version of the serializedGameData
@@ -28,6 +30,7 @@ public class SerializedGameData
     /// </param>
     public void DeSerialize(ref GameData gameData)
     {
-        gameData.currentScene = currentScene;
+        gameData.prevScene = prevScene;
+        gameData.nextScene = nextScene;
     }
 }

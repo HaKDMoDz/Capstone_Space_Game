@@ -4,7 +4,8 @@ using System.Collections.Generic;
 
 public class GameData
 {
-    public GameScene currentScene;
+    public GameScene prevScene;
+    public GameScene nextScene;
     public GalaxyMapData galaxyMapData;
     public EconomyData economyData;
     public MissionData missionData;
@@ -15,9 +16,10 @@ public class GameData
 
     public GameData() { }
 
-    public GameData(GameScene currentScene)
+    public GameData(GameScene prevScene, GameScene nextScene)
     {
-        this.currentScene = currentScene;
+        this.prevScene = prevScene;
+        this.nextScene = nextScene;
     }
 
     /// <summary>
@@ -28,7 +30,8 @@ public class GameData
     /// </param>
     public void Serialize(ref SerializedGameData sz_gameData)
     {
-        sz_gameData.currentScene = currentScene;
+        sz_gameData.prevScene = prevScene;
+        sz_gameData.nextScene = nextScene;
     }
 
 }

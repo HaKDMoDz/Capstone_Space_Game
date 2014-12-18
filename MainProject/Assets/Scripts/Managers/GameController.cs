@@ -54,7 +54,7 @@ public class GameController : Singleton<GameController>
     //need this for now - until Button's onClick event can pass in enums
     private Dictionary<string, GameScene> sceneNameToEnumTable;
     private GameData gameData; //will hold the current game state
-    private GameScene currentScene;
+    //private GameScene currentScene;
     #endregion //Internal
 
     #region Events
@@ -94,18 +94,35 @@ public class GameController : Singleton<GameController>
     /// </param>
     public void ChangeScene(GameScene nextScene)
     {
+        gameData.nextScene = nextScene;
         #if !NO_DEBUG
-        Debug.LogWarning("Scene changing from " + gameData.currentScene + " to " + nextScene);
-        #endif
-        #if FULL_DEBUG
-        Debug.Log("PreSceneChange event raised: " + gameData.currentScene + " to " + nextScene);
+        Debug.LogWarning("Scene changing from " + gameData.prevScene + " to " + nextScene);
         #endif
 
-        //notifies all other systems that the scene is about to change
-        //they should all update their "data" structures so they can be persisted
-        OnPreSceneChange(new SceneChangeArgs(gameData.currentScene, nextScene));
+        if (gameData.prevScene == GameScene.MainMenu || gameData.nextScene == GameScene.MainMenu)
+        {
+            #if FULL_DEBUG
+            Debug.Log("Loading from/to main menu - no SceneChangeEvents");
+            #endif
+        }
+        else if(gameData.prevScene == gameData.nextScene)
+        {
+            #if FULL_DEBUG
+            Debug.Log("Scene did not change - no SceneChangeEvents");
+            #endif
+        }
+        else
+        {
+            #if FULL_DEBUG
+            Debug.Log("PreSceneChange event raised: " + gameData.prevScene + " to " + nextScene);
+            #endif
+            //notifies all other systems that the scene is about to change
+            //they should all update their "data" structures so they can be persisted
+            OnPreSceneChange(new SceneChangeArgs(gameData.prevScene, nextScene));
+        }
         saveSystem.AutoSave(gameData);
         Application.LoadLevel(sceneEnumToNameTable[nextScene]);
+
     }//ChangeScene
 
     #region SaveSystemInterface
@@ -124,7 +141,7 @@ public class GameController : Singleton<GameController>
     {
         Debug.Log("Load latest save");
         saveSystem.LoadLatestSave(ref gameData);
-        ChangeScene(gameData.currentScene);
+        ChangeScene(gameData.prevScene);
     }
     
     #endregion SaveSystemInterface
@@ -157,10 +174,10 @@ public class GameController : Singleton<GameController>
 
         //empty game data - will be filled up upon loading an autosave
         gameData = new GameData();
-
+        gameData.prevScene = sceneNameToEnumTable[Application.loadedLevelName];
         //Debug.Log("autosave: " + autosaveFileName);
 
-        if (Application.loadedLevelName == sceneEnumToNameTable[GameScene.MainMenu])
+        if (gameData.prevScene == GameScene.MainMenu)
         {
             #if FULL_DEBUG
             Debug.Log("In Main Menu - not loading");
@@ -180,7 +197,7 @@ public class GameController : Singleton<GameController>
                 #if !NO_DEBUG
                 Debug.LogWarning("No AutoSave found, default GameData created");
                 #endif
-                gameData = new GameData(defaultStartScene);
+                gameData = new GameData(defaultStartScene, defaultStartScene);
             }
         }
     }//Awake
@@ -196,13 +213,28 @@ public class GameController : Singleton<GameController>
         //Debug.Log("GameController level loaded");
         #endif
 
-        #if !NO_DEBUG
-        Debug.Log("Post Scene Change: from " + gameData.currentScene + " to " + sceneNameToEnumTable[Application.loadedLevelName]);
-        #endif
+        if (gameData.prevScene == GameScene.MainMenu)
+        {
+            #if FULL_DEBUG
+            Debug.Log("Transitioning from MainMenu - no SceneChange events");
+            #endif
+        }
+        else if(gameData.prevScene == gameData.nextScene)
+        {
+            #if FULL_DEBUG
+            Debug.Log("Scene did not change - no SceneChangeEvents");
+            #endif
+        }
+        else
+        {
+            #if !NO_DEBUG
+            Debug.Log("Post Scene Change: from " + gameData.prevScene + " to " + gameData.nextScene);
+            #endif
 
-        //notifies all systems that a new scene has loaded
-        OnPostSceneChange(new SceneChangeArgs(gameData.currentScene, sceneNameToEnumTable[Application.loadedLevelName]));
-        gameData.currentScene = sceneNameToEnumTable[Application.loadedLevelName];
+            //notifies all systems that a new scene has loaded
+            OnPostSceneChange(new SceneChangeArgs(gameData.prevScene, gameData.nextScene));
+        }
+        gameData.prevScene = gameData.nextScene;
     }
     private void OnApplicationQuit()
     {
@@ -216,7 +248,7 @@ public class GameController : Singleton<GameController>
         #if FULL_DEBUG
         //Debug.Log("GameController Start");
         #endif
-        InputManager.Instance.RegisterKeysDown(KeyDown, KeyCode.F5, KeyCode.F9);
+        //InputManager.Instance.RegisterKeysDown(KeyDown, KeyCode.F5, KeyCode.F9);
     }
     #endregion UnityCallbacks
 
