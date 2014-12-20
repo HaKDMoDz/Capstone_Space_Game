@@ -125,6 +125,12 @@ public class GameController : Singleton<GameController>
 
     }//ChangeScene
 
+    public void StartNewGame()
+    {
+        ChangeScene(GameScene.GalaxyMap);
+    }
+
+
     #region SaveSystemInterface
     /// <summary>
     /// Will return true if any saves exist - essentially if a game has been started and can be continued/loaded
@@ -241,7 +247,11 @@ public class GameController : Singleton<GameController>
         #if FULL_DEBUG
         Debug.Log("app quit");
         #endif
-        saveSystem.AutoSave(gameData);
+
+        if (gameData.prevScene != GameScene.MainMenu)
+        { 
+            saveSystem.AutoSave(gameData); 
+        }
     }
     private void Start()
     {

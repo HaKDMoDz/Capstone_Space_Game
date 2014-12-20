@@ -27,6 +27,7 @@ public class MainMenuController : MonoBehaviour
     public void NewGame()
     {
         Debug.Log("new game");
+        GameController.Instance.StartNewGame();
     }
     public void LoadGame()
     {
