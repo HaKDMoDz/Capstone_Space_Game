@@ -8,9 +8,13 @@ public class Hull : MonoBehaviour
     #region Fields
     
     #region EditorExposed
-    [SerializeField]
-    public List<ComponentSlot> EmptyComponentGrid { get; private set; }
     public int ID;
+    [SerializeField]
+    private List<ComponentSlot> emptyComponentGrid;
+    public List<ComponentSlot> EmptyComponentGrid
+    {
+        get { return emptyComponentGrid; }
+    }
     #endregion EditorExposed
 
     #region Internal

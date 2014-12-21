@@ -125,6 +125,9 @@ public class GameController : Singleton<GameController>
 
     }//ChangeScene
 
+    /// <summary>
+    /// Called by the Main Menu - transitions to the galaxy map to start a new game
+    /// </summary>
     public void StartNewGame()
     {
         ChangeScene(GameScene.GalaxyMap);

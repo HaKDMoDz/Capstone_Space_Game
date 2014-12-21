@@ -1,77 +1,72 @@
 ﻿using UnityEngine;
+using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 
-public class HexTileMapGenerator : ScriptableWizard
+public class HexGridGenerator : EditorWindow 
 {
-
     public GameObject tile;
     public Transform shipTransform;
     public Renderer renderer;
     public int shipLayer = 8;
     public bool deleteExtraTiles = true;
+
+    private List<ComponentSlot> tiles;
     
+    private Vector2 hexTileSize;
+    private Vector3 shipSize;
 
-    List<ComponentSlot> tiles;
+    private Vector3 startPos;
+    private float tileSpawnHeight;
+    private float raycastHeight;
+    private int tileGridWidth;
+    private int tileGridHeight;
 
-    Vector2 hexTileSize;
-    Vector3 shipSize;
-
-    Vector3 startPos;
-    float tileSpawnHeight;
-    float raycastHeight;
-    int tileGridWidth;
-    int tileGridHeight;
-
-    
-
-
-    [MenuItem("Custom/Ship Hex Tilemap Wizard")]
-    static void CreateWizard()
+    [MenuItem("ShipHexGrid/Hex Grid Generator")]
+    private static void ShowWindow()
     {
-        ScriptableWizard.DisplayWizard<HexTileMapGenerator>("Ship Hex Tilemap Wizard", "Create");
-
+        EditorWindow.GetWindow<HexGridGenerator>();
     }
 
-    void OnWizardCreate()
-    {
-        Init();
-        CreateHexTileGrid();
-        if (deleteExtraTiles)
-        {
-            DeleteExtraTiles();
-        }
-        AssignSlotIndices();
-    }
-
-    void Init()
+    private void Awake()
     {
         tiles = new List<ComponentSlot>();
+    }
+    public void OnGUI()
+    {
+        tile = EditorGUILayout.ObjectField("Tile Prefab", tile, typeof(GameObject),false) as GameObject;
+        shipTransform = EditorGUILayout.ObjectField("Ship Transform", shipTransform, typeof(Transform), true) as Transform;
+        renderer = EditorGUILayout.ObjectField("Ship Mesh Renderer", renderer, typeof(Renderer), true) as Renderer;
+        shipLayer =  EditorGUILayout.IntField(new GUIContent("Ship Layer"), shipLayer);
+        deleteExtraTiles =  EditorGUILayout.Toggle(new GUIContent("Delete Extra Tiles"), deleteExtraTiles);
 
-        //rend = ship.GetComponentInChildren<Renderer>();
+        if (GUILayout.Button("Create Tile Grid"))
+        {
+            CreateTileGrid();
+        }
+    }
 
+    private void Init()
+    {
+
+        tiles.Clear();
         hexTileSize.x = tile.renderer.bounds.size.x;
         hexTileSize.y = tile.renderer.bounds.size.z;
-        //shipSize.x = ship.renderer.bounds.size.x;
-        //shipSize.y = ship.renderer.bounds.size.y;
-        //shipSize.z = ship.renderer.bounds.size.z;
+
         shipSize.x = renderer.bounds.size.x;
         shipSize.y = renderer.bounds.size.y;
         shipSize.z = renderer.bounds.size.z;
 
-
         CalculateGridSize();
 
         tileSpawnHeight = shipTransform.transform.position.y - shipSize.y;
-        raycastHeight = shipTransform.transform.position.y + shipSize.y * 2f;
+        raycastHeight = shipTransform.transform.position.y + shipSize.y * 4f;
 
         startPos = new Vector3(shipTransform.transform.position.x - shipSize.x / 2f, tileSpawnHeight,
                                shipTransform.transform.position.z + shipSize.z / 2f - hexTileSize.x / 2f);
 
     }
-
-    void CalculateGridSize()
+    private void CalculateGridSize()
     {
         //hexagon's side length is half the height
         float sideLength = hexTileSize.y / 2.0f;
@@ -82,9 +77,12 @@ public class HexTileMapGenerator : ScriptableWizard
         tileGridWidth = Mathf.RoundToInt(shipSize.x / hexTileSize.x);
 
     }
-    void CreateHexTileGrid()
+
+    private void CreateTileGrid()
     {
-        Transform shipTileMap = new GameObject("ComponentGrid").transform;
+        Init();
+
+        GameObject shipTileMap = new GameObject("ComponentGrid");
         shipTileMap.transform.position = shipTransform.transform.position;
         Vector3 tilePos;
         for (int y = 0; y < tileGridHeight; y++)
@@ -98,9 +96,15 @@ public class HexTileMapGenerator : ScriptableWizard
                 tilePos.x += hexTileSize.x * 2f;
             }
         }
-    }
+        shipTileMap.transform.SetParent(shipTransform, true);
 
-    Vector3 GetWorldCoords(int xGridPos, int yGridPos)
+        if(deleteExtraTiles)
+        {
+            DeleteExtraTiles();
+        }
+        AssignSlotIndices();
+    }
+    private Vector3 GetWorldCoords(int xGridPos, int yGridPos)
     {
         float offset = 0f;
         if (yGridPos % 2 == 0)
@@ -114,67 +118,29 @@ public class HexTileMapGenerator : ScriptableWizard
 
         return tilePos;
     }
-
-    void DeleteExtraTiles()
+    private void DeleteExtraTiles()
     {
         Vector3 rayOrigin;
         Ray ray = new Ray();
         for (int i = tiles.Count - 1; i >= 0; i--)
         {
-            rayOrigin = tiles[i].transform.position + Vector3.up * raycastHeight*3.0f;
+            rayOrigin = tiles[i].transform.position + Vector3.up * raycastHeight * 1.0f;
+            //GameObject tileRayOrigin = new GameObject("tileRayOrigin");
+            //tileRayOrigin.transform.position = rayOrigin;
             ray.origin = rayOrigin;
             ray.direction = Vector3.down;
             if (!Physics.Raycast(ray, 500f, 1 << shipLayer))
             {
                 DestroyImmediate(tiles[i].gameObject, false);
-                //Destroy(tiles[i].gameObject);
                 tiles.RemoveAt(i);
             }
         }
     }
-    void AssignSlotIndices()
+    private void AssignSlotIndices()
     {
         for (int i = 0; i < tiles.Count; i++)
         {
             tiles[i].index = i;
         }
     }
-
-    void OnWizardUpdate()
-    {
-        helpString = "Generates a hex tilemap based on the provided mesh";
-        bool valid = true;
-
-
-        if (shipLayer < 8)
-        {
-            errorString = "please assign the ship layer";
-            valid = false;
-        }
-        if (!shipTransform)
-        {
-            errorString = "please assign a ship object";
-            valid = false;
-        }
-
-        if (!tile)
-        {
-            errorString = "please assign a tile prefab";
-            valid = false;
-        }
-
-        if(!renderer)
-        {
-            errorString = "please assign a renderer to use as the bounds";
-            valid = false;
-        }
-
-        if (valid)
-        {
-            errorString = "";
-        }
-        isValid = valid;
-    }
-
-
 }

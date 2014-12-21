@@ -7,7 +7,7 @@ public class TileIndexGenerator : EditorWindow
 {
     List<ComponentSlot> slots;
 
-    [MenuItem("Custom/Generate Tile Indices")]
+    [MenuItem("ShipHexGrid/Generate Tile Indices")]
     public static void ShowWindow()
     {
         EditorWindow.GetWindow<TileIndexGenerator>();
