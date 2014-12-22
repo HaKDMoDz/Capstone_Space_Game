@@ -5,12 +5,16 @@ using System;
 
 public enum ComponentType { Weapon, Defense, Power, Support }
 
-public class ShipComponent : MonoBehaviour 
+public abstract class ShipComponent : MonoBehaviour 
 {
+
     [SerializeField]
     public ComponentType CompType { get; private set; }
-
-    public string componentName;
+    
     public int ID;
+    public string componentName;
     public bool unlocked;
+    public float activationCost;
+    public float powerDrain;
+
 }

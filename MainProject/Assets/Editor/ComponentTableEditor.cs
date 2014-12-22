@@ -34,17 +34,17 @@ public class ComponentTableEditor : Editor
         ComponentTable compTable = target as ComponentTable;
 
         float posY = 50f;
-        if (compTable.ComponentList != null)
+        if (compTable.Comp_id_List != null)
         {
             EditorGUI.LabelField(new Rect(0f, posY, Screen.width * 0.25f, EditorGUIUtility.singleLineHeight), "ID");
             EditorGUI.LabelField(new Rect(Screen.width * 0.26f, posY, Screen.width * 0.7f, EditorGUIUtility.singleLineHeight), "Component");
 
             //if(compTable.ComponentList.Where(entry=>entry.component is Component_Weapon).Count()>0)
-            if (compTable.ComponentList.Where(entry => entry.component.CompType== ComponentType.Weapon).Count() > 0)
+            if (compTable.Comp_id_List.Where(entry => entry.component.CompType == ComponentType.Weapon).Count() > 0)
             {
                 posY += EditorGUIUtility.singleLineHeight;
                 EditorGUI.LabelField(new Rect(0f, posY, Screen.width, EditorGUIUtility.singleLineHeight), "Weapons");
-                foreach (ComponentTableEntry entry in compTable.ComponentList.Where(entry => entry.component.CompType == ComponentType.Weapon))
+                foreach (ComponentTableEntry entry in compTable.Comp_id_List.Where(entry => entry.component.CompType == ComponentType.Weapon))
                 {
                     posY+=EditorGUIUtility.singleLineHeight;
                     EditorGUI.IntField(new Rect(0f, posY, Screen.width*0.25f, EditorGUIUtility.singleLineHeight),entry.ID);
@@ -52,42 +52,42 @@ public class ComponentTableEditor : Editor
                 }
             }
 
-            if (compTable.ComponentList.Where(entry => entry.component.CompType == ComponentType.Defense).Count() > 0)
+            if (compTable.Comp_id_List.Where(entry => entry.component.CompType == ComponentType.Defense).Count() > 0)
             {
                 posY += EditorGUIUtility.singleLineHeight;
                 EditorGUI.LabelField(new Rect(0f, posY, Screen.width, EditorGUIUtility.singleLineHeight), "Defenses");
-                foreach (ComponentTableEntry entry in compTable.ComponentList.Where(entry => entry.component.CompType == ComponentType.Defense))
+                foreach (ComponentTableEntry entry in compTable.Comp_id_List.Where(entry => entry.component.CompType == ComponentType.Defense))
                 {
                     posY += EditorGUIUtility.singleLineHeight;
                     EditorGUI.IntField(new Rect(0f, posY, Screen.width * 0.25f, EditorGUIUtility.singleLineHeight), entry.ID);
                     EditorGUI.ObjectField(new Rect(Screen.width * .26f, posY, Screen.width, EditorGUIUtility.singleLineHeight), entry.component, typeof(ShipComponent), true);
                 }
             }
-            if (compTable.ComponentList.Where(entry => entry.component.CompType == ComponentType.Power).Count() > 0)
+            if (compTable.Comp_id_List.Where(entry => entry.component.CompType == ComponentType.Power).Count() > 0)
             {
                 posY += EditorGUIUtility.singleLineHeight;
                 EditorGUI.LabelField(new Rect(0f, posY, Screen.width, EditorGUIUtility.singleLineHeight), "Power");
-                foreach (ComponentTableEntry entry in compTable.ComponentList.Where(entry => entry.component.CompType == ComponentType.Power))
+                foreach (ComponentTableEntry entry in compTable.Comp_id_List.Where(entry => entry.component.CompType == ComponentType.Power))
                 {
                     posY += EditorGUIUtility.singleLineHeight;
                     EditorGUI.IntField(new Rect(0f, posY, Screen.width * 0.25f, EditorGUIUtility.singleLineHeight), entry.ID);
                     EditorGUI.ObjectField(new Rect(Screen.width * .26f, posY, Screen.width, EditorGUIUtility.singleLineHeight), entry.component, typeof(ShipComponent), true);
                 }
             }
-            if (compTable.ComponentList.Where(entry => entry.component.CompType == ComponentType.Support).Count() > 0)
+            if (compTable.Comp_id_List.Where(entry => entry.component.CompType == ComponentType.Support).Count() > 0)
             {
                 posY += EditorGUIUtility.singleLineHeight;
                 EditorGUI.LabelField(new Rect(0f, posY, Screen.width, EditorGUIUtility.singleLineHeight), "Support");
-                foreach (ComponentTableEntry entry in compTable.ComponentList.Where(entry => entry.component.CompType == ComponentType.Support))
+                foreach (ComponentTableEntry entry in compTable.Comp_id_List.Where(entry => entry.component.CompType == ComponentType.Support))
                 {
                     posY += EditorGUIUtility.singleLineHeight;
                     EditorGUI.IntField(new Rect(0f, posY, Screen.width * 0.25f, EditorGUIUtility.singleLineHeight), entry.ID);
                     EditorGUI.ObjectField(new Rect(Screen.width * .26f, posY, Screen.width, EditorGUIUtility.singleLineHeight), entry.component, typeof(ShipComponent), true);
                 }
             }
-           
 
-            for (int i = 0; i < 15 + compTable.ComponentList.Count * EditorGUIUtility.singleLineHeight / 6; i++)
+
+            for (int i = 0; i < 15 + compTable.Comp_id_List.Count * EditorGUIUtility.singleLineHeight / 6; i++)
             {
                 EditorGUILayout.Space();
             }
@@ -102,7 +102,7 @@ public class ComponentTableEditor : Editor
         {
             EditorGUILayout.HelpBox("ID already exists in table", MessageType.Error, true);
         }
-        comp = EditorGUILayout.ObjectField("Component", comp, typeof(ShipComponent), true) as ShipComponent;
+        comp = EditorGUILayout.ObjectField("Component", comp, typeof(ShipComponent), false) as ShipComponent;
         if(!comp)
         {
             EditorGUILayout.HelpBox("Please assign a component", MessageType.Info, true);

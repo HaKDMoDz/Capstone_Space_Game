@@ -34,11 +34,19 @@ public class HullTableEditor : Editor
         //DrawDefaultInspector();
 
         HullTable hullTable = target as HullTable;
+
+        if (!hullTable)
+        { return; }
+
         float PosY = 50f;
         
         EditorGUI.LabelField(new Rect(0f, PosY, Screen.width * .25f, EditorGUIUtility.singleLineHeight), "ID");
         EditorGUI.LabelField(new Rect(Screen.width * .26f, PosY, Screen.width * .7f, EditorGUIUtility.singleLineHeight), "Hull");
-        foreach (HullTableEntry entry in hullTable.HullTableProp)
+        if(hullTable.Hull_id_List==null)
+        {
+            Debug.Log("hull table null");
+        }
+        foreach (HullTableEntry entry in hullTable.Hull_id_List)
         {
             PosY += EditorGUIUtility.singleLineHeight ;
             EditorGUI.IntField(new Rect(0f, PosY, Screen.width * .25f, EditorGUIUtility.singleLineHeight), entry.ID);
@@ -46,8 +54,8 @@ public class HullTableEditor : Editor
             
 
         }
-        
-        for (int i = 0; i < 5+hullTable.HullTableProp.Count * EditorGUIUtility.singleLineHeight/6; i++)
+
+        for (int i = 0; i < 5 + hullTable.Hull_id_List.Count * EditorGUIUtility.singleLineHeight / 6; i++)
         {
             EditorGUILayout.Space();
         }
@@ -60,7 +68,7 @@ public class HullTableEditor : Editor
             EditorGUILayout.HelpBox("ID already exists in table", MessageType.Error, true);     
         }
         EditorGUILayout.LabelField("Hull Prefab");
-        hull = EditorGUILayout.ObjectField(hull, typeof(Hull), true) as Hull;
+        hull = EditorGUILayout.ObjectField(hull, typeof(Hull), false) as Hull;
         
         if(!hull)
         {

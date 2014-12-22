@@ -23,7 +23,11 @@ public class HullTable : ScriptableObject
     #region Fields
     #region EditorExposed
     [SerializeField]
-    public List<HullTableEntry> HullTableProp { get; private set; }
+    private List<HullTableEntry> hull_id_List;
+    public List<HullTableEntry> Hull_id_List
+    {
+        get { return hull_id_List; }
+    }
     
     #endregion //EditorExposed
     #endregion //Fields
@@ -33,11 +37,11 @@ public class HullTable : ScriptableObject
     #region GUI
     public void AddEntry(int _ID, Hull _hull)
     {
-        if(HullTableProp==null)
+        if(Hull_id_List==null)
         {
-            HullTableProp = new List<HullTableEntry>();
+            hull_id_List = new List<HullTableEntry>();
         }
-        HullTableProp.Add(new HullTableEntry(_ID, _hull));
+        Hull_id_List.Add(new HullTableEntry(_ID, _hull));
         _hull.ID = _ID;
     }
 
@@ -48,11 +52,11 @@ public class HullTable : ScriptableObject
     public int GenNextID()
     {
         int genID = 0;
-        if(HullTableProp==null)
+        if(Hull_id_List==null)
         {
-            HullTableProp = new List<HullTableEntry>();
+            hull_id_List = new List<HullTableEntry>();
         }
-        while (HullTableProp.Any(entry => entry.ID == genID))
+        while (Hull_id_List.Any(entry => entry.ID == genID))
         {
             genID++;
         }
@@ -60,25 +64,25 @@ public class HullTable : ScriptableObject
     }
     public bool IDExists(int id)
     {
-        if(HullTableProp==null)
+        if(Hull_id_List==null)
         {
             return false;
         }
-        return HullTableProp.Any(entry => entry.ID == id);
+        return Hull_id_List.Any(entry => entry.ID == id);
     }
     public bool HullExists(Hull _hull)
     {
-        if (HullTableProp == null)
+        if (Hull_id_List == null)
         {
             return false;
         }
-        return HullTableProp.Any(entry => entry.hull == _hull);
+        return Hull_id_List.Any(entry => entry.hull == _hull);
     }
     public void WipeTable()
     {
-        if (HullTableProp != null)
+        if (Hull_id_List != null)
         {
-            HullTableProp.Clear();
+            Hull_id_List.Clear();
         }
     }
     #endregion //GUI
