@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
+using System.Linq;
 
 public class ShipDesignTester : MonoBehaviour 
 {
@@ -52,7 +54,7 @@ public class ShipDesignTester : MonoBehaviour
         foreach (var hullEntry in id_hull_table)
         {
             Debug.Log("Running FillWithRandomComponents test for" + hullEntry.Value.hullName);
-            yield return StartCoroutine(FillWithRandomComponents(hullEntry.Key));
+            yield return StartCoroutine(FillWithRandomComponents(hullEntry.Key,10));
         }
         Debug.LogWarning("FillWithRandomComponents tests complete");
 
@@ -83,16 +85,27 @@ public class ShipDesignTester : MonoBehaviour
             Debug.Log("Testing " + compEntry.Value.componentName);
             slotIndex_compID_table.Clear();
             //design.buildHull(hullID)
+            ShipDesignSystem.Instance.BuildHull(hullID);
             //get building hull
+            Hull hullBeingBuilt = typeof(ShipDesignSystem)
+                .GetField("hullBeingBuilt", BindingFlags.NonPublic | BindingFlags.Instance)
+                .GetValue(ShipDesignSystem.Instance) 
+                as Hull;
             //get current BP
-
+            
             //for buildingHull.SlotTable
+            foreach (ComponentSlot slot in hullBeingBuilt.EmptyComponentGrid)
+            {
                 //add component (slot, component)
                 //slotindextable.add
+                ShipDesignSystem.Instance.BuildComponent(slot, compEntry.Value);
+                yield return null;
+            }
 
             //get filename
             //design.delete, SaveBP
             //design.clear
+            ShipDesignSystem.Instance.ClearScreen();
 
             yield return new WaitForSeconds(0.2f);
 
@@ -104,12 +117,29 @@ public class ShipDesignTester : MonoBehaviour
             //design.delete
             //design.clear
         }
-
-        yield return null;
     }
-    private IEnumerator FillWithRandomComponents(int hullID)
+    private IEnumerator FillWithRandomComponents(int hullID, int numTests)
     {
-        yield return null;
+        int[] compIDs = id_comp_table.Keys.ToArray();
+
+        for (int i = 0; i < numTests; i++)
+        {
+            ShipDesignSystem.Instance.BuildHull(hullID);
+            Hull hullBeingBuilt = typeof(ShipDesignSystem)
+                .GetField("hullBeingBuilt", BindingFlags.NonPublic | BindingFlags.Instance)
+                .GetValue(ShipDesignSystem.Instance) as Hull;
+
+            foreach (ComponentSlot slot in hullBeingBuilt.EmptyComponentGrid)
+            {
+                int randCompID = compIDs[Random.Range(0, compIDs.Length)];
+                ShipDesignSystem.Instance.BuildComponent(slot, id_comp_table[randCompID]);
+                yield return null;
+            }
+            ShipDesignSystem.Instance.ClearScreen();
+            yield return new WaitForSeconds(0.2f);
+        }
+        yield return new WaitForSeconds(0.2f);
+
     }
     private bool VerifyLoadedBlueprint()
     {
