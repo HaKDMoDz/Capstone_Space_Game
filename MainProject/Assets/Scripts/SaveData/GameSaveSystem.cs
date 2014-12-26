@@ -20,7 +20,7 @@ public class GameSaveSystem
     private int maxAutoSaves, maxQuickSaves, maxNormalSaves;
 
     //caching common objects
-    private BinaryFormatter binFormatter;
+    private BinaryFormatter binaryFormatter;
     private FileStream fileStream;
     private string path;
     private SerializedGameData sz_gameData;
@@ -48,7 +48,7 @@ public class GameSaveSystem
         this.maxQuickSaves = numQuickSaves;
         this.maxNormalSaves = numNormalSaves;
 
-        binFormatter = new BinaryFormatter();
+        binaryFormatter = new BinaryFormatter();
         sz_gameData = new SerializedGameData();
 
         CreateSaveGameDirectory();
@@ -207,7 +207,7 @@ public class GameSaveSystem
         fileStream = File.Create(path);
         //SerializeGameData(gameData, out sz_gameData);
         gameData.Serialize(ref sz_gameData);
-        binFormatter.Serialize(fileStream, sz_gameData);
+        binaryFormatter.Serialize(fileStream, sz_gameData);
         fileStream.Close();
 
 
@@ -237,7 +237,7 @@ public class GameSaveSystem
         if (File.Exists(path))
         {
             fileStream = File.Open(path, FileMode.Open);
-            sz_gameData = binFormatter.Deserialize(fileStream) as SerializedGameData;
+            sz_gameData = binaryFormatter.Deserialize(fileStream) as SerializedGameData;
             sz_gameData.DeSerialize(ref gameData);
             fileStream.Close();
             return true;
@@ -258,7 +258,7 @@ public class GameSaveSystem
         if (File.Exists(path))
         {
             fileStream = File.Open(path, FileMode.Open);
-            savesList = binFormatter.Deserialize(fileStream) as SaveGameList;
+            savesList = binaryFormatter.Deserialize(fileStream) as SaveGameList;
             fileStream.Close();
         }
         else
@@ -273,7 +273,7 @@ public class GameSaveSystem
     {
         path = BuildPathString(fileName_SavesList);
         fileStream = File.Create(path);
-        binFormatter.Serialize(fileStream, savesList);
+        binaryFormatter.Serialize(fileStream, savesList);
         fileStream.Close();
     }
 
