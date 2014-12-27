@@ -72,7 +72,7 @@ public class ShipDesignTester : MonoBehaviour
     {
         ShipDesignSystem.Instance.BuildHull(hull_ID);
         string fileName = "Test_EmptyHull_" + id_hull_table[hull_ID].name;
-        ShipDesignSystem.Instance.DeleteBlueprint(fileName);
+        //ShipDesignSystem.Instance.DeleteBlueprint(fileName);
         ShipDesignSystem.Instance.SaveBlueprint(fileName);
         yield return new WaitForSeconds(0.4f);
         ShipDesignSystem.Instance.ClearScreen();
@@ -117,7 +117,7 @@ public class ShipDesignTester : MonoBehaviour
             }
 
             string fileName = "Test_FilledWithSameComponent_Hull_" + id_hull_table[hull_ID].hullName + "_Comp_" + id_comp.Value.componentName;
-            ShipDesignSystem.Instance.DeleteBlueprint(fileName);
+            //ShipDesignSystem.Instance.DeleteBlueprint(fileName);
             ShipDesignSystem.Instance.SaveBlueprint(fileName);
             ShipDesignSystem.Instance.ClearScreen();
 
@@ -167,7 +167,7 @@ public class ShipDesignTester : MonoBehaviour
                 yield return null;
             }
             string fileName = "Test_FillWithRandomComponents_Hull" + id_hull_table[hull_ID].hullName;
-            ShipDesignSystem.Instance.DeleteBlueprint(fileName);
+            //ShipDesignSystem.Instance.DeleteBlueprint(fileName);
             ShipDesignSystem.Instance.SaveBlueprint(fileName);
             ShipDesignSystem.Instance.ClearScreen();
             yield return new WaitForSeconds(0.2f);

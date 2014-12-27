@@ -57,8 +57,10 @@ public class ShipBlueprintSaveSystem
         fileStream = File.Create(path);
         binaryFormatter.Serialize(fileStream, sz_ShipBP);
         fileStream.Close();
-
         //update list
+        savedBPList.Add(fileName);
+        //optimize
+        SaveSavesList();
     }
 
     public bool LoadBlueprint(out ShipBlueprint shipBP, string fileName)
@@ -87,11 +89,36 @@ public class ShipBlueprintSaveSystem
 
     public void DeleteBlueprint(string fileName)
     {
+#if !NO_DEBUG
+        if (savedBPList.FileExists(fileName))
+        {
+            path = BuildPathString(fileName);
+            File.Delete(path);
+            savedBPList.Remove(fileName);
+            //optimize
+            SaveSavesList();
+        }
+        else
+        {
+            Debug.LogError("Blueprint " + fileName + " not found");
+        }
+#else
+            path = BuildPathString(fileName);
+            File.Delete(path);
+            savedBPList.Remove(fileName);
+            SaveSavesList();
+#endif
 
     }
     public void DeleteAllBlueprints()
     {
-
+        #if !NO_DEBUG
+        Debug.LogWarning("Deleting all ship blueprints");
+	    #endif
+        foreach (string fileName in savedBPList.fileNames)
+        {
+            DeleteBlueprint(fileName);
+        }
     }
     #endregion Public
     #region Private
@@ -116,7 +143,35 @@ public class ShipBlueprintSaveSystem
             ComponentSlot slot = shipBP.hull.index_slot_table[slotIndex_CompID.Key];
             shipBP.AddComponent(slot, component);
         }
+    }//DeSerialize
+
+    private void SaveSavesList()
+    {
+        path = BuildPathString(fileName_SaveList);
+        fileStream = File.Create(path);
+        binaryFormatter.Serialize(fileStream, savedBPList);
+        fileStream.Close();
     }
+
+    private void LoadSavesList()
+    {
+        path = BuildPathString(fileName_SaveList);
+
+        if (File.Exists(path))
+        {
+            fileStream = File.Open(path, FileMode.Open);
+            savedBPList = binaryFormatter.Deserialize(fileStream) as SavedShipBPList;
+            fileStream.Close();
+        }
+        else
+        {
+            #if FULL_DEBUG
+            Debug.Log("No ShipBlueprint list found - initializing");
+            #endif
+            savedBPList = new SavedShipBPList();
+        }
+    }
+
     #region Helper
     private void Init()
     {
@@ -129,6 +184,7 @@ public class ShipBlueprintSaveSystem
         sz_ShipBP = new SerializedShipBlueprint(0);
         CreateShipBPDirectory();
         //load list
+        LoadSavesList();
 
     }
     private void CreateShipBPDirectory()
