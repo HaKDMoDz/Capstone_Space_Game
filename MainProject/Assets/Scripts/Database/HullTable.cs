@@ -29,12 +29,27 @@ public class HullTable : ScriptableObject
         get { return hull_id_List; }
     }
     
-    #endregion //EditorExposed
-    #endregion //Fields
+    #endregion EditorExposed
+
+    //Database Reference
+    private static Dictionary<int, Hull> id_hull_table;
+    private static Dictionary<Hull, int> hull_id_table;
+
+    #endregion Fields
 
     #region Methods
-
-    #region GUI
+    #region Public
+    #region DatabaseAccess
+    public static Hull GetHull(int hull_ID)
+    {
+        return id_hull_table[hull_ID];
+    }
+    public static int GetID(Hull hull)
+    {
+        return hull_id_table[hull];
+    }
+    #endregion DatabaseAccess
+    #region GUI_Access
     public void AddEntry(int _ID, Hull _hull)
     {
         if(Hull_id_List==null)
@@ -85,7 +100,19 @@ public class HullTable : ScriptableObject
             Hull_id_List.Clear();
         }
     }
-    #endregion //GUI
-    #endregion //Methods
+    #endregion GUI_Access
+    #endregion Public
+    #region Private
+    #region UnityCallbacks
+    private void OnEnable()
+    {
+        //Debug.Log("hull table enable");
+        id_hull_table = hull_id_List.ToDictionary(h => h.ID, h => h.hull);
+        hull_id_table = hull_id_List.ToDictionary(h => h.hull, h => h.ID);
+    }
+    
+    #endregion UnityCallbacks
+    #endregion Private
+    #endregion Methods
 
 }

@@ -28,12 +28,26 @@ public class ComponentTable : ScriptableObject
     {
         get { return comp_id_List; }
     }
-    #endregion //EditorExposed
-    #endregion //Fields
+    #endregion EditorExposed
+    //Database Access
+    private static Dictionary<int, ShipComponent> id_comp_table;
+    private static Dictionary<ShipComponent, int> comp_id_table;
+    #endregion Fields
 
 
     #region Methods
-    #region GUI
+    #region Public 
+    #region DatabaseAccess
+    public static ShipComponent GetComponent(int compID)
+    {
+        return id_comp_table[compID];
+    }
+    public static int GetID(ShipComponent component)
+    {
+        return comp_id_table[component];
+    }
+    #endregion DatabaseAccess
+    #region GUI_Access
     public void AddEntry(int ID, ShipComponent component)
     {
         if(Comp_id_List == null)
@@ -84,6 +98,15 @@ public class ComponentTable : ScriptableObject
             Comp_id_List.Clear();
         }
     }
-    #endregion //GUI
-    #endregion //Methods
+    
+    #endregion GUI_Access
+    #endregion Public
+    #region UnityCallbacks
+    private void OnEnable()
+    {
+        id_comp_table = comp_id_List.ToDictionary(c => c.ID, c => c.component);
+        comp_id_table = comp_id_List.ToDictionary(c => c.component, c => c.ID);
+    }
+    #endregion UnityCallbacks
+    #endregion Methods
 }

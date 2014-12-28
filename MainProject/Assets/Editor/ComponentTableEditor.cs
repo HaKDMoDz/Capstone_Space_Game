@@ -10,7 +10,7 @@ public class ComponentTableEditor : Editor
     int id;
     ShipComponent comp;
     
-    [MenuItem("Data/Create Component Table")]
+    [MenuItem("Database/Create Component Table")]
     static void CreateTestData()
     {
         string path = EditorUtility.SaveFilePanel("Create Component Table", "Assets/", "ComponentTable.asset", "asset");

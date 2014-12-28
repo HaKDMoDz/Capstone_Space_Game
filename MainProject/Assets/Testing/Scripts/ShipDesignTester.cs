@@ -10,6 +10,10 @@ public class ShipDesignTester : MonoBehaviour
 #if UNITY_EDITOR
 
     #region Fields
+    #region EditorExposed
+    [SerializeField]
+    private bool fastTest=true;
+    #endregion EditorExposed
     #region Internal
     private Dictionary<int, Hull> id_hull_table;
     private Dictionary<Hull, int> hull_id_table;
@@ -74,7 +78,9 @@ public class ShipDesignTester : MonoBehaviour
         string fileName = "Test_EmptyHull_" + id_hull_table[hull_ID].name;
         //ShipDesignSystem.Instance.DeleteBlueprint(fileName);
         ShipDesignSystem.Instance.SaveBlueprint(fileName);
-        yield return new WaitForSeconds(0.4f);
+        
+        yield return new WaitForSeconds(0.2f);
+        
         ShipDesignSystem.Instance.ClearScreen();
         //design.load
         ShipDesignSystem.Instance.LoadBlueprint(fileName);
@@ -113,7 +119,10 @@ public class ShipDesignTester : MonoBehaviour
                 //slotindextable.add
                 ShipDesignSystem.Instance.BuildComponent(slot, id_comp.Value);
                 slotIndex_compID_table.Add(slot.index, id_comp.Key);
-                yield return null;
+                if (!fastTest)
+                {
+                    yield return null;
+                }
             }
 
             string fileName = "Test_FilledWithSameComponent_Hull_" + id_hull_table[hull_ID].hullName + "_Comp_" + id_comp.Value.componentName;
@@ -140,7 +149,7 @@ public class ShipDesignTester : MonoBehaviour
                 Debug.LogError("Error in Test: FilledWithSameComponent - Loaded blueprint does not match ");
                 Debug.Break();
             }
-
+            
             yield return new WaitForSeconds(0.2f);
 
             ShipDesignSystem.Instance.DeleteBlueprint(fileName);
@@ -164,12 +173,16 @@ public class ShipDesignTester : MonoBehaviour
                 int randCompID = compIDs[Random.Range(0, compIDs.Length)];
                 ShipDesignSystem.Instance.BuildComponent(slot, id_comp_table[randCompID]);
                 slotIndex_compID_table.Add(slot.index, randCompID);
-                yield return null;
+                if (!fastTest)
+                {
+                    yield return null;
+                }
             }
             string fileName = "Test_FillWithRandomComponents_Hull" + id_hull_table[hull_ID].hullName;
             //ShipDesignSystem.Instance.DeleteBlueprint(fileName);
             ShipDesignSystem.Instance.SaveBlueprint(fileName);
             ShipDesignSystem.Instance.ClearScreen();
+
             yield return new WaitForSeconds(0.2f);
 
             ShipDesignSystem.Instance.LoadBlueprint(fileName);
@@ -186,6 +199,7 @@ public class ShipDesignTester : MonoBehaviour
                 Debug.Break();
             }
             yield return new WaitForSeconds(0.2f);
+
             ShipDesignSystem.Instance.DeleteBlueprint(fileName);
             ShipDesignSystem.Instance.ClearScreen();
 
