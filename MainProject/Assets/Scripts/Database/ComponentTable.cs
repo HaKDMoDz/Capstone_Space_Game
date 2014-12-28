@@ -30,8 +30,8 @@ public class ComponentTable : ScriptableObject
     }
     #endregion EditorExposed
     //Database Access
-    private static Dictionary<int, ShipComponent> id_comp_table;
-    private static Dictionary<ShipComponent, int> comp_id_table;
+    public static Dictionary<int, ShipComponent> id_comp_table { get; private set; }
+    public static Dictionary<ShipComponent, int> comp_id_table { get; private set; }
     #endregion Fields
 
 

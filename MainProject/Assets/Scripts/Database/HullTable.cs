@@ -32,8 +32,8 @@ public class HullTable : ScriptableObject
     #endregion EditorExposed
 
     //Database Reference
-    private static Dictionary<int, Hull> id_hull_table;
-    private static Dictionary<Hull, int> hull_id_table;
+    public static Dictionary<int, Hull> id_hull_table { get; private set; }
+    public static Dictionary<Hull, int> hull_id_table { get; private set; }
 
     #endregion Fields
 
@@ -109,6 +109,7 @@ public class HullTable : ScriptableObject
         //Debug.Log("hull table enable");
         id_hull_table = hull_id_List.ToDictionary(h => h.ID, h => h.hull);
         hull_id_table = hull_id_List.ToDictionary(h => h.hull, h => h.ID);
+        
     }
     
     #endregion UnityCallbacks

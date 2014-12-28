@@ -18,10 +18,10 @@ public class ShipBlueprintSaveSystem
     private string fileName_SaveList = "ShipBPFileList";
 
     //database references
-    private Dictionary<int, Hull> id_hull_table;
-    private Dictionary<Hull, int> hull_id_table;
-    private Dictionary<int, ShipComponent> id_comp_table;
-    private Dictionary<ShipComponent, int> comp_id_table;
+    //private Dictionary<int, Hull> id_hull_table;
+    //private Dictionary<Hull, int> hull_id_table;
+    //private Dictionary<int, ShipComponent> id_comp_table;
+    //private Dictionary<ShipComponent, int> comp_id_table;
 
     //cached vars
     private BinaryFormatter binaryFormatter;
@@ -126,20 +126,20 @@ public class ShipBlueprintSaveSystem
     private void SerializeShipBP(ShipBlueprint shipBP)
     {
         sz_ShipBP.Clear();
-        sz_ShipBP.hull_ID = hull_id_table[shipBP.hull];
+        sz_ShipBP.hull_ID = HullTable.GetID(shipBP.hull);
         foreach (var slot_component in shipBP.slot_component_table)
         {
-            sz_ShipBP.AddComponent(slot_component.Key.index, comp_id_table[slot_component.Value]);
+            sz_ShipBP.AddComponent(slot_component.Key.index, ComponentTable.GetID(slot_component.Value));
         }
     }//Serialize
 
     private void DeSerializeSipBP(SerializedShipBlueprint sz_ShipBP, out ShipBlueprint shipBP)
     {
-        shipBP = new ShipBlueprint(id_hull_table[sz_ShipBP.hull_ID]);
+        shipBP = new ShipBlueprint(HullTable.GetHull(sz_ShipBP.hull_ID));
         shipBP.hull.Init();
         foreach (var slotIndex_CompID in sz_ShipBP.slotIndex_CompID_Table)
         {
-            ShipComponent component = id_comp_table[slotIndex_CompID.Value];
+            ShipComponent component = ComponentTable.GetComponent(slotIndex_CompID.Value);
             ComponentSlot slot = shipBP.hull.index_slot_table[slotIndex_CompID.Key];
             shipBP.AddComponent(slot, component);
         }
@@ -176,11 +176,7 @@ public class ShipBlueprintSaveSystem
     private void Init()
     {
         binaryFormatter = new BinaryFormatter();
-        id_hull_table = ShipDesignSystem.Instance.id_hull_table;
-        hull_id_table = ShipDesignSystem.Instance.hull_id_table;
-        id_comp_table = ShipDesignSystem.Instance.id_comp_table;
-        comp_id_table = ShipDesignSystem.Instance.comp_id_table;
-
+        
         sz_ShipBP = new SerializedShipBlueprint(0);
         CreateShipBPDirectory();
         //load list
