@@ -20,10 +20,10 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
     #region Private
     #region EditorExposed
 
-    //[SerializeField]
-    //private HullTable hullTableScriptableObject;
-    //[SerializeField]
-    //private ComponentTable compTableScriptableObject;
+    [SerializeField]
+    private HullTable hullTableScriptableObject;
+    [SerializeField]
+    private ComponentTable compTableScriptableObject;
     [SerializeField]
     private ShipBPSaveFields saveFields;
     #endregion EditorExposed
@@ -33,10 +33,10 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
     ShipBlueprintSaveSystem saveSystem;
 
     //database references
-    //public Dictionary<int, Hull> id_hull_table {get; private set;}
-    //public Dictionary<Hull, int> hull_id_table { get; private set; }
-    //public Dictionary<int, ShipComponent> id_comp_table { get; private set; }
-    //public Dictionary<ShipComponent, int> comp_id_table { get; private set; }
+    public Dictionary<int, Hull> id_hull_table { get; private set; }
+    public Dictionary<Hull, int> hull_id_table { get; private set; }
+    public Dictionary<int, ShipComponent> id_comp_table { get; private set; }
+    public Dictionary<ShipComponent, int> comp_id_table { get; private set; }
 
     private bool buildingShip;
     private ShipBlueprint blueprintBeingBuilt;
@@ -54,7 +54,8 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
         if (!buildingShip)
         {
             blueprintBeingBuilt.Clear();
-            blueprintBeingBuilt.hull = HullTable.GetHull(hull_ID);
+            //blueprintBeingBuilt.hull = HullTable.GetHull(hull_ID);
+            blueprintBeingBuilt.hull = id_hull_table[hull_ID];
             #if FULL_DEBUG
             Debug.Log("Building hull: " + blueprintBeingBuilt.hull.hullName);
             #endif
@@ -186,15 +187,15 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
     #region UnityCallBacks
     private void Awake()
     {
-        ////generating tables on awake - is accessed from other scripts
-        //id_hull_table = hullTableScriptableObject.Hull_id_List
-        //    .ToDictionary(h => h.ID, h => h.hull);
-        //hull_id_table = hullTableScriptableObject.Hull_id_List
-        //    .ToDictionary(h => h.hull, h => h.ID);
-        //id_comp_table = compTableScriptableObject.Comp_id_List
-        //    .ToDictionary(c => c.ID, c => c.component);
-        //comp_id_table = compTableScriptableObject.Comp_id_List
-        //    .ToDictionary(c => c.component, c => c.ID);
+        //generating tables on awake - is accessed from other scripts
+        id_hull_table = hullTableScriptableObject.Hull_id_List
+            .ToDictionary(h => h.ID, h => h.hull);
+        hull_id_table = hullTableScriptableObject.Hull_id_List
+            .ToDictionary(h => h.hull, h => h.ID);
+        id_comp_table = compTableScriptableObject.Comp_id_List
+            .ToDictionary(c => c.ID, c => c.component);
+        comp_id_table = compTableScriptableObject.Comp_id_List
+            .ToDictionary(c => c.component, c => c.ID);
 
 
         componentsBeingBuilt = new List<ShipComponent>();

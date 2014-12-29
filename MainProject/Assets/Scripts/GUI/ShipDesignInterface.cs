@@ -1,11 +1,26 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
+#region AdditionalStructs
+[Serializable]
+public struct InterfaceGUI_Fields
+{
+    public RectTransform hullButtonParent;
+    public RectTransform compButtonParent;
+    public Button buttonPrefab;
+}
+#endregion AdditionalStructs
 public class ShipDesignInterface : Singleton<ShipDesignInterface>
 {
 
     #region Fields
+    #region EditorExposed
+    [SerializeField]
+    private InterfaceGUI_Fields guiFields;
+    #endregion EditorExposed
     #endregion Fields
 
     #region Methods
@@ -19,6 +34,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     #region GUI
     private void SetupGUI()
     {
+        //Hull buttons
 
     }
     #endregion GUI
