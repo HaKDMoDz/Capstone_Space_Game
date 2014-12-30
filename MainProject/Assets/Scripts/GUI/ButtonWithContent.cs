@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class ButtonWithContent : MonoBehaviour 
 {
-    [SerializeField]
-    private Text buttonText;
-	
+    public Button button;
+    public Text buttonText;
+    	
 }

@@ -10,7 +10,7 @@ public struct InterfaceGUI_Fields
 {
     public RectTransform hullButtonParent;
     public RectTransform compButtonParent;
-    public Button buttonPrefab;
+    public ButtonWithContent buttonPrefab;
 }
 #endregion AdditionalStructs
 public class ShipDesignInterface : Singleton<ShipDesignInterface>
@@ -35,14 +35,49 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     private void SetupGUI()
     {
         //Hull buttons
-
+        foreach (var id_hull in ShipDesignSystem.Instance.id_hull_table)
+        {
+            ButtonWithContent buttonClone = Instantiate(guiFields.buttonPrefab) as ButtonWithContent;
+            buttonClone.transform.SetParent(guiFields.hullButtonParent,false); 
+            buttonClone.buttonText.text = id_hull.Value.hullName;
+            int hull_ID = id_hull.Key;
+            buttonClone.button.onClick.AddListener(() =>
+            {
+                BuildHull(hull_ID);
+            });
+        }
+        //Component Buttons
+        foreach (var id_comp in ShipDesignSystem.Instance.id_comp_table)
+        {
+            ButtonWithContent buttonClone = Instantiate(guiFields.buttonPrefab) as ButtonWithContent;
+            buttonClone.transform.SetParent(guiFields.compButtonParent, false);
+            buttonClone.buttonText.text = id_comp.Value.componentName;
+            int compID = id_comp.Key;
+            buttonClone.button.onClick.AddListener(() =>
+                {
+                    SelectComponentToBuild(compID);
+                });
+        }
     }
     #endregion GUI
+
+    private IEnumerator StartPlacementSequence(ShipComponent component)
+    {
+        yield return null;
+    }
+
     #endregion Private
     
     #region Public
     #region GUI
+    public void SelectComponentToBuild(int componentID)
+    {
+        #if FULL_DEBUG
+        Debug.Log("Selected component: " + ShipDesignSystem.Instance.id_comp_table[componentID].componentName);
+        #endif
+        //StartCoroutine(StartPlacementSequence())
 
+    }
     #endregion GUI
 
     #region DesignSystemAccess
