@@ -42,7 +42,7 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
     private ShipBlueprint blueprintBeingBuilt;
     private Hull hullBeingBuilt;
     private List<ShipComponent> componentsBeingBuilt;
-    //Dictionary<ComponentSlot, ShipComponent> slot_componentsBeingBuilt_table;
+    Dictionary<ComponentSlot, ShipComponent> slot_compsBeingBuilt_table;
     #endregion Internal
     #endregion Private
     #endregion Fields
@@ -78,6 +78,18 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
 #if !NO_DEBUG
         if(buildingShip)
         {
+            if(slot.InstalledComponent)
+            {
+                //if upgraded components don't have the same ID
+                //if(ComponentTable.GetID(slot.InstalledComponent) == ComponentTable.GetID(component))
+                //{
+                //    return;
+                //}
+                ShipComponent otherComp = slot_compsBeingBuilt_table[slot];
+                componentsBeingBuilt.Remove(otherComp);
+                Destroy(otherComp.gameObject);
+                blueprintBeingBuilt.RemoveComponent(slot);
+            }
             AddComponentToScene(slot, component);
             blueprintBeingBuilt.AddComponent(slot, component);
         }
@@ -114,7 +126,7 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
             }
         }
         componentsBeingBuilt.Clear();
-
+        slot_compsBeingBuilt_table.Clear();
     }//ClearScreen
 
     #region SaveSystemInterface
@@ -179,9 +191,16 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
 
     private void AddComponentToScene(ComponentSlot slot, ShipComponent component)
     {
-        Transform slotTrans = slot.transform;
-        ShipComponent builtComp = Instantiate(component, slotTrans.position, slotTrans.rotation) as ShipComponent;
+        ShipComponent builtComp = Instantiate(component, slot.transform.position, slot.transform.rotation) as ShipComponent;
         componentsBeingBuilt.Add(builtComp);
+        if(slot_compsBeingBuilt_table.ContainsKey(slot))
+        {
+            slot_compsBeingBuilt_table[slot] = builtComp;
+        }
+        else
+        {
+            slot_compsBeingBuilt_table.Add(slot, builtComp);
+        }
     }
 
     #region UnityCallBacks
@@ -201,6 +220,7 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
 
         componentsBeingBuilt = new List<ShipComponent>();
         blueprintBeingBuilt = new ShipBlueprint();
+        slot_compsBeingBuilt_table = new Dictionary<ComponentSlot, ShipComponent>();
         saveSystem = new ShipBlueprintSaveSystem(saveFields.fileExtension_ShipBP, saveFields.saveDirectory_ShipBP, saveFields.fileName_SaveList);
     }
 

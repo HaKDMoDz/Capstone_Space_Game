@@ -63,9 +63,32 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     }
     #endregion GUI
 
-    private IEnumerator StartPlacementSequence(ShipComponent component)
+    private IEnumerator StartPlacementSequence(ShipComponent selectedComponent)
     {
+        bool runSequence = true;
+        bool dragging = false;
+        RaycastHit hit;
+        int componentSlotLayer = GlobalTagsAndLayers.Instance.layers.componentSlotLayer;
         yield return null;
+
+        while(runSequence)
+        {
+            if(Input.GetMouseButtonDown(0) || dragging)
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                if(Physics.Raycast(ray, out hit, 1000.0f, 1<<componentSlotLayer))
+                {
+                    dragging = true;
+                    ComponentSlot slot = hit.transform.GetComponent<ComponentSlot>();
+                    ShipDesignSystem.Instance.BuildComponent(slot, selectedComponent);
+                }
+            }
+            if(Input.GetMouseButtonUp(0)||Input.GetKeyDown(KeyCode.Escape))
+            {
+                runSequence = false;
+            }
+            yield return null;
+        }
     }
 
     #endregion Private
@@ -77,8 +100,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
         #if FULL_DEBUG
         Debug.Log("Selected component: " + ComponentTable.GetComp(componentID).componentName);
         #endif
-        //StartCoroutine(StartPlacementSequence())
-
+        StartCoroutine(StartPlacementSequence(ComponentTable.GetComp(componentID)));
     }
     #endregion GUI
 

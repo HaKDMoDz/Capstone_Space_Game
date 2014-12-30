@@ -35,10 +35,10 @@ public class ShipBlueprint
         {
             slot_component_table.Add(slot, component);
         }
-        //slot.InstalledComponent = component;
+        slot.InstalledComponent = component;
 #else
         slot_component_table.Add(slot, component);
-        //slot.InstalledComponent = component;
+        slot.InstalledComponent = component;
 #endif
     }//AddComponent
 
@@ -48,7 +48,7 @@ public class ShipBlueprint
         if(slot_component_table.ContainsKey(slot))
         {
             slot_component_table.Remove(slot);
-            //slot.InstalledComponent = null;
+            slot.InstalledComponent = null;
         }
         else
         {

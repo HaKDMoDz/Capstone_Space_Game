@@ -12,7 +12,7 @@ public class GlobalTagsAndLayers : Singleton<GlobalTagsAndLayers>
 public class Layers
 {
     public int playerShipLayer = 8;
-    public int componentTileLayer = 9;
+    public int componentSlotLayer = 9;
     public int componentsLayer = 10;
     public int enemyShipLayer = 11;
 }
