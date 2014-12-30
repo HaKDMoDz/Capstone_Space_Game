@@ -32,7 +32,7 @@ public class HullTable : ScriptableObject
     #endregion EditorExposed
 
     //Database Reference
-    //private static Dictionary<int, Hull> id_hull_table;
+    public static Dictionary<int, Hull> id_hull_table { get; private set; }
     //public static Dictionary<int, Hull> ID_Hull_Table
     //{
     //    get
@@ -46,7 +46,7 @@ public class HullTable : ScriptableObject
     //    }
     //}
 
-    //private static Dictionary<Hull, int> hull_id_table;
+    public static Dictionary<Hull, int> hull_id_table { get; private set; }
     //public static Dictionary<Hull, int> Hull_ID_Table
     //{
     //    get
@@ -64,25 +64,30 @@ public class HullTable : ScriptableObject
 
     #region Methods
     #region Public
+    public void Init()
+    {
+        id_hull_table = hull_id_List.ToDictionary(h => h.ID, h => h.hull);
+        hull_id_table = hull_id_List.ToDictionary(h => h.hull, h => h.ID);
+    }
     #region DatabaseAccess
-    //public static Hull GetHull(int hull_ID)
-    //{
-    //    if (id_hull_table == null)
-    //    {
-    //        Debug.Log("force init");
-    //        FindObjectOfType<HullTable>().OnEnable();
-    //    }
-    //    return id_hull_table[hull_ID];
-    //}
-    //public static int GetID(Hull hull)
-    //{
-    //    if (hull_id_table == null)
-    //    {
-    //        Debug.Log("force init");
-    //        FindObjectOfType<HullTable>().OnEnable();
-    //    }
-    //    return hull_id_table[hull];
-    //}
+    public static Hull GetHull(int hull_ID)
+    {
+        //if (id_hull_table == null)
+        //{
+        //    Debug.Log("force init");
+        //    FindObjectOfType<HullTable>().OnEnable();
+        //}
+        return id_hull_table[hull_ID];
+    }
+    public static int GetID(Hull hull)
+    {
+        //if (hull_id_table == null)
+        //{
+        //    Debug.Log("force init");
+        //    FindObjectOfType<HullTable>().OnEnable();
+        //}
+        return hull_id_table[hull];
+    }
     #endregion DatabaseAccess
     #region GUI_Access
     public void AddEntry(int _ID, Hull _hull)

@@ -35,7 +35,8 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     private void SetupGUI()
     {
         //Hull buttons
-        foreach (var id_hull in ShipDesignSystem.Instance.id_hull_table)
+        //foreach (var id_hull in ShipDesignSystem.Instance.id_hull_table)
+        foreach(var id_hull in HullTable.id_hull_table)
         {
             ButtonWithContent buttonClone = Instantiate(guiFields.buttonPrefab) as ButtonWithContent;
             buttonClone.transform.SetParent(guiFields.hullButtonParent,false); 
@@ -47,7 +48,8 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
             });
         }
         //Component Buttons
-        foreach (var id_comp in ShipDesignSystem.Instance.id_comp_table)
+        //foreach (var id_comp in ShipDesignSystem.Instance.id_comp_table)
+        foreach (var id_comp in  ComponentTable.id_comp_table)
         {
             ButtonWithContent buttonClone = Instantiate(guiFields.buttonPrefab) as ButtonWithContent;
             buttonClone.transform.SetParent(guiFields.compButtonParent, false);
@@ -73,7 +75,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     public void SelectComponentToBuild(int componentID)
     {
         #if FULL_DEBUG
-        Debug.Log("Selected component: " + ShipDesignSystem.Instance.id_comp_table[componentID].componentName);
+        Debug.Log("Selected component: " + ComponentTable.GetComp(componentID).componentName);
         #endif
         //StartCoroutine(StartPlacementSequence())
 
