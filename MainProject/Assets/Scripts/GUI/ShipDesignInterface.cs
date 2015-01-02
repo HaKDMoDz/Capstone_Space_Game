@@ -129,6 +129,10 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     {
         ShipDesignSystem.Instance.DeleteAllBlueprints();
     }
+    public void ClearScreen()
+    {
+        ShipDesignSystem.Instance.ClearScreen();
+    }
     #endregion DesignSystemAccess
     #endregion Public
     #endregion Methods
