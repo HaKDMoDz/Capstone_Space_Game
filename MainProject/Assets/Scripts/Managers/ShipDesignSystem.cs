@@ -38,7 +38,7 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
     //public Dictionary<int, ShipComponent> id_comp_table { get; private set; }
     //public Dictionary<ShipComponent, int> comp_id_table { get; private set; }
 
-    private bool buildingShip;
+    public bool buildingShip { get; private set; }
     private ShipBlueprint blueprintBeingBuilt;
     private Hull hullBeingBuilt;
     private List<ShipComponent> componentsBeingBuilt;

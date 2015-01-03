@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
 using System;
@@ -11,6 +12,7 @@ public struct InterfaceGUI_Fields
     public RectTransform hullButtonParent;
     public RectTransform compButtonParent;
     public ButtonWithContent buttonPrefab;
+    public InputDialogueBox saveDialogueBox;
 }
 #endregion AdditionalStructs
 public class ShipDesignInterface : Singleton<ShipDesignInterface>
@@ -60,8 +62,36 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
                     SelectComponentToBuild(compID);
                 });
         }
+
+        //Configure Save dialogue box
+        guiFields.saveDialogueBox.inputField.characterValidation = InputField.CharacterValidation.Alphanumeric;
+        guiFields.saveDialogueBox.inputField.onEndEdit.AddListener((value) =>
+            {
+                SaveInputFieldSubmit(guiFields.saveDialogueBox.inputText.text);
+            });
+        guiFields.saveDialogueBox.submitButton.onClick.AddListener(() =>
+            {
+                SaveBlueprint(guiFields.saveDialogueBox.inputText.text);
+            });
+        guiFields.saveDialogueBox.cancelButton.onClick.AddListener(() =>
+            {
+                ShowSaveDialogueBox(false);
+            });
+
     }
     #endregion GUI
+
+    public void SaveInputFieldSubmit(string inputText)
+    {
+        if(Input.GetButtonDown("Submit"))
+        {
+            SaveBlueprint(inputText);
+        }
+        if(Input.GetButtonDown("Cancel"))
+        {
+            ShowSaveDialogueBox(false);
+        }
+    }
 
     private IEnumerator StartPlacementSequence(ShipComponent selectedComponent)
     {
@@ -102,6 +132,26 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
         #endif
         StartCoroutine(StartPlacementSequence(ComponentTable.GetComp(componentID)));
     }
+    public void ShowSaveDialogueBox(bool show)
+    {
+        if (!show)
+        {
+            guiFields.saveDialogueBox.gameObject.SetActive(false);
+        }
+        //showing dialogue box
+        else if(ShipDesignSystem.Instance.buildingShip)
+        {
+            guiFields.saveDialogueBox.gameObject.SetActive(true);
+            guiFields.saveDialogueBox.inputField.OnPointerDown(new PointerEventData(EventSystem.current));
+        }
+        else
+        {
+            #if FULL_DEBUG
+            Debug.Log("No Ship being built");
+            #endif
+        }
+
+    }
     #endregion GUI
 
     #region DesignSystemAccess
@@ -115,6 +165,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     }
     public void SaveBlueprint(string fileName)
     {
+        ShowSaveDialogueBox(false);
         ShipDesignSystem.Instance.SaveBlueprint(fileName);
     }
     public void LoadBlueprint(string fileName)
@@ -131,6 +182,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     }
     public void ClearScreen()
     {
+        ShowSaveDialogueBox(false);
         ShipDesignSystem.Instance.ClearScreen();
     }
     #endregion DesignSystemAccess
