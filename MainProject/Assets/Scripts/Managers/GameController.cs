@@ -247,8 +247,8 @@ public class GameController : Singleton<GameController>
     }
     private void OnApplicationQuit()
     {
-        #if FULL_DEBUG
-        Debug.Log("app quit");
+        #if !NO_DEBUG
+        Debug.Log("Application Quit");
         #endif
 
         if (gameData.prevScene != GameScene.MainMenu)

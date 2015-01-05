@@ -13,6 +13,8 @@ public struct InterfaceGUI_Fields
     public RectTransform compButtonParent;
     public ButtonWithContent buttonPrefab;
     public InputDialogueBox saveDialogueBox;
+    public GameObject loadPanel;
+    public RectTransform loadButtonParent;
 }
 #endregion AdditionalStructs
 public class ShipDesignInterface : Singleton<ShipDesignInterface>
@@ -33,10 +35,10 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
         SetupGUI();
     }
     #endregion UnityCallbacks
-    #region GUI
+    #region GUIBuilders
     private void SetupGUI()
     {
-        //Hull buttons
+        //Setup Hull Buttons
         //foreach (var id_hull in ShipDesignSystem.Instance.id_hull_table)
         foreach(var id_hull in HullTable.id_hull_table)
         {
@@ -49,7 +51,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
                 BuildHull(hull_ID);
             });
         }
-        //Component Buttons
+        //Setup Component Buttons
         //foreach (var id_comp in ShipDesignSystem.Instance.id_comp_table)
         foreach (var id_comp in  ComponentTable.id_comp_table)
         {
@@ -62,8 +64,13 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
                     SelectComponentToBuild(compID);
                 });
         }
+        //Setup Load Panel
+        foreach (string blueprintName in ShipDesignSystem.Instance.GetSaveFileList())
+        {
+            AddLoadButton(blueprintName);
+        }
 
-        //Configure Save dialogue box
+        //Setup Save dialogue box
         guiFields.saveDialogueBox.inputField.characterValidation = InputField.CharacterValidation.Alphanumeric;
         guiFields.saveDialogueBox.inputField.onEndEdit.AddListener((value) =>
             {
@@ -78,20 +85,21 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
                 ShowSaveDialogueBox(false);
             });
 
+        
     }
-    #endregion GUI
-
-    public void SaveInputFieldSubmit(string inputText)
+    private void AddLoadButton(string fileName)
     {
-        if(Input.GetButtonDown("Submit"))
-        {
-            SaveBlueprint(inputText);
-        }
-        if(Input.GetButtonDown("Cancel"))
-        {
-            ShowSaveDialogueBox(false);
-        }
+        ButtonWithContent buttonClone = Instantiate(guiFields.buttonPrefab) as ButtonWithContent;
+        buttonClone.transform.SetParent(guiFields.loadButtonParent, false);
+        buttonClone.buttonText.text = fileName;
+        buttonClone.button.onClick.AddListener(() =>
+            {
+                LoadBlueprint(fileName);
+            });
     }
+    #endregion GUIBuilders
+
+
 
     private IEnumerator StartPlacementSequence(ShipComponent selectedComponent)
     {
@@ -121,16 +129,32 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
         }
     }
 
+    private void ClearGUI()
+    {
+        ShowSaveDialogueBox(false);
+        ShowLoadPanel(false);
+    }
     #endregion Private
     
     #region Public
-    #region GUI
+    #region GUIAccess
     public void SelectComponentToBuild(int componentID)
     {
         #if FULL_DEBUG
         Debug.Log("Selected component: " + ComponentTable.GetComp(componentID).componentName);
         #endif
         StartCoroutine(StartPlacementSequence(ComponentTable.GetComp(componentID)));
+    }
+    public void SaveInputFieldSubmit(string inputText)
+    {
+        if(Input.GetButtonDown("Submit"))
+        {
+            SaveBlueprint(inputText);
+        }
+        if(Input.GetButtonDown("Cancel"))
+        {
+            ShowSaveDialogueBox(false);
+        }
     }
     public void ShowSaveDialogueBox(bool show)
     {
@@ -142,17 +166,22 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
         else if(ShipDesignSystem.Instance.buildingShip)
         {
             guiFields.saveDialogueBox.gameObject.SetActive(true);
-            guiFields.saveDialogueBox.inputField.OnPointerDown(new PointerEventData(EventSystem.current));
+            EventSystem.current.SetSelectedGameObject(guiFields.saveDialogueBox.inputField.gameObject, null);
+            guiFields.saveDialogueBox.inputField.ActivateInputField();
         }
+        #if FULL_DEBUG
         else
         {
-            #if FULL_DEBUG
             Debug.Log("No Ship being built");
-            #endif
         }
+        #endif
 
     }
-    #endregion GUI
+    public void ShowLoadPanel(bool show)
+    {
+        guiFields.loadPanel.SetActive(show);
+    }
+    #endregion GUIAccess
 
     #region DesignSystemAccess
     public void BuildHull(int hull_ID)
@@ -163,13 +192,17 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     {
         ShipDesignSystem.Instance.BuildComponent(slot, component);
     }
-    public void SaveBlueprint(string fileName)
+    //GUI should not access directly
+    private void SaveBlueprint(string fileName)
     {
-        ShowSaveDialogueBox(false);
+        ClearGUI();
         ShipDesignSystem.Instance.SaveBlueprint(fileName);
+        AddLoadButton(fileName);
     }
-    public void LoadBlueprint(string fileName)
+    //GUI should not access directly
+    private void LoadBlueprint(string fileName)
     {
+        ClearGUI();
         ShipDesignSystem.Instance.LoadBlueprint(fileName);
     }
     public void DeleteBlueprint(string fileName)
@@ -180,9 +213,10 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     {
         ShipDesignSystem.Instance.DeleteAllBlueprints();
     }
+    
     public void ClearScreen()
     {
-        ShowSaveDialogueBox(false);
+        ClearGUI();
         ShipDesignSystem.Instance.ClearScreen();
     }
     #endregion DesignSystemAccess

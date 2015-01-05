@@ -178,6 +178,10 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
         #endif
         saveSystem.DeleteAllBlueprints();
     }
+    public List<string> GetSaveFileList()
+    {
+        return saveSystem.savedBPList.fileNames;
+    }
     #endregion SaveSystemInterface
     #endregion Public
     #region Private
