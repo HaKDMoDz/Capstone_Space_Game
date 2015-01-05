@@ -1,12 +1,14 @@
-﻿using UnityEngine;
+﻿#region Usings
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+#endregion Usings
 
 #region AdditionalStructs
 [Serializable]
-public struct ShipBPSaveFields
+public struct ShipBPSaveFields //inspector grouping
 {
     public string fileExtension_ShipBP;
     public string saveDirectory_ShipBP;
@@ -19,43 +21,45 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
     #region Fields
     #region Private
     #region EditorExposed
-
+    //Database References
     [SerializeField]
     private HullTable hullTableScriptableObject;
     [SerializeField]
     private ComponentTable compTableScriptableObject;
     [SerializeField]
-    private ShipBPSaveFields saveFields;
+    private ShipBPSaveFields saveFields;//vars used by saveSystem for saving blueprints
     #endregion EditorExposed
 
     #region Internal
     //References
-    ShipBlueprintSaveSystem saveSystem;
+    ShipBlueprintSaveSystem saveSystem; //Handles saving ship blueprints
 
-    //database references
-    //public Dictionary<int, Hull> id_hull_table { get; private set; }
-    //public Dictionary<Hull, int> hull_id_table { get; private set; }
-    //public Dictionary<int, ShipComponent> id_comp_table { get; private set; }
-    //public Dictionary<ShipComponent, int> comp_id_table { get; private set; }
-
-    public bool buildingShip { get; private set; }
-    private ShipBlueprint blueprintBeingBuilt;
-    private Hull hullBeingBuilt;
-    private List<ShipComponent> componentsBeingBuilt;
-    Dictionary<ComponentSlot, ShipComponent> slot_compsBeingBuilt_table;
+    //these vars keep track of various factors regarding building ships
+    public bool buildingShip { get; private set; } //Whether a ship is actively being built
+    private ShipBlueprint blueprintBeingBuilt; //the blueprint representing the ship currently being built
+    private Hull hullBeingBuilt; //the intantiated Hull GameObject
+    private List<ShipComponent> componentsBeingBuilt; //the instantiated ShipComponent GameObjects
+    Dictionary<ComponentSlot, ShipComponent> slot_compsBeingBuilt_table; //The instantiated components corresponding to the ComponentSlots
     #endregion Internal
     #endregion Private
     #endregion Fields
 
     #region Methods
     #region Public
+    /// <summary>
+    /// Starts building a ship using the hull corresponding to the hull_ID. 
+    /// Starts a blueprint to keep track of the actual hull and components and instantiates the ship on screen.
+    /// Nothing happens if a ship is already being built
+    /// </summary>
+    /// <param name="hull_ID">
+    /// ID of the hull to start building the ship with
+    /// </param>
     public void BuildHull(int hull_ID)
     {
         if (!buildingShip)
         {
             blueprintBeingBuilt.Clear();
             blueprintBeingBuilt.hull = HullTable.GetHull(hull_ID);
-            //blueprintBeingBuilt.hull = id_hull_table[hull_ID];
             #if FULL_DEBUG
             Debug.Log("Building hull: " + blueprintBeingBuilt.hull.hullName);
             #endif
@@ -70,6 +74,15 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
         }
     }//BuildHull
 
+    /// <summary>
+    /// Installs a component onto the specified component slot on the blueprint being built and instantiates it onto the ship in the scene
+    /// </summary>
+    /// <param name="slot">
+    /// The component slot to built the component on
+    /// </param>
+    /// <param name="component">
+    /// The component to build
+    /// </param>
     public void BuildComponent(ComponentSlot slot, ShipComponent component)
     {
         #if FULL_DEBUG
@@ -85,6 +98,8 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
                 //{
                 //    return;
                 //}
+
+                //if a component is already present, delete it from the scene and blueprint
                 ShipComponent otherComp = slot_compsBeingBuilt_table[slot];
                 componentsBeingBuilt.Remove(otherComp);
                 Destroy(otherComp.gameObject);
@@ -99,12 +114,15 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
             Debug.LogError("No ship being built");
             #endif
         }
-#else
+#else //if NO_DEBUG
         AddComponentToScene(slot, component);
         blueprintBeingBuilt.AddComponent(slot, component);
 #endif
     }//BuildComponent
 
+    /// <summary>
+    /// Removes everything from the scene, destroying all instantiated objects
+    /// </summary>
     public void ClearScreen()
     {
         #if FULL_DEBUG
@@ -129,11 +147,25 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
         slot_compsBeingBuilt_table.Clear();
     }//ClearScreen
 
-    #region SaveSystemInterface
+    #region SaveSystemInterface 
+    //These methods provide other scripts access to the Save System
+
+    /// <summary>
+    /// Saves the current blueprint being built
+    /// </summary>
+    /// <param name="fileName">
+    /// The name of the blueprint to save as
+    /// </param>
     public void SaveBlueprint(string fileName)
     {
         saveSystem.SaveBlueprint(blueprintBeingBuilt, fileName);
     }
+    /// <summary>
+    /// Loads a saved blueprint and adds it to the scene; clearing any unsaved changes to the current ship being built
+    /// </summary>
+    /// <param name="fileName">
+    /// Name of the blueprint to load
+    /// </param>
     public void LoadBlueprint(string fileName)
     {
         ClearScreen();
@@ -141,8 +173,10 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
         if(saveSystem.LoadBlueprint(out blueprintBeingBuilt, fileName))
         {
             AddHullToScene(blueprintBeingBuilt.hull);
+            //loop through all components listed in the blueprint and add them to the scene
             foreach (var slot_component in blueprintBeingBuilt.slot_component_table)
             {
+                //need to get the actual component slot that corresponds to the slot index in the blueprint
                 int slotIndex = slot_component.Key.index;
                 ComponentSlot slotToBuildOn = hullBeingBuilt.index_slot_table[slotIndex];
                 AddComponentToScene(slotToBuildOn, slot_component.Value);
@@ -153,7 +187,7 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
         {
             Debug.LogError("ShipBlueprint named " + fileName + " could not be found");
         }
-#else
+#else //NO_DEBUG
         saveSystem.LoadBlueprint(out blueprintBeingBuilt, fileName);
         AddHullToScene(blueprintBeingBuilt.hull);
         foreach (var slot_component in blueprintBeingBuilt.slot_component_table)
@@ -164,38 +198,69 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
 #endif
     }//LoadBlueprint
 
+    /// <summary>
+    /// Deletes the specified blueprint
+    /// </summary>
+    /// <param name="fileName"></param>
     public void DeleteBlueprint(string fileName)
     {
-        #if FULL_DEBUG || LOW_DEBUG
+        #if !NO_DEBUG
         Debug.LogWarning("Deleting Blueprint " + fileName);
         #endif
         saveSystem.DeleteBlueprint(fileName);
     }
+    /// <summary>
+    /// Deletes all saved blueprints 
+    /// </summary>
     public void DeleteAllBlueprints()
     {
         #if !NO_DEBUG
-        Debug.LogWarning("Deleting All Blueprints ");
+        Debug.LogWarning("Deleting all ship blueprints");
         #endif
         saveSystem.DeleteAllBlueprints();
     }
+    /// <summary>
+    /// returns a list of filenames for all saved blueprints
+    /// </summary>
+    /// <returns>
+    /// List of filenames for all saved blueprints
+    /// </returns>
     public List<string> GetSaveFileList()
     {
         return saveSystem.savedBPList.fileNames;
     }
     #endregion SaveSystemInterface
-    #endregion Public
-    #region Private
 
+    #endregion Public
+
+    #region Private
+    /// <summary>
+    /// Instantiates the hull prefab (rotated 90 Deg) and initializes it.
+    /// Also adjusts the camera so the ship fits on screen properly
+    /// </summary>
+    /// <param name="hull">
+    /// The hull prefab to instantiate
+    /// </param>
     private void AddHullToScene(Hull hull)
     {
         hullBeingBuilt = Instantiate(hull, Vector3.zero, Quaternion.Euler(0.0f, 90.0f, 0.0f)) as Hull;
         hullBeingBuilt.Init();
         //camera
     }
-
+    /// <summary>
+    /// Intantiates a component on the specified slot
+    /// </summary>
+    /// <param name="slot">
+    /// The component slot to build the component on
+    /// </param>
+    /// <param name="component">
+    /// The component prefab to instantiate
+    /// </param>
     private void AddComponentToScene(ComponentSlot slot, ShipComponent component)
     {
         ShipComponent builtComp = Instantiate(component, slot.transform.position, slot.transform.rotation) as ShipComponent;
+
+        //tracking components that are built for deletion
         componentsBeingBuilt.Add(builtComp);
         if(slot_compsBeingBuilt_table.ContainsKey(slot))
         {
@@ -210,15 +275,6 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
     #region UnityCallBacks
     private void Awake()
     {
-        //generating tables on awake - is accessed from other scripts
-        //id_hull_table = hullTableScriptableObject.Hull_id_List
-        //    .ToDictionary(h => h.ID, h => h.hull);
-        //hull_id_table = hullTableScriptableObject.Hull_id_List
-        //    .ToDictionary(h => h.hull, h => h.ID);
-        //id_comp_table = compTableScriptableObject.Comp_id_List
-        //    .ToDictionary(c => c.ID, c => c.component);
-        //comp_id_table = compTableScriptableObject.Comp_id_List
-        //    .ToDictionary(c => c.component, c => c.ID);
         hullTableScriptableObject.Init();
         compTableScriptableObject.Init();
 
@@ -227,9 +283,7 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
         slot_compsBeingBuilt_table = new Dictionary<ComponentSlot, ShipComponent>();
         saveSystem = new ShipBlueprintSaveSystem(saveFields.fileExtension_ShipBP, saveFields.saveDirectory_ShipBP, saveFields.fileName_SaveList);
     }
-
     #endregion UnityCallBacks
-
 
     #endregion Private
     #endregion Methods

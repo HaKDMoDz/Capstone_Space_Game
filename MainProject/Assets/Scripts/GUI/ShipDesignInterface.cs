@@ -1,59 +1,71 @@
-﻿using UnityEngine;
+﻿#region Usings
+using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using System.Linq;
+#endregion Usings
 
 #region AdditionalStructs
 [Serializable]
-public struct InterfaceGUI_Fields
+public struct InterfaceGUI_Fields //Inspector Grouping
 {
-    public RectTransform hullButtonParent;
-    public RectTransform compButtonParent;
-    public ButtonWithContent buttonPrefab;
-    public InputDialogueBox saveDialogueBox;
-    public GameObject loadPanel;
-    public RectTransform loadButtonParent;
+    public RectTransform hullButtonParent; //the parent panel for instantiated Hull buttons 
+    public RectTransform compButtonParent; //the parent panel for instantiated Component buttons 
+    public RectTransform loadButtonParent; //the parent panel for instantiated Load Blueprint buttons 
+    public ButtonWithContent buttonPrefab; 
+    public InputDialogueBox saveDialogueBox; //Dialogue box for providing the name of a Blueprint to save
+    public GameObject loadPanel; //The load panel lists all saved blueprints
 }
 #endregion AdditionalStructs
+
 public class ShipDesignInterface : Singleton<ShipDesignInterface>
 {
-
     #region Fields
     #region EditorExposed
     [SerializeField]
-    private InterfaceGUI_Fields guiFields;
+    private InterfaceGUI_Fields guiFields; //all gui related vars from the inspector
     #endregion EditorExposed
+
+    #region Internal
+    private Dictionary<string, GameObject> fileName_button_table; //reference to the Load buttons corresponding to the filenames (used to remove the button when a file is deleted)
+    #endregion Internal
     #endregion Fields
 
     #region Methods
     #region Private
+    
     #region UnityCallbacks
     private void Start()
     {
+        fileName_button_table = new Dictionary<string, GameObject>();
         SetupGUI();
     }
     #endregion UnityCallbacks
+
     #region GUIBuilders
+    /// <summary>
+    /// Sets up all dynamic elements in the GUI like buttons for Hulls and Components based on the database entries and Load buttons based on saved blueprints
+    /// </summary>
     private void SetupGUI()
     {
         //Setup Hull Buttons
-        //foreach (var id_hull in ShipDesignSystem.Instance.id_hull_table)
-        foreach(var id_hull in HullTable.id_hull_table)
+        foreach (var id_hull in HullTable.id_hull_table)
         {
+            //create the button and position it
             ButtonWithContent buttonClone = Instantiate(guiFields.buttonPrefab) as ButtonWithContent;
-            buttonClone.transform.SetParent(guiFields.hullButtonParent,false); 
+            buttonClone.transform.SetParent(guiFields.hullButtonParent, false);
             buttonClone.buttonText.text = id_hull.Value.hullName;
             int hull_ID = id_hull.Key;
             buttonClone.button.onClick.AddListener(() =>
             {
-                BuildHull(hull_ID);
+                BuildHull(hull_ID); //the method to call when the button is clicked
             });
         }
         //Setup Component Buttons
-        //foreach (var id_comp in ShipDesignSystem.Instance.id_comp_table)
-        foreach (var id_comp in  ComponentTable.id_comp_table)
+        foreach (var id_comp in ComponentTable.id_comp_table)
         {
             ButtonWithContent buttonClone = Instantiate(guiFields.buttonPrefab) as ButtonWithContent;
             buttonClone.transform.SetParent(guiFields.compButtonParent, false);
@@ -74,19 +86,24 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
         guiFields.saveDialogueBox.inputField.characterValidation = InputField.CharacterValidation.Alphanumeric;
         guiFields.saveDialogueBox.inputField.onEndEdit.AddListener((value) =>
             {
-                SaveInputFieldSubmit(guiFields.saveDialogueBox.inputText.text);
+                SaveInputFieldSubmit(guiFields.saveDialogueBox.inputField.text);
             });
         guiFields.saveDialogueBox.submitButton.onClick.AddListener(() =>
             {
-                SaveBlueprint(guiFields.saveDialogueBox.inputText.text);
+                SaveBlueprint(guiFields.saveDialogueBox.inputField.text);
             });
         guiFields.saveDialogueBox.cancelButton.onClick.AddListener(() =>
             {
                 ShowSaveDialogueBox(false);
             });
-
-        
     }
+
+    /// <summary>
+    /// Helper method to add a load button
+    /// </summary>
+    /// <param name="fileName">
+    /// the fileName that the button will correspond to
+    /// </param>
     private void AddLoadButton(string fileName)
     {
         ButtonWithContent buttonClone = Instantiate(guiFields.buttonPrefab) as ButtonWithContent;
@@ -96,11 +113,26 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
             {
                 LoadBlueprint(fileName);
             });
+        fileName_button_table.Add(fileName, buttonClone.gameObject);
+    }
+    /// <summary>
+    /// Removes a load button
+    /// </summary>
+    /// <param name="fileName"></param>
+    private void RemoveLoadButton(string fileName)
+    {
+        Destroy(fileName_button_table[fileName]);
+        fileName_button_table.Remove(fileName);
     }
     #endregion GUIBuilders
 
-
-
+    /// <summary>
+    /// Lets the user place components on the ship being built.
+    /// The user can drag with the mouse to place multiple components of the same type
+    /// </summary>
+    /// <param name="selectedComponent">
+    /// The component to build
+    /// </param>
     private IEnumerator StartPlacementSequence(ShipComponent selectedComponent)
     {
         bool runSequence = true;
@@ -109,53 +141,78 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
         int componentSlotLayer = GlobalTagsAndLayers.Instance.layers.componentSlotLayer;
         yield return null;
 
-        while(runSequence)
+        while (runSequence) //keeps running until the user let's go of the mouse button or hits Esc
         {
-            if(Input.GetMouseButtonDown(0) || dragging)
+            if (Input.GetMouseButtonDown(0) || dragging)
             {
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                if(Physics.Raycast(ray, out hit, 1000.0f, 1<<componentSlotLayer))
+                if (Physics.Raycast(ray, out hit, 1000.0f, 1 << componentSlotLayer))
                 {
                     dragging = true;
                     ComponentSlot slot = hit.transform.GetComponent<ComponentSlot>();
                     ShipDesignSystem.Instance.BuildComponent(slot, selectedComponent);
                 }
             }
-            if(Input.GetMouseButtonUp(0)||Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetMouseButtonUp(0) || Input.GetKeyDown(KeyCode.Escape))
             {
                 runSequence = false;
             }
             yield return null;
         }
     }
-
+    /// <summary>
+    /// Removes all GUI elements from the screen
+    /// </summary>
     private void ClearGUI()
     {
         ShowSaveDialogueBox(false);
         ShowLoadPanel(false);
     }
     #endregion Private
-    
+
     #region Public
     #region GUIAccess
+    /// <summary>
+    /// Selects the component to build and starts the placement sequence
+    /// </summary>
+    /// <param name="componentID"></param>
     public void SelectComponentToBuild(int componentID)
     {
+        if(!ShipDesignSystem.Instance.buildingShip)
+        {
+            #if FULL_DEBUG
+            Debug.Log("Not building a ship");
+            #endif
+            return;
+        }
         #if FULL_DEBUG
         Debug.Log("Selected component: " + ComponentTable.GetComp(componentID).componentName);
         #endif
         StartCoroutine(StartPlacementSequence(ComponentTable.GetComp(componentID)));
     }
+    /// <summary>
+    /// The OnEndEdit event for input fields are called at various points, including when the input field loses focus etc...which doesn't necessarily mean that the InputField was meant to be submitted
+    /// This method acts as a filter and only actually submits the info from the input field if the Input Axis "Submit" is activated (Return, etc.)
+    /// Also hides the dialogue box upon Input Axis "Cancel" (Esc, etc.)
+    /// </summary>
+    /// <param name="inputText">
+    /// InputField text
+    /// </param>
     public void SaveInputFieldSubmit(string inputText)
     {
-        if(Input.GetButtonDown("Submit"))
+        if (Input.GetButtonDown("Submit"))
         {
             SaveBlueprint(inputText);
         }
-        if(Input.GetButtonDown("Cancel"))
+        if (Input.GetButtonDown("Cancel"))
         {
             ShowSaveDialogueBox(false);
         }
     }
+    /// <summary>
+    /// Shows the Save Dialogue Box for the user to enter the name of the blueprint to save as
+    /// </summary>
+    /// <param name="show"></param>
     public void ShowSaveDialogueBox(bool show)
     {
         if (!show)
@@ -163,7 +220,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
             guiFields.saveDialogueBox.gameObject.SetActive(false);
         }
         //showing dialogue box
-        else if(ShipDesignSystem.Instance.buildingShip)
+        else if (ShipDesignSystem.Instance.buildingShip)
         {
             guiFields.saveDialogueBox.gameObject.SetActive(true);
             EventSystem.current.SetSelectedGameObject(guiFields.saveDialogueBox.inputField.gameObject, null);
@@ -177,6 +234,10 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
         #endif
 
     }
+    /// <summary>
+    /// Shows the panel that lists all saved blueprints so the user can load one of them
+    /// </summary>
+    /// <param name="show"></param>
     public void ShowLoadPanel(bool show)
     {
         guiFields.loadPanel.SetActive(show);
@@ -184,15 +245,29 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     #endregion GUIAccess
 
     #region DesignSystemAccess
+    /// <summary>
+    /// Calls the BuildHull method of the ShipDesignSystem
+    /// </summary>
+    /// <param name="hull_ID"></param>
     public void BuildHull(int hull_ID)
     {
         ShipDesignSystem.Instance.BuildHull(hull_ID);
     }
+    /// <summary>
+    /// Calls the BuildComponent method of the ShipDesignSystem
+    /// </summary>
+    /// <param name="slot"></param>
+    /// <param name="component"></param>
     public void BuildComponent(ComponentSlot slot, ShipComponent component)
     {
         ShipDesignSystem.Instance.BuildComponent(slot, component);
     }
     //GUI should not access directly
+    /// <summary>
+    /// Saves the current blueprint using the name entered in the SaveDialgoueBox
+    /// Calls the SaveBlueprint method of the ShipDesignSystem
+    /// </summary>
+    /// <param name="fileName"></param>
     private void SaveBlueprint(string fileName)
     {
         ClearGUI();
@@ -200,20 +275,38 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
         AddLoadButton(fileName);
     }
     //GUI should not access directly
+    /// <summary>
+    /// Loads the blueprint selected from the Load Panel. Calls the LoadBlueprint method of ShipDesignSystem
+    /// </summary>
+    /// <param name="fileName"></param>
     private void LoadBlueprint(string fileName)
     {
         ClearGUI();
         ShipDesignSystem.Instance.LoadBlueprint(fileName);
     }
+    /// <summary>
+    /// Calls DeleteBlueprint on the ShipDesignSystem
+    /// </summary>
+    /// <param name="fileName"></param>
     public void DeleteBlueprint(string fileName)
     {
         ShipDesignSystem.Instance.DeleteBlueprint(fileName);
     }
+    /// <summary>
+    /// Removes all Load Buttons from the Load Panel and calls DeleteAllBlueprints on the ShipDesignSystem
+    /// </summary>
     public void DeleteAllBlueprints()
     {
+        for (int i = fileName_button_table.Count - 1; i >= 0; i--)
+        {
+            RemoveLoadButton(fileName_button_table.ElementAt(i).Key);
+        }
+        ClearGUI();
         ShipDesignSystem.Instance.DeleteAllBlueprints();
     }
-    
+    /// <summary>
+    /// Clears the GUI and calls ClearScreen on the ShipDesignSystem
+    /// </summary>
     public void ClearScreen()
     {
         ClearGUI();

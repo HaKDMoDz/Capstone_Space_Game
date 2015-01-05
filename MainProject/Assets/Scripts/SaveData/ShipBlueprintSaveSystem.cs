@@ -1,27 +1,24 @@
-﻿using UnityEngine;
+﻿#region Usings
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+#endregion Usings
 
-public class ShipBlueprintSaveSystem
+//pure C# class that deals with saving blueprints
+public class ShipBlueprintSaveSystem 
 {
     #region Fields
-    public SavedShipBPList savedBPList { get; private set; }
+    public SavedShipBPList savedBPList { get; private set; } //keeps track of all saves blueprints
 
     #region Internal
     //saving info
     private string fileExtension_ShipBP = "sbp";
     private string saveDirectory_ShipBP = "ShipBlueprints";
     private string fileName_SaveList = "ShipBPFileList";
-
-    //database references
-    //private Dictionary<int, Hull> id_hull_table;
-    //private Dictionary<Hull, int> hull_id_table;
-    //private Dictionary<int, ShipComponent> id_comp_table;
-    //private Dictionary<ShipComponent, int> comp_id_table;
 
     //cached vars
     private BinaryFormatter binaryFormatter;
@@ -46,31 +43,51 @@ public class ShipBlueprintSaveSystem
         Init();
     }
 
+    /// <summary>
+    /// Saves the ShipBlueprint object as a file named as specified
+    /// </summary>
+    /// <param name="shipBP">
+    /// The ship blueprint object to save
+    /// </param>
+    /// <param name="fileName">
+    /// The name of the blueprint to save as
+    /// </param>
     public void SaveBlueprint(ShipBlueprint shipBP, string fileName)
     {
         SerializeShipBP(shipBP);
-        path = BuildPathString(fileName);
+        path = BuildPathString(fileName); 
         #if FULL_DEBUG
         Debug.Log("Saving Ship Blueprint to " + path);
-        #endif 
+        #endif
 
         fileStream = File.Create(path);
         binaryFormatter.Serialize(fileStream, sz_ShipBP);
         fileStream.Close();
-        //update list
+        //update saves list
         savedBPList.Add(fileName);
         //optimize
         SaveSavesList();
     }
-
+    /// <summary>
+    /// Loads the blueprint as per the specified fileName and populates the reference to the blueprint
+    /// </summary>
+    /// <param name="shipBP">
+    /// The blueprint to populate upon loading
+    /// </param>
+    /// <param name="fileName">
+    /// Name of the blueprint file to load
+    /// </param>
+    /// <returns>
+    /// Whether the load was successful
+    /// </returns>
     public bool LoadBlueprint(out ShipBlueprint shipBP, string fileName)
     {
         path = BuildPathString(fileName);
-        if(File.Exists(path))
+        if (File.Exists(path))
         {
             #if FULL_DEBUG
-		    Debug.Log("Loading Ship Blueprint from " + path);
-	        #endif
+            Debug.Log("Loading Ship Blueprint from " + path);
+            #endif
             fileStream = File.Open(path, FileMode.Open);
             sz_ShipBP = binaryFormatter.Deserialize(fileStream) as SerializedShipBlueprint;
             DeSerializeSipBP(sz_ShipBP, out shipBP);
@@ -81,15 +98,18 @@ public class ShipBlueprintSaveSystem
         {
             #if !NO_DEBUG
             Debug.LogError("No ShipBlueprint found at path " + path);
-            #endif  
+            #endif
             shipBP = null;
             return false;
         }
     }
-
+    /// <summary>
+    /// Deletes the blueprint file
+    /// </summary>
+    /// <param name="fileName"></param>
     public void DeleteBlueprint(string fileName)
     {
-#if !NO_DEBUG
+        #if !NO_DEBUG
         if (savedBPList.FileExists(fileName))
         {
             path = BuildPathString(fileName);
@@ -102,39 +122,51 @@ public class ShipBlueprintSaveSystem
         {
             Debug.LogError("Blueprint " + fileName + " not found");
         }
-#else
+        #else //NO_DEBUG
             path = BuildPathString(fileName);
             File.Delete(path);
             savedBPList.Remove(fileName);
             SaveSavesList();
-#endif
-
+        #endif
     }
+    /// <summary>
+    /// Deletes all saved blueprints
+    /// </summary>
     public void DeleteAllBlueprints()
     {
-        #if !NO_DEBUG
-        Debug.LogWarning("Deleting all ship blueprints");
-	    #endif
-        foreach (string fileName in savedBPList.fileNames)
+        for (int i = savedBPList.fileNames.Count - 1; i >= 0; i--)
         {
-            DeleteBlueprint(fileName);
+            DeleteBlueprint(savedBPList.fileNames[i]);
         }
     }
     #endregion Public
-    #region Private
 
+    #region Private
+    /// <summary>
+    /// Coverts the ShipBlueprint into a format that .Net's binary serializer can serialize
+    /// </summary>
+    /// <param name="shipBP">
+    /// The blueprint to serialize
+    /// </param>
     private void SerializeShipBP(ShipBlueprint shipBP)
     {
         sz_ShipBP.Clear();
         sz_ShipBP.hull_ID = HullTable.GetID(shipBP.hull);
-        //sz_ShipBP.hull_ID = hull_id_table[shipBP.hull];
         foreach (var slot_component in shipBP.slot_component_table)
         {
             sz_ShipBP.AddComponent(slot_component.Key.index, ComponentTable.GetID(slot_component.Value));
-            //sz_ShipBP.AddComponent(slot_component.Key.index, comp_id_table[slot_component.Value]);
         }
     }//Serialize
 
+    /// <summary>
+    /// Deserializes the loaded serialized ship blueprint
+    /// </summary>
+    /// <param name="sz_ShipBP">
+    /// the serialized ship blueprint to de-serialize
+    /// </param>
+    /// <param name="shipBP">
+    /// the blueprint to populate the deserialized shipBP into
+    /// </param>
     private void DeSerializeSipBP(SerializedShipBlueprint sz_ShipBP, out ShipBlueprint shipBP)
     {
         shipBP = new ShipBlueprint(HullTable.GetHull(sz_ShipBP.hull_ID));
@@ -148,7 +180,10 @@ public class ShipBlueprintSaveSystem
             shipBP.AddComponent(slot, component);
         }
     }//DeSerialize
-
+    
+    /// <summary>
+    /// Saves the current list of saved blueprints
+    /// </summary>
     private void SaveSavesList()
     {
         path = BuildPathString(fileName_SaveList);
@@ -156,11 +191,12 @@ public class ShipBlueprintSaveSystem
         binaryFormatter.Serialize(fileStream, savedBPList);
         fileStream.Close();
     }
-
+    /// <summary>
+    /// Loads the list of saved blueprints from HDD
+    /// </summary>
     private void LoadSavesList()
     {
         path = BuildPathString(fileName_SaveList);
-
         if (File.Exists(path))
         {
             fileStream = File.Open(path, FileMode.Open);
@@ -180,19 +216,16 @@ public class ShipBlueprintSaveSystem
     private void Init()
     {
         binaryFormatter = new BinaryFormatter();
-        //id_hull_table = ShipDesignSystem.Instance.id_hull_table;
-        //hull_id_table = ShipDesignSystem.Instance.hull_id_table;
-        //id_comp_table = ShipDesignSystem.Instance.id_comp_table;
-        //comp_id_table = ShipDesignSystem.Instance.comp_id_table;
         sz_ShipBP = new SerializedShipBlueprint(0);
         CreateShipBPDirectory();
-        //load list
         LoadSavesList();
-
     }
+    /// <summary>
+    /// Creates the directory to save blueprints into, unless it exists already
+    /// </summary>
     private void CreateShipBPDirectory()
     {
-        if(!Directory.Exists(Application.persistentDataPath+'/'+saveDirectory_ShipBP))
+        if (!Directory.Exists(Application.persistentDataPath + '/' + saveDirectory_ShipBP))
         {
             Directory.CreateDirectory(Application.persistentDataPath + '/' + saveDirectory_ShipBP);
             #if FULL_DEBUG
@@ -200,11 +233,21 @@ public class ShipBlueprintSaveSystem
             #endif
         }
     }
+    /// <summary>
+    /// Returns the full path to save a file into
+    /// </summary>
+    /// <param name="fileName">
+    /// Name of the file to save
+    /// </param>
+    /// <returns>
+    /// The full path to save the file into
+    /// </returns>
     private string BuildPathString(string fileName)
     {
         return Application.persistentDataPath + '/' + saveDirectory_ShipBP + '/' + fileName + '.' + fileExtension_ShipBP;
     }
     #endregion Helper
+
     #endregion Private
 
     #endregion Methods
@@ -212,10 +255,10 @@ public class ShipBlueprintSaveSystem
 }
 #region AdditionalStructs
 [Serializable]
-public class SavedShipBPList
+public class SavedShipBPList //keeps track of all the saves ship blueprints
 {
-    public int count = 0;
-    public List<string> fileNames { get; private set; }
+    public int count = 0; //more efficient that list.count
+    public List<string> fileNames { get; private set; } //Filenames of all saved blueprints
 
     public SavedShipBPList()
     {
@@ -236,10 +279,9 @@ public class SavedShipBPList
     {
         return fileNames.Contains(fileName);
     }
-
 }
 [Serializable]
-public class SerializedShipBlueprint
+public class SerializedShipBlueprint //serializable version of the ShipBlueprint
 {
     public int hull_ID;
     public Dictionary<int, int> slotIndex_CompID_Table;
@@ -255,22 +297,20 @@ public class SerializedShipBlueprint
     }
     public void RemoveComponent(int slotIndex)
     {
-#if !NO_DEBUG
+    #if !NO_DEBUG
         if (slotIndex_CompID_Table.ContainsKey(slotIndex))
         {
             slotIndex_CompID_Table.Remove(slotIndex);
-            //slot.InstalledComponent = null;
         }
+        #if FULL_DEBUG
         else
         {
-            #if FULL_DEBUG
             Debug.Log("slot " + slotIndex + " is not populated in the blueprint");
-            #endif
         }
-
-#else
+        #endif
+    #else //NO_DEBUG
         slotIndex_CompID_Table.Remove(slotIndex);
-#endif
+    #endif
     }//RemoveComp
 
     public void Clear()
@@ -280,14 +320,4 @@ public class SerializedShipBlueprint
     }
 
 }
-//[Serializable]
-//public class SerializedComponent
-//{
-//    public int ID;
-
-//    public SerializedComponent(int ID)
-//    {
-//        this.ID =ID;
-//    }
-//}
 #endregion AdditionalStructs
