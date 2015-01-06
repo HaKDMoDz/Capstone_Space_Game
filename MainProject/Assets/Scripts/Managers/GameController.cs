@@ -40,7 +40,7 @@ public class GameController : Singleton<GameController>
     [SerializeField]
     private List<SceneNameEntry> sceneEntryList;
     [SerializeField]
-    SaveFields saveFields;
+    private SaveFields saveFields;
     #endregion //EditorExposed
 
     #region References
@@ -84,6 +84,7 @@ public class GameController : Singleton<GameController>
         //Debug.Log("Change Scene Button");
         ChangeScene(sceneNameToEnumTable[sceneName]);
     }
+
     /// <summary>
     /// Call this method to change the scene
     /// Raises a PreSceneChange event, autosaves, and then triggers a Unity scene change

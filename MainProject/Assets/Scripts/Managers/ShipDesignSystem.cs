@@ -120,6 +120,7 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
 #endif
     }//BuildComponent
 
+
     /// <summary>
     /// Removes everything from the scene, destroying all instantiated objects
     /// </summary>
