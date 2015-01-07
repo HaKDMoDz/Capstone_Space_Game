@@ -12,14 +12,23 @@ public class GameData
     public AI_Data eridani_AI_Data;
     public AI_Data kTaeran_AI_Data;
     public AI_Data pirates_AI_Data;
+    public PlayerFleetData playerFleetData;
 
-
-    public GameData() { }
+    public GameData()
+    {
+        Init();
+    }
 
     public GameData(GameScene prevScene, GameScene nextScene)
     {
         this.prevScene = prevScene;
         this.nextScene = nextScene;
+        Init();
+    }
+
+    private void Init()
+    {
+        playerFleetData = new PlayerFleetData();
     }
 
     /// <summary>
@@ -32,6 +41,9 @@ public class GameData
     {
         sz_gameData.prevScene = prevScene;
         sz_gameData.nextScene = nextScene;
+
+        playerFleetData.Serialize(ref sz_gameData.sz_playerFleetData);
+
     }
 
 }

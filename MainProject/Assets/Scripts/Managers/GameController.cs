@@ -120,6 +120,8 @@ public class GameController : Singleton<GameController>
             //notifies all other systems that the scene is about to change
             //they should all update their "data" structures so they can be persisted
             OnPreSceneChange(new SceneChangeArgs(gameData.prevScene, nextScene));
+            RetrieveGameData();
+            
         }
         saveSystem.AutoSave(gameData);
         Application.LoadLevel(sceneEnumToNameTable[nextScene]);
@@ -265,6 +267,25 @@ public class GameController : Singleton<GameController>
         //InputManager.Instance.RegisterKeysDown(KeyDown, KeyCode.F5, KeyCode.F9);
     }
     #endregion UnityCallbacks
+
+    /// <summary>
+    /// This method is called after the PreSceneEvent has been raised. All systems should have their persistent data ready to be retrieved and saved by now
+    /// </summary>
+    private void RetrieveGameData()
+    {
+        switch (gameData.prevScene)
+        {
+            case GameScene.GalaxyMap:
+                break;
+            case GameScene.CombatScene:
+                break;
+            case GameScene.ShipDesignScene:
+                gameData.playerFleetData = ShipDesignSystem.Instance.playerFleetData;
+                break;
+            default:
+                break;
+        }
+    }
 
     private void KeyDown(KeyCode key)
     {

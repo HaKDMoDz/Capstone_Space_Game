@@ -14,13 +14,23 @@ public class SerializedGameData
     public SerializedAI_Data sz_eridani_AI_Data;
     public SerializedAI_Data sz_kTaeran_AI_Data;
     public SerializedAI_Data sz_pirates_AI_Data;
+    public SerializedPlayerFleetData sz_playerFleetData;
 
-    public SerializedGameData() { }
+    public SerializedGameData() 
+    {
+        Init();
+    }
 
     public SerializedGameData(GameScene prevScene, GameScene nextScene)
     {
         this.prevScene = prevScene;
         this.nextScene = nextScene;
+        Init();
+    }
+
+    private void Init()
+    {
+        sz_playerFleetData = new SerializedPlayerFleetData();
     }
     /// <summary>
     /// Generates a deSerialized version of the serializedGameData
@@ -32,5 +42,7 @@ public class SerializedGameData
     {
         gameData.prevScene = prevScene;
         gameData.nextScene = nextScene;
+
+        sz_playerFleetData.DeSerialize(ref gameData.playerFleetData);
     }
 }

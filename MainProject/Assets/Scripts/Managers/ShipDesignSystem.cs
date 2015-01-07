@@ -31,6 +31,9 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
     #endregion EditorExposed
 
     #region Internal
+    //public Dictionary<string, ShipBlueprint> name_savedBP_table { get; private set; }
+    public PlayerFleetData playerFleetData { get; private set; }
+
     //References
     ShipBlueprintSaveSystem saveSystem; //Handles saving ship blueprints
 
@@ -39,7 +42,7 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
     private ShipBlueprint blueprintBeingBuilt; //the blueprint representing the ship currently being built
     private Hull hullBeingBuilt; //the intantiated Hull GameObject
     private List<ShipComponent> componentsBeingBuilt; //the instantiated ShipComponent GameObjects
-    Dictionary<ComponentSlot, ShipComponent> slot_compsBeingBuilt_table; //The instantiated components corresponding to the ComponentSlots
+    private Dictionary<ComponentSlot, ShipComponent> slot_compsBeingBuilt_table; //The instantiated components corresponding to the ComponentSlots
     #endregion Internal
     #endregion Private
     #endregion Fields
@@ -159,6 +162,8 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
     /// </param>
     public void SaveBlueprint(string fileName)
     {
+        blueprintBeingBuilt.blueprintName = fileName;
+
         saveSystem.SaveBlueprint(blueprintBeingBuilt, fileName);
     }
     /// <summary>
@@ -282,11 +287,25 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
         componentsBeingBuilt = new List<ShipComponent>();
         blueprintBeingBuilt = new ShipBlueprint();
         slot_compsBeingBuilt_table = new Dictionary<ComponentSlot, ShipComponent>();
+        //name_savedBP_table = new Dictionary<string, ShipBlueprint>();
         saveSystem = new ShipBlueprintSaveSystem(saveFields.fileExtension_ShipBP, saveFields.saveDirectory_ShipBP, saveFields.fileName_SaveList);
+        playerFleetData = new PlayerFleetData();
+    }
+    private void Start()
+    {
+        GameController.Instance.OnPreSceneChange += PreSceneChange;
     }
     #endregion UnityCallBacks
 
+    #region InternalCallbacks
+    private void PreSceneChange(SceneChangeArgs args)
+    {
+        playerFleetData.currentFleet_BlueprintNames = FleetManager.Instance.currentFleet;
+    }
+    #endregion InternalCallbacks
+
     #endregion Private
+
     #endregion Methods
 
 }

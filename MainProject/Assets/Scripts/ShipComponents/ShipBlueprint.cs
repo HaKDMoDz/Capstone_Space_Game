@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class ShipBlueprint
 {
     #region Fields
+    public string blueprintName;
     public Hull hull { get; set; }
     public Dictionary<ComponentSlot, ShipComponent> slot_component_table { get; private set; }
     #endregion Fields

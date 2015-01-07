@@ -12,12 +12,21 @@ using System.Linq;
 [Serializable]
 public struct InterfaceGUI_Fields //Inspector Grouping
 {
+    public ButtonWithContent buttonPrefab; 
+    //building panels
     public RectTransform hullButtonParent; //the parent panel for instantiated Hull buttons 
     public RectTransform compButtonParent; //the parent panel for instantiated Component buttons 
-    public RectTransform loadButtonParent; //the parent panel for instantiated Load Blueprint buttons 
-    public ButtonWithContent buttonPrefab; 
+    
     public InputDialogueBox saveDialogueBox; //Dialogue box for providing the name of a Blueprint to save
+
+    //load panel
     public GameObject loadPanel; //The load panel lists all saved blueprints
+    public RectTransform loadButtonParent; //the parent panel for instantiated Load Blueprint buttons 
+
+    //fleet panel
+    public GameObject fleetPanel;
+    public RectTransform currentFleetButtonsParent;
+    public RectTransform savedBlueprintsButtonsParent;
 }
 #endregion AdditionalStructs
 
@@ -30,7 +39,9 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     #endregion EditorExposed
 
     #region Internal
-    private Dictionary<string, GameObject> fileName_button_table; //reference to the Load buttons corresponding to the filenames (used to remove the button when a file is deleted)
+    //private Dictionary<string, GameObject> fileName_button_table; //reference to the Load buttons corresponding to the filenames (used to remove the button when a file is deleted)
+    //private Dictionary<string, GameObject> savedBP_button_table; //same as above - used in the fleet management planel
+    private Dictionary<string, List<GameObject>> blueprintName_button_table;
     #endregion Internal
     #endregion Fields
 
@@ -40,7 +51,8 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     #region UnityCallbacks
     private void Start()
     {
-        fileName_button_table = new Dictionary<string, GameObject>();
+        //fileName_button_table = new Dictionary<string, GameObject>();
+        blueprintName_button_table = new Dictionary<string, List<GameObject>>();
         SetupGUI();
     }
     #endregion UnityCallbacks
@@ -76,10 +88,10 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
                     SelectComponentToBuild(compID);
                 });
         }
-        //Setup Load Panel
+        //Add blueprint buttons to Load Panel and Fleet Panel
         foreach (string blueprintName in ShipDesignSystem.Instance.GetSaveFileList())
         {
-            AddLoadButton(blueprintName);
+            AddBlueprintButton(blueprintName);
         }
 
         //Setup Save dialogue box
@@ -96,33 +108,78 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
             {
                 ShowSaveDialogueBox(false);
             });
+
+        
     }
 
     /// <summary>
-    /// Helper method to add a load button
+    /// Helper method to add a blueprint button
     /// </summary>
     /// <param name="fileName">
     /// the fileName that the button will correspond to
     /// </param>
-    private void AddLoadButton(string fileName)
+    private void AddBlueprintButton(string fileName)
     {
-        ButtonWithContent buttonClone = Instantiate(guiFields.buttonPrefab) as ButtonWithContent;
-        buttonClone.transform.SetParent(guiFields.loadButtonParent, false);
-        buttonClone.buttonText.text = fileName;
-        buttonClone.button.onClick.AddListener(() =>
+        ButtonWithContent loadButtonClone = Instantiate(guiFields.buttonPrefab) as ButtonWithContent;
+        loadButtonClone.transform.SetParent(guiFields.loadButtonParent, false);
+        loadButtonClone.buttonText.text = fileName;
+        loadButtonClone.button.onClick.AddListener(() =>
             {
                 LoadBlueprint(fileName);
             });
-        fileName_button_table.Add(fileName, buttonClone.gameObject);
+
+        ButtonWithContent fleetPanel_savedBP_ButtonClone = Instantiate(guiFields.buttonPrefab) as ButtonWithContent;
+        fleetPanel_savedBP_ButtonClone.transform.SetParent(guiFields.savedBlueprintsButtonsParent, false);
+        fleetPanel_savedBP_ButtonClone.buttonText.text = fileName;
+        fleetPanel_savedBP_ButtonClone.button.onClick.AddListener(() => 
+            {
+                FleetManager.Instance.AddShipToFleet(fileName);
+                AddCurrentFleetButton(fileName);
+            });
+
+        //fileName_button_table.Add(fileName, buttonClone.gameObject);
+        blueprintName_button_table.Add(fileName, new List<GameObject> { loadButtonClone.gameObject, fleetPanel_savedBP_ButtonClone.gameObject});
     }
     /// <summary>
-    /// Removes a load button
+    /// Removes a blueprint button
     /// </summary>
     /// <param name="fileName"></param>
-    private void RemoveLoadButton(string fileName)
+    private void RemoveBlueprintButton(string fileName)
     {
-        Destroy(fileName_button_table[fileName]);
-        fileName_button_table.Remove(fileName);
+#if !NO_DEBUG
+        if(!blueprintName_button_table.ContainsKey(fileName))
+        {
+            Debug.LogError("Blueprint " + fileName + " does not exist in button table");
+            return;
+        }
+        if(blueprintName_button_table[fileName]==null)
+        {
+            Debug.LogError("No buttons found for blueprint " + fileName);
+            return;
+        }
+        for (int i = blueprintName_button_table[fileName].Count-1; i >=0; i--)
+        {
+            Destroy(blueprintName_button_table[fileName][i]);
+        }
+        blueprintName_button_table.Remove(fileName);
+#else //NO_DEBUG
+        for (int i = blueprintName_button_table[fileName].Count-1; i >=0; i--)
+        {
+            Destroy(blueprintName_button_table[fileName][i]);
+        }
+        blueprintName_button_table.Remove(fileName);
+#endif
+    }
+    
+    private void AddCurrentFleetButton(string fileName)
+    {
+        ButtonWithContent buttonClone = Instantiate(guiFields.buttonPrefab) as ButtonWithContent;
+        buttonClone.transform.SetParent(guiFields.currentFleetButtonsParent);
+        buttonClone.buttonText.text = fileName;
+        buttonClone.button.onClick.AddListener(() =>
+            {
+                Destroy(buttonClone.gameObject);
+            });
     }
     #endregion GUIBuilders
 
@@ -242,6 +299,11 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     {
         guiFields.loadPanel.SetActive(show);
     }
+
+    public void ShowFleetPanel(bool show)
+    {
+        guiFields.fleetPanel.SetActive(show);
+    }
     #endregion GUIAccess
 
     #region DesignSystemAccess
@@ -272,7 +334,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     {
         ClearGUI();
         ShipDesignSystem.Instance.SaveBlueprint(fileName);
-        AddLoadButton(fileName);
+        AddBlueprintButton(fileName);
     }
     //GUI should not access directly
     /// <summary>
@@ -297,9 +359,10 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     /// </summary>
     public void DeleteAllBlueprints()
     {
-        for (int i = fileName_button_table.Count - 1; i >= 0; i--)
+
+        for (int i = blueprintName_button_table.Count - 1; i >= 0; i--)
         {
-            RemoveLoadButton(fileName_button_table.ElementAt(i).Key);
+            RemoveBlueprintButton(blueprintName_button_table.ElementAt(i).Key);
         }
         ClearGUI();
         ShipDesignSystem.Instance.DeleteAllBlueprints();
