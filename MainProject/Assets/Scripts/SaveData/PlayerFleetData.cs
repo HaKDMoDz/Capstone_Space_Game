@@ -10,7 +10,6 @@ public class PlayerFleetData
     public PlayerFleetData()
     {
         currentFleet_BlueprintNames = new List<string>();
-        Debug.Log("Player Fleet Data C_TOR");
     }
 
     public void Serialize(ref SerializedPlayerFleetData sz_playerFleetData)

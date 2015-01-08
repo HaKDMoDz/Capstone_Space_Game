@@ -10,8 +10,20 @@ public class FleetManager : Singleton<FleetManager>
     [SerializeField]
     private int maxFleetStrength;
     #endregion EditorExposed
-
-    public List<string> currentFleet { get; private set; }
+    private List<string> currentFleet;
+    public List<string> CurrentFleet
+    {
+        get { return currentFleet; }
+        set
+        {
+            currentFleet = value;
+            foreach (string blueprintName in currentFleet)
+            {
+                ShipDesignInterface.Instance.AddCurrentFleetButton(blueprintName);
+            }
+        }
+    }
+    
     public int currentFleetStrength { get; private set; }
 
     #endregion Fields
@@ -25,7 +37,7 @@ public class FleetManager : Singleton<FleetManager>
     }
     public void RemoveShipFromFleet(string blueprintName)
     {
-        #if !NO_DEBUG
+#if !NO_DEBUG
         if (currentFleet.Contains(blueprintName))
         {
             currentFleet.Remove(blueprintName);
@@ -34,9 +46,9 @@ public class FleetManager : Singleton<FleetManager>
         {
             Debug.LogError("Ship does not exist in fleet");
         }
-        #else //NO_DEBUG
+#else //NO_DEBUG
         currentFleet.Remove(shipBP);
-        #endif
+#endif
     }
     #endregion GUIAccess
     #endregion Public
@@ -54,7 +66,7 @@ public class FleetManager : Singleton<FleetManager>
 
     //void PreSceneChange(SceneChangeArgs args)
     //{
-        
+
     //}
     #endregion UnityCallbacks
     #endregion Private

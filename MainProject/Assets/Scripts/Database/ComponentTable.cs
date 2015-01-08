@@ -117,11 +117,12 @@ public class ComponentTable : ScriptableObject
     #endregion GUI_Access
     #endregion Public
     #region UnityCallbacks
-    //private void OnEnable()
-    //{
-    //    id_comp_table = comp_id_List.ToDictionary(c => c.ID, c => c.component);
-    //    comp_id_table = comp_id_List.ToDictionary(c => c.component, c => c.ID);
-    //}
+    private void OnEnable()
+    {
+        Init();
+        //id_comp_table = comp_id_List.ToDictionary(c => c.ID, c => c.component);
+        //comp_id_table = comp_id_List.ToDictionary(c => c.component, c => c.ID);
+    }
     #endregion UnityCallbacks
     #endregion Methods
 }

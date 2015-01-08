@@ -151,6 +151,15 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
         slot_compsBeingBuilt_table.Clear();
     }//ClearScreen
 
+    public void SaveFleet()
+    {
+        #if FULL_DEBUG
+        Debug.Log("Saving fleet");
+        #endif
+        playerFleetData.currentFleet_BlueprintNames = FleetManager.Instance.CurrentFleet;
+        GameController.Instance.GameData.playerFleetData = playerFleetData;
+    }
+
     #region SaveSystemInterface 
     //These methods provide other scripts access to the Save System
 
@@ -294,13 +303,15 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
     private void Start()
     {
         GameController.Instance.OnPreSceneChange += PreSceneChange;
+        playerFleetData = GameController.Instance.GameData.playerFleetData;
+        FleetManager.Instance.CurrentFleet = playerFleetData.currentFleet_BlueprintNames;
     }
     #endregion UnityCallBacks
 
     #region InternalCallbacks
     private void PreSceneChange(SceneChangeArgs args)
     {
-        playerFleetData.currentFleet_BlueprintNames = FleetManager.Instance.currentFleet;
+        SaveFleet();
     }
     #endregion InternalCallbacks
 

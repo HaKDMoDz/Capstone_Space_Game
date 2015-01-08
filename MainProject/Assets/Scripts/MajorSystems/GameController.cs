@@ -53,7 +53,12 @@ public class GameController : Singleton<GameController>
     private Dictionary<GameScene, string> sceneEnumToNameTable;
     //need this for now - until Button's onClick event can pass in enums
     private Dictionary<string, GameScene> sceneNameToEnumTable;
-    private GameData gameData; //will hold the current game state
+    private GameData gameData;//will hold the current game state
+    public GameData GameData
+    {
+        get { return gameData; }
+    }
+    
     //private GameScene currentScene;
     #endregion //Internal
 
@@ -164,7 +169,7 @@ public class GameController : Singleton<GameController>
     private void Awake()
     {
         #if FULL_DEBUG
-       // Debug.Log("GameController Awake");
+        //Debug.Log("GameController Awake");
         #endif
 
         #if !NO_DEBUG

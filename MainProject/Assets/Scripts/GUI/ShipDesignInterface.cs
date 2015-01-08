@@ -93,6 +93,8 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
         {
             AddBlueprintButton(blueprintName);
         }
+        //Add current fleet buttons
+        
 
         //Setup Save dialogue box
         guiFields.saveDialogueBox.inputField.characterValidation = InputField.CharacterValidation.Alphanumeric;
@@ -171,13 +173,14 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
 #endif
     }
     
-    private void AddCurrentFleetButton(string fileName)
+    public void AddCurrentFleetButton(string fileName)
     {
         ButtonWithContent buttonClone = Instantiate(guiFields.buttonPrefab) as ButtonWithContent;
-        buttonClone.transform.SetParent(guiFields.currentFleetButtonsParent);
+        buttonClone.transform.SetParent(guiFields.currentFleetButtonsParent, false);
         buttonClone.buttonText.text = fileName;
         buttonClone.button.onClick.AddListener(() =>
             {
+                FleetManager.Instance.RemoveShipFromFleet(fileName);
                 Destroy(buttonClone.gameObject);
             });
     }
@@ -225,6 +228,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     {
         ShowSaveDialogueBox(false);
         ShowLoadPanel(false);
+        ShowFleetPanel(false);
     }
     #endregion Private
 
@@ -301,10 +305,23 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
         guiFields.loadPanel.SetActive(show);
     }
 
+    /// <summary>
+    /// Shows a panel to build and manage the fleet to take into combat
+    /// </summary>
+    /// <param name="show"></param>
     public void ShowFleetPanel(bool show)
     {
         guiFields.fleetPanel.SetActive(show);
     }
+
+    /// <summary>
+    /// Saves the current fleet
+    /// </summary>
+    public void SaveFleet()
+    {
+        ShipDesignSystem.Instance.SaveFleet();
+    }
+
     #endregion GUIAccess
 
     #region DesignSystemAccess

@@ -144,11 +144,13 @@ public class HullTable : ScriptableObject
     #endregion Public
     #region Private
     #region UnityCallbacks
-    //private void OnEnable()
-    //{
-    //    Debug.Log("hull table enable");
-    //    id_hull_table = hull_id_List.ToDictionary(h => h.ID, h => h.hull);
-    //    hull_id_table = hull_id_List.ToDictionary(h => h.hull, h => h.ID);
+    private void OnEnable()
+    {
+        //Debug.Log("hull table enable");
+        Init();
+        //id_hull_table = hull_id_List.ToDictionary(h => h.ID, h => h.hull);
+        //hull_id_table = hull_id_List.ToDictionary(h => h.hull, h => h.ID);
+    }
 
     #endregion UnityCallbacks
     #endregion Private
