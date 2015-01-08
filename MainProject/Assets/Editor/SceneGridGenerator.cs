@@ -15,7 +15,7 @@ public class SceneGridGenerator : EditorWindow
     private Transform gridParentTrans;
 
 
-    [MenuItem("SceneBuilder/Scene Grid Generator")]
+    [MenuItem("Custom/SceneBuilder/Scene Grid Generator")]
     private static void ShowWindow()
     {
         EditorWindow.GetWindow<SceneGridGenerator>();

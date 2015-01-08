@@ -11,28 +11,28 @@ public class SetDefines
     const string release = "RELEASE";
     const string noDebug = "NO_DEBUG";
 
-    [MenuItem("Defines/Full Debug")]
+    [MenuItem("Custom/Defines/Full Debug")]
     private static void SetFullDebug()
     {
         Debug.Log("Set full debug");
         SetDefinesForAllBuilds(fullDebug, lowDebug, release);
     }
 
-    [MenuItem("Defines/Low Debug")]
+    [MenuItem("Custom/Defines/Low Debug")]
     private static void SetLowDebug()
     {
         Debug.Log("Set low debug");
         SetDefinesForAllBuilds(lowDebug, release);
     }
 
-    [MenuItem("Defines/Release")]
+    [MenuItem("Custom/Defines/Release")]
     private static void SetRelease()
     {
         Debug.Log("Set release");
         SetDefinesForAllBuilds(release);
     }
 
-    [MenuItem("Defines/No Debug")]
+    [MenuItem("Custom/Defines/No Debug")]
     private static void SetNoDebug()
     {
         Debug.Log("Set no debug");

@@ -11,7 +11,7 @@ public class HullTableEditor : Editor
     Hull hull;
 
 
-    [MenuItem("Database/Create Hull Table")]
+    [MenuItem("Custom/Database/Create Hull Table")]
     static void CreateHullTable()
     {
         string path = EditorUtility.SaveFilePanel("Create Hull Table", "Assets/", "HullTable.asset", "asset");

@@ -10,7 +10,7 @@ public class ComponentTableEditor : Editor
     int id;
     ShipComponent comp;
     
-    [MenuItem("Database/Create Component Table")]
+    [MenuItem("Custom/Database/Create Component Table")]
     static void CreateTestData()
     {
         string path = EditorUtility.SaveFilePanel("Create Component Table", "Assets/", "ComponentTable.asset", "asset");
@@ -39,7 +39,6 @@ public class ComponentTableEditor : Editor
             EditorGUI.LabelField(new Rect(0f, posY, Screen.width * 0.25f, EditorGUIUtility.singleLineHeight), "ID");
             EditorGUI.LabelField(new Rect(Screen.width * 0.26f, posY, Screen.width * 0.7f, EditorGUIUtility.singleLineHeight), "Component");
 
-            //if(compTable.ComponentList.Where(entry=>entry.component is Component_Weapon).Count()>0)
             if (compTable.Comp_id_List.Where(entry => entry.component.CompType == ComponentType.Weapon).Count() > 0)
             {
                 posY += EditorGUIUtility.singleLineHeight;
@@ -92,8 +91,6 @@ public class ComponentTableEditor : Editor
                 EditorGUILayout.Space();
             }
         }
-
-
 
         EditorGUILayout.LabelField("Add entry to Component Table");
 

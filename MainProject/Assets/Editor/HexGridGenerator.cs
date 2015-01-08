@@ -22,7 +22,7 @@ public class HexGridGenerator : EditorWindow
     private int tileGridWidth;
     private int tileGridHeight;
 
-    [MenuItem("ShipHexGrid/Hex Grid Generator")]
+    [MenuItem("Custom/ShipHexGrid/Hex Grid Generator")]
     private static void ShowWindow()
     {
         EditorWindow.GetWindow<HexGridGenerator>();
@@ -125,8 +125,6 @@ public class HexGridGenerator : EditorWindow
         for (int i = tiles.Count - 1; i >= 0; i--)
         {
             rayOrigin = tiles[i].transform.position + Vector3.up * raycastHeight * 1.0f;
-            //GameObject tileRayOrigin = new GameObject("tileRayOrigin");
-            //tileRayOrigin.transform.position = rayOrigin;
             ray.origin = rayOrigin;
             ray.direction = Vector3.down;
             if (!Physics.Raycast(ray, 500f, 1 << shipLayer))
