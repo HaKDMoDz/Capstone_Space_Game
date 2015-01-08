@@ -48,7 +48,7 @@ public class ScriptableObjectCreator : EditorWindow
             if(GUILayout.Button(type.Name))
             {
                 ScriptableObject asset = ScriptableObject.CreateInstance(type);
-                string path = AssetDatabase.GenerateUniqueAssetPath("Assets/" + type.Name + ".asset");
+                string path = AssetDatabase.GenerateUniqueAssetPath("Assets/Database/" + type.Name + ".asset");
                 AssetDatabase.CreateAsset(asset, path);
                 EditorGUIUtility.PingObject(asset);
             }

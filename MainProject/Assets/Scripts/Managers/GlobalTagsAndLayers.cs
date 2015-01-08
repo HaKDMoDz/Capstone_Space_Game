@@ -12,12 +12,12 @@ public class GlobalTagsAndLayers : Singleton<GlobalTagsAndLayers>
 public class Layers
 {
     public int playerShipLayer = 8;
-    public int componentSlotLayer = 9;
-    public int componentsLayer = 10;
-    public int enemyShipLayer = 11;
+    public  int componentSlotLayer = 9;
+    public  int componentsLayer = 10;
+    public  int enemyShipLayer = 11;
 }
 [Serializable]
 public class Tags
 {
-    public string enemyShipTag;
+    public  string enemyShipTag = "EnemyShip";
 }
