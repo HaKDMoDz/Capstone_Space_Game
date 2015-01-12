@@ -3,11 +3,22 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
+#region AdditionalStructs
+[Serializable]
+public class ShipBlueprintMetaData
+{
+    public string blueprintName { get; private set; }
+    public float excessPower { get; private set; }
+
+}
+#endregion AdditionalStructs
+
+
 [Serializable]
 public class ShipBlueprint
 {
     #region Fields
-    public string blueprintName;
+    //public string blueprintName;
     public Hull hull { get; set; }
     public Dictionary<ComponentSlot, ShipComponent> slot_component_table { get; private set; }
     #endregion Fields
@@ -66,6 +77,15 @@ public class ShipBlueprint
 #endif
     }//RemoveComponent
 
+    public float CalculateExcessPower()
+    {
+        float excessPower = 0.0f;
+        foreach (ShipComponent component in slot_component_table.Values)
+        {
+            excessPower -= component.powerDrain;
+        }
+        return excessPower;
+    }
     public void Clear()
     {
         hull = null;

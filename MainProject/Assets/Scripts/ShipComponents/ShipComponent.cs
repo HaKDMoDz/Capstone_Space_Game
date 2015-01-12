@@ -9,7 +9,11 @@ public abstract class ShipComponent : MonoBehaviour
 {
 
     [SerializeField]
-    public ComponentType CompType { get; private set; }
+    private ComponentType compType;
+    public ComponentType CompType
+    {
+        get { return compType; }
+    }
     
     public int ID;
     public string componentName;

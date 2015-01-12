@@ -258,6 +258,7 @@ public class ShipBlueprintSaveSystem
 public class SavedShipBPList //keeps track of all the saves ship blueprints
 {
     public int count = 0; //more efficient that list.count
+    public List<ShipBlueprintMetaData> blueprintMetaDataList { get; private set; }
     public List<string> fileNames { get; private set; } //Filenames of all saved blueprints
 
     public SavedShipBPList()
@@ -297,7 +298,7 @@ public class SerializedShipBlueprint //serializable version of the ShipBlueprint
     }
     public void RemoveComponent(int slotIndex)
     {
-    #if !NO_DEBUG
+#if !NO_DEBUG
         if (slotIndex_CompID_Table.ContainsKey(slotIndex))
         {
             slotIndex_CompID_Table.Remove(slotIndex);
@@ -308,9 +309,9 @@ public class SerializedShipBlueprint //serializable version of the ShipBlueprint
             Debug.Log("slot " + slotIndex + " is not populated in the blueprint");
         }
         #endif
-    #else //NO_DEBUG
+#else //NO_DEBUG
         slotIndex_CompID_Table.Remove(slotIndex);
-    #endif
+#endif
     }//RemoveComp
 
     public void Clear()

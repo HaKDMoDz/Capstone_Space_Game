@@ -171,7 +171,7 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
     /// </param>
     public void SaveBlueprint(string fileName)
     {
-        blueprintBeingBuilt.blueprintName = fileName;
+        //blueprintBeingBuilt.blueprintName = fileName;
 
         saveSystem.SaveBlueprint(blueprintBeingBuilt, fileName);
     }
