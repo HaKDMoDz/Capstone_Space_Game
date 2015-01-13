@@ -64,7 +64,7 @@ public class ShipBlueprintSaveSystem
         binaryFormatter.Serialize(fileStream, sz_ShipBP);
         fileStream.Close();
         //update saves list
-        savedBPList.Add(fileName);
+        savedBPList.Add(new ShipBlueprintMetaData(fileName, shipBP.CalculateExcessPower()));
         //optimize
         SaveSavesList();
     }
@@ -134,9 +134,9 @@ public class ShipBlueprintSaveSystem
     /// </summary>
     public void DeleteAllBlueprints()
     {
-        for (int i = savedBPList.fileNames.Count - 1; i >= 0; i--)
+        for (int i = savedBPList.count - 1; i >= 0; i--)
         {
-            DeleteBlueprint(savedBPList.fileNames[i]);
+            DeleteBlueprint(savedBPList.blueprintMetaDataList[i].blueprintName);
         }
     }
     #endregion Public
@@ -257,28 +257,42 @@ public class ShipBlueprintSaveSystem
 [Serializable]
 public class SavedShipBPList //keeps track of all the saves ship blueprints
 {
-    public int count = 0; //more efficient that list.count
+    public int count { get; private set; } //more efficient that list.count
     public List<ShipBlueprintMetaData> blueprintMetaDataList { get; private set; }
-    public List<string> fileNames { get; private set; } //Filenames of all saved blueprints
+    //public List<string> fileNames { get; private set; } //Filenames of all saved blueprints
 
     public SavedShipBPList()
     {
         count = 0;
-        fileNames = new List<string>();
+        //fileNames = new List<string>();
+        blueprintMetaDataList = new List<ShipBlueprintMetaData>();
     }
-    public void Add(string fileName)
+    public void Add(ShipBlueprintMetaData metaData)
     {
         count++;
-        fileNames.Add(fileName);
+        //fileNames.Add(fileName);
+        blueprintMetaDataList.Add(metaData);
     }
     public void Remove(string fileName)
     {
         count--;
-        fileNames.Remove(fileName);
+        //fileNames.Remove(fileName);
+        #if FULL_DEBUG || LOW_DEBUG
+        if(FileExists(fileName))
+        {
+            blueprintMetaDataList.Remove(blueprintMetaDataList.FirstOrDefault(b => b.blueprintName == fileName));
+        }
+        else
+        {
+            Debug.LogError("Blueprint " + fileName + " not found");
+        }
+        #else
+        blueprintMetaDataList.Remove(blueprintMetaDataList.FirstOrDefault(b => b.blueprintName == fileName));
+        #endif
     }
     public bool FileExists(string fileName)
     {
-        return fileNames.Contains(fileName);
+        return blueprintMetaDataList.Exists(b => b.blueprintName == fileName);
     }
 }
 [Serializable]

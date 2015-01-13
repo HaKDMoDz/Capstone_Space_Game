@@ -10,6 +10,11 @@ public class ShipBlueprintMetaData
     public string blueprintName { get; private set; }
     public float excessPower { get; private set; }
 
+    public ShipBlueprintMetaData(string blueprintName, float excessPower)
+    {
+        this.blueprintName = blueprintName;
+        this.excessPower = excessPower;
+    }
 }
 #endregion AdditionalStructs
 

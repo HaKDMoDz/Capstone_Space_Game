@@ -242,7 +242,7 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
     /// </returns>
     public List<string> GetSaveFileList()
     {
-        return saveSystem.savedBPList.fileNames;
+        return saveSystem.savedBPList.blueprintMetaDataList.Select(b=>b.blueprintName).ToList();
     }
     #endregion SaveSystemInterface
 
