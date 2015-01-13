@@ -304,7 +304,10 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
     {
         GameController.Instance.OnPreSceneChange += PreSceneChange;
         playerFleetData = GameController.Instance.GameData.playerFleetData;
-        FleetManager.Instance.CurrentFleet = playerFleetData.currentFleet_BlueprintNames;
+        if (ValidateFleet())
+        {
+            FleetManager.Instance.CurrentFleet = playerFleetData.currentFleet_BlueprintNames;
+        }
     }
     #endregion UnityCallBacks
 
@@ -315,6 +318,19 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
     }
     #endregion InternalCallbacks
 
+    #region Helper
+    private bool ValidateFleet()
+    {
+        foreach (string blueprintName in playerFleetData.currentFleet_BlueprintNames)
+        {
+            if(!saveSystem.savedBPList.FileExists(blueprintName))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    #endregion Helper
     #endregion Private
 
     #endregion Methods

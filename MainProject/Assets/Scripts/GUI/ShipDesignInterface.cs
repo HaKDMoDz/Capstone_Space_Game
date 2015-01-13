@@ -42,6 +42,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     //private Dictionary<string, GameObject> fileName_button_table; //reference to the Load buttons corresponding to the filenames (used to remove the button when a file is deleted)
     //private Dictionary<string, GameObject> savedBP_button_table; //same as above - used in the fleet management planel
     private Dictionary<string, List<GameObject>> blueprintName_button_table;
+
     #endregion Internal
     #endregion Fields
 
@@ -184,6 +185,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
                 Destroy(buttonClone.gameObject);
             });
     }
+    //private void RemoveCurrentFleetButton(string fileName)
     #endregion GUIBuilders
 
     /// <summary>
@@ -230,6 +232,17 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
         ShowLoadPanel(false);
         ShowFleetPanel(false);
     }
+
+    #region Helper
+    private void ClearCurrentFleet()
+    {
+        foreach (Transform child in guiFields.currentFleetButtonsParent)
+	    {
+            Destroy(child.gameObject);
+	    }
+        FleetManager.Instance.CurrentFleet.Clear();
+    }
+    #endregion Helper
     #endregion Private
 
     #region Public
@@ -371,6 +384,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     public void DeleteBlueprint(string fileName)
     {
         ShipDesignSystem.Instance.DeleteBlueprint(fileName);
+        ClearCurrentFleet();
     }
     /// <summary>
     /// Removes all Load Buttons from the Load Panel and calls DeleteAllBlueprints on the ShipDesignSystem
@@ -382,6 +396,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
         {
             RemoveBlueprintButton(blueprintName_button_table.ElementAt(i).Key);
         }
+        ClearCurrentFleet();
         ClearGUI();
         ShipDesignSystem.Instance.DeleteAllBlueprints();
     }
