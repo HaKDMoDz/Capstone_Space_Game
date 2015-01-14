@@ -56,7 +56,7 @@ public class CombatSceneController : Singleton<CombatSceneController>
 
         foreach (string blueprintName in playerFleetData.currentFleet_BlueprintNames)
         {
-            playerShips.Add(shipBuilder.BuildShip(blueprintName, spawnPos, Quaternion.identity));
+            playerShips.Add(shipBuilder.BuildShip(ShipType.PlayerShip, blueprintName, spawnPos, Quaternion.identity));
             spawnPos.x += spawnSpacing;
         }
 
