@@ -308,6 +308,11 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
         {
             FleetManager.Instance.CurrentFleet = playerFleetData.currentFleet_BlueprintNames;
         }
+        else
+        {
+            FleetManager.Instance.CurrentFleet.Clear();
+        }
+        ShipDesignInterface.Instance.Init();
     }
     #endregion UnityCallBacks
 
@@ -315,6 +320,7 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
     private void PreSceneChange(SceneChangeArgs args)
     {
         SaveFleet();
+
     }
     #endregion InternalCallbacks
 

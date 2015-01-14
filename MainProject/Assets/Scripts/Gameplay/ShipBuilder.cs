@@ -5,7 +5,7 @@ using System.Linq;
 
 public enum ShipType {PlayerShip, AI_Ship, NPC_Ship}
 
-public class ShipBuilder// : Singleton<ShipBuilder> 
+public class ShipBuilder
 {
     #region Fields
     
@@ -15,7 +15,6 @@ public class ShipBuilder// : Singleton<ShipBuilder>
     private ShipBlueprintSaveSystem saveSystem;
 
     private ShipBlueprint blueprintBeingBuilt;
-    //private GameObject shipBeingBuilt;
     private Hull hullBeingBuilt;
     #endregion Internal
 
@@ -30,7 +29,7 @@ public class ShipBuilder// : Singleton<ShipBuilder>
         saveSystem = new ShipBlueprintSaveSystem();
     }
 
-    public GameObject BuildShip(ShipType shipType, string blueprintName, Vector3 position, Quaternion rotation)
+    public TurnBasedUnit BuildShip(ShipType shipType, string blueprintName, Vector3 position, Quaternion rotation)
     {
         #if !NO_DEBUG
         if (saveSystem.LoadBlueprint(out blueprintBeingBuilt, blueprintName))
@@ -53,27 +52,19 @@ public class ShipBuilder// : Singleton<ShipBuilder>
 
     #region Private
 
-    private GameObject InstantiateShip(ShipType shipType, Vector3 position, Quaternion rotation)
+    private TurnBasedUnit InstantiateShip(ShipType shipType, Vector3 position, Quaternion rotation)
     {
-        //shipBeingBuilt = Instantiate(blueprintBeingBuilt.hull, position, rotation) as GameObject;
         hullBeingBuilt = GameObject.Instantiate(blueprintBeingBuilt.hull, position, rotation) as Hull;
         if (!hullBeingBuilt)
         {
             Debug.LogError("ship null");
         }
-        //Hull hullBeingBuilt = shipBeingBuilt.GetComponent<Hull>();
 
         hullBeingBuilt.Init();
 
         for (int i = 0; i < blueprintBeingBuilt.slot_component_table.Count; i++)
-        //{
-
-        //}
-
-        //foreach (var slot_component in blueprintBeingBuilt.slot_component_table)
         {
             var slot_component = blueprintBeingBuilt.slot_component_table.ElementAt(i);
-
             int slotIndex = slot_component.Key.index;
 
 #if !NO_DEBUG
@@ -95,13 +86,12 @@ public class ShipBuilder// : Singleton<ShipBuilder>
 #endif
         }
 
-        AttachComponents(shipType);
-
-        return hullBeingBuilt.gameObject;
+        return GetFullySetupShip(shipType);
     }
 
-    private void AttachComponents(ShipType shipType)
+    private TurnBasedUnit GetFullySetupShip(ShipType shipType)
     {
+        TurnBasedUnit setupUnit = null;
         switch (shipType)
         {
             case ShipType.PlayerShip:
@@ -109,6 +99,7 @@ public class ShipBuilder// : Singleton<ShipBuilder>
                 ShipMove shipMove = hullBeingBuilt.gameObject.AddComponent<ShipMove>();
                 ShipControlInterface shipControlInterface = hullBeingBuilt.gameObject.AddComponent<ShipControlInterface>();
                 playerShip.Init(blueprintBeingBuilt, shipMove, shipControlInterface);
+                setupUnit = playerShip;
                 break;
             case ShipType.AI_Ship:
                 break;
@@ -117,17 +108,12 @@ public class ShipBuilder// : Singleton<ShipBuilder>
             default:
                 break;
         }
-    }
-
-    private void PointBlueprintToInstantiatedComponents()
-    {
-
+        return setupUnit;
     }
 
     #region UnityCallbacks
-    //private void Awake()
-    //{
-    //}
+    
+
     #endregion UnityCallbacks
 
     #endregion Private

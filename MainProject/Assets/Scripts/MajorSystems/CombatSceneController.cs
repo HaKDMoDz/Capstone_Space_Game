@@ -16,7 +16,7 @@ public class CombatSceneController : Singleton<CombatSceneController>
 
     #region Internal
 
-    private List<GameObject> playerShips;
+    //private List<PlayerShip> playerShips;
 
     //references
     private PlayerFleetData playerFleetData;
@@ -35,8 +35,6 @@ public class CombatSceneController : Singleton<CombatSceneController>
         Debug.Log("Setup Combat Scene");
         #endif
 
-        Init();
-
         //setup background objects, etc.
 
         //build player fleet
@@ -49,14 +47,18 @@ public class CombatSceneController : Singleton<CombatSceneController>
         }
 	    #endif
 
+        /////positioning ships automatically for now
         Vector3 spawnPos = Vector3.zero;
         int numShips = playerFleetData.currentFleet_BlueprintNames.Count;
         int spawnSpacing = 50;
         spawnPos.x -= spawnSpacing * numShips / 2;
+        /////
+
+        TurnBasedCombatSystem.Instance.Init();
 
         foreach (string blueprintName in playerFleetData.currentFleet_BlueprintNames)
         {
-            playerShips.Add(shipBuilder.BuildShip(ShipType.PlayerShip, blueprintName, spawnPos, Quaternion.identity));
+            TurnBasedCombatSystem.Instance.AddShip(shipBuilder.BuildShip(ShipType.PlayerShip, blueprintName, spawnPos, Quaternion.identity));
             spawnPos.x += spawnSpacing;
         }
 
@@ -69,24 +71,14 @@ public class CombatSceneController : Singleton<CombatSceneController>
     #region Private
     private void Init()
     {
-
-        playerShips = new List<GameObject>();
         shipBuilder = new ShipBuilder();
-        //shipBuilder = ShipBuilder.Instance;
-        //hullTableSO.Init();
-        //compTableSO.Init();
     }
 
     #region UnityCallbacks
     
-    //private void Awake()
-    //{
-    //    #if FULL_DEBUG
-    //    Debug.Log("Combat Controller Awake");
-    //    #endif
-    //}
     private void Start()
     {
+        Init();
         SetupScene();
     }
     

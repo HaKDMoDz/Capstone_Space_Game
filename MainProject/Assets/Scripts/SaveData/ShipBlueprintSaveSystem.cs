@@ -54,6 +54,7 @@ public class ShipBlueprintSaveSystem
     /// </param>
     public void SaveBlueprint(ShipBlueprint shipBP, string fileName)
     {
+        shipBP.GenerateMetaData(fileName);
         SerializeShipBP(shipBP);
         path = BuildPathString(fileName); 
         #if FULL_DEBUG
@@ -64,7 +65,7 @@ public class ShipBlueprintSaveSystem
         binaryFormatter.Serialize(fileStream, sz_ShipBP);
         fileStream.Close();
         //update saves list
-        savedBPList.Add(new ShipBlueprintMetaData(fileName, shipBP.CalculateExcessPower()));
+        savedBPList.Add(shipBP.metaData);
         //optimize
         SaveSavesList();
     }
@@ -156,6 +157,7 @@ public class ShipBlueprintSaveSystem
         {
             sz_ShipBP.AddComponent(slot_component.Key.index, ComponentTable.GetID(slot_component.Value));
         }
+        sz_ShipBP.metaData = shipBP.metaData;
     }//Serialize
 
     /// <summary>
@@ -170,15 +172,14 @@ public class ShipBlueprintSaveSystem
     private void DeSerializeSipBP(SerializedShipBlueprint sz_ShipBP, out ShipBlueprint shipBP)
     {
         shipBP = new ShipBlueprint(HullTable.GetHull(sz_ShipBP.hull_ID));
-        //shipBP = new ShipBlueprint(id_hull_table[sz_ShipBP.hull_ID]);
         shipBP.hull.Init();
         foreach (var slotIndex_CompID in sz_ShipBP.slotIndex_CompID_Table)
         {
             ShipComponent component = ComponentTable.GetComp(slotIndex_CompID.Value);
-            //ShipComponent component = id_comp_table[slotIndex_CompID.Value];
             ComponentSlot slot = shipBP.hull.index_slot_table[slotIndex_CompID.Key];
             shipBP.AddComponent(slot, component);
         }
+        shipBP.metaData = sz_ShipBP.metaData;
     }//DeSerialize
     
     /// <summary>
@@ -295,44 +296,5 @@ public class SavedShipBPList //keeps track of all the saves ship blueprints
         return blueprintMetaDataList.Exists(b => b.blueprintName == fileName);
     }
 }
-[Serializable]
-public class SerializedShipBlueprint //serializable version of the ShipBlueprint
-{
-    public int hull_ID;
-    public Dictionary<int, int> slotIndex_CompID_Table;
 
-    public SerializedShipBlueprint(int hull_ID)
-    {
-        this.hull_ID = hull_ID;
-        slotIndex_CompID_Table = new Dictionary<int, int>();
-    }
-    public void AddComponent(int slotIndex, int compID)
-    {
-        slotIndex_CompID_Table.Add(slotIndex, compID);
-    }
-    public void RemoveComponent(int slotIndex)
-    {
-#if !NO_DEBUG
-        if (slotIndex_CompID_Table.ContainsKey(slotIndex))
-        {
-            slotIndex_CompID_Table.Remove(slotIndex);
-        }
-        #if FULL_DEBUG
-        else
-        {
-            Debug.Log("slot " + slotIndex + " is not populated in the blueprint");
-        }
-        #endif
-#else //NO_DEBUG
-        slotIndex_CompID_Table.Remove(slotIndex);
-#endif
-    }//RemoveComp
-
-    public void Clear()
-    {
-        hull_ID = -1;
-        slotIndex_CompID_Table.Clear();
-    }
-
-}
 #endregion AdditionalStructs

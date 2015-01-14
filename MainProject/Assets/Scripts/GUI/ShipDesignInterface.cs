@@ -50,12 +50,11 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     #region Private
     
     #region UnityCallbacks
-    private void Start()
+    private void Awake()
     {
-        //fileName_button_table = new Dictionary<string, GameObject>();
         blueprintName_button_table = new Dictionary<string, List<GameObject>>();
-        SetupGUI();
     }
+    
     #endregion UnityCallbacks
 
     #region GUIBuilders
@@ -140,7 +139,6 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
                 AddCurrentFleetButton(fileName);
             });
 
-        //fileName_button_table.Add(fileName, buttonClone.gameObject);
         blueprintName_button_table.Add(fileName, new List<GameObject> { loadButtonClone.gameObject, fleetPanel_savedBP_ButtonClone.gameObject});
     }
     /// <summary>
@@ -246,6 +244,10 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     #endregion Private
 
     #region Public
+    public void Init()
+    {
+        SetupGUI();
+    }
     #region GUIAccess
     /// <summary>
     /// Selects the component to build and starts the placement sequence

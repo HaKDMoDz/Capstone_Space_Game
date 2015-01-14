@@ -59,15 +59,7 @@ public class FleetManager : Singleton<FleetManager>
     {
         currentFleet = new List<string>();
     }
-    //private void Start()
-    //{
-    //    GameController.Instance.OnPreSceneChange += PreSceneChange;
-    //}
-
-    //void PreSceneChange(SceneChangeArgs args)
-    //{
-
-    //}
+    
     #endregion UnityCallbacks
     #endregion Private
     #endregion Methods
