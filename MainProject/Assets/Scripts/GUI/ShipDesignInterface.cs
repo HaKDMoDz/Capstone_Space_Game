@@ -125,6 +125,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     /// </param>
     private void AddBlueprintButton(string fileName)
     {
+        Debug.Log("adding blueprint " + fileName);
         ButtonWithContent loadButtonClone = Instantiate(guiFields.buttonPrefab) as ButtonWithContent;
         loadButtonClone.transform.SetParent(guiFields.loadButtonParent, false);
         loadButtonClone.buttonText.text = fileName;
@@ -141,6 +142,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
                 FleetManager.Instance.AddShipToFleet(fileName);
                 AddCurrentFleetButton(fileName);
             });
+
 
         blueprintName_button_table.Add(fileName, new List<GameObject> { loadButtonClone.gameObject, fleetPanel_savedBP_ButtonClone.gameObject});
     }

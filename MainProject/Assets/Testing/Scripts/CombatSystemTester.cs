@@ -36,7 +36,10 @@ public class CombatSystemTester : MonoBehaviour
     {
         //add ships to list
         //calculate turn delay
-        
+        MethodInfo calculateTurnDelayMethod = typeof(TurnBasedCombatSystem).GetMethod("CalculateTurnDelay", BindingFlags.NonPublic | BindingFlags.Instance);
+        calculateTurnDelayMethod.Invoke(TurnBasedCombatSystem.Instance, null);
+        MethodInfo sortUnitsMethod = typeof(TurnBasedCombatSystem).GetMethod("SortUnitsByTurnDelay", BindingFlags.NonPublic | BindingFlags.Instance);
+        sortUnitsMethod.Invoke(TurnBasedCombatSystem.Instance, null);
         //sort units
         //get 1st unit
             //counter++

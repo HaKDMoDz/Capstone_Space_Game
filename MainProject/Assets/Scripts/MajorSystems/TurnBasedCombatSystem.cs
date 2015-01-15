@@ -51,6 +51,22 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
             unit.TurnDelay = shipPower / minPower - (shipPower - minPower) / turnDelayFactor;
         }
     }
+    private void SortUnitsByTurnDelay()
+    {
+        ships = ships.OrderBy(s => s.TurnDelay).ToList();
+    }
+    private IEnumerator ExecuteTurnForFirstUnit()
+    {
+        yield return null;
+    }
+    private void PostTurnAction()
+    {
+
+    }
+    private void EndCombat()
+    {
+
+    }
     #endregion PrivateMethods
 
     #endregion Methods
