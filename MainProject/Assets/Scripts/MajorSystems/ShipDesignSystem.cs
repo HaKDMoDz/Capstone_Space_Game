@@ -68,6 +68,7 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
             #endif
             AddHullToScene(blueprintBeingBuilt.hull);
             buildingShip = true;
+            
         }
         else
         {
@@ -110,6 +111,8 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
             }
             AddComponentToScene(slot, component);
             blueprintBeingBuilt.AddComponent(slot, component);
+            blueprintBeingBuilt.GenerateMetaData();
+            ShipDesignInterface.Instance.UpdateStatsPanel(blueprintBeingBuilt.metaData);
         }
         else
         {
@@ -171,8 +174,8 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
     /// </param>
     public void SaveBlueprint(string fileName)
     {
-        //blueprintBeingBuilt.blueprintName = fileName;
-
+        blueprintBeingBuilt.GenerateMetaData(fileName);
+        ShipDesignInterface.Instance.UpdateStatsPanel(blueprintBeingBuilt.metaData);
         saveSystem.SaveBlueprint(blueprintBeingBuilt, fileName);
     }
     /// <summary>
@@ -260,6 +263,8 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
     {
         hullBeingBuilt = Instantiate(hull, Vector3.zero, Quaternion.Euler(0.0f, 90.0f, 0.0f)) as Hull;
         hullBeingBuilt.Init();
+        blueprintBeingBuilt.GenerateMetaData();
+        ShipDesignInterface.Instance.UpdateStatsPanel(blueprintBeingBuilt.metaData);
         //camera
     }
     /// <summary>
@@ -285,6 +290,7 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
         {
             slot_compsBeingBuilt_table.Add(slot, builtComp);
         }
+        
     }
 
     #region UnityCallBacks

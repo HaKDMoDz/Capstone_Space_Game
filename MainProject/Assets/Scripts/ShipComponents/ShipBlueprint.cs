@@ -17,11 +17,11 @@ public class ShipBlueprint
 
     public ShipBlueprint() 
     {
-        slot_component_table = new Dictionary<ComponentSlot, ShipComponent>();
+        Init();
     }
     public ShipBlueprint(Hull hull)
     {
-        slot_component_table = new Dictionary<ComponentSlot, ShipComponent>();
+        Init();
         this.hull = hull;
     }
 
@@ -66,9 +66,14 @@ public class ShipBlueprint
         //slot.InstalledComponent = null;
 #endif
     }//RemoveComponent
+    public void GenerateMetaData()
+    {
+        metaData.excessPower = CalculateExcessPower();
+    }
     public void GenerateMetaData(string blueprintName)
     {
-        metaData = new ShipBlueprintMetaData(blueprintName, CalculateExcessPower());
+        metaData.blueprintName = blueprintName;
+        GenerateMetaData();
     }
     public float CalculateExcessPower()
     {
@@ -83,8 +88,14 @@ public class ShipBlueprint
     {
         hull = null;
         slot_component_table.Clear();
+        metaData.Reset();   
     }
 
+    private void Init()
+    {
+        slot_component_table = new Dictionary<ComponentSlot, ShipComponent>();
+        metaData = new ShipBlueprintMetaData();
+    }
     #endregion Methods
 
 }
@@ -93,13 +104,22 @@ public class ShipBlueprint
 [Serializable]
 public class ShipBlueprintMetaData
 {
-    public string blueprintName { get; private set; }
-    public float excessPower { get; private set; }
+    public string blueprintName { get; set; }
+    public float excessPower { get; set; }
 
+    public ShipBlueprintMetaData()
+    {
+        Reset();
+    }
     public ShipBlueprintMetaData(string blueprintName, float excessPower)
     {
         this.blueprintName = blueprintName;
         this.excessPower = excessPower;
+    }
+    public void Reset()
+    {
+        blueprintName = "";
+        excessPower = 0.0f;
     }
 }
 [Serializable]

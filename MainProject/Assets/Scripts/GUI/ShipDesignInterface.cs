@@ -27,6 +27,9 @@ public struct InterfaceGUI_Fields //Inspector Grouping
     public GameObject fleetPanel;
     public RectTransform currentFleetButtonsParent;
     public RectTransform savedBlueprintsButtonsParent;
+
+    //stats panel
+    public ShipStatsPanel statsPanel;
 }
 #endregion AdditionalStructs
 
@@ -229,6 +232,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
         ShowSaveDialogueBox(false);
         ShowLoadPanel(false);
         ShowFleetPanel(false);
+        //ShowStatsPanel(false);
     }
 
     #region Helper
@@ -329,12 +333,30 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
         guiFields.fleetPanel.SetActive(show);
     }
 
+    public void ShowStatsPanel(bool show)
+    {
+        guiFields.statsPanel.gameObject.SetActive(show);
+    }
+
     /// <summary>
     /// Saves the current fleet
     /// </summary>
     public void SaveFleet()
     {
         ShipDesignSystem.Instance.SaveFleet();
+    }
+
+    /// <summary>
+    /// Updates the stats displayed in the stat panel based on the meta data for the blueprint being built
+    /// </summary>
+    /// <param name="shipBPMetaData"></param>
+    public void UpdateStatsPanel(ShipBlueprintMetaData shipBPMetaData)
+    {
+        if (!guiFields.statsPanel.gameObject.activeSelf)
+        {
+            ShowStatsPanel(true);
+        }
+        guiFields.statsPanel.UpdateStats(shipBPMetaData.blueprintName, shipBPMetaData.excessPower);
     }
 
     #endregion GUIAccess
@@ -347,6 +369,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     public void BuildHull(int hull_ID)
     {
         ShipDesignSystem.Instance.BuildHull(hull_ID);
+        ShowStatsPanel(true);
     }
     /// <summary>
     /// Calls the BuildComponent method of the ShipDesignSystem
@@ -408,6 +431,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     public void ClearScreen()
     {
         ClearGUI();
+        ShowStatsPanel(false);
         ShipDesignSystem.Instance.ClearScreen();
     }
     #endregion DesignSystemAccess

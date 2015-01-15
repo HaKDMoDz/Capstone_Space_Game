@@ -26,9 +26,6 @@ public abstract class TurnBasedUnit : MonoBehaviour
     
     public virtual void Init(ShipBlueprint shipBP, ShipMove shipMove)
     {
-        #if FULL_DEBUG
-        Debug.Log("TurnBasedUnit Init");
-        #endif
         this.shipBP = shipBP;
         this.shipBPMetaData = shipBP.metaData;
         this.shipMove = shipMove;

@@ -16,10 +16,6 @@ public class PlayerShip : TurnBasedUnit
     public void Init(ShipBlueprint shipBP, ShipMove shipMove, ShipControlInterface shipControlInterface)
     {
         base.Init(shipBP, shipMove);
-        #if FULL_DEBUG
-        Debug.Log("PlayerShip Init");
-	    #endif
-        
         this.shipControlInterface = shipControlInterface;
     }
     #endregion PublicMethods

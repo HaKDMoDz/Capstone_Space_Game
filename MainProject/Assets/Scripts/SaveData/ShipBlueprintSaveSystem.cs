@@ -54,7 +54,6 @@ public class ShipBlueprintSaveSystem
     /// </param>
     public void SaveBlueprint(ShipBlueprint shipBP, string fileName)
     {
-        shipBP.GenerateMetaData(fileName);
         SerializeShipBP(shipBP);
         path = BuildPathString(fileName); 
         #if FULL_DEBUG
