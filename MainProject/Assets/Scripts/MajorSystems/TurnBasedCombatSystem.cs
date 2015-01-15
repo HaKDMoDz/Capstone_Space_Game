@@ -6,6 +6,10 @@ using System.Linq;
 public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
 {
     #region Fields
+    #region EditorExposed
+    [SerializeField]
+    private float turnDelayFactor = 200; //lower means higher penalty for having high power
+    #endregion EditorExposed
     #region Internal
     public List<TurnBasedUnit> ships { get; private set; }
     #endregion Internal
@@ -38,6 +42,15 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
     #endregion PublicMethods
 
     #region PrivateMethods
+    private void CalculateTurnDelay()
+    {
+        float minPower = ships.Min(s => s.shipBPMetaData.excessPower);
+        foreach (TurnBasedUnit unit in ships)
+        {
+            float shipPower = unit.shipBPMetaData.excessPower;
+            unit.TurnDelay = shipPower / minPower - (shipPower - minPower) / turnDelayFactor;
+        }
+    }
     #endregion PrivateMethods
 
     #endregion Methods

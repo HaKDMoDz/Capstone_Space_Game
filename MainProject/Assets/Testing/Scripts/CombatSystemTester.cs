@@ -36,6 +36,7 @@ public class CombatSystemTester : MonoBehaviour
     {
         //add ships to list
         //calculate turn delay
+        
         //sort units
         //get 1st unit
             //counter++

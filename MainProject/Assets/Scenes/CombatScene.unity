@@ -26593,8 +26593,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6614fa1f3aaba446b4fa9e61b1c615d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  orbitSpeed: .00999999978
-  rotationSpeed: 0
 --- !u!1 &422973557
 GameObject:
   m_ObjectHideFlags: 0
@@ -40091,7 +40089,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10d131df8a888ca48b6f2efb19568bf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  planetRotation: {x: 0, y: 0, z: .100000001}
 --- !u!111 &602191523
 Animation:
   m_ObjectHideFlags: 0
@@ -78186,7 +78183,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10d131df8a888ca48b6f2efb19568bf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  planetRotation: {x: 0, y: 0, z: 0}
 --- !u!111 &1253597144
 Animation:
   m_ObjectHideFlags: 0
@@ -94753,9 +94749,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28cf8eae3e06f8645acc10652e8ff25b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parentCamera: {fileID: 0}
-  inheritFOV: 1
-  relativeSpeed: 0
 --- !u!45 &1530519296
 Skybox:
   m_ObjectHideFlags: 0
@@ -102239,6 +102232,46 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1645329929}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1647180805
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1647180807}
+  - 114: {fileID: 1647180806}
+  m_Layer: 0
+  m_Name: TurnBasedCombatSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1647180806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1647180805}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ec90057e3f2c244f89788db86875eb7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  turnDelayFactor: 200
+--- !u!4 &1647180807
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1647180805}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 993.130554, y: 442.034058, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
 --- !u!1 &1647992530
 GameObject:
   m_ObjectHideFlags: 0
@@ -102762,8 +102795,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6614fa1f3aaba446b4fa9e61b1c615d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  orbitSpeed: 0
-  rotationSpeed: 0
 --- !u!1 &1659470135
 GameObject:
   m_ObjectHideFlags: 0
@@ -103241,7 +103272,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10d131df8a888ca48b6f2efb19568bf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  planetRotation: {x: 0, y: 0, z: .100000001}
 --- !u!111 &1669747876
 Animation:
   m_ObjectHideFlags: 0
