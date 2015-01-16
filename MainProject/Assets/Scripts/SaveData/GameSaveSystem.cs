@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Xml.Serialization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -20,7 +21,12 @@ public class GameSaveSystem
     private int maxAutoSaves, maxQuickSaves, maxNormalSaves;
 
     //caching common objects
-    private BinaryFormatter binaryFormatter;
+#if FULL_DEBUG || LOW_DEBUG
+    private XmlSerializer serializer;
+    private XmlSerializer saveListSerializer;
+#else
+    private BinaryFormatter serializer;
+#endif
     private FileStream fileStream;
     private string path;
     private SerializedGameData sz_gameData;
@@ -47,8 +53,12 @@ public class GameSaveSystem
         this.maxAutoSaves = numAutoSaves;
         this.maxQuickSaves = numQuickSaves;
         this.maxNormalSaves = numNormalSaves;
-
-        binaryFormatter = new BinaryFormatter();
+#if FULL_DEBUG || LOW_DEBUG
+        serializer = new XmlSerializer(typeof(SerializedGameData));
+        saveListSerializer = new XmlSerializer(typeof(SaveGameList));
+#else
+        serializer = new BinaryFormatter();
+#endif
         sz_gameData = new SerializedGameData();
 
         CreateSaveGameDirectory();
@@ -207,7 +217,7 @@ public class GameSaveSystem
         fileStream = File.Create(path);
         //SerializeGameData(gameData, out sz_gameData);
         gameData.Serialize(ref sz_gameData);
-        binaryFormatter.Serialize(fileStream, sz_gameData);
+        serializer.Serialize(fileStream, sz_gameData);
         fileStream.Close();
 
 
@@ -237,7 +247,7 @@ public class GameSaveSystem
         if (File.Exists(path))
         {
             fileStream = File.Open(path, FileMode.Open);
-            sz_gameData = binaryFormatter.Deserialize(fileStream) as SerializedGameData;
+            sz_gameData = serializer.Deserialize(fileStream) as SerializedGameData;
             sz_gameData.DeSerialize(ref gameData);
             fileStream.Close();
             return true;
@@ -258,7 +268,12 @@ public class GameSaveSystem
         if (File.Exists(path))
         {
             fileStream = File.Open(path, FileMode.Open);
-            savesList = binaryFormatter.Deserialize(fileStream) as SaveGameList;
+            #if FULL_DEBUG || LOW_DEBUG
+            savesList = saveListSerializer.Deserialize(fileStream) as SaveGameList;
+            savesList.ConvertFromXMLCompatible();
+            #else
+            savesList = serializer.Deserialize(fileStream) as SaveGameList;
+            #endif
             fileStream.Close();
         }
         else
@@ -273,7 +288,12 @@ public class GameSaveSystem
     {
         path = BuildPathString(fileName_SavesList);
         fileStream = File.Create(path);
-        binaryFormatter.Serialize(fileStream, savesList);
+        #if FULL_DEBUG || LOW_DEBUG
+        savesList.MakeXMLCompatible();
+        saveListSerializer.Serialize(fileStream, savesList);
+        #else
+        serializer.Serialize(fileStream, savesList);
+        #endif
         fileStream.Close();
     }
 
@@ -313,24 +333,53 @@ public enum SaveType { AutoSave, QuickSave, NormalSave } //the types of saves th
 [Serializable]
 public class SaveGameList //keeps track of the various save files being handled by the save system
 {
+    //the following is required for XML serialization
+#if FULL_DEBUG || LOW_DEBUG
+    public List<SaveGameMetaData> autoSavesList { get; private set; }
+    public List<SaveGameMetaData> quickSavesList { get; private set; }
+    public List<SaveGameMetaData> normalSavesList { get; private set; }
+    public void MakeXMLCompatible()
+    {
+        autoSavesList = autoSaves.ToList();
+        quickSavesList = autoSaves.ToList();
+        normalSavesList = normalSaves.ToList();
+    }
+    public void ConvertFromXMLCompatible()
+    {
+        autoSaves = new Queue<SaveGameMetaData>(autoSavesList);
+        quickSaves = new Queue<SaveGameMetaData>(quickSavesList);
+        normalSaves = new Queue<SaveGameMetaData>(normalSavesList);
+    }
+#endif
+
+
     //autoSaves
     public int maxAutoSaves { get; private set; }
     public int autoSaveCount { get; private set; }
+    [XmlIgnore]
     public Queue<SaveGameMetaData> autoSaves { get; private set; }
 
     //quickSaves
     public int maxQuickSaves { get; private set; }
     public int quickSaveCount { get; private set; }
+    [XmlIgnore]
     public Queue<SaveGameMetaData> quickSaves { get; private set; }
 
     //normal Saves
     public int maxNormalSaves { get; private set; }
     public int normalSaveCount { get; private set; }
+    [XmlIgnore]
     public Queue<SaveGameMetaData> normalSaves { get; private set; }
 
     //records the latest save game for quick retreival
     public SaveGameMetaData latestSaveGame { get; private set; }
-
+    public SaveGameList()
+    {
+        autoSaves = new Queue<SaveGameMetaData>();
+        quickSaves = new Queue<SaveGameMetaData>();
+        normalSaves = new Queue<SaveGameMetaData>();
+        latestSaveGame = null;
+    }
     public SaveGameList(int maxAutoSaves, int maxQuickSaves, int maxNormalSaves)
     {
         autoSaves = new Queue<SaveGameMetaData>();
@@ -394,6 +443,8 @@ public class SaveGameList //keeps track of the various save files being handled 
                 break;
         }
     }//AddSave
+
+    
 }
 
 [Serializable]
@@ -402,7 +453,10 @@ public class SaveGameMetaData //represents MetaData regarding a save file
     public SaveType saveType;
     public string fileName;
     public DateTime saveTime;
+    public SaveGameMetaData()
+    {
 
+    }
     public SaveGameMetaData(SaveType saveType, string fileName, DateTime saveTime)
     {
         this.saveType = saveType;
