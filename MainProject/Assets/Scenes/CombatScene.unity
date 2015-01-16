@@ -6891,6 +6891,7 @@ GameObject:
   - 92: {fileID: 962537993}
   - 124: {fileID: 962537992}
   - 81: {fileID: 962537991}
+  - 114: {fileID: 962537996}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -6963,6 +6964,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
+--- !u!114 &962537996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 962537990}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fae7f5d01a56c8043a0a6a0fbab1c2c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movementEpsilon: .200000003
+  heightAboveFocusTarget: 100
+  heightAboveFocusWhileAiming: 40
+  distToFocusWhileAiming: 50
+  orbitSpeed: 30
 --- !u!1 &990335548
 GameObject:
   m_ObjectHideFlags: 0
@@ -8509,6 +8526,10 @@ Prefab:
     - target: {fileID: 2036290, guid: 91db4c28597968c46b87ea2a700dace3, type: 2}
       propertyPath: field of view
       value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 11436288, guid: 91db4c28597968c46b87ea2a700dace3, type: 2}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 11436290, guid: 91db4c28597968c46b87ea2a700dace3, type: 2}

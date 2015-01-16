@@ -41,6 +41,7 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
         while (combatOn)
         {
             SortUnitsByTurnDelay();
+            
             yield return StartCoroutine(ExecuteTurnForFirstUnit());
             PostTurnAction();
         }
@@ -149,6 +150,7 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
     }
     private IEnumerator ExecuteTurnForFirstUnit()
     {
+        yield return StartCoroutine(CameraDirector.Instance.MoveToFocusOn(units[0].transform, 1.0f));
         yield return StartCoroutine(units[0].ExecuteTurn());
     }
     private void EndCombat()
