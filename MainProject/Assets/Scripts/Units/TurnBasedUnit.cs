@@ -13,6 +13,22 @@ public abstract class TurnBasedUnit : MonoBehaviour
         set { turnDelay = value; }
     }
 
+    private float timeLeftToTurn;
+    public float TimeLeftToTurn
+    {
+        get { return timeLeftToTurn; }
+        set
+        {
+            if (value <= 0.0f)
+            {
+                timeLeftToTurn = turnDelay;
+            }
+            else
+            {
+                timeLeftToTurn = value;
+            }
+        }
+    }
     //references
     public ShipBlueprintMetaData shipBPMetaData { get; private set; }
     public ShipMove shipMove { get; private set; }
@@ -23,19 +39,20 @@ public abstract class TurnBasedUnit : MonoBehaviour
 
     #region Methods
     #region PublicMethods
-    
+
     public virtual void Init(ShipBlueprint shipBP, ShipMove shipMove)
     {
         this.shipBP = shipBP;
         this.shipBPMetaData = shipBP.metaData;
         this.shipMove = shipMove;
+        timeLeftToTurn = turnDelay;
     }
 
     public IEnumerator ExecuteTurn()
     {
-        #if FULL_DEBUG
+#if FULL_DEBUG
         Debug.Log(gameObject.name + "executing turn");
-        #endif
+#endif
 
         yield return null;
     }

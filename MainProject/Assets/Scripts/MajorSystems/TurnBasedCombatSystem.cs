@@ -11,7 +11,12 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
     private float turnDelayFactor = 200; //lower means higher penalty for having high power
     #endregion EditorExposed
     #region Internal
-    public List<TurnBasedUnit> ships { get; private set; }
+    public List<TurnBasedUnit> units { get; private set; }
+
+    private float currentTurnTime;
+    private List<TurnBasedUnit> unitsWithSameTime;
+    private int numUnitsWithSameTime;
+    private bool turnsForUnitsWithSameTime;
     #endregion Internal
     #endregion Fields
 
@@ -20,7 +25,10 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
     #region PublicMethods
     public void Init()
     {
-        ships = new List<TurnBasedUnit>();
+        units = new List<TurnBasedUnit>();
+        unitsWithSameTime = new List<TurnBasedUnit>();
+        numUnitsWithSameTime = 0;
+        turnsForUnitsWithSameTime = false;
     }
     public IEnumerator StartCombat()
     {
@@ -28,40 +36,97 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
     }
     public void AddShip(TurnBasedUnit unit)
     {
-        #if FULL_DEBUG
-        if(ships.Contains(unit))
+#if FULL_DEBUG
+        if (units.Contains(unit))
         {
             Debug.LogError("Unit already exists in list");
             return;
         }
-        Debug.Log("Adding unit " + unit.shipBPMetaData.blueprintName + " with excess power: " + unit.shipBPMetaData.excessPower);
-        ships.Add(unit);
-        #else
-        #endif
+        Debug.Log("Adding unit " + unit.shipBPMetaData.blueprintName + " to combat with excess power: " + unit.shipBPMetaData.excessPower);
+        units.Add(unit);
+#else
+        units.Add(unit);
+#endif
     }
     #endregion PublicMethods
 
     #region PrivateMethods
     private void CalculateTurnDelay()
     {
-        float minPower = ships.Min(s => s.shipBPMetaData.excessPower);
-        foreach (TurnBasedUnit unit in ships)
+        float minPower = units.Min(s => s.shipBPMetaData.excessPower);
+        foreach (TurnBasedUnit unit in units)
         {
             float shipPower = unit.shipBPMetaData.excessPower;
-            unit.TurnDelay = shipPower / minPower - (shipPower - minPower) / turnDelayFactor;
+            float turnFrequency = shipPower / minPower - (shipPower - minPower) / turnDelayFactor;
+            unit.TurnDelay = 1 / turnFrequency;
         }
     }
     private void SortUnitsByTurnDelay()
     {
-        ships = ships.OrderBy(s => s.TurnDelay).ToList();
-    }
-    private IEnumerator ExecuteTurnForFirstUnit()
-    {
-        yield return null;
+        if (unitsWithSameTime.Count > 0)
+        {
+            numUnitsWithSameTime--;
+            units = units
+                .Skip(numUnitsWithSameTime)//units with the same item do not get sorted
+                .OrderBy(s => s.TimeLeftToTurn).ToList();
+            units = unitsWithSameTime.Concat(units).ToList();
+        }
+        else
+        {
+            units = units.OrderBy(s => s.TimeLeftToTurn).ToList();
+        }
+        currentTurnTime = units[0].TimeLeftToTurn;
+        if (!turnsForUnitsWithSameTime)
+        {
+            numUnitsWithSameTime = units.Count(unit => unit.TimeLeftToTurn == currentTurnTime);
+        }
+        if (numUnitsWithSameTime > 1)
+        {
+            turnsForUnitsWithSameTime = true;
+            unitsWithSameTime = units.Where(unit => unit.TimeLeftToTurn == currentTurnTime).ToList();
+            unitsWithSameTime.Shuffle();
+            for (int i = 0; i < numUnitsWithSameTime; i++)//re-order units with same time within original list
+            {
+                units[i] = unitsWithSameTime[i];
+            }
+        }
+        else
+        {
+            unitsWithSameTime.Clear();
+        }
     }
     private void PostTurnAction()
     {
-
+        if (numUnitsWithSameTime > 1)
+        {
+            units.RemoveAt(0);
+            units.Add(unitsWithSameTime[0]);
+            unitsWithSameTime.RemoveAt(0);
+            if (numUnitsWithSameTime == 0)
+            {
+                turnsForUnitsWithSameTime = false;
+            }
+        }
+        if (turnsForUnitsWithSameTime && numUnitsWithSameTime == 1)
+        {
+            units[0].TimeLeftToTurn -= currentTurnTime;
+            turnsForUnitsWithSameTime = false;
+        }
+        else
+        {
+            foreach (TurnBasedUnit unit in units)
+            {
+                if (!unitsWithSameTime.Contains(unit))
+                {
+                    unit.TimeLeftToTurn -= currentTurnTime;
+                }
+            }
+        }
+    }
+    private IEnumerator ExecuteTurnForFirstUnit()
+    {
+        //ships[0] execute turn
+        yield return null;
     }
     private void EndCombat()
     {

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 //this class adds extended functionality to various built in classes like Transform, GameObject, etc.
 public static class ExtensionMethods
@@ -106,7 +107,7 @@ public static class ExtensionMethods
     }
     #endregion
 
-    #region GameObject extensions
+    #region GameObject Extensions
     /// <summary>
     /// Defensive GetComponent that generates an error if not found - only works with Monobehaviour scripts
     /// </summary>
@@ -124,7 +125,7 @@ public static class ExtensionMethods
     }
     #endregion
 
-    #region Rigidbody extensions
+    #region Rigidbody Extensions
     /// <summary>
     /// resets a rigidbody to zero velocity and angular velocity
     /// </summary>
@@ -168,7 +169,7 @@ public static class ExtensionMethods
 
     #endregion
 
-    #region Material extensions
+    #region Material Extensions
     /// <summary>
     /// Returns a Colour with the provided alpha value e.g.: blah.color = someColour.WithAlpha(alpha)
     /// </summary>
@@ -181,6 +182,24 @@ public static class ExtensionMethods
     }
     #endregion
 
+    #region List Extensions
+    /// <summary>
+    /// This method shuffles the contents of the list
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="list"></param>
+    public static void Shuffle<T>(this IList<T> list)
+    {
+        int n = list.Count;
+        while(n-->1)
+        {
+            int k = Random.Range(0, n + 1);
+            T value = list[k];
+            list[k] = list[n];
+            list[n] = value;
+        }
+    }
+    #endregion List Extensions
 
 }
 

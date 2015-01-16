@@ -125,7 +125,6 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     /// </param>
     private void AddBlueprintButton(string fileName)
     {
-        Debug.Log("adding blueprint " + fileName);
         ButtonWithContent loadButtonClone = Instantiate(guiFields.buttonPrefab) as ButtonWithContent;
         loadButtonClone.transform.SetParent(guiFields.loadButtonParent, false);
         loadButtonClone.buttonText.text = fileName;
