@@ -12,6 +12,7 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
     #endregion EditorExposed
     #region Internal
     public List<TurnBasedUnit> units { get; private set; }
+    public bool combatOn { get; private set; }
 
     private float currentTurnTime;
     private List<TurnBasedUnit> unitsWithSameTime;
@@ -32,8 +33,17 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
     }
     public IEnumerator StartCombat()
     {
+        #if FULL_DEBUG
+        Debug.LogWarning("Starting Combat");
+        #endif
+        combatOn = true;
         PrepareForCombat();
-        yield return null;
+        while (combatOn)
+        {
+            SortUnitsByTurnDelay();
+            yield return StartCoroutine(ExecuteTurnForFirstUnit());
+            PostTurnAction();
+        }
     }
     public void AddShip(TurnBasedUnit unit)
     {
@@ -54,6 +64,8 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
     #region PrivateMethods
     private void PrepareForCombat()
     {
+        CalculateTurnDelay();
+        
         foreach (TurnBasedUnit unit in units)
         {
             CombatSystemInterface.Instance.AddShipButton(unit);
@@ -67,7 +79,7 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
             float shipPower = unit.shipBPMetaData.excessPower;
             float turnFrequency = shipPower / minPower - (shipPower - minPower) / turnDelayFactor;
             unit.TurnDelay = 1 / turnFrequency;
-            Debug.Log("Turn delay for " + unit.shipBPMetaData.blueprintName + ": " + unit.TurnDelay);
+            //Debug.Log("Turn delay for " + unit.shipBPMetaData.blueprintName + ": " + unit.TurnDelay);
         }
     }
     private void SortUnitsByTurnDelay()
@@ -137,8 +149,7 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
     }
     private IEnumerator ExecuteTurnForFirstUnit()
     {
-        //ships[0] execute turn
-        yield return null;
+        yield return StartCoroutine(units[0].ExecuteTurn());
     }
     private void EndCombat()
     {

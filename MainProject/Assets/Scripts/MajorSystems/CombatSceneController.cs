@@ -66,6 +66,7 @@ public class CombatSceneController : Singleton<CombatSceneController>
 
         //combat start
         yield return StartCoroutine(TurnBasedCombatSystem.Instance.StartCombat());
+        yield return null;
     }
 
     #endregion PublicMethods

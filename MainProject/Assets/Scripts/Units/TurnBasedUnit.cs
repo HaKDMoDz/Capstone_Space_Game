@@ -50,15 +50,13 @@ public abstract class TurnBasedUnit : MonoBehaviour
         this.shipBPMetaData = shipBP.metaData;
         this.shipMove = shipMove;
         timeLeftToTurn = turnDelay;
-        Debug.Log("Time left: " + turnDelay);
     }
 
-    public IEnumerator ExecuteTurn()
+    public virtual IEnumerator ExecuteTurn()
     {
-#if FULL_DEBUG
-        Debug.Log(gameObject.name + "executing turn");
-#endif
-
+        #if FULL_DEBUG
+        Debug.Log(shipBPMetaData.blueprintName + " executing turn");
+        #endif
         yield return null;
     }
     #endregion PublicMethods

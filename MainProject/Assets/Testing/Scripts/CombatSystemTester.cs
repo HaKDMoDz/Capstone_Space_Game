@@ -33,19 +33,19 @@ public class CombatSystemTester : MonoBehaviour
         Debug.LogWarning("Running tests");
 
         Debug.Log("Running Turn Order Logic Test");
-        yield return StartCoroutine(TestTurnDelayCalculations(100));
+        yield return StartCoroutine(TestTurnDelayCalculations(10000));
     }
     private IEnumerator TestTurnDelayCalculations(int numCycles)
     {
         //add ships to list
         //calculate turn delay
 
-        MethodInfo calculateTurnDelayMethod = typeof(TurnBasedCombatSystem).GetMethod("CalculateTurnDelay", BindingFlags.NonPublic | BindingFlags.Instance);
+        MethodInfo prepareForCombatMethod = typeof(TurnBasedCombatSystem).GetMethod("PrepareForCombat", BindingFlags.NonPublic | BindingFlags.Instance);
         MethodInfo sortUnitsMethod = typeof(TurnBasedCombatSystem).GetMethod("SortUnitsByTurnDelay", BindingFlags.NonPublic | BindingFlags.Instance);
         MethodInfo postTurnMethod = typeof(TurnBasedCombatSystem).GetMethod("PostTurnAction", BindingFlags.NonPublic | BindingFlags.Instance);
 
 
-        calculateTurnDelayMethod.Invoke(TurnBasedCombatSystem.Instance, null);
+        prepareForCombatMethod.Invoke(TurnBasedCombatSystem.Instance, null);
         //sort units
         Dictionary<TurnBasedUnit, int> unit_turnCount_table = TurnBasedCombatSystem.Instance.units.ToDictionary(s => s, s => 0);
         //get 1st unit
@@ -56,13 +56,6 @@ public class CombatSystemTester : MonoBehaviour
             unit_turnCount_table[firstUnit]++;
             //Debug.Log(firstUnit.shipBPMetaData.blueprintName + " takes it's turn");
             postTurnMethod.Invoke(TurnBasedCombatSystem.Instance, null);
-            
-            while(!Input.GetKeyDown(KeyCode.Space))
-            {
-                yield return null;
-            }
-            yield return null;
-            
         }
 
         Debug.Log("Num turns for unit: ");
