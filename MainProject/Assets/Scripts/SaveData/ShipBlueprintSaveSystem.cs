@@ -295,7 +295,7 @@ public class SavedShipBPList //keeps track of all the saves ship blueprints
     {
         count++;
         //fileNames.Add(fileName);
-        blueprintMetaDataList.Add(metaData);
+        blueprintMetaDataList.Add(new ShipBlueprintMetaData(metaData));
     }
     public void Remove(string fileName)
     {

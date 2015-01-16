@@ -116,6 +116,11 @@ public class ShipBlueprintMetaData
         this.blueprintName = blueprintName;
         this.excessPower = excessPower;
     }
+    public ShipBlueprintMetaData(ShipBlueprintMetaData metaData)
+    {
+        this.blueprintName = metaData.blueprintName;
+        this.excessPower = metaData.excessPower;
+    }
     public void Reset()
     {
         blueprintName = "";
