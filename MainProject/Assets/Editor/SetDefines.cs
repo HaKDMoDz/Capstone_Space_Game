@@ -14,28 +14,28 @@ public class SetDefines
     [MenuItem("Custom/Defines/Full Debug")]
     private static void SetFullDebug()
     {
-        Debug.Log("Set full debug");
+        Debug.Log("Set "+fullDebug);
         SetDefinesForAllBuilds(fullDebug, lowDebug, release);
     }
 
     [MenuItem("Custom/Defines/Low Debug")]
     private static void SetLowDebug()
     {
-        Debug.Log("Set low debug");
+        Debug.Log("Set "+lowDebug);
         SetDefinesForAllBuilds(lowDebug, release);
     }
 
     [MenuItem("Custom/Defines/Release")]
     private static void SetRelease()
     {
-        Debug.Log("Set release");
+        Debug.Log("Set "+release);
         SetDefinesForAllBuilds(release);
     }
 
     [MenuItem("Custom/Defines/No Debug")]
     private static void SetNoDebug()
     {
-        Debug.Log("Set no debug");
+        Debug.Log("Set "+noDebug);
         SetDefinesForAllBuilds(noDebug);
     }
 

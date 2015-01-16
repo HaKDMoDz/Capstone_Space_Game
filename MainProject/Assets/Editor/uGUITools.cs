@@ -21,7 +21,7 @@ public class uGUITools : MonoBehaviour {
 		}
 	}
 
-	[MenuItem("uGUI/Corners to Anchors %]")]
+    [MenuItem("Custom/uGUI/Corners to Anchors %]")]
 	static void CornersToAnchors(){
 		foreach(Transform transform in Selection.transforms){
 			RectTransform t = transform as RectTransform;
@@ -32,12 +32,12 @@ public class uGUITools : MonoBehaviour {
 		}
 	}
 
-	[MenuItem("uGUI/Mirror Horizontally Around Anchors %;")]
+    [MenuItem("Custom/uGUI/Mirror Horizontally Around Anchors %;")]
 	static void MirrorHorizontallyAnchors(){
 		MirrorHorizontally(false);
 	}
 
-	[MenuItem("uGUI/Mirror Horizontally Around Parent Center %:")]
+    [MenuItem("Custom/uGUI/Mirror Horizontally Around Parent Center %:")]
 	static void MirrorHorizontallyParent(){
 		MirrorHorizontally(true);
 	}
@@ -63,12 +63,12 @@ public class uGUITools : MonoBehaviour {
 		}
 	}
 
-	[MenuItem("uGUI/Mirror Vertically Around Anchors %'")]
+    [MenuItem("Custom/uGUI/Mirror Vertically Around Anchors %'")]
 	static void MirrorVerticallyAnchors(){
 		MirrorVertically(false);
 	}
-	
-	[MenuItem("uGUI/Mirror Vertically Around Parent Center %\"")]
+
+    [MenuItem("Custom/uGUI/Mirror Vertically Around Parent Center %\"")]
 	static void MirrorVerticallyParent(){
 		MirrorVertically(true);
 	}

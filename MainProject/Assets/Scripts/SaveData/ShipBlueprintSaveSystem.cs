@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Xml.Serialization;
 using System.IO;
 #endregion Usings
 
@@ -21,7 +22,12 @@ public class ShipBlueprintSaveSystem
     private string fileName_SaveList = "ShipBPFileList";
 
     //cached vars
-    private BinaryFormatter binaryFormatter;
+#if FULL_DEBUG || LOW_DEBUG
+    private XmlSerializer serializer;
+    private XmlSerializer saveListSerializer;
+#else    
+    private BinaryFormatter serializer;
+#endif
     private FileStream fileStream;
     private string path;
     private SerializedShipBlueprint sz_ShipBP;
@@ -61,7 +67,7 @@ public class ShipBlueprintSaveSystem
         #endif
 
         fileStream = File.Create(path);
-        binaryFormatter.Serialize(fileStream, sz_ShipBP);
+        serializer.Serialize(fileStream, sz_ShipBP);
         fileStream.Close();
         //update saves list
         savedBPList.Add(shipBP.metaData);
@@ -89,7 +95,7 @@ public class ShipBlueprintSaveSystem
             Debug.Log("Loading Ship Blueprint from " + path);
             #endif
             fileStream = File.Open(path, FileMode.Open);
-            sz_ShipBP = binaryFormatter.Deserialize(fileStream) as SerializedShipBlueprint;
+            sz_ShipBP = serializer.Deserialize(fileStream) as SerializedShipBlueprint;
             DeSerializeSipBP(sz_ShipBP, out shipBP);
             fileStream.Close();
             return true;
@@ -174,8 +180,13 @@ public class ShipBlueprintSaveSystem
         shipBP.hull.Init();
         foreach (var slotIndex_CompID in sz_ShipBP.slotIndex_CompID_Table)
         {
+            #if FULL_DEBUG || LOW_DEBUG
+            ShipComponent component = ComponentTable.GetComp(slotIndex_CompID.compID);
+            ComponentSlot slot = shipBP.hull.index_slot_table[slotIndex_CompID.slotIndex];
+            #else
             ShipComponent component = ComponentTable.GetComp(slotIndex_CompID.Value);
             ComponentSlot slot = shipBP.hull.index_slot_table[slotIndex_CompID.Key];
+            #endif
             shipBP.AddComponent(slot, component);
         }
         shipBP.metaData = sz_ShipBP.metaData;
@@ -188,7 +199,11 @@ public class ShipBlueprintSaveSystem
     {
         path = BuildPathString(fileName_SaveList);
         fileStream = File.Create(path);
-        binaryFormatter.Serialize(fileStream, savedBPList);
+        #if FULL_DEBUG || LOW_DEBUG
+        saveListSerializer.Serialize(fileStream, savedBPList);
+        #else
+        serializer.Serialize(fileStream, savedBPList);
+        #endif
         fileStream.Close();
     }
     /// <summary>
@@ -200,7 +215,11 @@ public class ShipBlueprintSaveSystem
         if (File.Exists(path))
         {
             fileStream = File.Open(path, FileMode.Open);
-            savedBPList = binaryFormatter.Deserialize(fileStream) as SavedShipBPList;
+            #if FULL_DEBUG || LOW_DEBUG
+            savedBPList = saveListSerializer.Deserialize(fileStream) as SavedShipBPList;
+            #else
+            savedBPList = serializer.Deserialize(fileStream) as SavedShipBPList;
+            #endif
             fileStream.Close();
         }
         else
@@ -215,7 +234,12 @@ public class ShipBlueprintSaveSystem
     #region Helper
     private void Init()
     {
-        binaryFormatter = new BinaryFormatter();
+        #if FULL_DEBUG || LOW_DEBUG
+        serializer = new XmlSerializer(typeof(SerializedShipBlueprint));
+        saveListSerializer = new XmlSerializer(typeof(SavedShipBPList));
+        #else
+        serializer = new BinaryFormatter();
+        #endif
         sz_ShipBP = new SerializedShipBlueprint(0);
         CreateShipBPDirectory();
         LoadSavesList();

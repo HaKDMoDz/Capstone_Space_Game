@@ -122,35 +122,82 @@ public class ShipBlueprintMetaData
         excessPower = 0.0f;
     }
 }
+#if FULL_DEBUG || LOW_DEBUG
+[Serializable]
+public class SlotIndex_CompID
+{
+    public int slotIndex;
+    public int compID;
+
+    public SlotIndex_CompID()
+    {
+
+    }
+    public SlotIndex_CompID(int slotIndex, int compID)
+    {
+        this.slotIndex = slotIndex;
+        this.compID = compID;
+    }
+}
+#endif
 [Serializable]
 public class SerializedShipBlueprint //serializable version of the ShipBlueprint
 {
     public int hull_ID;
+    #if FULL_DEBUG || LOW_DEBUG
+    public List<SlotIndex_CompID> slotIndex_CompID_Table;
+    #else
     public Dictionary<int, int> slotIndex_CompID_Table;
+    #endif
+
     public ShipBlueprintMetaData metaData ;
 
+    public SerializedShipBlueprint()
+    {
+        hull_ID = -1;
+        Init();
+    }
     public SerializedShipBlueprint(int hull_ID)
     {
         this.hull_ID = hull_ID;
+        Init();
+    }
+    private void Init()
+    {
+        #if FULL_DEBUG || LOW_DEBUG
+        slotIndex_CompID_Table = new List<SlotIndex_CompID>();
+        #else
         slotIndex_CompID_Table = new Dictionary<int, int>();
+        #endif
     }
     public void AddComponent(int slotIndex, int compID)
     {
+        #if FULL_DEBUG || LOW_DEBUG
+        slotIndex_CompID_Table.Add(new SlotIndex_CompID(slotIndex, compID));
+        #else
         slotIndex_CompID_Table.Add(slotIndex, compID);
+        #endif
     }
     public void RemoveComponent(int slotIndex)
     {
-#if !NO_DEBUG
+
+    #if !NO_DEBUG
+        #if FULL_DEBUG || LOW_DEBUG
+        if(slotIndex_CompID_Table.Exists(s=>s.slotIndex == slotIndex))
+        {
+            int indexToRemove = slotIndex_CompID_Table.FindIndex(s=>s.slotIndex==slotIndex);
+            slotIndex_CompID_Table.RemoveAt(indexToRemove);  
+        }
+        #else
         if (slotIndex_CompID_Table.ContainsKey(slotIndex))
         {
             slotIndex_CompID_Table.Remove(slotIndex);
         }
-#if FULL_DEBUG
+        #endif
         else
         {
             Debug.Log("slot " + slotIndex + " is not populated in the blueprint");
         }
-#endif
 #else //NO_DEBUG
         slotIndex_CompID_Table.Remove(slotIndex);
 #endif
