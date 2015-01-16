@@ -10,7 +10,11 @@ public abstract class TurnBasedUnit : MonoBehaviour
     public float TurnDelay
     {
         get { return turnDelay; }
-        set { turnDelay = value; }
+        set
+        {
+            turnDelay = value;
+            TimeLeftToTurn = turnDelay;
+        }
     }
 
     private float timeLeftToTurn;
@@ -46,6 +50,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
         this.shipBPMetaData = shipBP.metaData;
         this.shipMove = shipMove;
         timeLeftToTurn = turnDelay;
+        Debug.Log("Time left: " + turnDelay);
     }
 
     public IEnumerator ExecuteTurn()

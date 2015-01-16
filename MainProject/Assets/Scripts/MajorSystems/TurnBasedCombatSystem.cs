@@ -32,6 +32,7 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
     }
     public IEnumerator StartCombat()
     {
+        PrepareForCombat();
         yield return null;
     }
     public void AddShip(TurnBasedUnit unit)
@@ -51,6 +52,13 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
     #endregion PublicMethods
 
     #region PrivateMethods
+    private void PrepareForCombat()
+    {
+        foreach (TurnBasedUnit unit in units)
+        {
+            CombatSystemInterface.Instance.AddShipButton(unit);
+        }
+    }
     private void CalculateTurnDelay()
     {
         float minPower = units.Min(s => s.shipBPMetaData.excessPower);
@@ -59,6 +67,7 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
             float shipPower = unit.shipBPMetaData.excessPower;
             float turnFrequency = shipPower / minPower - (shipPower - minPower) / turnDelayFactor;
             unit.TurnDelay = 1 / turnFrequency;
+            Debug.Log("Turn delay for " + unit.shipBPMetaData.blueprintName + ": " + unit.TurnDelay);
         }
     }
     private void SortUnitsByTurnDelay()
@@ -94,6 +103,9 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
         {
             unitsWithSameTime.Clear();
         }
+
+        //update GUI
+        CombatSystemInterface.Instance.UpdateTurnOrderPanel(units);
     }
     private void PostTurnAction()
     {

@@ -29,7 +29,7 @@ public class CombatSceneController : Singleton<CombatSceneController>
 
     #region PublicMethods
 
-    public void SetupScene()
+    public IEnumerator SetupScene()
     {
         #if FULL_DEBUG
         Debug.Log("Setup Combat Scene");
@@ -64,6 +64,8 @@ public class CombatSceneController : Singleton<CombatSceneController>
 
         //build AI fleet
 
+        //combat start
+        yield return StartCoroutine(TurnBasedCombatSystem.Instance.StartCombat());
     }
 
     #endregion PublicMethods
@@ -76,10 +78,10 @@ public class CombatSceneController : Singleton<CombatSceneController>
 
     #region UnityCallbacks
     
-    private void Start()
+    private IEnumerator Start()
     {
         Init();
-        SetupScene();
+        yield return StartCoroutine(SetupScene());
     }
     
     #endregion UnityCallbacks

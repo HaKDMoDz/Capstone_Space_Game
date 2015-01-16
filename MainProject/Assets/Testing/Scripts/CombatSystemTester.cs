@@ -33,7 +33,7 @@ public class CombatSystemTester : MonoBehaviour
         Debug.LogWarning("Running tests");
 
         Debug.Log("Running Turn Order Logic Test");
-        yield return StartCoroutine(TestTurnDelayCalculations(1000));
+        yield return StartCoroutine(TestTurnDelayCalculations(100));
     }
     private IEnumerator TestTurnDelayCalculations(int numCycles)
     {
@@ -54,7 +54,15 @@ public class CombatSystemTester : MonoBehaviour
             sortUnitsMethod.Invoke(TurnBasedCombatSystem.Instance, null);
             TurnBasedUnit firstUnit = TurnBasedCombatSystem.Instance.units[0];
             unit_turnCount_table[firstUnit]++;
+            //Debug.Log(firstUnit.shipBPMetaData.blueprintName + " takes it's turn");
             postTurnMethod.Invoke(TurnBasedCombatSystem.Instance, null);
+            
+            while(!Input.GetKeyDown(KeyCode.Space))
+            {
+                yield return null;
+            }
+            yield return null;
+            
         }
 
         Debug.Log("Num turns for unit: ");
