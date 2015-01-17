@@ -1,12 +1,17 @@
-﻿using UnityEngine;
+﻿#region Usings
+using UnityEngine;
+using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+#endregion Usings
 
 public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
 {
     #region Fields
     #region EditorExposed
+    [SerializeField]
+    private SpaceGround spaceGround;
     [SerializeField]
     private float turnDelayFactor = 200; //lower means higher penalty for having high power
     #endregion EditorExposed
@@ -30,7 +35,10 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
         unitsWithSameTime = new List<TurnBasedUnit>();
         numUnitsWithSameTime = 0;
         turnsForUnitsWithSameTime = false;
+        spaceGround.OnGroundRightClick += SpaceGroundClick;
     }
+
+    
     public IEnumerator StartCombat()
     {
         #if FULL_DEBUG
@@ -60,6 +68,7 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
         units.Add(unit);
 #endif
     }
+
     #endregion PublicMethods
 
     #region PrivateMethods
@@ -157,9 +166,25 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
     {
 
     }
+    #region InternalCallbacks
+    void SpaceGroundClick(Vector3 worldPosition)
+    {
+        Debug.Log("Click on ground at position: "+worldPosition);
+        if(units[0] is PlayerShip)
+        {
+            ((PlayerShip)units[0]).Move(worldPosition);
+        }
+    }
+    #endregion InternalCallbacks
+    #region UnityCallbacks
+
+    #endregion UnityCallbacks
+
     #endregion PrivateMethods
 
     #endregion Methods
+
+
 
 
 }

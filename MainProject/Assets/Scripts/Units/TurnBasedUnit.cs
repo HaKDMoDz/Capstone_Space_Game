@@ -16,7 +16,6 @@ public abstract class TurnBasedUnit : MonoBehaviour
             TimeLeftToTurn = turnDelay;
         }
     }
-
     private float timeLeftToTurn;
     public float TimeLeftToTurn
     {
@@ -39,6 +38,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
     protected ShipBlueprint shipBP;
 
 
+
     #endregion Fields
 
     #region Methods
@@ -49,6 +49,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
         this.shipBP = shipBP;
         this.shipBPMetaData = shipBP.metaData;
         this.shipMove = shipMove;
+        this.shipMove.Init();
         timeLeftToTurn = turnDelay;
     }
 
@@ -57,8 +58,14 @@ public abstract class TurnBasedUnit : MonoBehaviour
         #if FULL_DEBUG
         Debug.Log(shipBPMetaData.blueprintName + " executing turn");
         #endif
+
         yield return null;
     }
     #endregion PublicMethods
+
+    #region InternalCallbacks
+    
+    #endregion InternalCallbacks
+
     #endregion Methods
 }

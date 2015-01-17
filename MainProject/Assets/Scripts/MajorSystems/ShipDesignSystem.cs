@@ -22,10 +22,10 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
     #region Private
     #region EditorExposed
     //Database References
-    [SerializeField]
-    private HullTable hullTableScriptableObject;
-    [SerializeField]
-    private ComponentTable compTableScriptableObject;
+    //[SerializeField]
+    //private HullTable hullTableScriptableObject;
+    //[SerializeField]
+    //private ComponentTable compTableScriptableObject;
     [SerializeField]
     private ShipBPSaveFields saveFields;//vars used by saveSystem for saving blueprints
     #endregion EditorExposed
@@ -296,8 +296,8 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
     #region UnityCallBacks
     private void Awake()
     {
-        hullTableScriptableObject.Init();
-        compTableScriptableObject.Init();
+        //hullTableScriptableObject.Init();
+        //compTableScriptableObject.Init();
 
         componentsBeingBuilt = new List<ShipComponent>();
         blueprintBeingBuilt = new ShipBlueprint();
