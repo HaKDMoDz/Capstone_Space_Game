@@ -10,5 +10,9 @@ public class DatabaseActivator : MonoBehaviour
     private ComponentTable compTable;
     [SerializeField]
     private GlobalVars globalVars;
+    [SerializeField]
+    private SaveFilesConfig saveFilesConfig;
+    [SerializeField]
+    private TagsAndLayers tagsAndLayers;
 	
 }

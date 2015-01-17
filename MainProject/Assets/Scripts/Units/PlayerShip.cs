@@ -38,7 +38,6 @@ public class PlayerShip : TurnBasedUnit
             }
             yield return null;  
         }
-        //yield return new WaitForSeconds(1.5f);
     }
 
     public void Move(Vector3 destination)
