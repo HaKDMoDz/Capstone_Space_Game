@@ -503,10 +503,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35f807f2f1c27f84ab43dc4d2d066e76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  saveFields:
-    fileExtension_ShipBP: sbp
-    saveDirectory_ShipBP: ShipBlueprints
-    fileName_SaveList: ShipBPFileList
 --- !u!1 &66386475
 GameObject:
   m_ObjectHideFlags: 0
@@ -1934,7 +1930,7 @@ RectTransform:
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 126060, guid: 6f91e10d4d04f104294cf9b3de348fac, type: 2}
-  m_PrefabInternal: {fileID: 1884946192}
+  m_PrefabInternal: {fileID: 407104554}
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 387374692}
@@ -1951,7 +1947,7 @@ MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 11426060, guid: 6f91e10d4d04f104294cf9b3de348fac,
     type: 2}
-  m_PrefabInternal: {fileID: 1884946192}
+  m_PrefabInternal: {fileID: 407104554}
   m_GameObject: {fileID: 387374690}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -1963,11 +1959,12 @@ MonoBehaviour:
   globalVars: {fileID: 11400000, guid: 292bc5185e654c54c898008205e54ea3, type: 2}
   saveFilesConfig: {fileID: 11400000, guid: 3ca5bd01d4ce6fa44be532911e54f72d, type: 2}
   tagsAndLayers: {fileID: 11400000, guid: dcb2f5a41ebe04f448874853c3319233, type: 2}
+  gameConfig: {fileID: 11400000, guid: c1ac6d1b5787d9242b4322f67fd0de5a, type: 2}
 --- !u!4 &387374692
 Transform:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 426060, guid: 6f91e10d4d04f104294cf9b3de348fac, type: 2}
-  m_PrefabInternal: {fileID: 1884946192}
+  m_PrefabInternal: {fileID: 407104554}
   m_GameObject: {fileID: 387374690}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -44.8461952, y: -19.9141235, z: -7.6885376}
@@ -1975,6 +1972,50 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 10
+--- !u!1001 &407104554
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 426060, guid: 6f91e10d4d04f104294cf9b3de348fac, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -44.8461952
+      objectReference: {fileID: 0}
+    - target: {fileID: 426060, guid: 6f91e10d4d04f104294cf9b3de348fac, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -19.9141235
+      objectReference: {fileID: 0}
+    - target: {fileID: 426060, guid: 6f91e10d4d04f104294cf9b3de348fac, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: -7.6885376
+      objectReference: {fileID: 0}
+    - target: {fileID: 426060, guid: 6f91e10d4d04f104294cf9b3de348fac, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 426060, guid: 6f91e10d4d04f104294cf9b3de348fac, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 426060, guid: 6f91e10d4d04f104294cf9b3de348fac, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 426060, guid: 6f91e10d4d04f104294cf9b3de348fac, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 426060, guid: 6f91e10d4d04f104294cf9b3de348fac, type: 2}
+      propertyPath: m_RootOrder
+      value: 10
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 6f91e10d4d04f104294cf9b3de348fac, type: 2}
+  m_RootGameObject: {fileID: 387374690}
+  m_IsPrefabParent: 0
+  m_IsExploded: 1
 --- !u!1 &421463578
 GameObject:
   m_ObjectHideFlags: 0
@@ -6364,24 +6405,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultStartScene: 0
-  sceneEntryList:
-  - gameScene: 1
-    sceneName: GalaxyMap
-  - gameScene: 2
-    sceneName: CombatScene
-  - gameScene: 3
-    sceneName: ShipDesignScene
-  - gameScene: 0
-    sceneName: MainMenu
-  saveFields:
-    fileExtension: sav
-    saveDirectory: SaveGames
-    fileName_SavesList: SaveList
-    autoSaveFileName: AutoSave
-    numAutoSaves: 3
-    quickSaveName: QuickSave
-    numQuickSaves: 3
-    numNormalSaves: 20
 --- !u!4 &1478538104
 Transform:
   m_ObjectHideFlags: 0
@@ -8338,50 +8361,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1879770391}
---- !u!1001 &1884946192
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 426060, guid: 6f91e10d4d04f104294cf9b3de348fac, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: -44.8461952
-      objectReference: {fileID: 0}
-    - target: {fileID: 426060, guid: 6f91e10d4d04f104294cf9b3de348fac, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: -19.9141235
-      objectReference: {fileID: 0}
-    - target: {fileID: 426060, guid: 6f91e10d4d04f104294cf9b3de348fac, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: -7.6885376
-      objectReference: {fileID: 0}
-    - target: {fileID: 426060, guid: 6f91e10d4d04f104294cf9b3de348fac, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 426060, guid: 6f91e10d4d04f104294cf9b3de348fac, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 426060, guid: 6f91e10d4d04f104294cf9b3de348fac, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 426060, guid: 6f91e10d4d04f104294cf9b3de348fac, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 426060, guid: 6f91e10d4d04f104294cf9b3de348fac, type: 2}
-      propertyPath: m_RootOrder
-      value: 10
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: 6f91e10d4d04f104294cf9b3de348fac, type: 2}
-  m_RootGameObject: {fileID: 387374690}
-  m_IsPrefabParent: 0
-  m_IsExploded: 1
 --- !u!1 &1906227717
 GameObject:
   m_ObjectHideFlags: 0

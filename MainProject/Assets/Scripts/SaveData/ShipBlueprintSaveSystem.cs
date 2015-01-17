@@ -39,15 +39,22 @@ public class ShipBlueprintSaveSystem
     #region Public
     public ShipBlueprintSaveSystem()
     {
-        Init();
+        #if FULL_DEBUG || LOW_DEBUG
+        serializer = new XmlSerializer(typeof(SerializedShipBlueprint));
+        saveListSerializer = new XmlSerializer(typeof(SavedShipBPList));
+        #else
+        serializer = new BinaryFormatter();
+        #endif
+        sz_ShipBP = new SerializedShipBlueprint(0);
+
+        fileExtension_ShipBP = SaveFilesConfig.FileExtension_ShipBP;
+        saveDirectory_ShipBP = SaveFilesConfig.Directory_ShipBP;
+        fileName_SaveList = SaveFilesConfig.FileName_ShipBP_SaveList;
+
+        CreateShipBPDirectory();
+        LoadSavesList();
     }
-    public ShipBlueprintSaveSystem(string fileExtension_ShipBP, string saveDirectory_ShipBP, string fileName_SaveList)
-    {
-        this.fileExtension_ShipBP = fileExtension_ShipBP;
-        this.saveDirectory_ShipBP = saveDirectory_ShipBP;
-        this.fileName_SaveList = fileName_SaveList;
-        Init();
-    }
+  
 
     /// <summary>
     /// Saves the ShipBlueprint object as a file named as specified
@@ -232,18 +239,6 @@ public class ShipBlueprintSaveSystem
     }
 
     #region Helper
-    private void Init()
-    {
-        #if FULL_DEBUG || LOW_DEBUG
-        serializer = new XmlSerializer(typeof(SerializedShipBlueprint));
-        saveListSerializer = new XmlSerializer(typeof(SavedShipBPList));
-        #else
-        serializer = new BinaryFormatter();
-        #endif
-        sz_ShipBP = new SerializedShipBlueprint(0);
-        CreateShipBPDirectory();
-        LoadSavesList();
-    }
     /// <summary>
     /// Creates the directory to save blueprints into, unless it exists already
     /// </summary>

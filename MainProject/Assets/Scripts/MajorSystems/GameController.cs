@@ -7,25 +7,19 @@ using System.Linq;
 #region AdditionalData
 public enum GameScene {MainMenu, GalaxyMap, CombatScene, ShipDesignScene }
 
-[Serializable]
-public struct SceneNameEntry
-{
-    public GameScene gameScene;
-    public string sceneName;
-}
 //for a prettier inspector window
-[Serializable]
-public struct SaveFields
-{
-    public string fileExtension;
-    public string saveDirectory;
-    public string fileName_SavesList;
-    public string autoSaveFileName;
-    public int numAutoSaves;
-    public string quickSaveName;
-    public int numQuickSaves;
-    public int numNormalSaves;
-}
+//[Serializable]
+//public struct SaveFields
+//{
+//    public string fileExtension;
+//    public string saveDirectory;
+//    public string fileName_SavesList;
+//    public string autoSaveFileName;
+//    public int numAutoSaves;
+//    public string quickSaveName;
+//    public int numQuickSaves;
+//    public int numNormalSaves;
+//}
 
 #endregion//Additional Data
 
@@ -37,10 +31,10 @@ public class GameController : Singleton<GameController>
     #region EditorExposed
     [SerializeField]
     private GameScene defaultStartScene = GameScene.GalaxyMap;
-    [SerializeField]
-    private List<SceneNameEntry> sceneEntryList;
-    [SerializeField]
-    private SaveFields saveFields;
+    //[SerializeField]
+    //private List<SceneNameEntry> sceneEntryList;
+    //[SerializeField]
+    //private SaveFields saveFields;
     #endregion //EditorExposed
 
     #region References
@@ -50,9 +44,9 @@ public class GameController : Singleton<GameController>
 
     #region InternalFields
     //private GameScene currentScene;
-    private Dictionary<GameScene, string> sceneEnumToNameTable;
-    //need this for now - until Button's onClick event can pass in enums
-    private Dictionary<string, GameScene> sceneNameToEnumTable;
+    //private Dictionary<GameScene, string> sceneEnumToNameTable;
+    ////need this for now - until Button's onClick event can pass in enums
+    //private Dictionary<string, GameScene> sceneNameToEnumTable;
     private GameData gameData;//will hold the current game state
     public GameData GameData
     {
@@ -87,7 +81,7 @@ public class GameController : Singleton<GameController>
     public void ChangeScene(string sceneName)
     {
         //Debug.Log("Change Scene Button");
-        ChangeScene(sceneNameToEnumTable[sceneName]);
+        ChangeScene(GameConfig.GetSceneEnum(sceneName));
     }
 
     /// <summary>
@@ -127,7 +121,7 @@ public class GameController : Singleton<GameController>
             OnPreSceneChange(new SceneChangeArgs(gameData.prevScene, nextScene));
         }
         saveSystem.AutoSave(gameData);
-        Application.LoadLevel(sceneEnumToNameTable[nextScene]);
+        Application.LoadLevel(GameConfig.GetSceneName(nextScene));
 
     }//ChangeScene
 
@@ -170,26 +164,14 @@ public class GameController : Singleton<GameController>
         //Debug.Log("GameController Awake");
         #endif
 
-        #if !NO_DEBUG
-        if (sceneEntryList.Count == 0)
-        {
-            Debug.LogError("No Scene Name Entries provided");
-            return;
-        }
-        #endif
-        //create scene name table
-        sceneEnumToNameTable = sceneEntryList.ToDictionary(s => s.gameScene, s => s.sceneName);
-        //need this for now - until Button's onClick event can pass in enums
-        sceneNameToEnumTable = sceneEntryList.ToDictionary(s => s.sceneName, s => s.gameScene);
-
-        saveSystem = new GameSaveSystem(
-            saveFields.fileExtension, saveFields.saveDirectory, saveFields.fileName_SavesList, 
-            saveFields.autoSaveFileName,saveFields.quickSaveName,
-            saveFields.numAutoSaves, saveFields.numQuickSaves, saveFields.numNormalSaves);
+        saveSystem = new GameSaveSystem();
+            //saveFields.fileExtension, saveFields.saveDirectory, saveFields.fileName_SavesList, 
+            //saveFields.autoSaveFileName,saveFields.quickSaveName,
+            //saveFields.numAutoSaves, saveFields.numQuickSaves, saveFields.numNormalSaves);
 
         //empty game data - will be filled up upon loading an autosave
         gameData = new GameData();
-        gameData.prevScene = sceneNameToEnumTable[Application.loadedLevelName];
+        gameData.prevScene = GameConfig.GetSceneEnum(Application.loadedLevelName);
         //Debug.Log("autosave: " + autosaveFileName);
 
         if (gameData.prevScene == GameScene.MainMenu)

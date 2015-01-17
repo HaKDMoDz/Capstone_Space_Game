@@ -14,5 +14,7 @@ public class DatabaseActivator : MonoBehaviour
     private SaveFilesConfig saveFilesConfig;
     [SerializeField]
     private TagsAndLayers tagsAndLayers;
+    [SerializeField]
+    private GameConfig gameConfig;
 	
 }

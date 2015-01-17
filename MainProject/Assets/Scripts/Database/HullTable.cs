@@ -33,32 +33,7 @@ public class HullTable : ScriptableObject
 
     //Database Reference
     public static Dictionary<int, Hull> id_hull_table { get; private set; }
-    //public static Dictionary<int, Hull> ID_Hull_Table
-    //{
-    //    get
-    //    {
-    //        if (id_hull_table == null)
-    //        {
-    //            Debug.Log("force init");
-    //            FindObjectOfType<HullTable>().OnEnable();
-    //        }
-    //        return id_hull_table;
-    //    }
-    //}
-
     public static Dictionary<Hull, int> hull_id_table { get; private set; }
-    //public static Dictionary<Hull, int> Hull_ID_Table
-    //{
-    //    get
-    //    {
-    //        if (hull_id_table == null)
-    //        {
-    //            Debug.Log("force init");
-    //            FindObjectOfType<HullTable>().OnEnable();
-    //        }
-    //        return hull_id_table;
-    //    }
-    //}
 
     #endregion Fields
 
@@ -72,20 +47,10 @@ public class HullTable : ScriptableObject
     #region DatabaseAccess
     public static Hull GetHull(int hull_ID)
     {
-        //if (id_hull_table == null)
-        //{
-        //    Debug.Log("force init");
-        //    FindObjectOfType<HullTable>().OnEnable();
-        //}
         return id_hull_table[hull_ID];
     }
     public static int GetID(Hull hull)
     {
-        //if (hull_id_table == null)
-        //{
-        //    Debug.Log("force init");
-        //    FindObjectOfType<HullTable>().OnEnable();
-        //}
         return hull_id_table[hull];
     }
     #endregion DatabaseAccess
@@ -146,10 +111,7 @@ public class HullTable : ScriptableObject
     #region UnityCallbacks
     private void OnEnable()
     {
-        //Debug.Log("hull table enable");
         Init();
-        //id_hull_table = hull_id_List.ToDictionary(h => h.ID, h => h.hull);
-        //hull_id_table = hull_id_List.ToDictionary(h => h.hull, h => h.ID);
     }
 
     #endregion UnityCallbacks

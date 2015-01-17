@@ -6,15 +6,15 @@ using System.Linq;
 using System;
 #endregion Usings
 
-#region AdditionalStructs
-[Serializable]
-public struct ShipBPSaveFields //inspector grouping
-{
-    public string fileExtension_ShipBP;
-    public string saveDirectory_ShipBP;
-    public string fileName_SaveList;
-}
-#endregion AdditionalStructs
+//#region AdditionalStructs
+//[Serializable]
+//public struct ShipBPSaveFields //inspector grouping
+//{
+//    public string fileExtension_ShipBP;
+//    public string saveDirectory_ShipBP;
+//    public string fileName_SaveList;
+//}
+//#endregion AdditionalStructs
 
 public class ShipDesignSystem : Singleton<ShipDesignSystem>
 {
@@ -26,8 +26,8 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
     //private HullTable hullTableScriptableObject;
     //[SerializeField]
     //private ComponentTable compTableScriptableObject;
-    [SerializeField]
-    private ShipBPSaveFields saveFields;//vars used by saveSystem for saving blueprints
+    //[SerializeField]
+    //private ShipBPSaveFields saveFields;//vars used by saveSystem for saving blueprints
     #endregion EditorExposed
 
     #region Internal
@@ -303,7 +303,7 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
         blueprintBeingBuilt = new ShipBlueprint();
         slot_compsBeingBuilt_table = new Dictionary<ComponentSlot, ShipComponent>();
         //name_savedBP_table = new Dictionary<string, ShipBlueprint>();
-        saveSystem = new ShipBlueprintSaveSystem(saveFields.fileExtension_ShipBP, saveFields.saveDirectory_ShipBP, saveFields.fileName_SaveList);
+        saveSystem = new ShipBlueprintSaveSystem();//saveFields.fileExtension_ShipBP, saveFields.saveDirectory_ShipBP, saveFields.fileName_SaveList);
         playerFleetData = new PlayerFleetData();
     }
     private void Start()

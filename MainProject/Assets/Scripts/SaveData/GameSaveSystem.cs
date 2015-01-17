@@ -41,24 +41,27 @@ public class GameSaveSystem
     /// <summary>
     /// Initializes the save system. Will assign variables related to saves, create the save game directory, and attempt to load the saves list file.
     /// </summary>
-    public GameSaveSystem(string fileExtension, string saveDirectory, string fileName_SavesList,
-        string autosaveFileName, string quickSaveName,
-        int numAutoSaves, int numQuickSaves, int numNormalSaves)
+    public GameSaveSystem()
+        //string fileExtension, string saveDirectory, string fileName_SavesList,
+        //string autosaveFileName, string quickSaveName,
+        //int numAutoSaves, int numQuickSaves, int numNormalSaves)
     {
-        this.fileExtension = fileExtension;
-        this.saveDirectory = saveDirectory;
-        this.fileName_SavesList = fileName_SavesList;
-        this.autosaveFileName = autosaveFileName;
-        this.quickSaveName = quickSaveName;
-        this.maxAutoSaves = numAutoSaves;
-        this.maxQuickSaves = numQuickSaves;
-        this.maxNormalSaves = numNormalSaves;
-#if FULL_DEBUG || LOW_DEBUG
+        fileExtension = SaveFilesConfig.FileExtension_GameSave;
+        saveDirectory = SaveFilesConfig.Directory_GameSave;
+        fileName_SavesList = SaveFilesConfig.FileName_GameSavesList;
+        autosaveFileName = SaveFilesConfig.AutoSaveFileName;
+        quickSaveName = SaveFilesConfig.QuickSaveName;
+        maxAutoSaves =SaveFilesConfig.NumAutoSaves;
+        maxQuickSaves = SaveFilesConfig.NumQuickSaves;
+        maxNormalSaves = SaveFilesConfig.NumNormalSaves;
+        
+        #if FULL_DEBUG || LOW_DEBUG
         serializer = new XmlSerializer(typeof(SerializedGameData));
         saveListSerializer = new XmlSerializer(typeof(SaveGameList));
-#else
+        #else
         serializer = new BinaryFormatter();
-#endif
+        #endif
+        
         sz_gameData = new SerializedGameData();
 
         CreateSaveGameDirectory();
