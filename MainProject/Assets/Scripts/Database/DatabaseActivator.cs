@@ -9,6 +9,6 @@ public class DatabaseActivator : MonoBehaviour
     [SerializeField]
     private ComponentTable compTable;
     [SerializeField]
-    private GlobalVariables globalVars;
+    private GlobalVars globalVars;
 	
 }

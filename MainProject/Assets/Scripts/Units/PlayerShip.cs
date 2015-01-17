@@ -31,6 +31,10 @@ public class PlayerShip : TurnBasedUnit
             if(receivedMoveCommand)
             {
                 yield return StartCoroutine(shipMove.Move());
+                receivedMoveCommand = false;
+                #if FULL_DEBUG
+                Debug.Log(shipBPMetaData.blueprintName+ "- Movement end");
+                #endif
             }
             yield return null;  
         }
@@ -39,9 +43,12 @@ public class PlayerShip : TurnBasedUnit
 
     public void Move(Vector3 destination)
     {
-        Debug.Log("Move command recieved " + shipBPMetaData.blueprintName);
-        shipMove.destination = destination;
-        receivedMoveCommand = true;
+        if (!receivedMoveCommand)
+        {
+            Debug.Log("Move command recieved " + shipBPMetaData.blueprintName);
+            shipMove.destination = destination;
+            receivedMoveCommand = true;
+        }
     }
 
     #endregion PublicMethods

@@ -17,10 +17,17 @@ public class ShipMove : MonoBehaviour
     }
     public IEnumerator Move()
     {
-        Debug.Log("moving to " + destination);
+        //Debug.Log("moving to " + destination);
         Vector3 moveDir = destination - trans.position;
         trans.LookAt(destination);
-        yield return null;
+        while (Vector3.SqrMagnitude(moveDir) > GlobalVars.MovementEpsilon * GlobalVars.MovementEpsilon)
+        {
+            trans.position = Vector3.Lerp(trans.position, destination, GlobalVars.PlayerShipMoveSpeed * Time.deltaTime);
+            StartCoroutine(CameraDirector.Instance.MoveToFocusOn(trans, .1f));
+            moveDir = destination - trans.position;
+            yield return null;
+        }
+
     }
     #endregion Methods
 }

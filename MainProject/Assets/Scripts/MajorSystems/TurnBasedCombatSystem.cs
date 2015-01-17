@@ -169,7 +169,8 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
     #region InternalCallbacks
     void SpaceGroundClick(Vector3 worldPosition)
     {
-        Debug.Log("Click on ground at position: "+worldPosition);
+        //Debug.Log("Click on ground at position: "+worldPosition);
+
         if(units[0] is PlayerShip)
         {
             ((PlayerShip)units[0]).Move(worldPosition);
