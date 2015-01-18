@@ -33,29 +33,31 @@ public class CombatSystemTester : MonoBehaviour
         Debug.LogWarning("Running tests");
 
         Debug.Log("Running Turn Order Logic Test");
-        yield return StartCoroutine(TestTurnDelayCalculations(10000));
+        yield return StartCoroutine(TestTurnDelayCalculations(1000));
+        yield return null;
     }
     private IEnumerator TestTurnDelayCalculations(int numCycles)
     {
         //add ships to list
         //calculate turn delay
 
-        MethodInfo prepareForCombatMethod = typeof(TurnBasedCombatSystem).GetMethod("PrepareForCombat", BindingFlags.NonPublic | BindingFlags.Instance);
-        MethodInfo sortUnitsMethod = typeof(TurnBasedCombatSystem).GetMethod("SortUnitsByTurnDelay", BindingFlags.NonPublic | BindingFlags.Instance);
-        MethodInfo postTurnMethod = typeof(TurnBasedCombatSystem).GetMethod("PostTurnAction", BindingFlags.NonPublic | BindingFlags.Instance);
+        MethodInfo PrepareForCombatMethod = typeof(TurnBasedCombatSystem).GetMethod("PrepareForCombat", BindingFlags.NonPublic | BindingFlags.Instance);
+        MethodInfo PreTurnMethod = typeof(TurnBasedCombatSystem).GetMethod("PreTurnActions", BindingFlags.NonPublic | BindingFlags.Instance);
+        MethodInfo PostTurnMethod = typeof(TurnBasedCombatSystem).GetMethod("PostTurnActions", BindingFlags.NonPublic | BindingFlags.Instance);
 
+        TurnBasedCombatSystem combatSystem = TurnBasedCombatSystem.Instance;
 
-        prepareForCombatMethod.Invoke(TurnBasedCombatSystem.Instance, null);
+        PrepareForCombatMethod.Invoke(combatSystem, null);
         //sort units
-        Dictionary<TurnBasedUnit, int> unit_turnCount_table = TurnBasedCombatSystem.Instance.units.ToDictionary(s => s, s => 0);
+        Dictionary<TurnBasedUnit, int> unit_turnCount_table = combatSystem.units.ToDictionary(s => s, s => 0);
         //get 1st unit
         for (int i = 0; i < numCycles; i++)
         {
-            sortUnitsMethod.Invoke(TurnBasedCombatSystem.Instance, null);
-            TurnBasedUnit firstUnit = TurnBasedCombatSystem.Instance.units[0];
-            unit_turnCount_table[firstUnit]++;
+            Debug.Log("Cycle # " + i);
+            PreTurnMethod.Invoke(combatSystem, null);
+            unit_turnCount_table[combatSystem.firstUnit]++;
             //Debug.Log(firstUnit.shipBPMetaData.blueprintName + " takes it's turn");
-            postTurnMethod.Invoke(TurnBasedCombatSystem.Instance, null);
+            PostTurnMethod.Invoke(combatSystem, null);
         }
 
         Debug.Log("Num turns for unit: ");

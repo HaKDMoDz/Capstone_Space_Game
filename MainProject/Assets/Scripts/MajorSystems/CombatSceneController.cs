@@ -7,10 +7,10 @@ public class CombatSceneController : Singleton<CombatSceneController>
     #region Fields
 
     #region EditorExposted
-    [SerializeField]
-    private HullTable hullTableSO;
-    [SerializeField]
-    private ComponentTable compTableSO;
+    //[SerializeField]
+    //private HullTable hullTableSO;
+    //[SerializeField]
+    //private ComponentTable compTableSO;
 
     #endregion EditorExposted
 
@@ -27,9 +27,9 @@ public class CombatSceneController : Singleton<CombatSceneController>
 
     #region Methods
 
-    #region PublicMethods
+    #region PrivateMethods
 
-    public IEnumerator SetupScene()
+    private IEnumerator SetupScene()
     {
         #if FULL_DEBUG
         Debug.Log("Setup Combat Scene");
@@ -69,9 +69,6 @@ public class CombatSceneController : Singleton<CombatSceneController>
         yield return null;
     }
 
-    #endregion PublicMethods
-
-    #region Private
     private void Init()
     {
         shipBuilder = new ShipBuilder();
@@ -87,11 +84,8 @@ public class CombatSceneController : Singleton<CombatSceneController>
     
     #endregion UnityCallbacks
 
-    #region InternalCallbacks
 
-    #endregion InternalCallbacks
-
-    #endregion Private
+    #endregion PrivateMethods
 
     #endregion Methods
 }

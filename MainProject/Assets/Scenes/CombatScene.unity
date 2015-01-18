@@ -1484,8 +1484,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd5a223cb7a38a841b9ecc62da3a5d64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hullTableSO: {fileID: 11400000, guid: c76404ba1646af346a4eaeb650832dd4, type: 2}
-  compTableSO: {fileID: 11400000, guid: 970cbdfa0b130b74088172243e442e1d, type: 2}
 --- !u!1 &166530016
 GameObject:
   m_ObjectHideFlags: 0
@@ -3706,6 +3704,9 @@ MonoBehaviour:
   hullTable: {fileID: 11400000, guid: c76404ba1646af346a4eaeb650832dd4, type: 2}
   compTable: {fileID: 11400000, guid: 970cbdfa0b130b74088172243e442e1d, type: 2}
   globalVars: {fileID: 11400000, guid: 292bc5185e654c54c898008205e54ea3, type: 2}
+  saveFilesConfig: {fileID: 11400000, guid: 3ca5bd01d4ce6fa44be532911e54f72d, type: 2}
+  tagsAndLayers: {fileID: 11400000, guid: dcb2f5a41ebe04f448874853c3319233, type: 2}
+  gameConfig: {fileID: 11400000, guid: c1ac6d1b5787d9242b4322f67fd0de5a, type: 2}
 --- !u!4 &581600926
 Transform:
   m_ObjectHideFlags: 0
@@ -10761,24 +10762,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultStartScene: 0
-  sceneEntryList:
-  - gameScene: 1
-    sceneName: GalaxyMap
-  - gameScene: 2
-    sceneName: CombatScene
-  - gameScene: 3
-    sceneName: ShipDesignScene
-  - gameScene: 0
-    sceneName: MainMenu
-  saveFields:
-    fileExtension: sav
-    saveDirectory: SaveGames
-    fileName_SavesList: SaveList
-    autoSaveFileName: AutoSave
-    numAutoSaves: 3
-    quickSaveName: QuickSave
-    numQuickSaves: 3
-    numNormalSaves: 20
 --- !u!4 &1374355561
 Transform:
   m_ObjectHideFlags: 0

@@ -21,8 +21,9 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
 
     private float currentTurnTime;
     private List<TurnBasedUnit> unitsWithSameTime;
-    private int numUnitsWithSameTime;
-    private bool turnsForUnitsWithSameTime;
+    public TurnBasedUnit firstUnit { get; private set; }
+    //private int numUnitsWithSameTime;
+    //private bool turnsForUnitsWithSameTime;
     #endregion Internal
     #endregion Fields
 
@@ -33,8 +34,8 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
     {
         units = new List<TurnBasedUnit>();
         unitsWithSameTime = new List<TurnBasedUnit>();
-        numUnitsWithSameTime = 0;
-        turnsForUnitsWithSameTime = false;
+        //numUnitsWithSameTime = 0;
+        //turnsForUnitsWithSameTime = false;
         spaceGround.OnGroundRightClick += SpaceGroundClick;
     }
 
@@ -48,10 +49,9 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
         PrepareForCombat();
         while (combatOn)
         {
-            SortUnitsByTurnDelay();
-            
+            PreTurnActions();
             yield return StartCoroutine(ExecuteTurnForFirstUnit());
-            PostTurnAction();
+            PostTurnActions();
         }
     }
     public void AddShip(TurnBasedUnit unit)
@@ -92,75 +92,63 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
             //Debug.Log("Turn delay for " + unit.shipBPMetaData.blueprintName + ": " + unit.TurnDelay);
         }
     }
-    private void SortUnitsByTurnDelay()
+
+    private void PreTurnActions()
     {
-        if (unitsWithSameTime.Count > 0)
+        if(unitsWithSameTime.Count > 0 )
         {
-            numUnitsWithSameTime--;
-            units = units
-                .Skip(numUnitsWithSameTime)//units with the same item do not get sorted
-                .OrderBy(s => s.TimeLeftToTurn).ToList();
-            units = unitsWithSameTime.Concat(units).ToList();
+            CombatSystemInterface.Instance.UpdateTurnOrderPanel(units);
+            firstUnit = units[0];
         }
         else
         {
             units = units.OrderBy(s => s.TimeLeftToTurn).ToList();
-        }
-        currentTurnTime = units[0].TimeLeftToTurn;
-        if (!turnsForUnitsWithSameTime)
-        {
-            numUnitsWithSameTime = units.Count(unit => unit.TimeLeftToTurn == currentTurnTime);
-        }
-        if (numUnitsWithSameTime > 1)
-        {
-            turnsForUnitsWithSameTime = true;
-            unitsWithSameTime = units.Where(unit => unit.TimeLeftToTurn == currentTurnTime).ToList();
-            unitsWithSameTime.Shuffle();
-            for (int i = 0; i < numUnitsWithSameTime; i++)//re-order units with same time within original list
+            firstUnit = units[0];
+            currentTurnTime = firstUnit.TimeLeftToTurn;
+
+            //more than 1 unit with the same time as first unit
+            if(units.Count(unit=>unit.TimeLeftToTurn==currentTurnTime)>1)
             {
-                units[i] = unitsWithSameTime[i];
+                unitsWithSameTime = units.Where(unit => unit.TimeLeftToTurn == currentTurnTime).ToList();
+                foreach (TurnBasedUnit unit in units)
+                {
+                    unit.TimeLeftToTurn -= currentTurnTime;
+                }
+            }
+            else
+            {
+                CombatSystemInterface.Instance.UpdateTurnOrderPanel(units);
             }
         }
-        else
-        {
-            unitsWithSameTime.Clear();
-        }
-
-        //update GUI
-        CombatSystemInterface.Instance.UpdateTurnOrderPanel(units);
     }
-    private void PostTurnAction()
+    //first unit takes turn
+    private void PostTurnActions()
     {
-        if (numUnitsWithSameTime > 1)
+        if(unitsWithSameTime.Count > 0)
         {
             units.RemoveAt(0);
             units.Add(unitsWithSameTime[0]);
             unitsWithSameTime.RemoveAt(0);
-            if (numUnitsWithSameTime == 0)
+            if(unitsWithSameTime.Count>0)
             {
-                turnsForUnitsWithSameTime = false;
+                units = units
+                .Skip(unitsWithSameTime.Count)//units with the same item do not get sorted
+                .OrderBy(s => s.TimeLeftToTurn).ToList();
+                units = unitsWithSameTime.Concat(units).ToList();
             }
-        }
-        if (turnsForUnitsWithSameTime && numUnitsWithSameTime == 1)
-        {
-            units[0].TimeLeftToTurn -= currentTurnTime;
-            turnsForUnitsWithSameTime = false;
         }
         else
         {
             foreach (TurnBasedUnit unit in units)
             {
-                if (!unitsWithSameTime.Contains(unit))
-                {
-                    unit.TimeLeftToTurn -= currentTurnTime;
-                }
+                unit.TimeLeftToTurn -= currentTurnTime;
             }
         }
     }
     private IEnumerator ExecuteTurnForFirstUnit()
     {
-        yield return StartCoroutine(CameraDirector.Instance.MoveToFocusOn(units[0].transform, 1.0f));
-        yield return StartCoroutine(units[0].ExecuteTurn());
+        yield return StartCoroutine(CameraDirector.Instance.MoveToFocusOn(firstUnit.transform, 1.0f));
+        yield return StartCoroutine(firstUnit.ExecuteTurn());
     }
     private void EndCombat()
     {
@@ -177,15 +165,83 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
         }
     }
     #endregion InternalCallbacks
-    #region UnityCallbacks
-
-    #endregion UnityCallbacks
 
     #endregion PrivateMethods
 
     #endregion Methods
 
 
+    #region UnusedRandomizationCode
+    //private void SortUnitsByTurnDelay()
+    //{
+    //    if (unitsWithSameTime.Count > 0)
+    //    {
+    //        numUnitsWithSameTime--;
+    //        units = units
+    //            .Skip(numUnitsWithSameTime)//units with the same item do not get sorted
+    //            .OrderBy(s => s.TimeLeftToTurn).ToList();
+    //        //List<TurnBasedUnit> tempList = units;
+    //        //units = unitsWithSameTime;
+    //        //units = units.Concat(tempList).ToList();
+    //        units = unitsWithSameTime.Concat(units).ToList();
+    //    }
+    //    else
+    //    {
+    //        units = units.OrderBy(s => s.TimeLeftToTurn).ToList();
+    //    }
+    //    currentTurnTime = units[0].TimeLeftToTurn;
+    //    if (!turnsForUnitsWithSameTime)
+    //    {
+    //        numUnitsWithSameTime = units.Count(unit => unit.TimeLeftToTurn == currentTurnTime);
+    //        if (numUnitsWithSameTime > 1)
+    //        {
+    //            turnsForUnitsWithSameTime = true;
+    //            unitsWithSameTime = units.Where(unit => unit.TimeLeftToTurn == currentTurnTime).ToList();
+    //            unitsWithSameTime.Shuffle();
+    //            for (int i = 0; i < numUnitsWithSameTime; i++)//re-order units with same time within original list
+    //            {
+    //                units[i] = unitsWithSameTime[i];
+    //            }
+    //        }
+    //        else
+    //        {
+    //            unitsWithSameTime.Clear();
+    //        }
+    //    }
+    //    //update GUI
+    //    CombatSystemInterface.Instance.UpdateTurnOrderPanel(units);
+    //}
+    //private void PostTurnAction()
+    //{
+    //    if (numUnitsWithSameTime > 1)
+    //    {
+    //        units.RemoveAt(0);
+    //        units.Add(unitsWithSameTime[0]);
+    //        unitsWithSameTime.RemoveAt(0);
+    //        if (numUnitsWithSameTime == 0)
+    //        {
+    //            turnsForUnitsWithSameTime = false;
+    //            //unitsWithSameTime.Clear();
+    //        }
+    //    }
+    //    if (turnsForUnitsWithSameTime && numUnitsWithSameTime == 1)
+    //    {
+    //        units[0].TimeLeftToTurn -= currentTurnTime;
+    //        turnsForUnitsWithSameTime = false;
+    //        // unitsWithSameTime.Clear();
+    //    }
+    //    else
+    //    {
+    //        foreach (TurnBasedUnit unit in units)
+    //        {
+    //            if (!unitsWithSameTime.Contains(unit))
+    //            {
+    //                unit.TimeLeftToTurn -= currentTurnTime;
+    //            }
+    //        }
+    //    }
+    //}
+    #endregion UnusedRandomizationCode
 
 
 }
