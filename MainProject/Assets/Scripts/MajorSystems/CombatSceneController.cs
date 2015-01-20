@@ -6,17 +6,8 @@ public class CombatSceneController : Singleton<CombatSceneController>
 {
     #region Fields
 
-    #region EditorExposted
-    //[SerializeField]
-    //private HullTable hullTableSO;
-    //[SerializeField]
-    //private ComponentTable compTableSO;
-
-    #endregion EditorExposted
 
     #region Internal
-
-    //private List<PlayerShip> playerShips;
 
     //references
     private PlayerFleetData playerFleetData;
@@ -29,6 +20,10 @@ public class CombatSceneController : Singleton<CombatSceneController>
 
     #region PrivateMethods
 
+    /// <summary>
+    /// Setups up the combat scene: adds ships, background objects, etc., and then tells the turn based system to start combat
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator SetupScene()
     {
         #if FULL_DEBUG
@@ -37,7 +32,7 @@ public class CombatSceneController : Singleton<CombatSceneController>
 
         //setup background objects, etc.
 
-        //build player fleet
+        //get the saved player fleet
         playerFleetData = GameController.Instance.GameData.playerFleetData;
         
         #if FULL_DEBUG
@@ -52,10 +47,11 @@ public class CombatSceneController : Singleton<CombatSceneController>
         int numShips = playerFleetData.currentFleet_BlueprintNames.Count;
         int spawnSpacing = 50;
         spawnPos.x -= spawnSpacing * numShips / 2;
-        /////
+        /////////////////////////////////////////////////
 
         TurnBasedCombatSystem.Instance.Init();
 
+        //tells the shipbuilder to build each ship in the fleet data
         foreach (string blueprintName in playerFleetData.currentFleet_BlueprintNames)
         {
             TurnBasedCombatSystem.Instance.AddShip(shipBuilder.BuildShip(ShipType.PlayerShip, blueprintName, spawnPos, Quaternion.identity));

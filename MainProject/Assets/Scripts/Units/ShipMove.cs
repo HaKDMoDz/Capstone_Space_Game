@@ -23,7 +23,7 @@ public class ShipMove : MonoBehaviour
         while (Vector3.SqrMagnitude(moveDir) > GlobalVars.MovementEpsilon * GlobalVars.MovementEpsilon)
         {
             trans.position = Vector3.Lerp(trans.position, destination, GlobalVars.PlayerShipMoveSpeed * Time.deltaTime);
-            StartCoroutine(CameraDirector.Instance.MoveToFocusOn(trans, .1f));
+            StartCoroutine(CameraDirector.Instance.MoveToFocusOn(trans, GlobalVars.CameraFollowPeriod));
             moveDir = destination - trans.position;
             yield return null;
         }

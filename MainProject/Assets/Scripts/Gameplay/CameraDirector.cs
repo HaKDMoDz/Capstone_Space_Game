@@ -6,8 +6,7 @@ public class CameraDirector : Singleton<CameraDirector>
 {
     #region Fields
     #region EditorExposed
-    [SerializeField]
-    private float movementEpsilon = 0.2f;
+    
     [SerializeField]
     private float heightAboveFocusTarget = 200.0f;
     [SerializeField]
@@ -17,6 +16,7 @@ public class CameraDirector : Singleton<CameraDirector>
     [SerializeField]
     private float orbitSpeed = 30.0f;
     #endregion EditorExposed
+
     #region Internal
     private float initialAngleX;
     private Quaternion initialRot;
@@ -33,7 +33,6 @@ public class CameraDirector : Singleton<CameraDirector>
 
     #region PublicMethods
 
-    #endregion PublicMethods
     public IEnumerator MoveToFocusOn(Transform target, float period)
     {
         Vector3 targetPos = target.position;
@@ -59,6 +58,8 @@ public class CameraDirector : Singleton<CameraDirector>
         trans.position = position;
         trans.rotation = rotation;
     }
+
+    #endregion PublicMethods
 
     #region PrivateMethods
     private IEnumerator MoveAndRotate(Vector3 destination, Quaternion desiredRot, float period)

@@ -36,6 +36,11 @@ public class CombatSystemTester : MonoBehaviour
         yield return StartCoroutine(TestTurnDelayCalculations(1000));
         yield return null;
     }
+    /// <summary>
+    /// tests turn delay calculations to make sure the ratios for turns that each unit takes is as expected
+    /// </summary>
+    /// <param name="numCycles"></param>
+    /// <returns></returns>
     private IEnumerator TestTurnDelayCalculations(int numCycles)
     {
         //add ships to list
