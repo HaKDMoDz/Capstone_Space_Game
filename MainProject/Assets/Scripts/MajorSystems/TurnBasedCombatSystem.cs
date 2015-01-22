@@ -72,6 +72,10 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
             Debug.LogError("Unit already exists in list");
             return;
         }
+        if (unit == null)
+        {
+            Debug.Log("adding null unit");
+        }
        // Debug.Log("Adding unit " + unit.shipBPMetaData.blueprintName + " to combat with excess power: " + unit.shipBPMetaData.excessPower);
         units.Add(unit);
 #else
@@ -101,6 +105,21 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
     /// </summary>
     private void CalculateTurnDelay()
     {
+        if(units == null)
+        {
+            Debug.Log("units null");
+        }
+            for (int i = 0; i < units.Count; i++)
+        {
+            if(units[i]==null)
+            {
+                Debug.Log("item "+i+" null");
+            }
+                if(units[i].shipBPMetaData==null)
+                {
+                    Debug.Log(i + "meta null");
+                }
+        }
         float minPower = units.Min(s => s.shipBPMetaData.excessPower);
         foreach (TurnBasedUnit unit in units)
         {

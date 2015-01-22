@@ -55,11 +55,13 @@ public class ShipBuilder
     private TurnBasedUnit InstantiateShip(ShipType shipType, Vector3 position, Quaternion rotation)
     {
         hullBeingBuilt = GameObject.Instantiate(blueprintBeingBuilt.hull, position, rotation) as Hull;
+        #if FULL_DEBUG
         if (!hullBeingBuilt)
         {
             Debug.LogError("ship null");
         }
-
+        #endif
+        
         hullBeingBuilt.Init();
 
         for (int i = 0; i < blueprintBeingBuilt.slot_component_table.Count; i++)
@@ -102,8 +104,10 @@ public class ShipBuilder
                 setupUnit = playerShip;
                 break;
             case ShipType.AI_Ship:
-
+                AI_Ship ai_ship = hullBeingBuilt.gameObject.AddComponent<AI_Ship>();
                 ShipMove ai_shipMove = hullBeingBuilt.gameObject.AddComponent<ShipMove>();
+                ai_ship.Init(blueprintBeingBuilt, ai_shipMove);
+                setupUnit = ai_ship;
                 break;
             case ShipType.NPC_Ship:
                 break;

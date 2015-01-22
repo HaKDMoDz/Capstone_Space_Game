@@ -31,6 +31,7 @@ public class SerializedGameData
     private void Init()
     {
         sz_playerFleetData = new SerializedPlayerFleetData();
+        sz_pirates_AI_Data = new SerializedAI_Data();
     }
     /// <summary>
     /// Generates a deSerialized version of the serializedGameData

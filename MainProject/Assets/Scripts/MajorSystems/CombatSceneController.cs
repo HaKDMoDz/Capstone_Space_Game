@@ -37,7 +37,7 @@ public class CombatSceneController : Singleton<CombatSceneController>
         playerFleetData = GameController.Instance.GameData.playerFleetData;
         pirateFleetData = GameController.Instance.GameData.pirates_AI_Data;
 
-        pirateFleetData.currentFleet_BlueprintNames = playerFleetData.currentFleet_BlueprintNames;
+        pirateFleetData.currentFleet_BlueprintNames = new List<string>(playerFleetData.currentFleet_BlueprintNames);
 
         #if FULL_DEBUG
         if(playerFleetData.currentFleet_BlueprintNames.Count==0)
@@ -73,7 +73,15 @@ public class CombatSceneController : Singleton<CombatSceneController>
 
         foreach (string blueprintName in pirateFleetData.currentFleet_BlueprintNames)
         {
-            TurnBasedCombatSystem.Instance.AddShip(shipBuilder.BuildShip(ShipType.AI_Ship, blueprintName, spawnPos, Quaternion.identity));
+            TurnBasedUnit unit = shipBuilder.BuildShip(ShipType.AI_Ship, blueprintName, spawnPos, Quaternion.identity);
+            #if FULL_DEBUG
+            if (unit == null)
+            {
+                Debug.Log("shipbuilder returned null");
+            }
+            #endif
+            
+            TurnBasedCombatSystem.Instance.AddShip(unit);
             spawnPos.x += spawnSpacing;
         }
 
