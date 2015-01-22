@@ -11,6 +11,7 @@ public class CombatSceneController : Singleton<CombatSceneController>
 
     //references
     private PlayerFleetData playerFleetData;
+    private AI_Data pirateFleetData;
     private ShipBuilder shipBuilder;
     #endregion Internal
 
@@ -34,13 +35,23 @@ public class CombatSceneController : Singleton<CombatSceneController>
 
         //get the saved player fleet
         playerFleetData = GameController.Instance.GameData.playerFleetData;
-        
+        pirateFleetData = GameController.Instance.GameData.pirates_AI_Data;
+
+        pirateFleetData.currentFleet_BlueprintNames = playerFleetData.currentFleet_BlueprintNames;
+
         #if FULL_DEBUG
         if(playerFleetData.currentFleet_BlueprintNames.Count==0)
         {
             Debug.LogError("Empty player fleet");
         }
 	    #endif
+
+        #if FULL_DEBUG
+        if (pirateFleetData.currentFleet_BlueprintNames.Count == 0)
+        {
+            Debug.LogError("Empty enemy fleet");
+        }
+        #endif
 
         /////positioning ships automatically for now
         Vector3 spawnPos = Vector3.zero;
@@ -59,6 +70,12 @@ public class CombatSceneController : Singleton<CombatSceneController>
         }
 
         //build AI fleet
+
+        foreach (string blueprintName in pirateFleetData.currentFleet_BlueprintNames)
+        {
+            TurnBasedCombatSystem.Instance.AddShip(shipBuilder.BuildShip(ShipType.AI_Ship, blueprintName, spawnPos, Quaternion.identity));
+            spawnPos.x += spawnSpacing;
+        }
 
         //combat start
         yield return StartCoroutine(TurnBasedCombatSystem.Instance.StartCombat());

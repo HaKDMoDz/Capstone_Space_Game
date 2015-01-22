@@ -16,7 +16,6 @@ public class PlayerFleetData
     {
         sz_playerFleetData.currentFleet_BlueprintNames = currentFleet_BlueprintNames;    
     }
-	
 }
 
 [Serializable]

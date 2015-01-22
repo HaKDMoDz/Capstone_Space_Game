@@ -72,7 +72,7 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
             Debug.LogError("Unit already exists in list");
             return;
         }
-        Debug.Log("Adding unit " + unit.shipBPMetaData.blueprintName + " to combat with excess power: " + unit.shipBPMetaData.excessPower);
+       // Debug.Log("Adding unit " + unit.shipBPMetaData.blueprintName + " to combat with excess power: " + unit.shipBPMetaData.excessPower);
         units.Add(unit);
 #else
         units.Add(unit);

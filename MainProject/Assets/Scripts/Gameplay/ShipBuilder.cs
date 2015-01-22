@@ -102,6 +102,8 @@ public class ShipBuilder
                 setupUnit = playerShip;
                 break;
             case ShipType.AI_Ship:
+
+                ShipMove ai_shipMove = hullBeingBuilt.gameObject.AddComponent<ShipMove>();
                 break;
             case ShipType.NPC_Ship:
                 break;

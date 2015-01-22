@@ -29,6 +29,7 @@ public class GameData
     private void Init()
     {
         playerFleetData = new PlayerFleetData();
+        pirates_AI_Data = new AI_Data();
     }
 
     /// <summary>
@@ -43,7 +44,7 @@ public class GameData
         sz_gameData.nextScene = nextScene;
 
         playerFleetData.Serialize(ref sz_gameData.sz_playerFleetData);
-
+        pirates_AI_Data.Serialize(ref sz_gameData.sz_pirates_AI_Data);
     }
 
 }
