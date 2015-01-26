@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class AI_Ship : TurnBasedUnit 
 {
     #region Fields
     #region Internal
     private bool receivedMoveCommand;
+
+    private float range = 100.0f;
     #endregion Internal
     #endregion Fields
 
@@ -22,9 +25,11 @@ public class AI_Ship : TurnBasedUnit
 
         // AI doesn't wait for space to be pressed...
 
+        Move();
         if (receivedMoveCommand)
         {
             yield return StartCoroutine(shipMove.Move());
+            //yield return StartCoroutine(Move());
             receivedMoveCommand = false;
 #if FULL_DEBUG
             Debug.Log(shipBPMetaData.blueprintName + "- Movement end");
@@ -39,7 +44,18 @@ public class AI_Ship : TurnBasedUnit
         if (!receivedMoveCommand)
         {
             Debug.Log("Move command recieved " + shipBPMetaData.blueprintName);
-            shipMove.destination = new Vector3(0, 0, 0);
+            List<TurnBasedUnit> currentTargets = new List<TurnBasedUnit>();
+            foreach (TurnBasedUnit unit in TurnBasedCombatSystem.Instance.units)
+            {
+                if (unit is PlayerShip)
+                {
+                    currentTargets.Add(unit);
+                }
+            }
+
+            Vector3 enemyPosition = currentTargets[0].transform.position;
+            Vector3 directionBetween = (transform.position - enemyPosition).normalized;
+            shipMove.destination = enemyPosition + (directionBetween * range);
             receivedMoveCommand = true;
         }
     }

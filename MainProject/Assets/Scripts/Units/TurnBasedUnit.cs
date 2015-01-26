@@ -37,8 +37,6 @@ public abstract class TurnBasedUnit : MonoBehaviour
     public ShipMove shipMove { get; private set; }
     protected ShipBlueprint shipBP;
 
-
-
     #endregion Fields
 
     #region Methods
