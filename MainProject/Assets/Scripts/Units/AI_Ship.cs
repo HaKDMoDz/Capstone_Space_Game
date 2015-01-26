@@ -8,7 +8,9 @@ public class AI_Ship : TurnBasedUnit
     #region Internal
     private bool receivedMoveCommand;
 
+    //TEMP
     private float range = 100.0f;
+
     #endregion Internal
     #endregion Fields
 
@@ -29,7 +31,6 @@ public class AI_Ship : TurnBasedUnit
         if (receivedMoveCommand)
         {
             yield return StartCoroutine(shipMove.Move());
-            //yield return StartCoroutine(Move());
             receivedMoveCommand = false;
 #if FULL_DEBUG
             Debug.Log(shipBPMetaData.blueprintName + "- Movement end");
