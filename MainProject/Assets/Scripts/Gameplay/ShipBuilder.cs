@@ -106,7 +106,8 @@ public class ShipBuilder
             case ShipType.AI_Ship:
                 AI_Ship ai_ship = hullBeingBuilt.gameObject.AddComponent<AI_Ship>();
                 ShipMove ai_shipMove = hullBeingBuilt.gameObject.AddComponent<ShipMove>();
-                ai_ship.Init(blueprintBeingBuilt, ai_shipMove);
+                AI_Attack ai_attack = hullBeingBuilt.gameObject.AddComponent<AI_Attack>();
+                ai_ship.Init(blueprintBeingBuilt, ai_shipMove, ai_attack);
                 setupUnit = ai_ship;
                 break;
             case ShipType.NPC_Ship:

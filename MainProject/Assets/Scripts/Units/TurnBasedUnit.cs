@@ -74,6 +74,8 @@ public abstract class TurnBasedUnit : MonoBehaviour
     public ShipMove shipMove { get; private set; }
     protected ShipBlueprint shipBP;
 
+    public AI_Attack shipAttack { get; private set; }
+
     #endregion Fields
 
     #region Methods
@@ -84,6 +86,16 @@ public abstract class TurnBasedUnit : MonoBehaviour
         this.shipBP = shipBP;
         this.shipBPMetaData = shipBP.metaData;
         this.shipMove = shipMove;
+        this.shipMove.Init();
+        timeLeftToTurn = turnDelay;
+    }
+
+    public virtual void Init(ShipBlueprint shipBP, ShipMove shipMove, AI_Attack shipAttack)
+    {
+        this.shipBP = shipBP;
+        this.shipBPMetaData = shipBP.metaData;
+        this.shipMove = shipMove;
+        this.shipAttack = shipAttack;
         this.shipMove.Init();
         timeLeftToTurn = turnDelay;
     }

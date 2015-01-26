@@ -27,7 +27,6 @@ public class ShipMove : MonoBehaviour
             moveDir = destination - trans.position;
             yield return null;
         }
-
     }
     #endregion Methods
 }
