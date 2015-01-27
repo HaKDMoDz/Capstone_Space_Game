@@ -21,4 +21,15 @@ public abstract class ShipComponent : MonoBehaviour
     public float activationCost;
     public float powerDrain;
 
+    bool selected;
+    public bool Selected
+    {
+        get { return selected; }
+        set
+        {
+            selected = value;
+            //selection effect here
+        }
+    }
+
 }
