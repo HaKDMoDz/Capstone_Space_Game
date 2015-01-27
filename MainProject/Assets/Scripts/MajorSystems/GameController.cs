@@ -29,8 +29,7 @@ public class GameController : Singleton<GameController>
     #region Fields
     
     #region EditorExposed
-    [SerializeField]
-    private GameScene defaultStartScene = GameScene.GalaxyMap;
+    private GameScene defaultStartScene = GameScene.MainMenu;
     //[SerializeField]
     //private List<SceneNameEntry> sceneEntryList;
     //[SerializeField]

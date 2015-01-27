@@ -38,15 +38,37 @@ public class PlayerShip : TurnBasedUnit
                 Debug.Log(shipBPMetaData.blueprintName+ "- Movement end");
                 #endif
             }
+
+            //if(Input.GetMouseButtonDown(0))
+            //{
+            //    //Debug.Log("Left click");
+            //    ShipComponent comp = CheckClickOnComponent();
+            //}
+
             yield return null;  
         }
     }
+    ShipComponent CheckClickOnComponent()
+    {
+        ShipComponent componentClickedOn = null;
 
+        Ray ray = componentCamera.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, 1000f, 1 << TagsAndLayers.ComponentsLayer))
+        {
+#if FULL_DEBUG
+            Debug.Log("Clicked on "+ hit.collider.name);
+#endif
+            componentClickedOn = hit.collider.gameObject.GetComponent<ShipComponent>();
+        }
+        return componentClickedOn;
+    }
     public void Move(Vector3 destination)
     {
         if (!receivedMoveCommand)
         {
-            Debug.Log("Move command recieved " + shipBPMetaData.blueprintName);
+            Debug.Log("Move command received " + shipBPMetaData.blueprintName);
             shipMove.destination = destination;
             receivedMoveCommand = true;
         }

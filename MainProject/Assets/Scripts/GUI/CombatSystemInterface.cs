@@ -70,6 +70,10 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
     {
         guiFields.closedCompSelectPanel.SetActive(show);
         guiFields.openCompSelectionPanel.SetActive(false);
+        if(!show)
+        {
+            TurnBasedCombatSystem.Instance.ShowingSelectionPanel(false);
+        }
     }
     #endregion PublicMethods
 

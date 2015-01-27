@@ -33,7 +33,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
         }
     }
 
-    private Camera componentCamera;
+    protected Camera componentCamera;
 
     //TEMP
     private float hullHP = 100;
