@@ -14,14 +14,17 @@ public class AI_Ship : TurnBasedUnit
     //TEMP
     private float damagePerAttack = 35.0f;
 
+    public AI_Attack ai_Attack { get; private set; }
+
     #endregion Internal
     #endregion Fields
 
     #region Methods
     #region PublicMethods
-    public void Init(ShipBlueprint shipBP, ShipMove shipMove, AI_Attack shipAttack)
+    public void Init(ShipBlueprint shipBP, ShipMove shipMove, AI_Attack ai_Attack)
     {
-        base.Init(shipBP, shipMove, shipAttack);
+        base.Init(shipBP, shipMove);
+        this.ai_Attack = ai_Attack;
     }
     public override IEnumerator ExecuteTurn()
     {
@@ -49,7 +52,7 @@ public class AI_Ship : TurnBasedUnit
             Debug.Log("1");
             TurnBasedUnit targetEnemy = TargetEnemy(TurnBasedCombatSystem.Instance.units);
             Debug.Log("2");
-            yield return StartCoroutine(shipAttack.Attack(targetEnemy, damagePerAttack));
+            yield return StartCoroutine(ai_Attack.Attack(targetEnemy, damagePerAttack));
             Debug.Log("3");
             receivedAttackCommand = false;
 #if FULL_DEBUG

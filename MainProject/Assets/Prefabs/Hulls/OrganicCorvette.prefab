@@ -644,7 +644,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 482650}
   - 114: {fileID: 11482586}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: OrganicCorvette
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -713,6 +713,22 @@ GameObject:
   - 137: {fileID: 13782586}
   m_Layer: 8
   m_Name: Plane003
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &183954
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 483954}
+  - 20: {fileID: 2083954}
+  m_Layer: 0
+  m_Name: Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1145,6 +1161,7 @@ Transform:
   m_Children:
   - {fileID: 482656}
   - {fileID: 482648}
+  - {fileID: 483954}
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!4 &482652
@@ -1198,6 +1215,50 @@ Transform:
   m_Children: []
   m_Father: {fileID: 482656}
   m_RootOrder: 1
+--- !u!4 &483954
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 183954}
+  m_LocalRotation: {x: .707106829, y: 0, z: 0, w: .707106829}
+  m_LocalPosition: {x: 0, y: 16.4200001, z: -1.79999995}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 482650}
+  m_RootOrder: 2
+--- !u!20 &2083954
+Camera:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 183954}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 3
+  m_BackGroundColor: {r: .192156866, g: .301960796, b: .474509805, a: .0196078438}
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: -.270000011
+    y: .25999999
+    width: .600000024
+    height: .600000024
+  near clip plane: .300000012
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 1
+  orthographic size: 16.4799995
+  m_Depth: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 13056
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_HDR: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: .0219999999
 --- !u!23 &2382586
 Renderer:
   m_ObjectHideFlags: 1

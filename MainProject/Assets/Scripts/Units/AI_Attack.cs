@@ -12,7 +12,7 @@ public class AI_Attack : MonoBehaviour
     /// <returns>null</returns>
     public IEnumerator Attack(TurnBasedUnit _target, float _damageAmount)
     {
-        _target.takeDamage(_damageAmount);
+        _target.TakeDamage(_damageAmount);
         yield return null;
     }
 }

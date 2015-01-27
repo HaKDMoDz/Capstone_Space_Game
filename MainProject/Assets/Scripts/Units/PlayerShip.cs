@@ -26,6 +26,8 @@ public class PlayerShip : TurnBasedUnit
         yield return StartCoroutine(base.ExecuteTurn());
         Debug.Log("Player unit turn");
 
+        CombatSystemInterface.Instance.EnableComponentSelectionPanel(true);
+
         while (!Input.GetKeyDown(KeyCode.Space))
         {
             if(receivedMoveCommand)

@@ -1,5 +1,6 @@
 ﻿#region Usings
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using System;
@@ -11,6 +12,14 @@ public struct CombatGUIFields
 {
     public ButtonWithContent buttonPrefab;
     public RectTransform turnOrderButtonParent;
+
+    //public RectTransform compSelectionPanelRect;
+    //public float changeTimeSelectionPanel;
+    //public float openRightSelectionPanel;
+    //public float closedRightSelectionPanel;
+
+    public GameObject openCompSelectionPanel;
+    public GameObject closedCompSelectPanel;
 }
 #endregion AdditionalStructs
 public class CombatSystemInterface : Singleton<CombatSystemInterface>
@@ -34,10 +43,12 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
     {
         ButtonWithContent buttonClone = Instantiate(guiFields.buttonPrefab) as ButtonWithContent;
         buttonClone.buttonText.text = unit.shipBPMetaData.blueprintName;
-        //RectTransform buttonRect = buttonClone.transform as RectTransform;
         buttonClone.transform.SetParent(guiFields.turnOrderButtonParent, false);
         unit_buttonRect_table.Add(unit, buttonClone);
     }
+    
+    #endregion GUISetup
+
     public void UpdateTurnOrderPanel(List<TurnBasedUnit> units)
     {
         for (int i = 0; i < units.Count; i++)
@@ -47,11 +58,65 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
             button.transform.SetSiblingIndex(i);
         }
     }
-    #endregion GUISetup
 
+    public void ShowComponentSelectionPanel(bool show)
+    {
+        guiFields.openCompSelectionPanel.SetActive(show);
+        guiFields.closedCompSelectPanel.SetActive(!show);
+
+        TurnBasedCombatSystem.Instance.ShowingSelectionPanel(show);
+    }
+    public void EnableComponentSelectionPanel(bool show)
+    {
+        guiFields.closedCompSelectPanel.SetActive(show);
+        guiFields.openCompSelectionPanel.SetActive(false);
+    }
     #endregion PublicMethods
 
     #region PrivateMethods
+
+    #region GUIRelated
+
+    //private IEnumerator ShowCompSelectionPanel(bool show)
+    //{
+    //    Debug.Log("opening Panel");
+
+    //    float destRightValue;
+    //    if(show)
+    //    {
+    //        destRightValue = guiFields.openRightSelectionPanel;
+    //    }
+    //    else
+    //    {
+    //        destRightValue = guiFields.closedRightSelectionPanel;
+    //    }
+    //    float time = 0.0f;
+
+    //    Rect panelRect = guiFields.compSelectionPanelRect.rect;
+    //    while (time < 1.0f)
+    //    {
+    //        //guiFields.compSelectionPanelRect.rect.Set(guiFields.compSelectionPanelRect.rect.xMin,
+    //        //    guiFields.compSelectionPanelRect.rect.yMin,
+    //        //    Mathf.Lerp(guiFields.compSelectionPanelRect.rect.width, destRightValue, time),
+    //        //    panelRect.height);
+
+    //        //Vector2 rectSize = guiFields.compSelectionPanelRect.sizeDelta;
+    //        //rectSize.x = Mathf.Lerp(rectSize.x, destRightValue, time);
+    //        //guiFields.compSelectionPanelRect.sizeDelta = rectSize;
+    //        /*guiFields.compSelectionPanelRect.position = Vector2.zero;*/
+    //        float rightPos = Mathf.Lerp(guiFields.compSelectionPanelRect.Size().x, destRightValue, time);
+    //        guiFields.compSelectionPanelRect.SetWidth(rightPos);
+
+    //        time += Time.deltaTime / guiFields.changeTimeSelectionPanel;
+
+    //        yield return null;
+    //    }
+
+
+
+    //}
+    
+    #endregion GUIRelated
 
     #region UnityCallbacks
 

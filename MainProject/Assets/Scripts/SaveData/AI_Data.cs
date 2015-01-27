@@ -15,7 +15,7 @@ public class AI_Data
 
     public void Serialize(ref SerializedAI_Data sz_AIFleetData)
     {
-        Debug.Log(currentFleet_BlueprintNames);
+        //Debug.Log(currentFleet_BlueprintNames);
         sz_AIFleetData.currentFleet_BlueprintNames = currentFleet_BlueprintNames;
     }
 

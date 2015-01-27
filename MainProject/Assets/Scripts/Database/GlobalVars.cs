@@ -6,9 +6,9 @@ public class GlobalVars : ScriptableObject
 {
     //Editor Exposed
     [SerializeField]
-    private float movementEpsilon = 0.2f;
+    private float lerpDistanceEpsilon = 0.2f;
     [SerializeField]
-    private float playerShipMoveSpeed = 3.0f;
+    private float shipMoveSpeed = 3.0f;
     [SerializeField]
     private float cameraFollowPeriod = 0.5f;
     [SerializeField]
@@ -17,16 +17,16 @@ public class GlobalVars : ScriptableObject
     private float turnDelayFactor = 200.0f; //lower means higher penalty for having high power
 
     //static vars for easy access
-    public static float MovementEpsilon;
-    public static float PlayerShipMoveSpeed;
-    public static float CameraFollowPeriod;
-    public static float CameraMoveToFocusPeriod;
-    public static float TurnDelayFactor;
+    public static float LerpDistanceEpsilon { get; private set; }
+    public static float ShipMoveSpeed { get; private set; }
+    public static float CameraFollowPeriod { get; private set; }
+    public static float CameraMoveToFocusPeriod { get; private set; }
+    public static float TurnDelayFactor { get; private set; }
 
     private void OnEnable()
     {
-        MovementEpsilon = movementEpsilon;
-        PlayerShipMoveSpeed = playerShipMoveSpeed;
+        LerpDistanceEpsilon = lerpDistanceEpsilon;
+        ShipMoveSpeed = shipMoveSpeed;
         CameraFollowPeriod = cameraFollowPeriod;
         CameraMoveToFocusPeriod = cameraMoveToFocusPeriod;
         TurnDelayFactor = turnDelayFactor;

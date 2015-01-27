@@ -83,6 +83,17 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
 #endif
     }
 
+
+    #region GUIAccess
+    public void ShowingSelectionPanel(bool show)
+    {
+        firstUnit.ShowComponentSelection(show);
+    }
+
+
+
+    #endregion GUIAccess
+
     #endregion PublicMethods
 
     #region PrivateMethods
@@ -208,6 +219,7 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
     {
         yield return StartCoroutine(CameraDirector.Instance.MoveToFocusOn(firstUnit.transform, GlobalVars.CameraMoveToFocusPeriod));
         yield return StartCoroutine(firstUnit.ExecuteTurn());
+        CombatSystemInterface.Instance.EnableComponentSelectionPanel(false);
     }
     private void EndCombat()
     {

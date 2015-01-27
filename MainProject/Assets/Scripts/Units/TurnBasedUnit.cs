@@ -32,6 +32,9 @@ public abstract class TurnBasedUnit : MonoBehaviour
             }
         }
     }
+
+    private Camera componentCamera;
+
     //TEMP
     private float hullHP = 100;
 
@@ -42,16 +45,12 @@ public abstract class TurnBasedUnit : MonoBehaviour
     /// </summary>
     /// <param name="_amountOfDamage">The amount of Damage done to the ship</param>
     /// <returns>null or the Destroy() Coroutine</returns>
-    public IEnumerator takeDamage(float _amountOfDamage)
+    public IEnumerator TakeDamage(float _amountOfDamage)
     {
         hullHP -= _amountOfDamage;
         if (hullHP <= 0)
         {
             yield return StartCoroutine(Destroy());
-        }
-        else
-        {
-            yield return null;
         }
     }
 
@@ -74,7 +73,6 @@ public abstract class TurnBasedUnit : MonoBehaviour
     public ShipMove shipMove { get; private set; }
     protected ShipBlueprint shipBP;
 
-    public AI_Attack shipAttack { get; private set; }
 
     #endregion Fields
 
@@ -88,17 +86,17 @@ public abstract class TurnBasedUnit : MonoBehaviour
         this.shipMove = shipMove;
         this.shipMove.Init();
         timeLeftToTurn = turnDelay;
+        componentCamera = GetComponentInChildren<Camera>();
+        #if FULL_DEBUG
+        if(componentCamera==null)
+        {
+            Debug.LogError("No Component camera found");
+        }
+	    #endif
+        componentCamera.enabled = false;
     }
 
-    public virtual void Init(ShipBlueprint shipBP, ShipMove shipMove, AI_Attack shipAttack)
-    {
-        this.shipBP = shipBP;
-        this.shipBPMetaData = shipBP.metaData;
-        this.shipMove = shipMove;
-        this.shipAttack = shipAttack;
-        this.shipMove.Init();
-        timeLeftToTurn = turnDelay;
-    }
+
 
     public virtual IEnumerator ExecuteTurn()
     {
@@ -107,6 +105,11 @@ public abstract class TurnBasedUnit : MonoBehaviour
         #endif
 
         yield return null;
+    }
+
+    public void ShowComponentSelection(bool show)
+    {
+        componentCamera.enabled = show;
     }
     #endregion PublicMethods
 

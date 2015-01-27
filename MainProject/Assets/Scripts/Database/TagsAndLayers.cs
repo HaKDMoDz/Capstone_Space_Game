@@ -4,32 +4,37 @@ using System.Collections.Generic;
 
 public class TagsAndLayers : ScriptableObject
 {
-    #region Layers
-    public int playerShipLayer = 8;
-    public int componentSlotLayer = 9;
-    public int componentsLayer = 10;
-    public int enemyShipLayer = 11;
+    [SerializeField]
+    private int playerShipLayer = 8;
+    [SerializeField]
+    private int componentSlotLayer = 9;
+    [SerializeField]
+    private int spaceSceneLayer = 10;
+    [SerializeField]
+    private int spaceGroundLayer = 11;
+    [SerializeField]
+    private int componentsLayer = 12;
+    [SerializeField]
+    private int ai_ShipLayer = 13;
 
-    public static int PlayerShipLayer;
-    public static int ComponentSlotLayer;
-    public static int ComponentsLayer ;
-    public static int EnemyShipLayer ;
+    public static int PlayerShipLayer {get; private set;}
+    public static int ComponentSlotLayer {get; private set;}
+    public static int SpaceSceneLayer { get; private set; }
+    public static int SpaceGroundLayer { get; private set; }
+    public static int ComponentsLayer { get; private set; }
+    public static int AI_ShipLayer { get; private set; }
 
-    #endregion Layers
-    
-    #region Tags
-    public string enemyShipTag = "EnemyShip";
+    private string enemyShipTag = "EnemyShip";
 
-    public static string EnemyShipTag ;
-    #endregion Tags
+    public static string EnemyShipTag { get; private set; }
 
     private void OnEnable()
     {
         PlayerShipLayer = playerShipLayer;
         ComponentSlotLayer = componentSlotLayer;
+        SpaceSceneLayer=spaceSceneLayer;
+        SpaceGroundLayer = spaceGroundLayer;
         ComponentsLayer = componentsLayer;
-        EnemyShipLayer = enemyShipLayer;
-
-        EnemyShipTag = enemyShipTag;
+        AI_ShipLayer = ai_ShipLayer;
     }
 }
