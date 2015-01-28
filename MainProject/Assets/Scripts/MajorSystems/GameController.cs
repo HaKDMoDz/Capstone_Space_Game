@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 
 #region AdditionalData
-public enum GameScene {MainMenu, GalaxyMap, CombatScene, ShipDesignScene }
+public enum GameScene {MainMenu, GalaxyMap, CombatScene, ShipDesignScene, TestScene, ParticleWorkshop }
 
 //for a prettier inspector window
 //[Serializable]

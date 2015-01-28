@@ -30,6 +30,8 @@ public abstract class ShipComponent : MonoBehaviour , IPointerClickHandler
         {
             selected = value;
             //selection effect here
+            transform.FindChild("SelectionHalo").gameObject.SetActive(value);
+
         }
     }
 
@@ -37,5 +39,6 @@ public abstract class ShipComponent : MonoBehaviour , IPointerClickHandler
     public virtual void OnPointerClick(PointerEventData eventData)
     {
         Debug.Log("Clicked on component " + componentName);
+        Selected = !Selected;
     }
 }
