@@ -45,7 +45,7 @@ public class AI_Ship : TurnBasedUnit
         }
 
         //attack phase
-        //Attack();
+        Attack();
 
         if (receivedAttackCommand)
         {

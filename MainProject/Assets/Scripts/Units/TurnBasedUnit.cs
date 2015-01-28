@@ -47,9 +47,11 @@ public abstract class TurnBasedUnit : MonoBehaviour
     /// <returns>null or the Destroy() Coroutine</returns>
     public IEnumerator TakeDamage(float _amountOfDamage)
     {
+        Debug.Log("damage taken-------------------------------------------------------------------------------");
         hullHP -= _amountOfDamage;
         if (hullHP <= 0)
         {
+            Debug.Log("Destroy Ship");
             yield return StartCoroutine(Destroy());
         }
     }
@@ -64,6 +66,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
         //play explosion sound
         //play explosion juice (screen shake, etc)
         //remove ship
+        gameObject.transform.FindChild("Explosion").gameObject.SetActive(true);
         Debug.Log("Ship Destroyed");
         yield return null;
     }
