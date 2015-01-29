@@ -33,9 +33,13 @@ public abstract class TurnBasedUnit : MonoBehaviour
         }
     }
 
+    //references
     protected Camera componentCamera;
+    [SerializeField]
+    protected GameObject expolosionObject;
 
     //TEMP
+    [SerializeField]
     private float hullHP = 100;
 
     //TEMP
@@ -62,17 +66,21 @@ public abstract class TurnBasedUnit : MonoBehaviour
     /// Coroutine for Destroying ships when HP is 0 (or less)
     /// </summary>
     /// <returns>null after it finishes</returns>
-    private IEnumerator Destroy()
+    protected virtual IEnumerator Destroy()
     {
         //play explosion particle effect
-        gameObject.transform.FindChild("Explosion").gameObject.SetActive(true);
+        //gameObject.transform.FindChild("Explosion").gameObject.SetActive(true);
+        expolosionObject.SetActive(true);
+        yield return new WaitForSeconds(3.0f);
         //play explosion sound
         //play explosion juice (screen shake, etc)
         //remove ship
-#if FULL_DEBUG
+
+        TurnBasedCombatSystem.Instance.KillShip(this);
+
+        #if FULL_DEBUG
         Debug.Log("Ship Destroyed");
-#endif
-        yield return null;
+        #endif  
     }
 
     //references
@@ -101,6 +109,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
         }
 	    #endif
         componentCamera.enabled = false;
+        expolosionObject = transform.FindChild("Explosion").gameObject;
     }
 
 

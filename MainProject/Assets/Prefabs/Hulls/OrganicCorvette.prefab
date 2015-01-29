@@ -662,6 +662,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 482650}
   - 114: {fileID: 11482586}
+  - 65: {fileID: 6555626}
   m_Layer: 8
   m_Name: OrganicCorvette
   m_TagString: Untagged
@@ -1287,7 +1288,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 182650}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 112.069534, y: 2.05867437e-17, z: 88.7426529}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 445504}
@@ -1427,7 +1428,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 195376}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -6.98000002, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 495366}
@@ -2776,6 +2777,18 @@ MeshCollider:
   m_SmoothSphereCollisions: 0
   m_Convex: 0
   m_Mesh: {fileID: 4300004, guid: b2a2a83c6e04f4741b0ad3605d9ec142, type: 3}
+--- !u!65 &6555626
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 182650}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 30.2202263, y: 7.96030426, z: 24.9339905}
+  m_Center: {x: -.126075745, y: 1.6689949, z: -2.69526672}
 --- !u!95 &9582586
 Animator:
   serializedVersion: 3

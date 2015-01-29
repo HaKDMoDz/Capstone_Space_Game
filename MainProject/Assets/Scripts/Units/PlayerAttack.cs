@@ -36,25 +36,28 @@ public class PlayerAttack : MonoBehaviour
             yield return StartCoroutine(WeaponTargetingSequence());
             numWeaponsActivated = 0;
 
-            if(!targetShip)
+            if(targetShip)
             {
                 Transform targetShipTrans = targetShip.transform;
                 trans.LookAt(targetShipTrans);
 
                 foreach (Component_Weapon weapon in components.Where(c => c is Component_Weapon))
                 {
+                    Debug.Log("activate weapon");
+                    
+                    yield return StartCoroutine(
                     weapon.Fire(targetShipTrans,
                         () =>
                         {
                             numWeaponsActivated--;
-                        });
+                        }));
                     numWeaponsActivated++;
                 }
             }
             #if !NO_DEBUG
             else
             {
-                Debug.Log("Targeting Cancelled");
+                Debug.Log("Targeting Sequence Complete");
             }
             #endif
         }
@@ -63,6 +66,7 @@ public class PlayerAttack : MonoBehaviour
         {
             yield return null;
         }
+
         yield return StartCoroutine(CameraDirector.Instance.MoveToFocusOn(trans, GlobalVars.CameraMoveToFocusPeriod));
 
 
@@ -113,6 +117,7 @@ public class PlayerAttack : MonoBehaviour
                 RaycastHit hit;
                 if(Physics.Raycast(ray, out hit, 1000.0f, 1<<TagsAndLayers.AI_ShipLayer))
                 {
+                    Debug.Log(hit.collider.gameObject.name);
                     targetConfirmed = true;
                     targetShip = hit.collider.gameObject.GetComponent<AI_Ship>();
                 }

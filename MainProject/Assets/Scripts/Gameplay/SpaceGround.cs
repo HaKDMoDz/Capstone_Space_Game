@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
 
-public class SpaceGround : MonoBehaviour, IPointerClickHandler
+public class SpaceGround : Singleton<SpaceGround>, IPointerClickHandler
 {
     public delegate void GroundRightClick(Vector3 worldPosition);
     public event GroundRightClick OnGroundRightClick = new GroundRightClick((Vector3) => { });

@@ -10,8 +10,8 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
 {
     #region Fields
     #region EditorExposed
-    [SerializeField]
-    private SpaceGround spaceGround;
+    //[SerializeField]
+    //private SpaceGround spaceGround;
     #endregion EditorExposed
 
     #region Internal
@@ -41,7 +41,7 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
         unitsWithSameTime = new List<TurnBasedUnit>();
         playerShips = new List<PlayerShip>();
         ai_Ships = new List<AI_Ship>();
-        spaceGround.OnGroundRightClick += SpaceGroundClick; //raised whenever user clicks on the "ground"
+        //raised whenever user clicks on the "ground"
     }
 
     /// <summary>
@@ -89,6 +89,20 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
 #endif
     }
 
+    public void KillShip(TurnBasedUnit unit)
+    {
+        units.Remove(unit);
+        unitsWithSameTime.Remove(unit);
+        if(unit is AI_Ship)
+        {
+            ai_Ships.Remove((AI_Ship)unit);
+        }
+        else if(unit is PlayerShip)
+        {
+            playerShips.Remove((PlayerShip)unit);
+        }
+        Destroy(unit.gameObject);
+    }
 
     #region GUIAccess
     public void ShowingSelectionPanel(bool show)
@@ -248,23 +262,7 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
     {
 
     }
-    #region InternalCallbacks
-
-    /// <summary>
-    /// Callback from the "ground" being clicked. Is sent as a move command to the current player ship
-    /// </summary>
-    /// <param name="worldPosition"></param>
-    void SpaceGroundClick(Vector3 worldPosition)
-    {
-        //Debug.Log("Click on ground at position: "+worldPosition);
-
-        if(units[0] is PlayerShip)
-        {
-            ((PlayerShip)units[0]).Move(worldPosition);
-        }
-    }
-    #endregion InternalCallbacks
-
+    
     #endregion PrivateMethods
 
     #endregion Methods

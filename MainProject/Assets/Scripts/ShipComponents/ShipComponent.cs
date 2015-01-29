@@ -31,6 +31,12 @@ public abstract class ShipComponent : MonoBehaviour , IPointerClickHandler, IPoi
         {
             selected = value;
             //selection effect here
+            #if FULL_DEBUG
+            if(!selectionHalo)
+            {
+                Debug.LogError("Selection Halo not set");
+            }
+            #endif
             selectionHalo.SetActive(value);
         }
     }
@@ -45,8 +51,8 @@ public abstract class ShipComponent : MonoBehaviour , IPointerClickHandler, IPoi
 
     public virtual void OnPointerClick(PointerEventData eventData)
     {
-        //Debug.Log("Clicked on component " + componentName);
-        Selected = !Selected;
+        Debug.Log("Clicked on component " + componentName);
+        //Selected = !Selected;
         OnComponentClicked(this);
     }
 

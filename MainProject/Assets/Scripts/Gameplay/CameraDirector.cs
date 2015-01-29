@@ -8,11 +8,11 @@ public class CameraDirector : Singleton<CameraDirector>
     #region EditorExposed
     
     [SerializeField]
-    private float heightAboveFocusTarget = 200.0f;
+    private float heightFocus = 200.0f;
     [SerializeField]
-    private float heightAboveFocusWhileAiming = 40.0f;
+    private float heightAiming = 40.0f;
     [SerializeField]
-    private float distToFocusWhileAiming = 50.0f;
+    private float distFocusAiming = 50.0f;
     [SerializeField]
     private float orbitSpeed = 30.0f;
     #endregion EditorExposed
@@ -36,8 +36,8 @@ public class CameraDirector : Singleton<CameraDirector>
     public IEnumerator MoveToFocusOn(Transform target, float period)
     {
         Vector3 targetPos = target.position;
-        targetPos.y += heightAboveFocusTarget;
-        targetPos.z -= heightAboveFocusTarget / Mathf.Tan(initialAngleX);
+        targetPos.y += heightFocus;
+        targetPos.z -= heightFocus / Mathf.Tan(initialAngleX);
         yield return StartCoroutine(MoveAndRotate(targetPos, initialRot, period));
     }
     public IEnumerator AimAtTarget(Transform currentFocus, Transform target, float period)
@@ -46,8 +46,8 @@ public class CameraDirector : Singleton<CameraDirector>
         float targetToFocusDist = targetToFocusDir.magnitude;
         targetToFocusDir.Normalize();
         Quaternion desiredCamRotation = Quaternion.LookRotation(-targetToFocusDir);
-        targetToFocusDir *= targetToFocusDist + distToFocusWhileAiming;
-        Vector3 desiredCamPos = target.position + targetToFocusDir + Vector3.up * heightAboveFocusWhileAiming;
+        targetToFocusDir *= targetToFocusDist + distFocusAiming;
+        Vector3 desiredCamPos = target.position + targetToFocusDir + Vector3.up * heightAiming;
         yield return StartCoroutine(MoveAndRotate(desiredCamPos, desiredCamRotation, period));
     }
     public void OrbitAroundImmediate(Transform target, float xAngle, float yAngle)

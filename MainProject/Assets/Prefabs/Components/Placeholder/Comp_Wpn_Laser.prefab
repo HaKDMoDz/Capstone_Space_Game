@@ -151,6 +151,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &162400
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 462400}
+  m_Layer: 12
+  m_Name: ShootPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!4 &400000
 Transform:
   m_ObjectHideFlags: 1
@@ -158,12 +173,13 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 4.7828846, y: 6.23976416e-17, z: -137.216766}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 447208}
   - {fileID: 400008}
   - {fileID: 448124}
+  - {fileID: 462400}
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!4 &400002
@@ -267,6 +283,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 400000}
   m_RootOrder: 2
+--- !u!4 &462400
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 162400}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: .00999999978, y: .889999986, z: 1.41999996}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 400000}
+  m_RootOrder: 3
 --- !u!23 &2300000
 Renderer:
   m_ObjectHideFlags: 1
@@ -1497,15 +1525,15 @@ MonoBehaviour:
   unlocked: 0
   activationCost: 0
   powerDrain: 20
-  damage: 0
+  damage: 50
   range: 0
   hullDamagePercent: 0
   armourDmgModifier: 0
   shieldDmgModifier: 0
-  shootPoint: {fileID: 0}
-  effectDuration: .400000006
+  shootPoint: {fileID: 462400}
+  effectDuration: 1
   laserImpactEffect: {fileID: 0}
-  lineNoise: 0
+  lineNoise: .400000006
 --- !u!120 &12048124
 LineRenderer:
   m_ObjectHideFlags: 1
@@ -1530,8 +1558,8 @@ LineRenderer:
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 22.2099991}
   m_Parameters:
-    startWidth: 1
-    endWidth: 1
+    startWidth: .300000012
+    endWidth: .300000012
     m_StartColor:
       serializedVersion: 2
       rgba: 4294967295

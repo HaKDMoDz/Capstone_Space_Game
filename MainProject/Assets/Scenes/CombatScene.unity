@@ -1871,9 +1871,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fae7f5d01a56c8043a0a6a0fbab1c2c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  heightAboveFocusTarget: 100
-  heightAboveFocusWhileAiming: 40
-  distToFocusWhileAiming: 50
+  heightFocus: 150
+  heightAiming: 40
+  distFocusAiming: 100
   orbitSpeed: 30
 --- !u!114 &962537997
 MonoBehaviour:
@@ -1888,7 +1888,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_EventMask:
     serializedVersion: 2
-    m_Bits: 6144
+    m_Bits: 14336
 --- !u!1 &1017451997
 GameObject:
   m_ObjectHideFlags: 0
@@ -4464,7 +4464,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ec90057e3f2c244f89788db86875eb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spaceGround: {fileID: 2051935071}
 --- !u!4 &1647180807
 Transform:
   m_ObjectHideFlags: 0

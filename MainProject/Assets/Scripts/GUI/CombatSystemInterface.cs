@@ -54,7 +54,7 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
         for (int i = 0; i < units.Count; i++)
         {
             ButtonWithContent button = unit_buttonRect_table[units[i]];
-            button.buttonText.text = units[i].shipBPMetaData.blueprintName + " : " + units[i].TimeLeftToTurn;
+            button.buttonText.text = units[i].shipBPMetaData.blueprintName;
             button.transform.SetSiblingIndex(i);
         }
     }

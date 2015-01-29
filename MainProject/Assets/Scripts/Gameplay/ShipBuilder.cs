@@ -101,13 +101,17 @@ public class ShipBuilder
                 ShipMove shipMove = hullBeingBuilt.gameObject.AddComponent<ShipMove>();
                 PlayerAttack playerAttack = hullBeingBuilt.gameObject.AddComponent<PlayerAttack>();
                 playerShip.Init(blueprintBeingBuilt, shipMove, playerAttack);
+                playerShip.gameObject.name = "Player " + playerShip.gameObject.name;
                 setupUnit = playerShip;
+                
                 break;
             case ShipType.AI_Ship:
                 AI_Ship ai_ship = hullBeingBuilt.gameObject.AddComponent<AI_Ship>();
                 ShipMove ai_shipMove = hullBeingBuilt.gameObject.AddComponent<ShipMove>();
                 AI_Attack ai_attack = hullBeingBuilt.gameObject.AddComponent<AI_Attack>();
                 ai_ship.Init(blueprintBeingBuilt, ai_shipMove, ai_attack);
+                ai_ship.gameObject.layer = TagsAndLayers.AI_ShipLayer;
+                ai_ship.gameObject.name = "AI " + ai_ship.gameObject.name;
                 setupUnit = ai_ship;
                 break;
             case ShipType.NPC_Ship:

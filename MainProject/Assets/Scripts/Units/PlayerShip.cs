@@ -9,13 +9,16 @@ public class PlayerShip : TurnBasedUnit
 
     //references
     public PlayerAttack playerAttack { get; private set; }
+    private SpaceGround spaceGround;
 
     #region Internal
     private bool continueTurn = true;
+    private bool registerInput;
     private bool receivedMoveCommand;
     private bool componentSelectionOn;
     private bool dragging;
     //private ShipComponent componentClickedOn;
+    private List<ShipComponent> components = new List<ShipComponent>();
     private List<ShipComponent> selectedComponents = new List<ShipComponent>();
 
     #endregion Internal
@@ -41,14 +44,41 @@ public class PlayerShip : TurnBasedUnit
         foreach (ShipComponent component in shipBP.slot_component_table.Values)
         {
             component.Init();
-            component.OnComponentClicked += OnComponentClicked;
-            component.OnComponentMouseOver += OnComponentMouseOver;
+            components.Add(component);
+
+        }
+        spaceGround = SpaceGround.Instance;
+
+    }
+
+    private void RegisterInput(bool register)
+    {
+        registerInput = register;
+        if (register)
+        {
+            foreach (ShipComponent component in components)
+            {
+                component.OnComponentClicked += OnComponentClicked;
+                component.OnComponentMouseOver += OnComponentMouseOver;
+            }
+            spaceGround.OnGroundRightClick += SpaceGroundClick;
+
+        }
+        else
+        {
+            foreach (ShipComponent component in components)
+            {
+                component.OnComponentClicked -= OnComponentClicked;
+                component.OnComponentMouseOver -= OnComponentMouseOver;
+            }
+            spaceGround.OnGroundRightClick -= SpaceGroundClick;
         }
     }
-    
-    
+
+
     public override IEnumerator ExecuteTurn()
     {
+        RegisterInput(true);
         yield return StartCoroutine(base.ExecuteTurn());
         Debug.Log("Player unit turn");
         continueTurn = true;
@@ -59,43 +89,39 @@ public class PlayerShip : TurnBasedUnit
         {
             if (receivedMoveCommand)
             {
+                RegisterInput(false);
+                UnSelectComponents();
                 yield return StartCoroutine(shipMove.Move());
-                receivedMoveCommand = false;
 #if FULL_DEBUG
                 Debug.Log(shipBPMetaData.blueprintName + "- Movement end");
 #endif
+                RegisterInput(true);
             }
 
             if (componentSelectionOn)
             {
                 yield return StartCoroutine(ComponentSelectionSequence());
-                yield return StartCoroutine(playerAttack.ActivateComponents(selectedComponents));
                 Debug.Log("activating components");
+                RegisterInput(false);
+                yield return StartCoroutine(playerAttack.ActivateComponents(selectedComponents));
+                UnSelectComponents();
+                RegisterInput(true);
             }
-
+            receivedMoveCommand = false;
             yield return null;
         }
-        UnSelectComponents();
+        RegisterInput(false);
     }
 
     private void UnSelectComponents()
     {
-        foreach (ShipComponent component in shipBP.slot_component_table.Values)
+        foreach (ShipComponent component in components)
         {
             component.Selected = false;
         }
         selectedComponents.Clear();
     }
 
-    public void Move(Vector3 destination)
-    {
-        if (!receivedMoveCommand)
-        {
-            Debug.Log("Move command received " + shipBPMetaData.blueprintName);
-            shipMove.destination = destination;
-            receivedMoveCommand = true;
-        }
-    }
 
     #endregion PublicMethods
 
@@ -109,28 +135,21 @@ public class PlayerShip : TurnBasedUnit
         {
             yield return null;
         }
-
-
         componentSelectionOn = false;
     }
 
-    //ShipComponent CheckClickOnComponent()
-    //{
-    //    Debug.Log("checking click");
-    //    ShipComponent componentClickedOn = null;
-
-    //    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-    //    RaycastHit hit;
-
-    //    if (Physics.Raycast(ray, out hit, 1000f, 1 <<TagsAndLayers.ComponentsLayer))
-    //    {
-    //        Debug.Log(hit.collider.name);
-    //        componentClickedOn = hit.collider.gameObject.GetComponent<ShipComponent>();
-    //    }
-    //    return componentClickedOn;
-    //}
 
     #region InternalCallbacks
+    void SpaceGroundClick(Vector3 worldPosition)
+    {
+        //Debug.Log("Click on ground at position: "+worldPosition);
+        if (!receivedMoveCommand)
+        {
+            Debug.Log("Move command received " + shipBPMetaData.blueprintName);
+            shipMove.destination = worldPosition;
+            receivedMoveCommand = true;
+        }
+    }
 
     void OnComponentClicked(ShipComponent component)
     {
@@ -140,6 +159,12 @@ public class PlayerShip : TurnBasedUnit
         if (!selectedComponents.Contains(component))
         {
             selectedComponents.Add(component);
+            component.Selected = true;
+        }
+        else
+        {
+            selectedComponents.Remove(component);
+            component.Selected = false;
         }
     }
 

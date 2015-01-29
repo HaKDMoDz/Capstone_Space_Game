@@ -9,6 +9,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400136}
   - 114: {fileID: 11400000}
+  - 65: {fileID: 6559006}
   m_Layer: 8
   m_Name: OrganicFrigate
   m_TagString: Untagged
@@ -1254,7 +1255,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100136}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 25.9364567, y: 98.0859375, z: -1.51245391}
+  m_LocalPosition: {x: 27.4135132, y: 4.17220107e-17, z: -25.4790649}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400162}
@@ -4380,6 +4381,18 @@ MeshCollider:
   m_SmoothSphereCollisions: 0
   m_Convex: 0
   m_Mesh: {fileID: 4300000, guid: 3dd04e617abc17e4293799b8ca5cb4f2, type: 3}
+--- !u!65 &6559006
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100136}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 25.0827637, y: 7.87023544, z: 30.4016304}
+  m_Center: {x: -.073846817, y: 2.40088844, z: -.147764206}
 --- !u!95 &9500134
 Animator:
   serializedVersion: 3
