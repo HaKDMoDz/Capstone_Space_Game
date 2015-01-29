@@ -99,8 +99,8 @@ public class ShipBuilder
             case ShipType.PlayerShip:
                 PlayerShip playerShip =  hullBeingBuilt.gameObject.AddComponent<PlayerShip>();
                 ShipMove shipMove = hullBeingBuilt.gameObject.AddComponent<ShipMove>();
-                ShipControlInterface shipControlInterface = hullBeingBuilt.gameObject.AddComponent<ShipControlInterface>();
-                playerShip.Init(blueprintBeingBuilt, shipMove, shipControlInterface);
+                PlayerAttack playerAttack = hullBeingBuilt.gameObject.AddComponent<PlayerAttack>();
+                playerShip.Init(blueprintBeingBuilt, shipMove, playerAttack);
                 setupUnit = playerShip;
                 break;
             case ShipType.AI_Ship:

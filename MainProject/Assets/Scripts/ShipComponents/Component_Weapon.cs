@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public abstract class Component_Weapon : ShipComponent 
 {
@@ -10,5 +11,9 @@ public abstract class Component_Weapon : ShipComponent
 	public float armourDmgModifier;
     public float shieldDmgModifier;
 
-    public abstract void Fire();
+    [SerializeField]
+    protected Transform shootPoint;
+
+
+    public abstract IEnumerator Fire(Transform target, Action OnActivationComplete);
 }

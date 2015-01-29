@@ -6,23 +6,25 @@ using System;
 
 public enum ComponentType { Weapon, Defense, Power, Support }
 
-public abstract class ShipComponent : MonoBehaviour , IPointerClickHandler
+public abstract class ShipComponent : MonoBehaviour , IPointerClickHandler, IPointerEnterHandler
 {
 
+    //Component info and stats
     [SerializeField]
     private ComponentType compType;
     public ComponentType CompType
     {
         get { return compType; }
     }
-    
     public int ID;
     public string componentName;
     public bool unlocked;
     public float activationCost;
     public float powerDrain;
 
-    bool selected;
+
+    //interface
+    private bool selected;
     public bool Selected
     {
         get { return selected; }
@@ -30,15 +32,34 @@ public abstract class ShipComponent : MonoBehaviour , IPointerClickHandler
         {
             selected = value;
             //selection effect here
-            transform.FindChild("SelectionHalo").gameObject.SetActive(value);
-
+            selectionHalo.SetActive(value);
         }
     }
 
+    //cached references
+    private GameObject selectionHalo;
+
+    public delegate void ComponentClickEvent(ShipComponent component);
+    public event ComponentClickEvent OnComponentClicked = new ComponentClickEvent((ShipComponent) => { });
+    public delegate void ComponentHoverMouseOver(ShipComponent component);
+    public event ComponentHoverMouseOver OnComponentMouseOver = new ComponentHoverMouseOver((ShipComponent) => {  });
 
     public virtual void OnPointerClick(PointerEventData eventData)
     {
-        Debug.Log("Clicked on component " + componentName);
+        //Debug.Log("Clicked on component " + componentName);
         Selected = !Selected;
+        OnComponentClicked(this);
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        //Debug.Log("Entered component " + componentName); 
+        OnComponentMouseOver(this);
+    }
+
+
+    public virtual void Init()
+    {
+        selectionHalo = transform.FindChild("SelectionHalo").gameObject;
     }
 }

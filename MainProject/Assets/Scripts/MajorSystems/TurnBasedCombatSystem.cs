@@ -16,6 +16,9 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
 
     #region Internal
     public List<TurnBasedUnit> units { get; private set; }
+    public List<PlayerShip> playerShips { get; private set; }
+    public List<AI_Ship> ai_Ships { get; private set; }
+
     public bool combatOn { get; private set; }
 
     private float currentTurnTime;
@@ -36,7 +39,8 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
     {
         units = new List<TurnBasedUnit>();
         unitsWithSameTime = new List<TurnBasedUnit>();
-        
+        playerShips = new List<PlayerShip>();
+        ai_Ships = new List<AI_Ship>();
         spaceGround.OnGroundRightClick += SpaceGroundClick; //raised whenever user clicks on the "ground"
     }
 
@@ -106,10 +110,25 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
     private void PrepareForCombat()
     {
         CalculateTurnDelay();
-        
+
         //add each ship to the turn order list in the GUI
         foreach (TurnBasedUnit unit in units)
         {
+            if(unit is PlayerShip)
+            {
+                playerShips.Add((PlayerShip)unit);
+            }
+            else if(unit is AI_Ship)
+            {
+                ai_Ships.Add((AI_Ship)unit);
+            }
+            #if FULL_DEBUG
+            else
+            {
+                Debug.LogWarning("Not player nor AI");
+            }
+            #endif
+
             CombatSystemInterface.Instance.AddShipButton(unit);
         }
     }

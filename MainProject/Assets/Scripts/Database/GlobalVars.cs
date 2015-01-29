@@ -14,12 +14,15 @@ public class GlobalVars : ScriptableObject
     [SerializeField]
     private float cameraMoveToFocusPeriod = 1.0f;
     [SerializeField]
+    private float cameraAimAtPeriod = 1.0f;
+    [SerializeField]
     private float turnDelayFactor = 200.0f; //lower means higher penalty for having high power
 
     //static vars for easy access
     public static float LerpDistanceEpsilon { get; private set; }
     public static float ShipMoveSpeed { get; private set; }
     public static float CameraFollowPeriod { get; private set; }
+    public static float CameraAimAtPeriod { get; private set; }
     public static float CameraMoveToFocusPeriod { get; private set; }
     public static float TurnDelayFactor { get; private set; }
 
@@ -29,6 +32,7 @@ public class GlobalVars : ScriptableObject
         ShipMoveSpeed = shipMoveSpeed;
         CameraFollowPeriod = cameraFollowPeriod;
         CameraMoveToFocusPeriod = cameraMoveToFocusPeriod;
+        CameraAimAtPeriod = cameraAimAtPeriod;
         TurnDelayFactor = turnDelayFactor;
     }
 }

@@ -4,24 +4,9 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 
-#region AdditionalData
-public enum GameScene {MainMenu, GalaxyMap, CombatScene, ShipDesignScene, TestScene, ParticleWorkshop }
 
-//for a prettier inspector window
-//[Serializable]
-//public struct SaveFields
-//{
-//    public string fileExtension;
-//    public string saveDirectory;
-//    public string fileName_SavesList;
-//    public string autoSaveFileName;
-//    public int numAutoSaves;
-//    public string quickSaveName;
-//    public int numQuickSaves;
-//    public int numNormalSaves;
-//}
-
-#endregion//Additional Data
+//The scenes that will be in the release build and are managed by the game controller
+public enum GameScene {MainMenu, GalaxyMap, CombatScene, ShipDesignScene }
 
 
 public class GameController : Singleton<GameController>
