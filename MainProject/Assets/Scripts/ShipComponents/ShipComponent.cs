@@ -22,7 +22,6 @@ public abstract class ShipComponent : MonoBehaviour , IPointerClickHandler, IPoi
     public float activationCost;
     public float powerDrain;
 
-
     //interface
     private bool selected;
     public bool Selected

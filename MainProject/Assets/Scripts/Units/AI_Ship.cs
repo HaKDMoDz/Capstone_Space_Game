@@ -29,8 +29,9 @@ public class AI_Ship : TurnBasedUnit
     public override IEnumerator ExecuteTurn()
     {
         yield return StartCoroutine(base.ExecuteTurn());
+#if FULL_DEBUG
         Debug.Log("AI unit turn");
-
+#endif
         // AI doesn't wait for space to be pressed...
 
         //move phase
@@ -49,11 +50,8 @@ public class AI_Ship : TurnBasedUnit
 
         if (receivedAttackCommand)
         {
-            Debug.Log("1");
             TurnBasedUnit targetEnemy = TargetEnemy(TurnBasedCombatSystem.Instance.units);
-            Debug.Log("2");
             yield return StartCoroutine(ai_Attack.Attack(targetEnemy, damagePerAttack));
-            Debug.Log("3");
             receivedAttackCommand = false;
 #if FULL_DEBUG
             Debug.Log(shipBPMetaData.blueprintName + "- Attack end");

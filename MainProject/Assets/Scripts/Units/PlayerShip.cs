@@ -130,7 +130,6 @@ public class PlayerShip : TurnBasedUnit
     //    return componentClickedOn;
     //}
 
-
     #region InternalCallbacks
 
     void OnComponentClicked(ShipComponent component)
@@ -151,9 +150,7 @@ public class PlayerShip : TurnBasedUnit
         //    Debug.Log(component.componentName + " entered");
         //    selectedComponents.Add(component);
         //}
-
     }
-
 
     #endregion InternalCallbacks
     #endregion PrivateMethods

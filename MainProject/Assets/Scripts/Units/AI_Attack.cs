@@ -13,7 +13,7 @@ public class AI_Attack : MonoBehaviour
     public IEnumerator Attack(TurnBasedUnit _target, float _damageAmount)
     {
         Debug.Log("Unit: " + _target + "takes: " + _damageAmount);
-        _target.TakeDamage(_damageAmount);
+        StartCoroutine(_target.TakeDamage(_damageAmount));
         yield return null;
     }
 }
