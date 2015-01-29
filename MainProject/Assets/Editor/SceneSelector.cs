@@ -32,6 +32,11 @@ public class SceneSelector : Editor
     {
         OpenScene("TestScene");
     }
+    [MenuItem(menuName + "/Particle Workshop")]
+    public static void ParticleWorkshop()
+    {
+        OpenScene("ParticleWorkshop");
+    }
     static void OpenScene(string name)
     {
         if(EditorApplication.SaveCurrentSceneIfUserWantsTo())
