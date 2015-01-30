@@ -41,6 +41,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
     //TEMP
     [SerializeField]
     private float hullHP = 100;
+    public float HullHP { get { return hullHP; } private set { hullHP = value; } }
 
     //TEMP
     /// <summary>
@@ -71,7 +72,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
         //play explosion particle effect
         //gameObject.transform.FindChild("Explosion").gameObject.SetActive(true);
         expolosionObject.SetActive(true);
-        yield return new WaitForSeconds(5.0f);
+        yield return new WaitForSeconds(2.5f);
         //play explosion sound
         //play explosion juice (screen shake, etc)
         //remove ship

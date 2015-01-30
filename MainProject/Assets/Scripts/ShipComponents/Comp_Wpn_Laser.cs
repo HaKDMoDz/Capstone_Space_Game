@@ -32,29 +32,32 @@ public class Comp_Wpn_Laser : Component_Weapon
 
     public override IEnumerator Fire(Transform target, System.Action OnActivationComplete)
     {
-        Debug.Log("Firing lasers");
-
-        length = Mathf.RoundToInt(Vector3.Distance(target.position, shootPoint.position));
-        float currentTime = 0.0f;
-        while(currentTime<=effectDuration)
-        {
-            CreateBeamEffect();
-            currentTime += Time.deltaTime;
-            yield return null;
-        }
-        line.enabled = false;
         if (target)
         {
-             yield return StartCoroutine(target.GetComponent<TurnBasedUnit>().TakeDamage(damage));
-        }
-        else
-        {
-            yield return null;
-        }
-       
+            if (target.GetComponent<TurnBasedUnit>().HullHP > 0.0f)
+	        {	 
+	            Debug.Log("Firing lasers");
 
+                length = Mathf.RoundToInt(Vector3.Distance(target.position, shootPoint.position));
+                float currentTime = 0.0f;
+                while (currentTime <= effectDuration)
+                {
+                    CreateBeamEffect();
+                    currentTime += Time.deltaTime;
+                    yield return null;
+                }
+                line.enabled = false;
+                if (target)
+                {
+                    yield return StartCoroutine(target.GetComponent<TurnBasedUnit>().TakeDamage(damage));
+                }
+                else
+                {
+                    yield return null;
+                }
+            }
+        }
         OnActivationComplete();
-
     }
 
     private void CreateBeamEffect()
