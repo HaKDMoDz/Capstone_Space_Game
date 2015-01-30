@@ -38,6 +38,11 @@ public abstract class TurnBasedUnit : MonoBehaviour
     [SerializeField]
     protected GameObject expolosionObject;
 
+    public GameObject getExplosionObject()
+    {
+        return expolosionObject;
+    }
+
     //TEMP
     [SerializeField]
     private float hullHP = 100;

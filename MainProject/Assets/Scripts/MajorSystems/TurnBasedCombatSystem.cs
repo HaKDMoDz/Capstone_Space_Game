@@ -64,6 +64,8 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
 
             PostTurnActions();
         }
+
+        Debug.Log("Combat Complete!");
     }
 
     /// <summary>
@@ -101,7 +103,12 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
         {
             playerShips.Remove((PlayerShip)unit);
         }
-        Destroy(unit.gameObject);
+        StartCoroutine(Explode(unit));
+
+        if (ai_Ships.Count <= 0 || playerShips.Count <= 0)
+        {
+            combatOn = false;
+        }
     }
 
     #region GUIAccess
@@ -117,6 +124,13 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
     #endregion PublicMethods
 
     #region PrivateMethods
+
+    private IEnumerator Explode(TurnBasedUnit unit)
+    {
+        unit.getExplosionObject().SetActive(true);
+        yield return new WaitForSeconds(1.25f);
+        Destroy(unit.gameObject);
+    }
 
     /// <summary>
     /// does some preliminary actions like calculating each ship's turn delay and setting up the GUI

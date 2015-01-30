@@ -98,7 +98,16 @@ public class AI_Ship : TurnBasedUnit
 
      //insert logic here to determine closest enemy
 
-    return currentTargets[0];
+    if (currentTargets.Count > 0)
+    {
+        return currentTargets[0];
+    }
+    else
+    {
+        return null;
+        //flag turnBasedcontroller... the battle is OVER
+    }
+    
 }
 
     #endregion PublicMethods
