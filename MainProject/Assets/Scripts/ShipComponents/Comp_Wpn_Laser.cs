@@ -43,7 +43,16 @@ public class Comp_Wpn_Laser : Component_Weapon
             yield return null;
         }
         line.enabled = false;
-        yield return StartCoroutine(target.GetComponent<TurnBasedUnit>().TakeDamage(damage));
+        if (target)
+        {
+             yield return StartCoroutine(target.GetComponent<TurnBasedUnit>().TakeDamage(damage));
+        }
+        else
+        {
+            yield return null;
+        }
+       
+
         OnActivationComplete();
 
     }
