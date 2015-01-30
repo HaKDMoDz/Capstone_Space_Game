@@ -32,7 +32,6 @@ public class SU_Planet : MonoBehaviour {
 	}
 	
 	void Update () {
-        Debug.Log("test");
 		// Rotate the planet based on the rotational vector
 		if (_cacheTransform != null) {			
 			_cacheTransform.Rotate(planetRotation * Time.deltaTime);

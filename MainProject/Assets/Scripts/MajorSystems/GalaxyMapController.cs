@@ -6,4 +6,6 @@ using System.Linq;
 public class GalaxyMapController : Singleton<GalaxyMapController>
 {
     
+
+
 }
