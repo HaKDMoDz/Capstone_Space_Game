@@ -8,9 +8,12 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 498504}
+  - 114: {fileID: 11455734}
+  - 65: {fileID: 6542184}
+  - 54: {fileID: 5406534}
   m_Layer: 0
   m_Name: Mothership
-  m_TagString: Untagged
+  m_TagString: MotherShip
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -39,7 +42,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 498508}
-  - 64: {fileID: 6498524}
   m_Layer: 8
   m_Name: Battleship
   m_TagString: Untagged
@@ -541,19 +543,46 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 198524}
   m_Mesh: {fileID: 4300010, guid: c1ed03dd3ca9f8541b23a7816ca6bf53, type: 3}
---- !u!64 &6498524
-MeshCollider:
+--- !u!54 &5406534
+Rigidbody:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 198508}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
+  m_GameObject: {fileID: 198504}
   serializedVersion: 2
-  m_SmoothSphereCollisions: 0
-  m_Convex: 0
-  m_Mesh: {fileID: 4300000, guid: c1ed03dd3ca9f8541b23a7816ca6bf53, type: 3}
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: .0500000007
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &6542184
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 198504}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 16.378067, y: 8.14518356, z: 40.3078766}
+  m_Center: {x: .10389328, y: 2.05961037, z: -.833343506}
+--- !u!114 &11455734
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 198504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7b583b6030009641acfc4037411ba56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spaceGround: {fileID: 0}
+  moveSpeed: 1
 --- !u!114 &11498524
 MonoBehaviour:
   m_ObjectHideFlags: 1

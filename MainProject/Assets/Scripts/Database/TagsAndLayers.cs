@@ -17,6 +17,8 @@ public class TagsAndLayers : ScriptableObject
     [SerializeField]
     private int ai_ShipLayer = 13;
 
+
+
     public static int PlayerShipLayer {get; private set;}
     public static int ComponentSlotLayer {get; private set;}
     public static int SpaceSceneLayer { get; private set; }
@@ -24,9 +26,10 @@ public class TagsAndLayers : ScriptableObject
     public static int ComponentsLayer { get; private set; }
     public static int AI_ShipLayer { get; private set; }
 
-    private string enemyShipTag = "EnemyShip";
+    [SerializeField]
+    private string motherShipTag = "MotherShip";
 
-    public static string EnemyShipTag { get; private set; }
+    public static string MotherShipTag { get; private set; }
 
     private void OnEnable()
     {
@@ -36,5 +39,7 @@ public class TagsAndLayers : ScriptableObject
         SpaceGroundLayer = spaceGroundLayer;
         ComponentsLayer = componentsLayer;
         AI_ShipLayer = ai_ShipLayer;
+
+        MotherShipTag = motherShipTag;
     }
 }

@@ -24,6 +24,8 @@ public class CameraDirector : Singleton<CameraDirector>
     #endregion Internal
 
     #region Events
+    public delegate void CameraMoveEvent();
+    public event CameraMoveEvent OnCameraMove = new CameraMoveEvent(() => { });
 
     #endregion Events
 
@@ -57,6 +59,7 @@ public class CameraDirector : Singleton<CameraDirector>
         Vector3 position = rotation * new Vector3(0.0f, 0.0f, -distanceToTarget) + target.position;
         trans.position = position;
         trans.rotation = rotation;
+        OnCameraMove();
     }
 
     #endregion PublicMethods
@@ -72,7 +75,9 @@ public class CameraDirector : Singleton<CameraDirector>
             trans.position = Vector3.Lerp(startPos, destination, time);
             trans.rotation = Quaternion.Slerp(startRot, desiredRot, time);
             time += Time.deltaTime / period;
+            OnCameraMove();
             yield return null;
+
         }
     }
     #region UnityCallbacks
