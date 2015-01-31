@@ -16,6 +16,8 @@ public class AI_Ship : TurnBasedUnit
 
     public AI_Attack ai_Attack { get; private set; }
 
+    List<ShipComponent> activeComponents = new List<ShipComponent>();
+
     #endregion Internal
     #endregion Fields
 
@@ -25,6 +27,13 @@ public class AI_Ship : TurnBasedUnit
     {
         base.Init(shipBP, shipMove);
         this.ai_Attack = ai_Attack;
+
+        foreach (ShipComponent component in shipBP.slot_component_table.Values)
+        {
+            activeComponents.Add(component);
+            component.Init();
+        }
+
     }
     public override IEnumerator ExecuteTurn()
     {
@@ -51,7 +60,9 @@ public class AI_Ship : TurnBasedUnit
         if (receivedAttackCommand)
         {
             TurnBasedUnit targetEnemy = TargetEnemy(TurnBasedCombatSystem.Instance.units);
-            yield return StartCoroutine(ai_Attack.Attack(targetEnemy, damagePerAttack));
+            //yield return StartCoroutine(ai_Attack.Attack(targetEnemy, damagePerAttack));
+
+            yield return StartCoroutine(ai_Attack.Attack(targetEnemy, damagePerAttack, activeComponents));
             receivedAttackCommand = false;
 #if FULL_DEBUG
             Debug.Log(shipBPMetaData.blueprintName + "- Attack end");
