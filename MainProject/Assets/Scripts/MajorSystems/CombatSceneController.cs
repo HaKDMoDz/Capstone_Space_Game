@@ -54,7 +54,8 @@ public class CombatSceneController : Singleton<CombatSceneController>
         #endif
 
         /////positioning ships automatically for now
-        Vector3 spawnPos = Vector3.zero;
+        Vector3 spawnPos = new Vector3(0, 0, -100);
+        Vector3 aiSpawnPos = new Vector3(0,0,100);
         int numShips = playerFleetData.currentFleet_BlueprintNames.Count;
         int spawnSpacing = 50;
         spawnPos.x -= spawnSpacing * numShips / 2;
@@ -73,7 +74,7 @@ public class CombatSceneController : Singleton<CombatSceneController>
 
         foreach (string blueprintName in pirateFleetData.currentFleet_BlueprintNames)
         {
-            TurnBasedUnit unit = shipBuilder.BuildShip(ShipType.AI_Ship, blueprintName, spawnPos, Quaternion.identity);
+            TurnBasedUnit unit = shipBuilder.BuildShip(ShipType.AI_Ship, blueprintName, aiSpawnPos, Quaternion.identity);
             #if FULL_DEBUG
             if (unit == null)
             {
@@ -82,7 +83,8 @@ public class CombatSceneController : Singleton<CombatSceneController>
             #endif
             
             TurnBasedCombatSystem.Instance.AddShip(unit);
-            spawnPos.x += spawnSpacing;
+            aiSpawnPos.x -= spawnSpacing;
+            unit.transform.RotateAroundYAxis(180.0f);
         }
 
         //combat start

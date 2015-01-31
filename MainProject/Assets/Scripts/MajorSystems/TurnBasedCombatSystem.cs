@@ -66,6 +66,7 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
         }
 
         Debug.Log("Combat Complete!");
+        GameController.Instance.ChangeScene(GameScene.GalaxyMap);
     }
 
     /// <summary>
