@@ -75,14 +75,21 @@ public abstract class TurnBasedUnit : MonoBehaviour
     protected virtual IEnumerator Destroy()
     {
         //play explosion particle effect
-        //gameObject.transform.FindChild("Explosion").gameObject.SetActive(true);
         expolosionObject.SetActive(true);
-        yield return new WaitForSeconds(2.5f);
-        //play explosion sound
-        //play explosion juice (screen shake, etc)
-        //remove ship
 
+        //play explosion sound
+
+        //play explosion juice (screen shake, etc)
+        yield return new WaitForSeconds(1.75f);
+        Camera.main.GetComponent<CameraShake>().DoShake();
+        
+        //wait for explosion to finish
+        yield return new WaitForSeconds(1.0f);
+        
+        //remove ship
         TurnBasedCombatSystem.Instance.KillShip(this);
+        
+        yield return new WaitForSeconds(1.0f);
 
         #if FULL_DEBUG
         Debug.Log("Ship Destroyed");
