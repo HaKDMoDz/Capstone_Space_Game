@@ -12,8 +12,8 @@ public class UI_Billboard : MonoBehaviour
     void Start()
     {
         trans = transform;
-        mainCamera = CameraDirector.Instance.transform;
-        CameraDirector.Instance.OnCameraMove += OnCameraMove;
+        mainCamera = GalaxyCamera.Instance.transform;
+        GalaxyCamera.Instance.OnCameraMove += OnCameraMove;
         OnCameraMove();
     }
 

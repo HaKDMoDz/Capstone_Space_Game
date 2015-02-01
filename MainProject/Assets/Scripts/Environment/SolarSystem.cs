@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,8 +16,12 @@ public class SolarSystem : MonoBehaviour
 {
     #region Fields
 
+    [SerializeField]
+    private GameObject systemRingGUI;
 
     //Internal
+    private string systemName;
+    private Text systemLabel;
     private SystemObject[] systemObjects;
     private Dictionary<SystemObject, SystemObjectInfo> systemObject_info_table = new Dictionary<SystemObject, SystemObjectInfo>();
 
@@ -28,10 +33,15 @@ public class SolarSystem : MonoBehaviour
     private IEnumerator OpenSystem()
     {
         StopCoroutine("CloseSystem");
+        
         foreach (GameObject obj in systemObjects.Select(s => s.gameObject))
         {
             obj.SetActive(true);
         }
+        
+        systemRingGUI.SetActive(false);
+        systemLabel.gameObject.SetActive(true);
+        systemLabel.text = systemName;
 
         float time = 0.0f;
         while(time<1.0f)
@@ -47,11 +57,16 @@ public class SolarSystem : MonoBehaviour
             time += Time.deltaTime / GalaxyConfig.SystemAnimationPeriod;
             yield return null;
         }
+
     }
 
     private IEnumerator CloseSystem()
     {
         StopCoroutine("OpenSystem");
+
+        systemLabel.gameObject.SetActive(false);
+        systemRingGUI.SetActive(true);
+
         float time = 0.0f;
         while (time < 1.0f)
         {
@@ -70,6 +85,8 @@ public class SolarSystem : MonoBehaviour
         {
             obj.SetActive(false);
         }
+        
+        
     }
 
     #endregion PrivateMethods
@@ -84,9 +101,20 @@ public class SolarSystem : MonoBehaviour
             Debug.LogError("No system objects found");
         }
         #endif
+        systemLabel = GameObject.Find("SystemLabel").GetComponent<Text>();
+        #if FULL_DEBUG || LOW_DEBUG
+        if(systemLabel == null)
+        {
+            Debug.LogError("No system label found");
+        }
+        #endif
+        systemName = systemRingGUI.GetComponentInChildren<Text>().text;
+        
     }
     private void Start()
     {
+        systemLabel.gameObject.SetActive(false);
+        
         foreach (SystemObject sysObj in systemObjects)
         {
             #if FULL_DEBUG
@@ -107,7 +135,7 @@ public class SolarSystem : MonoBehaviour
         if(other.tag == TagsAndLayers.MotherShipTag)
         {
             #if FULL_DEBUG
-            Debug.Log("Mothership entered system");
+            //Debug.Log("Mothership entered system");
 	        #endif
             StartCoroutine("OpenSystem");
         }
@@ -118,7 +146,7 @@ public class SolarSystem : MonoBehaviour
         if (other.tag == TagsAndLayers.MotherShipTag)
         {
             #if FULL_DEBUG
-            Debug.Log("Mothership left system");
+            //Debug.Log("Mothership left system");
             #endif
             StartCoroutine("CloseSystem");
         }

@@ -7,5 +7,4 @@ public class GalaxyMapController : Singleton<GalaxyMapController>
 {
     
 
-
 }

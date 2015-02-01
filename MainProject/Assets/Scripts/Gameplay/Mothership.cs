@@ -18,6 +18,7 @@ public class Mothership : MonoBehaviour
 
     private Vector3 destination;
     private bool moving = false;
+    private bool inSystem = false;
     #endregion Fields
 
     #region Methods
@@ -34,7 +35,7 @@ public class Mothership : MonoBehaviour
             trans.LookAt(destination);
             moveDir = destination - trans.position;
             trans.position = Vector3.Lerp(trans.position, destination, moveSpeed * Time.deltaTime);
-            StartCoroutine(CameraDirector.Instance.MoveToFocusOn(trans, GlobalVars.CameraFollowPeriod * 0.1f));
+            StartCoroutine(GalaxyCamera.Instance.FollowMothership(trans,inSystem));
             yield return null;
 
         } while (Vector3.SqrMagnitude(moveDir) > GlobalVars.LerpDistanceEpsilon * GlobalVars.LerpDistanceEpsilon);
@@ -50,9 +51,28 @@ public class Mothership : MonoBehaviour
     private void Start()
     {
         spaceGround.OnGroundRightClick += OnGroundClick;
-        StartCoroutine(CameraDirector.Instance.MoveToFocusOn(trans, GlobalVars.CameraFollowPeriod ));
+        StartCoroutine(GalaxyCamera.Instance.MoveToFocusOn(trans));
     }
-
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.tag == TagsAndLayers.SolarSystemTag)
+        {
+            inSystem = true;
+            #if FULL_DEBUG
+            Debug.Log("In System: " + inSystem);
+            #endif
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == TagsAndLayers.SolarSystemTag)
+        {
+            inSystem = false;
+            #if FULL_DEBUG
+            Debug.Log("In System: " + inSystem);
+            #endif
+        }
+    }
     #endregion UnityCallbacks
 
     #region InternalCallbacks

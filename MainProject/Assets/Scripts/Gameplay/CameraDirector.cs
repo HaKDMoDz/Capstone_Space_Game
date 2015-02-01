@@ -84,8 +84,9 @@ public class CameraDirector : Singleton<CameraDirector>
     private void Awake()
     {
         trans = transform;
-        initialAngleX = Mathf.Deg2Rad * trans.rotation.eulerAngles.x;
         initialRot = trans.rotation;
+        initialAngleX = Mathf.Deg2Rad * initialRot.eulerAngles.x;
+        
     }
     #endregion UnityCallbacks
 

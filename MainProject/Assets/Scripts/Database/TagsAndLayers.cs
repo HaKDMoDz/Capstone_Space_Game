@@ -28,8 +28,12 @@ public class TagsAndLayers : ScriptableObject
 
     [SerializeField]
     private string motherShipTag = "MotherShip";
+    [SerializeField]
+    private string solarSystemTag = "SolarSystem";
 
     public static string MotherShipTag { get; private set; }
+    public static string SolarSystemTag { get; private set; }
+
 
     private void OnEnable()
     {
@@ -41,5 +45,6 @@ public class TagsAndLayers : ScriptableObject
         AI_ShipLayer = ai_ShipLayer;
 
         MotherShipTag = motherShipTag;
+        SolarSystemTag = solarSystemTag;
     }
 }
