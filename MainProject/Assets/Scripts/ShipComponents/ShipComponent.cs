@@ -42,6 +42,7 @@ public abstract class ShipComponent : MonoBehaviour , IPointerClickHandler, IPoi
     }
 
     //cached references
+    [SerializeField]
     private GameObject selectionHalo;
 
     public delegate void ComponentClickEvent(ShipComponent component);
@@ -51,7 +52,7 @@ public abstract class ShipComponent : MonoBehaviour , IPointerClickHandler, IPoi
 
     public virtual void OnPointerClick(PointerEventData eventData)
     {
-        Debug.Log("Clicked on component " + componentName);
+        Debug.Log("At component: Clicked on component " + componentName);
         //Selected = !Selected;
         OnComponentClicked(this);
     }
@@ -65,6 +66,6 @@ public abstract class ShipComponent : MonoBehaviour , IPointerClickHandler, IPoi
 
     public virtual void Init()
     {
-        selectionHalo = transform.FindChild("SelectionHalo").gameObject;
+        //selectionHalo = transform.FindChild("SelectionHalo").gameObject;
     }
 }

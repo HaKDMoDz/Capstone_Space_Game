@@ -17,6 +17,8 @@ public class PlayerShip : TurnBasedUnit
     private bool receivedMoveCommand;
     private bool componentSelectionOn;
     private bool dragging;
+    private bool takingTurn = false;
+    private bool firing = false;
     //private ShipComponent componentClickedOn;
     private List<ShipComponent> components = new List<ShipComponent>();
     private List<ShipComponent> selectedComponents = new List<ShipComponent>();
@@ -48,37 +50,18 @@ public class PlayerShip : TurnBasedUnit
 
         }
         spaceGround = SpaceGround.Instance;
-
-    }
-
-    private void RegisterInput(bool register)
-    {
-        registerInput = register;
-        if (register)
+        foreach (ShipComponent component in components)
         {
-            foreach (ShipComponent component in components)
-            {
-                component.OnComponentClicked += OnComponentClicked;
-                component.OnComponentMouseOver += OnComponentMouseOver;
-            }
-            spaceGround.OnGroundClick += SpaceGroundClick;
-
+            component.OnComponentClicked += OnComponentClicked;
+            component.OnComponentMouseOver += OnComponentMouseOver;
         }
-        else
-        {
-            foreach (ShipComponent component in components)
-            {
-                component.OnComponentClicked -= OnComponentClicked;
-                component.OnComponentMouseOver -= OnComponentMouseOver;
-            }
-            spaceGround.OnGroundClick -= SpaceGroundClick;
-        }
+        spaceGround.OnGroundClick += SpaceGroundClick;
     }
 
 
     public override IEnumerator ExecuteTurn()
     {
-        RegisterInput(true);
+        takingTurn = true;
         yield return StartCoroutine(base.ExecuteTurn());
         Debug.Log("Player unit turn");
         continueTurn = true;
@@ -89,28 +72,26 @@ public class PlayerShip : TurnBasedUnit
         {
             if (receivedMoveCommand)
             {
-                RegisterInput(false);
                 UnSelectComponents();
                 yield return StartCoroutine(shipMove.Move());
-#if FULL_DEBUG
+                #if FULL_DEBUG
                 Debug.Log(shipBPMetaData.blueprintName + "- Movement end");
-#endif
-                RegisterInput(true);
+                #endif
             }
 
             if (componentSelectionOn)
             {
                 yield return StartCoroutine(ComponentSelectionSequence());
                 Debug.Log("activating components");
-                RegisterInput(false);
+                firing = true;
                 yield return StartCoroutine(playerAttack.ActivateComponents(selectedComponents));
+                firing = false;
                 UnSelectComponents();
-                RegisterInput(true);
             }
             receivedMoveCommand = false;
             yield return null;
         }
-        RegisterInput(false);
+        takingTurn = false;
     }
 
     private void UnSelectComponents()
@@ -143,7 +124,7 @@ public class PlayerShip : TurnBasedUnit
     void SpaceGroundClick(Vector3 worldPosition)
     {
         //Debug.Log("Click on ground at position: "+worldPosition);
-        if (!receivedMoveCommand)
+        if (takingTurn && !receivedMoveCommand)
         {
             Debug.Log("Move command received " + shipBPMetaData.blueprintName);
             shipMove.destination = worldPosition;
@@ -153,16 +134,22 @@ public class PlayerShip : TurnBasedUnit
 
     void OnComponentClicked(ShipComponent component)
     {
-        Debug.Log(component.componentName + " clicked");
+        if(firing)
+        {
+            return;
+        }
+        Debug.Log("At PlayerShip: "+ component.componentName + " clicked");
         componentSelectionOn = true;
         //componentClickedOn = component;
         if (!selectedComponents.Contains(component))
         {
+            Debug.Log("selected ");
             selectedComponents.Add(component);
             component.Selected = true;
         }
         else
         {
+            Debug.Log("removed");
             selectedComponents.Remove(component);
             component.Selected = false;
         }

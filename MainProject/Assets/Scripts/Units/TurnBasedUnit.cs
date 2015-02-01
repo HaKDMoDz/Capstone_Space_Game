@@ -33,19 +33,28 @@ public abstract class TurnBasedUnit : MonoBehaviour
         }
     }
 
+    private float maxHullHP;
+    public float MaxHullHP
+    {
+        get { return maxHullHP; }
+    }
+
     //references
-    protected Camera componentCamera;
+    [SerializeField]
+    private GameObject componentCamera;
+    protected GameObject ComponentCamera
+    {
+        get { return componentCamera; }
+    }
     [SerializeField]
     protected GameObject expolosionObject;
-
     public GameObject getExplosionObject()
     {
         return expolosionObject;
     }
 
     //TEMP
-    [SerializeField]
-    private float hullHP = 100;
+    private float hullHP;
     public float HullHP { get { return hullHP; } private set { hullHP = value; } }
 
     //TEMP
@@ -114,15 +123,13 @@ public abstract class TurnBasedUnit : MonoBehaviour
         this.shipMove = shipMove;
         this.shipMove.Init();
         timeLeftToTurn = turnDelay;
-        componentCamera = GetComponentInChildren<Camera>();
-        #if FULL_DEBUG
-        if(componentCamera==null)
-        {
-            Debug.LogError("No Component camera found");
-        }
-	    #endif
-        componentCamera.enabled = false;
+        
+        componentCamera = GetComponentInChildren<Camera>().gameObject;
+        componentCamera.SetActive(false);
         expolosionObject = transform.FindChild("Explosion").gameObject;
+       
+        maxHullHP = shipBP.hull.HullHP;
+        hullHP = maxHullHP;
     }
 
 
@@ -138,7 +145,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
 
     public void ShowComponentSelection(bool show)
     {
-        componentCamera.enabled = show;
+        componentCamera.SetActive(show);
     }
     #endregion PublicMethods
 

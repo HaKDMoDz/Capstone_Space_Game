@@ -11,6 +11,12 @@ public class Hull : MonoBehaviour
     public int ID;
     public string hullName;
     [SerializeField]
+    private float hullHP;
+    public float HullHP
+    {
+        get { return hullHP; }
+    }
+    [SerializeField]
     private List<ComponentSlot> emptyComponentGrid;
     public List<ComponentSlot> EmptyComponentGrid
     {
