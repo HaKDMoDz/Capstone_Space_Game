@@ -16,5 +16,7 @@ public class DatabaseActivator : MonoBehaviour
     private TagsAndLayers tagsAndLayers;
     [SerializeField]
     private GameConfig gameConfig;
+    [SerializeField]
+    private GalaxyConfig galaxyConfig;
 	
 }

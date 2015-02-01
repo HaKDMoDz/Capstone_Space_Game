@@ -2,19 +2,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
+[Serializable]
+public struct SystemObjectInfo
+{
+    public Vector3 scenePosition;
+    public Vector3 sceneScale;
+
+}
 public class SolarSystem : MonoBehaviour
 {
     #region Fields
 
+
+    //Internal
     private SystemObject[] systemObjects;
-    public SystemObject[] SystemObjects
-    {
-        get { return systemObjects; }
-    }
-
-
-
+    private Dictionary<SystemObject, SystemObjectInfo> systemObject_info_table = new Dictionary<SystemObject, SystemObjectInfo>();
 
     #endregion Fields
     #region Methods
@@ -23,20 +27,49 @@ public class SolarSystem : MonoBehaviour
 
     private IEnumerator OpenSystem()
     {
+        StopCoroutine("CloseSystem");
         foreach (GameObject obj in systemObjects.Select(s => s.gameObject))
         {
             obj.SetActive(true);
         }
-        yield return null;
+
+        float time = 0.0f;
+        while(time<1.0f)
+        {
+
+            foreach (var obj_info in systemObject_info_table)
+            {
+                Transform trans_SysObj = obj_info.Key.transform;
+                trans_SysObj.localPosition = Vector3.Lerp(trans_SysObj.localPosition, obj_info.Value.scenePosition, time);
+                trans_SysObj.localScale = Vector3.Lerp(trans_SysObj.localScale, obj_info.Value.sceneScale, time);
+            }
+
+            time += Time.deltaTime / GalaxyConfig.SystemAnimationPeriod;
+            yield return null;
+        }
     }
 
     private IEnumerator CloseSystem()
     {
+        StopCoroutine("OpenSystem");
+        float time = 0.0f;
+        while (time < 1.0f)
+        {
+
+            foreach (var obj_info in systemObject_info_table)
+            {
+                Transform trans_SysObj = obj_info.Key.transform;
+                trans_SysObj.localPosition = Vector3.Lerp(trans_SysObj.localPosition, Vector3.zero, time);
+                trans_SysObj.localScale = Vector3.Lerp(trans_SysObj.localScale, Vector3.zero, time);
+            }
+
+            time += Time.deltaTime / GalaxyConfig.SystemAnimationPeriod;
+            yield return null;
+        }
         foreach (GameObject obj in systemObjects.Select(s => s.gameObject))
         {
             obj.SetActive(false);
         }
-        yield return null;
     }
 
     #endregion PrivateMethods
@@ -54,9 +87,19 @@ public class SolarSystem : MonoBehaviour
     }
     private void Start()
     {
-        foreach (GameObject obj in systemObjects.Select(s => s.gameObject))
+        foreach (SystemObject sysObj in systemObjects)
         {
-            obj.SetActive(false);
+            #if FULL_DEBUG
+            if(systemObject_info_table.ContainsKey(sysObj))
+            {
+                Debug.LogError("Duplicate System Object found");
+            }
+            #endif
+            Transform sysObjTrans = sysObj.transform;
+            systemObject_info_table.Add(sysObj, new SystemObjectInfo { scenePosition = sysObjTrans.localPosition, sceneScale = sysObjTrans.localScale });
+            sysObjTrans.localPosition = Vector3.zero;
+            sysObjTrans.localScale = Vector3.zero;
+            sysObjTrans.gameObject.SetActive(false);    
         }
     }
     private void OnTriggerEnter(Collider other)
@@ -66,8 +109,7 @@ public class SolarSystem : MonoBehaviour
             #if FULL_DEBUG
             Debug.Log("Mothership entered system");
 	        #endif
-
-            StartCoroutine(OpenSystem());
+            StartCoroutine("OpenSystem");
         }
     }
     private void OnTriggerExit(Collider other)
@@ -78,7 +120,7 @@ public class SolarSystem : MonoBehaviour
             #if FULL_DEBUG
             Debug.Log("Mothership left system");
             #endif
-            StartCoroutine(CloseSystem());
+            StartCoroutine("CloseSystem");
         }
     }
     #endregion UnityCallbacks
