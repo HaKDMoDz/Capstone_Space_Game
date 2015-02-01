@@ -121,7 +121,6 @@ public partial class InputManager
     {
         foreach (MouseButton button in buttonsToCheck)
         {
-            //print("S");
             if (Input.GetMouseButtonDown((int)button))
             {
                 MouseDown(button);

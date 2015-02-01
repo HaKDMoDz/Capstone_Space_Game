@@ -50,9 +50,11 @@ public class Mothership : MonoBehaviour
     }
     private void Start()
     {
-        spaceGround.OnGroundRightClick += OnGroundClick;
+        spaceGround.OnGroundClick += OnGroundClick;
+        spaceGround.OnGroundHold += OnGroundClick;
         StartCoroutine(GalaxyCamera.Instance.MoveToFocusOn(trans));
     }
+
     private void OnTriggerEnter(Collider other)
     {
         if(other.tag == TagsAndLayers.SolarSystemTag)
@@ -79,13 +81,14 @@ public class Mothership : MonoBehaviour
     
     void OnGroundClick(Vector3 worldPosition)
     {
+        Debug.Log("mothership click");
         destination = worldPosition;
         if (!moving)
         {
             StartCoroutine(Move());
         }
     }
-    
+
     #endregion InternalCallbacks
     
     #endregion PrivateMethods

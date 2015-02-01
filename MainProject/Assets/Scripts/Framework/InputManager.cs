@@ -11,6 +11,7 @@ public partial class InputManager : Singleton<InputManager>
     //mouse events
     public delegate void MouseClickEvent(MouseButton mouseButton);
     public delegate void MouseMoveEvent(Vector2 direction);
+
     /// <summary>
     /// This event is raised whenever the mouse is moved - the argument is a vector of the horizontal and vertical movement of the mouse
     /// </summary>

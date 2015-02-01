@@ -61,7 +61,7 @@ public class PlayerShip : TurnBasedUnit
                 component.OnComponentClicked += OnComponentClicked;
                 component.OnComponentMouseOver += OnComponentMouseOver;
             }
-            spaceGround.OnGroundRightClick += SpaceGroundClick;
+            spaceGround.OnGroundClick += SpaceGroundClick;
 
         }
         else
@@ -71,7 +71,7 @@ public class PlayerShip : TurnBasedUnit
                 component.OnComponentClicked -= OnComponentClicked;
                 component.OnComponentMouseOver -= OnComponentMouseOver;
             }
-            spaceGround.OnGroundRightClick -= SpaceGroundClick;
+            spaceGround.OnGroundClick -= SpaceGroundClick;
         }
     }
 
