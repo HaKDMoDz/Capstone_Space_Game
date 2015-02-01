@@ -37,19 +37,19 @@ public class SpaceGround : Singleton<SpaceGround>, IPointerClickHandler, IPointe
         }
     }
 
-    private void Start()
-    {
-        InputManager.Instance.RegisterMouseButtonsHold(MouseDown, MouseButton.Left);
-    }
+    //private void Start()
+    //{
+    //    //InputManager.Instance.RegisterMouseButtonsHold(MouseDown, MouseButton.Left);
+    //}
 
-    void MouseDown(MouseButton btn)
-    {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 1000.0f, 1 << TagsAndLayers.SpaceGroundLayer))
-        {
-            holding = true;
-            OnGroundClick(hit.point);
-        }
-    }
+    //void MouseDown(MouseButton btn)
+    //{
+    //    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+    //    RaycastHit hit;
+    //    if (Physics.Raycast(ray, out hit, 1000.0f, 1 << TagsAndLayers.SpaceGroundLayer))
+    //    {
+    //        holding = true;
+    //        OnGroundClick(hit.point);
+    //    }
+    //}
 }

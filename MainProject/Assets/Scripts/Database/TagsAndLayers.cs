@@ -5,6 +5,8 @@ using System.Collections.Generic;
 public class TagsAndLayers : ScriptableObject
 {
     [SerializeField]
+    private int uiLayer = 5;
+    [SerializeField]
     private int playerShipLayer = 8;
     [SerializeField]
     private int componentSlotLayer = 9;
@@ -18,7 +20,7 @@ public class TagsAndLayers : ScriptableObject
     private int ai_ShipLayer = 13;
 
 
-
+    public static int UI_Layer { get; private set; }
     public static int PlayerShipLayer {get; private set;}
     public static int ComponentSlotLayer {get; private set;}
     public static int SpaceSceneLayer { get; private set; }
@@ -37,6 +39,7 @@ public class TagsAndLayers : ScriptableObject
 
     private void OnEnable()
     {
+        UI_Layer = uiLayer;
         PlayerShipLayer = playerShipLayer;
         ComponentSlotLayer = componentSlotLayer;
         SpaceSceneLayer=spaceSceneLayer;

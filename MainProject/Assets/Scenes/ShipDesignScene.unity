@@ -1351,45 +1351,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 270749466}
---- !u!1 &284126838
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 284126840}
-  - 114: {fileID: 284126839}
-  m_Layer: 0
-  m_Name: GlobalTagsAndLayers
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &284126839
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 284126838}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc3b85627642fa74281d6c8799516087, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &284126840
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 284126838}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 136.495117, y: 715.191162, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 8
 --- !u!1 &304468760
 GameObject:
   m_ObjectHideFlags: 0
@@ -1953,6 +1914,7 @@ MonoBehaviour:
   saveFilesConfig: {fileID: 11400000, guid: 3ca5bd01d4ce6fa44be532911e54f72d, type: 2}
   tagsAndLayers: {fileID: 11400000, guid: dcb2f5a41ebe04f448874853c3319233, type: 2}
   gameConfig: {fileID: 11400000, guid: c1ac6d1b5787d9242b4322f67fd0de5a, type: 2}
+  galaxyConfig: {fileID: 11400000, guid: d74f5e5526c93f24cad62c39395bfec3, type: 2}
 --- !u!4 &387374692
 Transform:
   m_ObjectHideFlags: 0
@@ -1964,7 +1926,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 9
 --- !u!1001 &407104554
 Prefab:
   m_ObjectHideFlags: 0
@@ -9052,7 +9014,7 @@ RectTransform:
   - {fileID: 678249533}
   - {fileID: 751188441}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
