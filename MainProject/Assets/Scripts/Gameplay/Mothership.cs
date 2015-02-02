@@ -10,13 +10,20 @@ public class Mothership : MonoBehaviour
     [SerializeField]
     private SpaceGround spaceGround;
     [SerializeField]
-    private float moveSpeed = 1.0f;
+    private float moveSpeed = 0.5f;
+    [SerializeField]
+    private float orbitSpeed = 0.01f;
+    private Quaternion orbitalRotation;
+    private bool orbitting;
+
+    private float angle = 0.0f;
 
 
     //cached
     private Transform trans;
 
     private Vector3 destination;
+    private Vector3 orbitDestination;
     private bool moving = false;
     private bool inSystem = false;
     #endregion Fields
@@ -27,20 +34,24 @@ public class Mothership : MonoBehaviour
 
     private IEnumerator Move()
     {
-        Vector3 moveDir;
-        trans.LookAt(destination);
-        moving = true;
-        do
+        if (!orbitting)
         {
+            Vector3 moveDir;
             trans.LookAt(destination);
-            moveDir = destination - trans.position;
-            trans.position = Vector3.Lerp(trans.position, destination, moveSpeed * Time.deltaTime);
-            StartCoroutine(GalaxyCamera.Instance.FollowMothership(trans,inSystem));
-            yield return null;
+            moving = true;
+            do
+            {
+                trans.LookAt(destination);
+                moveDir = destination - trans.position;
+                trans.position = Vector3.Lerp(trans.position, destination, moveSpeed * Time.deltaTime);
+                StartCoroutine(GalaxyCamera.Instance.FollowMothership(trans, inSystem));
+                yield return null;
 
-        } while (Vector3.SqrMagnitude(moveDir) > GlobalVars.LerpDistanceEpsilon * GlobalVars.LerpDistanceEpsilon);
-        
-        moving = false;
+            } while (Vector3.SqrMagnitude(moveDir) > GlobalVars.LerpDistanceEpsilon * GlobalVars.LerpDistanceEpsilon);
+
+            moving = false;
+        }
+        yield return null;
     }
 
     #region UnityCallbacks
@@ -64,7 +75,45 @@ public class Mothership : MonoBehaviour
             Debug.Log("In System: " + inSystem);
             #endif
         }
+        if (other.tag == TagsAndLayers.PlanetTag)
+        {
+            Debug.Log("entering planter orbit");
+            //TODO: add code for setting initial angle
+            float deltaZ = other.transform.position.z - transform.position.z;
+            float deltaX = other.transform.position.x - transform.position.x;
+            angle = Mathf.Atan(deltaZ/deltaX) * 180.0f / Mathf.PI;
+            orbitalRotation = other.transform.rotation;
+            orbitting = true;
+        }
     }
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.tag == TagsAndLayers.PlanetTag && orbitting)
+        {
+            //Debug.Log("<<<" + other.name + ">>>");
+
+            angle = (angle + orbitSpeed) % 360.0f;
+            Debug.Log(angle);
+
+            transform.position = PointOnCircle(other.GetComponent<SphereCollider>().radius, angle, other.transform.position);
+            destination = PointOnCircle(other.GetComponent<SphereCollider>().radius, (angle + 2.0f)% 360.0f, other.transform.position);
+
+            transform.rotation = orbitalRotation;
+            moving = false;
+            
+        }
+    }
+
+    //helper
+    private Vector3 PointOnCircle(float radius, float angleInDegrees, Vector3 origin)
+    {
+        // Convert from degrees to radians via multiplication by PI/180        
+        float x = (float)(radius * Mathf.Cos(angleInDegrees * Mathf.PI / 180F)) + origin.x;
+        float z = (float)(radius * Mathf.Sin(angleInDegrees * Mathf.PI / 180F)) + origin.z;
+
+        return new Vector3(x, origin.y, z);
+    }
+
     private void OnTriggerExit(Collider other)
     {
         if (other.tag == TagsAndLayers.SolarSystemTag)
@@ -73,6 +122,10 @@ public class Mothership : MonoBehaviour
             #if FULL_DEBUG
             Debug.Log("In System: " + inSystem);
             #endif
+        }
+        if (other.tag == TagsAndLayers.PlanetTag)
+        {
+            orbitting = false;
         }
     }
     #endregion UnityCallbacks
@@ -83,6 +136,7 @@ public class Mothership : MonoBehaviour
     {
         Debug.Log("mothership click");
         destination = worldPosition;
+        orbitting = false;
         if (!moving)
         {
             StartCoroutine(Move());

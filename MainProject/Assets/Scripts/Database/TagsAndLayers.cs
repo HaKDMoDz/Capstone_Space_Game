@@ -32,9 +32,12 @@ public class TagsAndLayers : ScriptableObject
     private string motherShipTag = "MotherShip";
     [SerializeField]
     private string solarSystemTag = "SolarSystem";
+    [SerializeField]
+    private string planetTag = "Planet";
 
     public static string MotherShipTag { get; private set; }
     public static string SolarSystemTag { get; private set; }
+    public static string PlanetTag { get; private set; }
 
 
     private void OnEnable()
@@ -49,5 +52,6 @@ public class TagsAndLayers : ScriptableObject
 
         MotherShipTag = motherShipTag;
         SolarSystemTag = solarSystemTag;
+        PlanetTag = planetTag;
     }
 }

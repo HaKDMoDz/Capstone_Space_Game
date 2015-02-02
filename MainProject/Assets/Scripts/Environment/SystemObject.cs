@@ -4,6 +4,4 @@ using System.Collections.Generic;
 
 public class SystemObject : MonoBehaviour 
 {
-
-	
 }
