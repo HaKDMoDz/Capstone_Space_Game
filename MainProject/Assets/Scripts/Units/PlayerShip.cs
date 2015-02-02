@@ -99,7 +99,18 @@ public class PlayerShip : TurnBasedUnit
 
     public void ActivateAllComponents(Type compType)
     {
+        if(firing)
+        {
+            return;
+        }
         Debug.Log("Activating all " + compType.ToString());
+        UnSelectComponents();
+        componentSelectionOn = true;
+        foreach (ShipComponent component in components.Where(c=>c.GetType()==compType))
+        {
+            component.Selected = true;
+            selectedComponents.Add(component);
+        }
     }
 
     #endregion PublicMethods
@@ -108,7 +119,7 @@ public class PlayerShip : TurnBasedUnit
     #region PrivateMethods
     private IEnumerator ComponentSelectionSequence()
     {
-        Debug.Log("Selecting Components - [Enter] to confirm");
+        Debug.Log("Selecting Components - [Space] to confirm");
 
         while (componentSelectionOn)
         {
