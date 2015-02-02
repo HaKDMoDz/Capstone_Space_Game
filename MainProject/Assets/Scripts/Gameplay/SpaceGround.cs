@@ -15,11 +15,11 @@ public class SpaceGround : Singleton<SpaceGround>, IPointerClickHandler, IPointe
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (eventData.button == PointerEventData.InputButton.Left)
-        {
-            holding = true;
-            OnGroundClick(eventData.worldPosition);
-        }
+        //if (eventData.button == PointerEventData.InputButton.Left)
+        //{
+        //    holding = true;
+        //    OnGroundClick(eventData.worldPosition);
+        //}
     }
 
 

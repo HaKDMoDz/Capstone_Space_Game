@@ -268,7 +268,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1036505446}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9827f7fd2a645fe4a9332e71db33480a, type: 3}
+  m_Script: {fileID: 11500000, guid: dfa5cb39208ecf545aa8e9e4b16eb9f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1155996011
@@ -284,6 +284,7 @@ GameObject:
   - 124: {fileID: 1155996013}
   - 81: {fileID: 1155996012}
   - 114: {fileID: 1155996017}
+  - 114: {fileID: 1155996018}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -370,6 +371,27 @@ MonoBehaviour:
   m_EventMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &1155996018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1155996011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09e38a06e8302c64290dfc57484eb6c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  numSources: 32
+  soundInfoList:
+  - sound: 1
+    audioClip: {fileID: 8300000, guid: eb03482805785df49980868a78180cfc, type: 3}
+    defaultVolume: 1
+    priority: 64
+  - sound: 0
+    audioClip: {fileID: 8300000, guid: e825c4c367d6cbc4cb18fac674a49e89, type: 3}
+    defaultVolume: 1
+    priority: 128
 --- !u!1 &1276671199
 GameObject:
   m_ObjectHideFlags: 0
@@ -404,6 +426,7 @@ MonoBehaviour:
   saveFilesConfig: {fileID: 11400000, guid: 3ca5bd01d4ce6fa44be532911e54f72d, type: 2}
   tagsAndLayers: {fileID: 11400000, guid: dcb2f5a41ebe04f448874853c3319233, type: 2}
   gameConfig: {fileID: 11400000, guid: c1ac6d1b5787d9242b4322f67fd0de5a, type: 2}
+  galaxyConfig: {fileID: 11400000, guid: d74f5e5526c93f24cad62c39395bfec3, type: 2}
 --- !u!4 &1276671201
 Transform:
   m_ObjectHideFlags: 0
@@ -456,6 +479,33 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
+--- !u!1 &1598303835
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1598303836}
+  m_Layer: 0
+  m_Name: AudioTester
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1598303836
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1598303835}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -80.8053894, y: 78.6049042, z: -43.375}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
 --- !u!1 &1686103811
 GameObject:
   m_ObjectHideFlags: 0

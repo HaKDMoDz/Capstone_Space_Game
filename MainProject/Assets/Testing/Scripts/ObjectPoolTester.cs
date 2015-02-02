@@ -10,18 +10,27 @@ public class ObjectPoolTester : MonoBehaviour
 
     //internal fields
     private Transform trans;
-    
+
     private void Start()
     {
         InputManager.Instance.RegisterMouseButtonsDown(Shoot, MouseButton.Left);
+        FindObjectOfType<SpaceGround>().OnGroundClick += GroundClick;
         trans = transform;
+        //AudioManager.Instance.SetMainTrack(Sound.TestTrack);
+    }
+
+    void GroundClick(Vector3 worldPosition)
+    {
+        Debug.Log("ground click");
+        //AudioManager.Instance.PlayEffect(Sound.LaserBeam, worldPosition);
     }
 
     private void Shoot(MouseButton button)
     {
-       GameObject currentBullet = ObjectPool.Instance.GetPooledObject(bulletPrefab, false);
+        GameObject currentBullet = ObjectPool.Instance.GetPooledObject(bulletPrefab, false);
         currentBullet.transform.position = trans.position;
-        currentBullet.rigidbody.AddForce(trans.forward * 100.0f);
+        AudioManager.Instance.PlayEffectAndAttachTo(Sound.LaserBeam, currentBullet.transform);
+        currentBullet.rigidbody.AddForce(trans.forward * 300.0f);
         StartCoroutine(currentBullet.GetSafeComponent<TimedAction>().SetTimedAction(2.0f,
             () =>
             {
