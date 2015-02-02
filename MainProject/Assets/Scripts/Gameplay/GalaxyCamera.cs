@@ -58,6 +58,7 @@ public class GalaxyCamera : Singleton<GalaxyCamera>
         targetPos.y += zoomedInHeight;
         targetPos.z -= zoomedInHeight / Mathf.Tan(initialAngleX);
         yield return StartCoroutine(MoveAndRotate(systemTrans.position,initialRot,GalaxyConfig.SystemAnimationPeriod));
+
     }
 
     private IEnumerator MoveAndRotate(Vector3 destination, Quaternion desiredRot, float period)

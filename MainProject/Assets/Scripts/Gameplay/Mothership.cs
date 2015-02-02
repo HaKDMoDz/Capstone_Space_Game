@@ -14,9 +14,11 @@ public class Mothership : MonoBehaviour
     [SerializeField]
     private float orbitSpeed = 1.0f;
     private Quaternion orbitalRotation;
-    private bool orbitting;
+    private bool orbiting;
 
     private float angle = 0.0f;
+
+    public bool Orbiting { get { return orbiting; } set { orbiting = value; } }
 
 
     //cached
@@ -34,7 +36,7 @@ public class Mothership : MonoBehaviour
 
     private IEnumerator Move()
     {
-        if (!orbitting)
+        if (!orbiting)
         {
             Vector3 moveDir;
             trans.LookAt(destination);
@@ -83,24 +85,23 @@ public class Mothership : MonoBehaviour
             float deltaX = other.transform.position.x - transform.position.x;
             angle = Mathf.Atan(deltaZ/deltaX) * 180.0f / Mathf.PI;
             orbitalRotation = other.transform.rotation;
-            orbitting = true;
+            orbiting = true;
         }
     }
     private void OnTriggerStay(Collider other)
     {
-        if (other.tag == TagsAndLayers.PlanetTag && orbitting)
+        if (other.tag == TagsAndLayers.PlanetTag && orbiting)
         {
             //Debug.Log("<<<" + other.name + ">>>");
 
             angle = (angle + orbitSpeed) % 360.0f;
-            Debug.Log(angle);
+            //Debug.Log(angle);
 
             transform.position = PointOnCircle(other.GetComponent<SphereCollider>().radius - 10.0f, angle, other.transform.position);
             destination = PointOnCircle(other.GetComponent<SphereCollider>().radius - 10.0f, (angle + 2.0f) % 360.0f, other.transform.position);
 
             transform.rotation = orbitalRotation;
             moving = false;
-            
         }
     }
 
@@ -125,7 +126,7 @@ public class Mothership : MonoBehaviour
         }
         if (other.tag == TagsAndLayers.PlanetTag)
         {
-            orbitting = false;
+            orbiting = false;
         }
     }
     #endregion UnityCallbacks
@@ -136,7 +137,7 @@ public class Mothership : MonoBehaviour
     {
         Debug.Log("mothership click");
         destination = worldPosition;
-        orbitting = false;
+        orbiting = false;
         if (!moving)
         {
             StartCoroutine(Move());
