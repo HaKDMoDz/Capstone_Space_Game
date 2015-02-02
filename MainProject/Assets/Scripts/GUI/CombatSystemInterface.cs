@@ -17,6 +17,7 @@ public struct CombatGUIFields
     public RectTransform compButtonParent;
     public GameObject openCompSelectionPanel;
     public GameObject closedCompSelectPanel;
+    public Text powerText;
 
 }
 #endregion AdditionalStructs
@@ -67,6 +68,15 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
             compButtons.Add(buttonClone);
             buttonClone.transform.SetParent(guiFields.compButtonParent, false);
         }
+    }
+    //public void UpdateStats(TurnBasedUnit unit)
+    //{
+    //    //Debug.Log("Current power = " + unit.CurrentPower);
+    //    guiFields.powerText.text = unit.CurrentPower.ToString();
+    //}
+    public void UpdatePower(float currentPower)
+    {
+        guiFields.powerText.text = currentPower.ToString();
     }
     #endregion GUISetup
 

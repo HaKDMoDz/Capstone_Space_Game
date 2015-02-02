@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 public class PlayerAttack : MonoBehaviour 
 {
@@ -9,8 +10,9 @@ public class PlayerAttack : MonoBehaviour
     #region Internal
 
     private Transform trans;
+    private AI_Ship targetShip;
+
     bool targetConfirmed = false;
-    AI_Ship targetShip;
     int targetShipIndex;
     int numAiShips;
     int numWeaponsActivated;
@@ -28,8 +30,9 @@ public class PlayerAttack : MonoBehaviour
 
     }
 
-    public IEnumerator ActivateComponents(List<ShipComponent> components)
+    public IEnumerator ActivateComponents(List<ShipComponent> components, Action<float> activationComplete)
     {
+        float totalPowerUsed = 0.0f;
         //if there are any weapons in the selection
         if(components.Any(c=>c is Component_Weapon))
         {
@@ -44,12 +47,12 @@ public class PlayerAttack : MonoBehaviour
                 foreach (Component_Weapon weapon in components.Where(c => c is Component_Weapon))
                 {
                     Debug.Log("activate weapon");
-                    
                     yield return StartCoroutine(
                     weapon.Fire(targetShipTrans,
                         () =>
                         {
                             numWeaponsActivated--;
+                            totalPowerUsed += weapon.ActivationCost;
                         }));
                     numWeaponsActivated++;
                 }
@@ -66,7 +69,7 @@ public class PlayerAttack : MonoBehaviour
         {
             yield return null;
         }
-
+        activationComplete(totalPowerUsed);
         yield return StartCoroutine(CameraDirector.Instance.MoveToFocusOn(trans, GlobalVars.CameraMoveToFocusPeriod));
 
 

@@ -39,6 +39,19 @@ public abstract class TurnBasedUnit : MonoBehaviour
         get { return maxHullHP; }
     }
 
+    private float maxPower;
+    public float MaxPower
+    {
+        get { return maxPower; }
+    }
+
+    private float currentPower;
+    public float CurrentPower
+    {
+        get { return currentPower; }
+        protected set { currentPower = value; }
+    }
+
     //references
     [SerializeField]
     private GameObject componentCamera;
@@ -52,6 +65,11 @@ public abstract class TurnBasedUnit : MonoBehaviour
     {
         return expolosionObject;
     }
+    
+    public ShipBlueprintMetaData shipBPMetaData { get; private set; }
+    public ShipMove shipMove { get; private set; }
+    protected ShipBlueprint shipBP;
+
 
     //TEMP
     private float hullHP;
@@ -105,10 +123,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
         #endif  
     }
 
-    //references
-    public ShipBlueprintMetaData shipBPMetaData { get; private set; }
-    public ShipMove shipMove { get; private set; }
-    protected ShipBlueprint shipBP;
+ 
 
 
     #endregion Fields
@@ -130,6 +145,9 @@ public abstract class TurnBasedUnit : MonoBehaviour
        
         maxHullHP = shipBP.hull.HullHP;
         hullHP = maxHullHP;
+
+        maxPower = shipBPMetaData.excessPower;
+        currentPower = MaxPower;
     }
 
 
@@ -139,6 +157,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
         #if FULL_DEBUG
         Debug.Log(shipBPMetaData.blueprintName + " executing turn");
         #endif
+        currentPower = MaxPower;
 
         yield return null;
     }
