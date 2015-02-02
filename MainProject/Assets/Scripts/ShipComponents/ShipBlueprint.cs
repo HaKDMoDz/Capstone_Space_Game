@@ -80,7 +80,7 @@ public class ShipBlueprint
         float excessPower = 0.0f;
         foreach (ShipComponent component in slot_component_table.Values)
         {
-            excessPower -= component.powerDrain;
+            excessPower -= component.PowerDrain;
         }
         return excessPower;
     }

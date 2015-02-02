@@ -1,6 +1,7 @@
 ﻿#region Usings
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 using System.Collections;
 using System.Collections.Generic;
 using System;
@@ -12,14 +13,10 @@ public struct CombatGUIFields
 {
     public ButtonWithContent buttonPrefab;
     public RectTransform turnOrderButtonParent;
-
-    //public RectTransform compSelectionPanelRect;
-    //public float changeTimeSelectionPanel;
-    //public float openRightSelectionPanel;
-    //public float closedRightSelectionPanel;
-
+    public RectTransform compButtonParent;
     public GameObject openCompSelectionPanel;
     public GameObject closedCompSelectPanel;
+
 }
 #endregion AdditionalStructs
 public class CombatSystemInterface : Singleton<CombatSystemInterface>
@@ -32,6 +29,7 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
 
     //private List<RectTransform> shipButtonRectList;
     private Dictionary<TurnBasedUnit, ButtonWithContent> unit_buttonRect_table;
+    private List<ButtonWithContent> compButtons = new List<ButtonWithContent>();
     #endregion Fields
 
     #region Methods
@@ -46,7 +44,44 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
         buttonClone.transform.SetParent(guiFields.turnOrderButtonParent, false);
         unit_buttonRect_table.Add(unit, buttonClone);
     }
-    
+    public void ShowComponentActivationButtons(UnityAction<Type> activationMethod, List<ShipComponent> components)
+    {
+        for (int i = compButtons.Count - 1; i >= 0; i--)
+        {
+            Destroy(compButtons[i].gameObject);
+            compButtons.RemoveAt(i);
+        }
+
+        if(components == null)
+        {
+            return;    
+        }
+        List<ShipComponent> tempList = components;
+        
+        for (int i = 0; i < tempList.Count; i++)
+        {
+            Type currentType = tempList[i].GetType();
+            Debug.Log("Current Type: " + currentType);
+            for (int j = tempList.Count-1; j > i; j--)
+            {
+                if(tempList[j].GetType()==currentType)
+                {
+                    Debug.Log("Removing " + tempList[j].GetType());
+                    tempList.RemoveAt(j);
+                }
+            }
+        }
+        
+        foreach (ShipComponent component in tempList)
+        {
+            Type currentType = component.GetType();
+            ButtonWithContent buttonClone = Instantiate(guiFields.buttonPrefab) as ButtonWithContent;
+            buttonClone.buttonText.text = component.componentName;
+            buttonClone.button.onClick.AddListener(() => activationMethod(currentType));
+            compButtons.Add(buttonClone);
+            buttonClone.transform.SetParent(guiFields.compButtonParent, false);
+        }
+    }
     #endregion GUISetup
 
     public void UpdateTurnOrderPanel(List<TurnBasedUnit> units)
@@ -75,6 +110,9 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
             TurnBasedCombatSystem.Instance.ShowingSelectionPanel(false);
         }
     }
+
+    
+
     #endregion PublicMethods
 
     #region PrivateMethods

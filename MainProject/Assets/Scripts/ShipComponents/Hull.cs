@@ -8,7 +8,6 @@ public class Hull : MonoBehaviour
     #region Fields
     
     #region EditorExposed
-    public int ID;
     public string hullName;
     [SerializeField]
     private float hullHP;

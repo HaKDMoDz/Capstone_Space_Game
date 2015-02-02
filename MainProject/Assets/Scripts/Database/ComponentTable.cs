@@ -69,7 +69,6 @@ public class ComponentTable : ScriptableObject
         {
             comp_id_List = new List<ComponentTableEntry>();
         }
-        component.ID = ID;
         Comp_id_List.Add((new ComponentTableEntry(ID, component)));
         
     }

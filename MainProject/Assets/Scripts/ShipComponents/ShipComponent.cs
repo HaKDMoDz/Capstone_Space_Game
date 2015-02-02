@@ -16,11 +16,29 @@ public abstract class ShipComponent : MonoBehaviour , IPointerClickHandler, IPoi
     {
         get { return compType; }
     }
-    public int ID;
     public string componentName;
     public bool unlocked;
-    public float activationCost;
-    public float powerDrain;
+    
+    [SerializeField]
+    private float activationCost;
+    public float ActivationCost
+    {
+        get { return activationCost; }
+    }
+    [SerializeField]
+    private float powerDrain;
+    public float PowerDrain
+    {
+        get { return powerDrain; }
+    }
+    [SerializeField]
+    private float maxHP;
+    
+    private float compHP;
+    public float CompHP
+    {
+        get { return compHP; }
+    }
 
     //interface
     private bool selected;
@@ -67,5 +85,6 @@ public abstract class ShipComponent : MonoBehaviour , IPointerClickHandler, IPoi
     public virtual void Init()
     {
         //selectionHalo = transform.FindChild("SelectionHalo").gameObject;
+        compHP = maxHP;
     }
 }

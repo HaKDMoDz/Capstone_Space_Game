@@ -263,6 +263,7 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
     {
         hullBeingBuilt = Instantiate(hull, Vector3.zero, Quaternion.Euler(0.0f, 90.0f, 0.0f)) as Hull;
         hullBeingBuilt.Init();
+        hullBeingBuilt.GetComponentInChildren<Camera>().gameObject.SetActive(false);
         blueprintBeingBuilt.GenerateMetaData();
         ShipDesignInterface.Instance.UpdateStatsPanel(blueprintBeingBuilt.metaData);
         //camera

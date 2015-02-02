@@ -62,7 +62,6 @@ public class HullTable : ScriptableObject
             hull_id_List = new List<HullTableEntry>();
         }
         Hull_id_List.Add(new HullTableEntry(_ID, _hull));
-        _hull.ID = _ID;
     }
 
     public void AutoGenIDAndAdd(Hull hull)

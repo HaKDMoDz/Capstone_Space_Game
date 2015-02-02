@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 public class PlayerShip : TurnBasedUnit
 {
@@ -67,6 +68,7 @@ public class PlayerShip : TurnBasedUnit
         continueTurn = true;
 
         CombatSystemInterface.Instance.EnableComponentSelectionPanel(true);
+        CombatSystemInterface.Instance.ShowComponentActivationButtons( ActivateAllComponents, components);
 
         while (continueTurn)
         {
@@ -92,17 +94,13 @@ public class PlayerShip : TurnBasedUnit
             yield return null;
         }
         takingTurn = false;
+        CombatSystemInterface.Instance.ShowComponentActivationButtons(null,null);
     }
 
-    private void UnSelectComponents()
+    public void ActivateAllComponents(Type compType)
     {
-        foreach (ShipComponent component in components)
-        {
-            component.Selected = false;
-        }
-        selectedComponents.Clear();
+        Debug.Log("Activating all " + compType.ToString());
     }
-
 
     #endregion PublicMethods
 
@@ -118,7 +116,15 @@ public class PlayerShip : TurnBasedUnit
         }
         componentSelectionOn = false;
     }
-
+    private void UnSelectComponents()
+    {
+        foreach (ShipComponent component in components)
+        {
+            component.Selected = false;
+        }
+        selectedComponents.Clear();
+    }
+    
 
     #region InternalCallbacks
     void SpaceGroundClick(Vector3 worldPosition)
