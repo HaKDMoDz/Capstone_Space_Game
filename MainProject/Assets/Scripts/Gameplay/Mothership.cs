@@ -12,7 +12,7 @@ public class Mothership : MonoBehaviour
     [SerializeField]
     private float moveSpeed = 0.5f;
     [SerializeField]
-    private float orbitSpeed = 0.01f;
+    private float orbitSpeed = 1.0f;
     private Quaternion orbitalRotation;
     private bool orbitting;
 
@@ -95,8 +95,8 @@ public class Mothership : MonoBehaviour
             angle = (angle + orbitSpeed) % 360.0f;
             Debug.Log(angle);
 
-            transform.position = PointOnCircle(other.GetComponent<SphereCollider>().radius, angle, other.transform.position);
-            destination = PointOnCircle(other.GetComponent<SphereCollider>().radius, (angle + 2.0f)% 360.0f, other.transform.position);
+            transform.position = PointOnCircle(other.GetComponent<SphereCollider>().radius - 10.0f, angle, other.transform.position);
+            destination = PointOnCircle(other.GetComponent<SphereCollider>().radius - 10.0f, (angle + 2.0f) % 360.0f, other.transform.position);
 
             transform.rotation = orbitalRotation;
             moving = false;
