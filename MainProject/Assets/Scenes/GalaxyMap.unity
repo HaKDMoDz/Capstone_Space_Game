@@ -2562,7 +2562,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 13598848, guid: cd4d3b12c2cd96b41a62cd93d7b5f4e3, type: 2}
       propertyPath: m_Radius
-      value: 131.910004
+      value: 183.229996
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: cd4d3b12c2cd96b41a62cd93d7b5f4e3, type: 2}
@@ -5382,7 +5382,7 @@ GameObject:
   - 198: {fileID: 754033041}
   - 199: {fileID: 754033040}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Stars
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5426,18 +5426,18 @@ ParticleSystem:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 754033039}
-  lengthInSec: 1000
+  lengthInSec: 10000
   startDelay: 0
   speed: 1
   randomSeed: 0
-  looping: 1
+  looping: 0
   prewarm: 1
   playOnAwake: 1
   moveWithTransform: 1
   InitialModule:
     enabled: 1
     startLifetime:
-      scalar: 1000
+      scalar: 10000
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -5606,29 +5606,19 @@ ParticleSystem:
           inSlope: 0
           outSlope: 0
           tangentMode: 0
-        - time: 1
-          value: 1
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
       minCurve:
         serializedVersion: 2
         m_Curve:
         - time: 0
-          value: 0
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-        - time: 1
-          value: 0
+          value: .25
           inSlope: 0
           outSlope: 0
           tangentMode: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
-      minMaxState: 0
+      minMaxState: 3
     startRotation:
       scalar: 0
       maxCurve:
@@ -9688,8 +9678,8 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: .300000012
-  far clip plane: 1000
+  near clip plane: .00999999978
+  far clip plane: 600
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -19215,7 +19205,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 131.910004
+  m_Radius: 183.229996
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &2012445872
 MonoBehaviour:

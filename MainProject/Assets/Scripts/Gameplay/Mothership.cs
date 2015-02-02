@@ -83,7 +83,7 @@ public class Mothership : MonoBehaviour
             //TODO: add code for setting initial angle
             float deltaZ = other.transform.position.z - transform.position.z;
             float deltaX = other.transform.position.x - transform.position.x;
-            angle = Mathf.Atan(deltaZ/deltaX) * 180.0f / Mathf.PI;
+            angle = (180.0f + ((Mathf.Atan2(deltaZ,deltaX) * 180.0f) / Mathf.PI))%360.0f;
             orbitalRotation = other.transform.rotation;
             orbiting = true;
         }
