@@ -23,6 +23,13 @@ public class CameraDirector : Singleton<CameraDirector>
     private Transform trans;
     #endregion Internal
 
+
+    public bool Shaking;
+    private float ShakeDecay;
+    private float ShakeIntensity;
+    private Vector3 OriginalPos;
+    private Quaternion OriginalRot;
+
     #region Events
     public delegate void CameraMoveEvent();
     public event CameraMoveEvent OnCameraMove = new CameraMoveEvent(() => { });
@@ -62,6 +69,15 @@ public class CameraDirector : Singleton<CameraDirector>
         OnCameraMove();
     }
 
+    public void DoShake()
+    {
+        OriginalPos = transform.position;
+        OriginalRot = transform.rotation;
+
+        ShakeIntensity = 0.07f;
+        ShakeDecay = 0.0005f;
+        Shaking = true;
+    }
     #endregion PublicMethods
 
     #region PrivateMethods
@@ -86,8 +102,28 @@ public class CameraDirector : Singleton<CameraDirector>
         trans = transform;
         initialRot = trans.rotation;
         initialAngleX = Mathf.Deg2Rad * initialRot.eulerAngles.x;
-        
+        Shaking = false;
     }
+
+    //TODO refactor camera shake with coroutines if performance becomes an issue
+    void Update()
+    {
+        if (ShakeIntensity > 0)
+        {
+            transform.position = OriginalPos + Random.insideUnitSphere * ShakeIntensity;
+            transform.rotation = new Quaternion(OriginalRot.x + Random.Range(-ShakeIntensity, ShakeIntensity) * .2f,
+                                      OriginalRot.y + Random.Range(-ShakeIntensity, ShakeIntensity) * .2f,
+                                      OriginalRot.z + Random.Range(-ShakeIntensity, ShakeIntensity) * .2f,
+                                      OriginalRot.w + Random.Range(-ShakeIntensity, ShakeIntensity) * .2f);
+
+            ShakeIntensity -= ShakeDecay;
+        }
+        else if (Shaking)
+        {
+            Shaking = false;
+        }
+    }
+
     #endregion UnityCallbacks
 
     #endregion PrivateMethods
