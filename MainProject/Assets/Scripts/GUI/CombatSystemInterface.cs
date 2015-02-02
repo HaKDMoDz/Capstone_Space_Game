@@ -5,6 +5,7 @@ using UnityEngine.Events;
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 #endregion Usings
 
 #region AdditionalStructs
@@ -52,31 +53,16 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
             compButtons.RemoveAt(i);
         }
 
-        if(components == null)
+        if (components == null)
         {
-            return;    
+            return;
         }
-        List<ShipComponent> tempList = components;
-        
-        for (int i = 0; i < tempList.Count; i++)
+   
+        foreach (Type type in components.Select(c => c.GetType()).Distinct())
         {
-            Type currentType = tempList[i].GetType();
-            Debug.Log("Current Type: " + currentType);
-            for (int j = tempList.Count-1; j > i; j--)
-            {
-                if(tempList[j].GetType()==currentType)
-                {
-                    Debug.Log("Removing " + tempList[j].GetType());
-                    tempList.RemoveAt(j);
-                }
-            }
-        }
-        
-        foreach (ShipComponent component in tempList)
-        {
-            Type currentType = component.GetType();
+            Type currentType = type;
             ButtonWithContent buttonClone = Instantiate(guiFields.buttonPrefab) as ButtonWithContent;
-            buttonClone.buttonText.text = component.componentName;
+            buttonClone.buttonText.text = components.First(c => c.GetType() == currentType).componentName;
             buttonClone.button.onClick.AddListener(() => activationMethod(currentType));
             compButtons.Add(buttonClone);
             buttonClone.transform.SetParent(guiFields.compButtonParent, false);
