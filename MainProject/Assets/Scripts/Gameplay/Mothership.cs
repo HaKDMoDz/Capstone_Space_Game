@@ -12,7 +12,7 @@ public class Mothership : MonoBehaviour
     [SerializeField]
     private float moveSpeed = 0.5f;
     [SerializeField]
-    private float orbitSpeed = 1.0f;
+    private float orbitSpeed = 0.01f;
     private Quaternion orbitalRotation;
     private bool orbiting;
 
