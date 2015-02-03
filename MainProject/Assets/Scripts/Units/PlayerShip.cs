@@ -1,8 +1,11 @@
-﻿using UnityEngine;
+﻿#region Usings
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using System.Reflection;
+#endregion Usings
 
 public class PlayerShip : TurnBasedUnit
 {
@@ -11,6 +14,8 @@ public class PlayerShip : TurnBasedUnit
     //references
     public PlayerAttack playerAttack { get; private set; }
     private SpaceGround spaceGround;
+    [SerializeField]
+    private LineRenderer line;
 
     #region Internal
     private bool continueTurn = true;
@@ -22,7 +27,7 @@ public class PlayerShip : TurnBasedUnit
     private bool firing = false;
     private float totalActivationCost = 0.0f;
     
-    private List<ShipComponent> components = new List<ShipComponent>();
+    
     private List<ShipComponent> selectedComponents = new List<ShipComponent>();
 
     #endregion Internal
@@ -36,6 +41,11 @@ public class PlayerShip : TurnBasedUnit
         this.playerAttack = playerAttack;
         this.playerAttack.Init();
 
+
+        ConfigurePlayerShip();
+        
+
+
         InputManager.Instance.RegisterKeysDown(
             (key) => { componentSelectionOn = false; },
             KeyCode.Space);
@@ -45,17 +55,12 @@ public class PlayerShip : TurnBasedUnit
            KeyCode.KeypadEnter, KeyCode.Return
             );
 
-        foreach (ShipComponent component in shipBP.slot_component_table.Values)
-        {
-            component.Init();
-            components.Add(component);
-
-        }
+        
         spaceGround = SpaceGround.Instance;
         foreach (ShipComponent component in components)
         {
             component.OnComponentClicked += OnComponentClicked;
-            component.OnComponentMouseOver += OnComponentMouseOver;
+            //component.OnComponentMouseOver += OnComponentMouseOver;
         }
         spaceGround.OnGroundClick += SpaceGroundClick;
     }
@@ -218,6 +223,20 @@ public class PlayerShip : TurnBasedUnit
     }
 
     #endregion InternalCallbacks
+
+    //Helper
+    private void ConfigurePlayerShip()
+    {
+        //add line renderer for movement and targeting
+        GameObject linePrefab = Resources.Load<GameObject>("Prefabs/LineRenderer");
+
+        GameObject lineObj = Instantiate(linePrefab) as GameObject;
+        lineObj.transform.SetParent(transform, false);
+        line = lineObj.GetComponent<LineRenderer>();
+
+        playerAttack.line = line;
+        line.enabled = false;
+    }
     #endregion PrivateMethods
     #endregion Methods
 }

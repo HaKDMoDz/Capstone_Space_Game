@@ -18,7 +18,8 @@ public struct CombatGUIFields
     public GameObject openCompSelectionPanel;
     public GameObject closedCompSelectPanel;
     public Text powerText;
-
+    public GameObject targetingPanel;
+    public Text targetedShipName;
 }
 #endregion AdditionalStructs
 public class CombatSystemInterface : Singleton<CombatSystemInterface>
@@ -106,7 +107,11 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
             TurnBasedCombatSystem.Instance.ShowingSelectionPanel(false);
         }
     }
-
+    public void ShowTargetingPanel(bool show, string targetName)
+    {
+        guiFields.targetedShipName.text = targetName;
+        guiFields.targetingPanel.SetActive(show);
+    }
     
 
     #endregion PublicMethods

@@ -52,6 +52,12 @@ public abstract class TurnBasedUnit : MonoBehaviour
         protected set { currentPower = value; }
     }
 
+    protected List<ShipComponent> components = new List<ShipComponent>();
+    public List<ShipComponent> Components
+    {
+        get { return components; }
+    }
+
     //references
     [SerializeField]
     private GameObject componentCamera;
@@ -59,6 +65,13 @@ public abstract class TurnBasedUnit : MonoBehaviour
     {
         get { return componentCamera; }
     }
+    [SerializeField]
+    private GameObject targetingCamera;
+    protected GameObject TargetingCamera
+    {
+        get { return targetingCamera; }
+    }
+
     [SerializeField]
     protected GameObject expolosionObject;
     public GameObject getExplosionObject()
@@ -69,7 +82,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
     public ShipBlueprintMetaData shipBPMetaData { get; private set; }
     public ShipMove shipMove { get; private set; }
     protected ShipBlueprint shipBP;
-
+    private Transform trans;
 
     //TEMP
     private float hullHP;
@@ -138,10 +151,34 @@ public abstract class TurnBasedUnit : MonoBehaviour
         this.shipMove = shipMove;
         this.shipMove.Init();
         timeLeftToTurn = turnDelay;
-        
-        componentCamera = GetComponentInChildren<Camera>().gameObject;
+
+        foreach (ShipComponent component in shipBP.slot_component_table.Values)
+        {
+            component.Init();
+            components.Add(component);
+        }
+
+        trans = transform;
+
+        #if FULL_DEBUG
+        if (trans.FindChild("ComponentCamera")==null)
+        {
+            Debug.LogError("No Component camera found");
+        }
+        #endif
+        componentCamera = trans.FindChild("ComponentCamera").gameObject;
         componentCamera.SetActive(false);
-        expolosionObject = transform.FindChild("Explosion").gameObject;
+
+        #if FULL_DEBUG
+        if (trans.FindChild("TargetingCamera") == null)
+        {
+            Debug.LogError("No Targeting camera found");
+        }
+        #endif
+        targetingCamera = trans.FindChild("TargetingCamera").gameObject;
+        targetingCamera.SetActive(false);
+
+        expolosionObject = trans.FindChild("Explosion").gameObject;
        
         maxHullHP = shipBP.hull.HullHP;
         hullHP = maxHullHP;
@@ -166,6 +203,13 @@ public abstract class TurnBasedUnit : MonoBehaviour
     {
         componentCamera.SetActive(show);
     }
+
+    public void ShowTargetingPanel(bool show)
+    {
+        CombatSystemInterface.Instance.ShowTargetingPanel(show, name);
+        targetingCamera.SetActive(show);
+    }
+
     #endregion PublicMethods
 
     #region InternalCallbacks

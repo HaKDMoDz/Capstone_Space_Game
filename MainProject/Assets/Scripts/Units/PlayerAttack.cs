@@ -11,11 +11,13 @@ public class PlayerAttack : MonoBehaviour
 
     private Transform trans;
     private AI_Ship targetShip;
+    
+    private bool targetConfirmed = false;
+    private int targetShipIndex;
+    private int numAiShips;
+    private int numWeaponsActivated;
 
-    bool targetConfirmed = false;
-    int targetShipIndex;
-    int numAiShips;
-    int numWeaponsActivated;
+    public LineRenderer line;
     
     #endregion Internal
     #endregion Fields
@@ -27,7 +29,6 @@ public class PlayerAttack : MonoBehaviour
     public void Init()
     {
         trans = transform;
-
     }
 
     public IEnumerator ActivateComponents(List<ShipComponent> components, Action<float> activationComplete)
@@ -100,18 +101,23 @@ public class PlayerAttack : MonoBehaviour
         #endif
         
         yield return StartCoroutine(CameraDirector.Instance.AimAtTarget(trans, ai_ships[targetShipIndex].transform, GlobalVars.CameraAimAtPeriod));
+        TargetShip(ai_ships[targetShipIndex], true);
 
         while(!targetConfirmed)
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
+                TargetShip(ai_ships[targetShipIndex], false);
                 targetConfirmed = true;
                 targetShip = null;
             }
             if (Input.GetKeyDown(KeyCode.Tab))
             {
+                TargetShip(ai_ships[targetShipIndex], false);
                 targetShipIndex = ++targetShipIndex % numAiShips;
-                Debug.Log(targetShipIndex);
+                //Debug.Log(targetShipIndex);
+                TargetShip(ai_ships[targetShipIndex], true);
+
                 yield return StartCoroutine(CameraDirector.Instance.AimAtTarget(trans, ai_ships[targetShipIndex].transform, GlobalVars.CameraAimAtPeriod));
             }
             if(Input.GetMouseButtonDown((int)MouseButton.Left))
@@ -126,9 +132,82 @@ public class PlayerAttack : MonoBehaviour
                 }
             }
             yield return null;
+
         }//while
 
+        TargetShip(ai_ships[targetShipIndex], false);
+
     }//WeaponTargetingSequence
+
+    private void TargetShip(TurnBasedUnit targetUnit, bool show)
+    {
+        if (!show)
+        {
+            DisplayTargetingLine(Vector3.zero, false);
+            targetUnit.ShowTargetingPanel(false);
+            foreach (ShipComponent component in targetUnit.Components)
+            {
+                component.OnComponentClicked -= OnComponentClick;
+                component.OnComponentMouseOver -= OnComponentMouseOver;
+                
+            }
+        }
+        else
+        {
+            //DisplayTargetingLine(targetUnit.transform.position, true);
+            targetUnit.ShowTargetingPanel(true);
+            foreach (ShipComponent component in targetUnit.Components)
+            {
+                component.OnComponentClicked += OnComponentClick;
+                component.OnComponentMouseOver += OnComponentMouseOver;
+                component.OnComponentPointerExit += OnComponentPointerExit;
+            }
+        }
+    }
+
+    void OnComponentPointerExit(ShipComponent component)
+    {
+        component.Selected = false;
+    }
+    void OnComponentMouseOver(ShipComponent component)
+    {
+        Debug.Log("Targeted component " + component.componentName);
+        DisplayTargetingLine(component.transform.position, true);
+        component.Selected = true;
+    }
+
+    void OnComponentClick(ShipComponent component)
+    {
+        Debug.Log("mouse over component " + component.componentName);
+        component.Selected = true;
+    }
+
+    void DisplayTargetingLine(Vector3 targetPos, bool show)
+    {
+        line.enabled = show;
+        if(!show)
+        {
+            return;
+        }
+
+        Vector3 targetDir = targetPos - trans.position;
+        int lineLength = Mathf.RoundToInt(targetDir.magnitude)+1;
+        targetDir.Normalize();
+
+        line.SetVertexCount(lineLength);
+
+        for (int i = 0; i < lineLength; i++)
+        {
+            Vector3 newPos = trans.position;
+            Vector3 offset = Vector3.zero;
+            offset.x = newPos.x + i * targetDir.x;
+            offset.y = newPos.y + i * targetDir.y;
+            offset.z = newPos.z + i * targetDir.z;
+            newPos = offset;
+            line.SetPosition(i, newPos);
+        }
+    }
+
 
     #endregion PrivateMethods
 

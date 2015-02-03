@@ -6,7 +6,7 @@ using System;
 
 public enum ComponentType { Weapon, Defense, Power, Support }
 
-public abstract class ShipComponent : MonoBehaviour , IPointerClickHandler, IPointerEnterHandler
+public abstract class ShipComponent : MonoBehaviour , IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
 
     //Component info and stats
@@ -67,6 +67,8 @@ public abstract class ShipComponent : MonoBehaviour , IPointerClickHandler, IPoi
     public event ComponentClickEvent OnComponentClicked = new ComponentClickEvent((ShipComponent) => { });
     public delegate void ComponentHoverMouseOver(ShipComponent component);
     public event ComponentHoverMouseOver OnComponentMouseOver = new ComponentHoverMouseOver((ShipComponent) => {  });
+    public delegate void ComponentPointerExit(ShipComponent component);
+    public event ComponentPointerExit OnComponentPointerExit = new ComponentPointerExit((ShipComponent) => { });
 
     public virtual void OnPointerClick(PointerEventData eventData)
     {
@@ -81,10 +83,15 @@ public abstract class ShipComponent : MonoBehaviour , IPointerClickHandler, IPoi
         OnComponentMouseOver(this);
     }
 
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        OnComponentPointerExit(this);
+    }
 
     public virtual void Init()
     {
         //selectionHalo = transform.FindChild("SelectionHalo").gameObject;
         compHP = maxHP;
     }
+
 }
