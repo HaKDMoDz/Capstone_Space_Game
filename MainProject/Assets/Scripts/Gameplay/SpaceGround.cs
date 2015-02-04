@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
 
-public class SpaceGround : Singleton<SpaceGround>, IPointerClickHandler, IPointerUpHandler, IPointerDownHandler
+public class SpaceGround : Singleton<SpaceGround>, IPointerClickHandler, IPointerUpHandler, IPointerDownHandler, IDragHandler
 {
     public delegate void GroundClick(Vector3 worldPosition);
     public event GroundClick OnGroundClick = new GroundClick((Vector3) => { });
@@ -36,7 +36,7 @@ public class SpaceGround : Singleton<SpaceGround>, IPointerClickHandler, IPointe
             OnGroundClick(eventData.worldPosition);
         }
     }
-
+    
     //private void Start()
     //{
     //    //InputManager.Instance.RegisterMouseButtonsHold(MouseDown, MouseButton.Left);
@@ -52,4 +52,12 @@ public class SpaceGround : Singleton<SpaceGround>, IPointerClickHandler, IPointe
     //        OnGroundClick(hit.point);
     //    }
     //}
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            OnGroundClick(eventData.worldPosition);
+        }
+    }
 }

@@ -96,10 +96,11 @@ public class Mothership : MonoBehaviour
         {
             Debug.Log("entering planter orbit");
             //TODO: add code for setting initial angle
-            float deltaZ = other.transform.position.z - transform.position.z;
-            float deltaX = other.transform.position.x - transform.position.x;
+            Transform otherTrans = other.transform;
+            float deltaZ = otherTrans.position.z - trans.position.z;
+            float deltaX = otherTrans.position.x - trans.position.x;
             angle = (180.0f + ((Mathf.Atan2(deltaZ,deltaX) * 180.0f) / Mathf.PI))%360.0f;
-            orbitalRotation = other.transform.rotation;
+            orbitalRotation = otherTrans.rotation;
             orbiting = true;
         }
     }
@@ -111,11 +112,11 @@ public class Mothership : MonoBehaviour
 
             angle = (angle + orbitSpeed) % 360.0f;
             //Debug.Log(angle);
+            Transform otherTrans = other.transform;
 
-            transform.position = PointOnCircle(other.GetComponent<SphereCollider>().radius - 10.0f, angle, other.transform.position);
-            destination = PointOnCircle(other.GetComponent<SphereCollider>().radius - 10.0f, (angle + 2.0f) % 360.0f, other.transform.position);
+            trans.position = PointOnCircle(((SphereCollider)other).radius - 10.0f, angle, otherTrans.position);
+            destination = PointOnCircle(((SphereCollider)other).radius - 10.0f, (angle + 2.0f) % 360.0f, otherTrans.position);
 
-            //transform.rotation = orbitalRotation;
             trans.LookAt(destination);
             moving = false;
         }
