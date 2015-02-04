@@ -6,6 +6,9 @@ public class Mothership : MonoBehaviour
 {
     #region Fields
 
+    public enum MovementMode { Lerp, Translate}
+    [SerializeField]
+    private MovementMode movementMode;
     //EditorExposed
     [SerializeField]
     private SpaceGround spaceGround;
@@ -33,24 +36,36 @@ public class Mothership : MonoBehaviour
     #region Methods
 
     #region PrivateMethods
-
     private IEnumerator Move()
     {
         if (!orbiting)
         {
             Vector3 moveDir;
-            trans.LookAt(destination);
             moving = true;
-            do
+            moveDir = destination - trans.position;
+
+            if (movementMode == MovementMode.Translate)
+            {
+                while (moveDir.magnitude > moveSpeed * Time.deltaTime)
+                {
+                    Vector3 moveDirNorm = moveDir.normalized;
+                    trans.LookAt(destination);
+                    trans.position += moveDirNorm * moveSpeed * Time.deltaTime;
+                    moveDir = destination - trans.position;
+                    StartCoroutine(GalaxyCamera.Instance.FollowMothership(trans, inSystem));
+                    yield return null;
+
+                }
+            }
+            while (moveDir.magnitude > GlobalVars.LerpDistanceEpsilon)
             {
                 trans.LookAt(destination);
-                moveDir = destination - trans.position;
-                trans.position = Vector3.Lerp(trans.position, destination, moveSpeed * Time.deltaTime);
+                trans.position = Vector3.Lerp(trans.position, destination, moveSpeed*.01f * Time.deltaTime);
                 StartCoroutine(GalaxyCamera.Instance.FollowMothership(trans, inSystem));
+                moveDir = destination - trans.position;
                 yield return null;
-
-            } while (Vector3.SqrMagnitude(moveDir) > GlobalVars.LerpDistanceEpsilon * GlobalVars.LerpDistanceEpsilon);
-
+            }
+            
             moving = false;
         }
         yield return null;
@@ -100,7 +115,8 @@ public class Mothership : MonoBehaviour
             transform.position = PointOnCircle(other.GetComponent<SphereCollider>().radius - 10.0f, angle, other.transform.position);
             destination = PointOnCircle(other.GetComponent<SphereCollider>().radius - 10.0f, (angle + 2.0f) % 360.0f, other.transform.position);
 
-            transform.rotation = orbitalRotation;
+            //transform.rotation = orbitalRotation;
+            trans.LookAt(destination);
             moving = false;
         }
     }

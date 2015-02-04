@@ -3986,8 +3986,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7b583b6030009641acfc4037411ba56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  movementMode: 1
   spaceGround: {fileID: 412392120}
-  moveSpeed: 1
+  moveSpeed: 150
   orbitSpeed: 1
 --- !u!54 &383796680
 Rigidbody:
@@ -4276,6 +4277,14 @@ Prefab:
       propertyPath: spaceGround
       value: 
       objectReference: {fileID: 412392120}
+    - target: {fileID: 11455734, guid: ea9e3e6388a254145ac00577869acac8, type: 2}
+      propertyPath: moveSpeed
+      value: 150
+      objectReference: {fileID: 0}
+    - target: {fileID: 11455734, guid: ea9e3e6388a254145ac00577869acac8, type: 2}
+      propertyPath: movementMode
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ea9e3e6388a254145ac00577869acac8, type: 2}
   m_RootGameObject: {fileID: 383796676}
