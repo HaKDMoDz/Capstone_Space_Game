@@ -66,19 +66,19 @@ namespace AI_Fleet
             {
                 case OrganismHull.CORVETTE:
                     // 5 - 10 Genes
-                    numGenes = RandomManager.randomInt(20,30);
+                    numGenes = RandomManager.randomInt(31,31);
                     break;
                 case OrganismHull.FRIGATE:
                     // 7 - 14 Genes
-                    numGenes = RandomManager.randomInt(30, 50);
+                    numGenes = RandomManager.randomInt(48,48);
                     break;
                 case OrganismHull.CRUISER:
                     //9 - 18 Genes
-                    numGenes = RandomManager.randomInt(40, 70);
+                    numGenes = RandomManager.randomInt(70, 70);
                     break;
                 case OrganismHull.BATTLESHIP:
                     //12 - 23 Genes
-                    numGenes = RandomManager.randomInt(60, 91);
+                    numGenes = RandomManager.randomInt(91, 91);
                     break;
                 default:
                     break;
@@ -133,12 +133,12 @@ namespace AI_Fleet
                                 }
                                 break;
                             default:
+                                Console.WriteLine("Shouldnt get here. Organism.cs->Constructor->switch(Placement)->default:");
                                 break;
                         }
-
                         numTries++;
 
-                    } while (!found && numTries > 200);
+                    } while (!found && numTries > 100);
 
                     if (found)
                     {
@@ -150,23 +150,18 @@ namespace AI_Fleet
                             {
                                 if (genome[i].Alleles[k].Type == gene.Type && genome[i].Alleles[k].Placement == gene.Placement)
                                 {
-                                    //Console.WriteLine("updated gene");
-                                    //TODO:
-                                    //go through the genes and find the one that matches position
                                     genome[i].Alleles[k].Count += gene.Count;
                                     genome[i].Alleles[k].ComponentAbilityStat += gene.ComponentAbilityStat;
-                                    //add count and bonus to it instead of making a new one
-                                    //make sure to make the new one if no matches occur
                                 }
                                 else
                                 {
                                     addNew = true;
-                                }
+                                    break;
+                                } 
                             }
 
                             if (addNew)
                             {
-                                //Console.WriteLine("added new gene");
                                 genome[i].Alleles.Add(gene);
                             } 
                         }
@@ -176,14 +171,10 @@ namespace AI_Fleet
                         }
                     }
                 }
-                Console.Write(genome[i].Alleles.Count + " genes in this chromosome\t");
-                for (int j = 0; j < genome[i].Alleles.Count; j++)
-                {
-                    Console.Write(" | " + genome[i].Alleles[j].Count + " " + genome[i].Alleles[j].Type + " " + genome[i].Alleles[j].Placement);
-                }
-                Console.WriteLine("\n");
-            } 
+            }
         }
+
+
 
         public Organism(List<Chromosome> _genome, OrganismHull _hull = OrganismHull.CORVETTE, OrganismArchetype _archetype = OrganismArchetype.SNIPER)
         {

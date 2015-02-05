@@ -46,7 +46,7 @@ namespace AI_Fleet
 
             #region populationTests
             Population pop001 = new Population();
-            //pop001.DebugDisplay();
+            pop001.DebugDisplay();
             #endregion
 
 
