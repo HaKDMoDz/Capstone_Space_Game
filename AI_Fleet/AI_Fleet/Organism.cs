@@ -56,7 +56,7 @@ namespace AI_Fleet
             //assign a completely random genome
             hull = (OrganismHull)(RandomManager.rollDwhatever((int)OrganismHull.COUNT));
             archetype = (OrganismArchetype)(RandomManager.rollDwhatever((int)OrganismArchetype.COUNT));
-            Console.WriteLine(hull);
+            Console.Write(hull + "  \t");
             Console.WriteLine(archetype);
             genome = new List<Chromosome>();
             SlotsPerSection remainingSlots = slots;
@@ -142,15 +142,47 @@ namespace AI_Fleet
 
                     if (found)
                     {
-                        genome[i].Alleles.Add(gene);
+                        bool addNew = false;
+
+                        if (genome[i].Alleles.Count > 0)
+                        {
+                            for (int k = 0; k < genome[i].Alleles.Count; k++)
+                            {
+                                if (genome[i].Alleles[k].Type == gene.Type && genome[i].Alleles[k].Placement == gene.Placement)
+                                {
+                                    //Console.WriteLine("updated gene");
+                                    //TODO:
+                                    //go through the genes and find the one that matches position
+                                    genome[i].Alleles[k].Count += gene.Count;
+                                    genome[i].Alleles[k].ComponentAbilityStat += gene.ComponentAbilityStat;
+                                    //add count and bonus to it instead of making a new one
+                                    //make sure to make the new one if no matches occur
+                                }
+                                else
+                                {
+                                    addNew = true;
+                                }
+                            }
+
+                            if (addNew)
+                            {
+                                //Console.WriteLine("added new gene");
+                                genome[i].Alleles.Add(gene);
+                            } 
+                        }
+                        else
+                        {
+                            genome[i].Alleles.Add(gene);
+                        }
                     }
-                    
                 }
-            }
-
-
-
-            
+                Console.Write(genome[i].Alleles.Count + " genes in this chromosome\t");
+                for (int j = 0; j < genome[i].Alleles.Count; j++)
+                {
+                    Console.Write(" | " + genome[i].Alleles[j].Count + " " + genome[i].Alleles[j].Type + " " + genome[i].Alleles[j].Placement);
+                }
+                Console.WriteLine("\n");
+            } 
         }
 
         public Organism(List<Chromosome> _genome, OrganismHull _hull = OrganismHull.CORVETTE, OrganismArchetype _archetype = OrganismArchetype.SNIPER)

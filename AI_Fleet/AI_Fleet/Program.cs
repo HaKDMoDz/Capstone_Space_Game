@@ -13,7 +13,7 @@ namespace AI_Fleet
             RandomManager.InitializeManager();
 
 
-            //#region geneTests
+            #region geneTests
             //Console.WriteLine("Testing Genes...");
             ////test gene
             //Gene testGene001 = new Gene(OrganismHull.CORVETTE);
@@ -21,9 +21,9 @@ namespace AI_Fleet
 
             //testGene001.DebugDisplay();
             //testGene002.DebugDisplay();
-            //#endregion
+            #endregion
 
-            //#region chromosomeTests
+            #region chromosomeTests
             //Console.WriteLine("Testing Chromosomes...");
             ////test chromosome
             //Chromosome chromo001 = new Chromosome(OrganismHull.FRIGATE);
@@ -37,12 +37,20 @@ namespace AI_Fleet
             //chromo001.DebugDeisplay();
             //chromo002.DebugDeisplay();
             //chromo003.DebugDeisplay();
-            //#endregion
+            #endregion
 
-            Organism org001 = new Organism();
-            org001.DebugDisplay();
+            #region organismTests
+            //Organism org001 = new Organism();
+            //org001.DebugDisplay();
+            #endregion
+
+            #region populationTests
+            Population pop001 = new Population();
+            //pop001.DebugDisplay();
+            #endregion
+
+
             Console.ReadLine();
-            
         }
     }
 }
