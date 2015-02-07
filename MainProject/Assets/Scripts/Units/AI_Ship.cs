@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
-public class AI_Ship : TurnBasedUnit 
+public class AI_Ship : TurnBasedUnit
 {
     #region Fields
     #region Internal
@@ -14,7 +15,9 @@ public class AI_Ship : TurnBasedUnit
     //TEMP
     private float damagePerAttack = 35.0f;
 
+    //references
     public AI_Attack ai_Attack { get; private set; }
+    private Transform trans;
 
     List<ShipComponent> activeComponents = new List<ShipComponent>();
 
@@ -34,24 +37,27 @@ public class AI_Ship : TurnBasedUnit
             component.Init();
         }
 
+        trans = transform;
+
     }
     public override IEnumerator ExecuteTurn()
     {
         yield return StartCoroutine(base.ExecuteTurn());
-#if FULL_DEBUG
+        #if FULL_DEBUG
         Debug.Log("AI unit turn");
-#endif
+        #endif
         // AI doesn't wait for space to be pressed...
 
+        PlayerShip targetPlayer = TargetEnemy(TurnBasedCombatSystem.Instance.playerShips);
         //move phase
-        Move();
+        Move(targetPlayer);
         if (receivedMoveCommand)
         {
             yield return StartCoroutine(shipMove.Move());
             receivedMoveCommand = false;
-#if FULL_DEBUG
-            Debug.Log(shipBPMetaData.blueprintName + "- Movement end");
-#endif
+            #if FULL_DEBUG
+            Debug.Log(name + "- Movement end");
+            #endif
         }
 
         //attack phase
@@ -59,26 +65,23 @@ public class AI_Ship : TurnBasedUnit
 
         if (receivedAttackCommand)
         {
-            TurnBasedUnit targetEnemy = TargetEnemy(TurnBasedCombatSystem.Instance.units);
-            //yield return StartCoroutine(ai_Attack.Attack(targetEnemy, damagePerAttack));
-
-            yield return StartCoroutine(ai_Attack.Attack(targetEnemy, damagePerAttack, activeComponents));
+            yield return StartCoroutine(ai_Attack.Attack(targetPlayer, damagePerAttack, activeComponents));
             receivedAttackCommand = false;
-#if FULL_DEBUG
-            Debug.Log(shipBPMetaData.blueprintName + "- Attack end");
-#endif
+            #if FULL_DEBUG
+            Debug.Log(name + "- Attack end");
+            #endif
         }
         yield return null;
     }
 
-    public void Move()
+    public void Move(PlayerShip targetPlayer)
     {
         if (!receivedMoveCommand)
         {
-#if FULL_DEBUG
+            #if FULL_DEBUG
             Debug.Log("Move command received " + shipBPMetaData.blueprintName);
-#endif
-            Vector3 enemyPosition = TargetEnemy(TurnBasedCombatSystem.Instance.units).transform.position;
+            #endif
+            Vector3 enemyPosition = targetPlayer.transform.position;
             Vector3 directionBetween = (transform.position - enemyPosition).normalized;
             shipMove.destination = enemyPosition + (directionBetween * range);
             receivedMoveCommand = true;
@@ -88,38 +91,30 @@ public class AI_Ship : TurnBasedUnit
     {
         if (!receivedAttackCommand)
         {
-#if FULL_DEBUG
+            #if FULL_DEBUG
             Debug.Log("Attack command received " + shipBPMetaData.blueprintName);
-#endif
+            #endif
             receivedAttackCommand = true;
         }
     }
 
- private TurnBasedUnit TargetEnemy(List<TurnBasedUnit> _units)
-{
-    List<TurnBasedUnit> currentTargets = new List<TurnBasedUnit>();
-    
-    foreach (TurnBasedUnit unit in _units)
+    private PlayerShip TargetEnemy(List<PlayerShip> playerShips)
     {
-        if (unit is PlayerShip)
+        if (playerShips == null || playerShips.Count == 0)
         {
-            currentTargets.Add(unit);
+            return null;
+        }
+        else
+        {
+            //insert logic here to determine closest enemy
+            Vector3 selfPos = trans.position;
+            return playerShips
+                .Aggregate((current, next) =>
+                    Vector3.Distance(current.transform.position, selfPos)
+                        < Vector3.Distance(next.transform.position, selfPos)
+                        ? current : next);
         }
     }
-
-     //insert logic here to determine closest enemy
-
-    if (currentTargets.Count > 0)
-    {
-        return currentTargets[0];
-    }
-    else
-    {
-        return null;
-        //flag turnBasedcontroller... the battle is OVER
-    }
-    
-}
 
     #endregion PublicMethods
     #endregion Methods
