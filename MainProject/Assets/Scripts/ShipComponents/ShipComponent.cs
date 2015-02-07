@@ -1,8 +1,11 @@
-﻿using UnityEngine;
+﻿#region Usings
+using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
 using System;
+#endregion Usings
 
 public enum ComponentType { Weapon, Defense, Power, Support }
 
@@ -63,6 +66,9 @@ public abstract class ShipComponent : MonoBehaviour , IPointerClickHandler, IPoi
     //cached references
     [SerializeField]
     private GameObject selectionHalo;
+    [SerializeField]
+    private Slider hpBar;
+
 
     public delegate void ComponentClickEvent(ShipComponent component);
     public event ComponentClickEvent OnComponentClicked = new ComponentClickEvent((ShipComponent) => { });
@@ -102,6 +108,7 @@ public abstract class ShipComponent : MonoBehaviour , IPointerClickHandler, IPoi
     {
 
         compHP -= _amountOfDamage;
+        hpBar.value -= _amountOfDamage/maxHP;
 #if FULL_DEBUG
         Debug.Log("damage taken. remaining HP: " + compHP);
 #endif
