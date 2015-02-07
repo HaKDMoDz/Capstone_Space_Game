@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Comp_Wpn_Laser : Component_Weapon 
+public class Comp_Wpn_Laser : Component_Weapon
 {
     [SerializeField]
     private float effectDuration = 0.4f;
@@ -19,42 +19,40 @@ public class Comp_Wpn_Laser : Component_Weapon
         base.Init();
 
         line = GetComponentInChildren<LineRenderer>();
-        #if FULL_DEBUG
-        if(!line)
+#if FULL_DEBUG
+        if (!line)
         {
             Debug.LogError("No line renderer found");
         }
-        #endif
+#endif
 
         line.enabled = false;
         //laserImpactEffect.Stop();
     }
 
-    public override IEnumerator Fire(Transform target, System.Action OnActivationComplete)
+    //public override IEnumerator Fire(Transform target, System.Action OnActivationComplete)
+    public override IEnumerator Fire(ShipComponent targetComp, System.Action OnActivationComplete)
     {
-        if (target)
+        if (targetComp && targetComp.CompHP > 0.0f)
         {
-            if (target.GetComponent<TurnBasedUnit>().HullHP > 0.0f)
-	        {	 
-	            Debug.Log("Firing lasers");
+            Debug.Log("Firing lasers");
 
-                length = Mathf.RoundToInt(Vector3.Distance(target.position, shootPoint.position));
-                float currentTime = 0.0f;
-                while (currentTime <= effectDuration)
-                {
-                    CreateBeamEffect();
-                    currentTime += Time.deltaTime;
-                    yield return null;
-                }
-                line.enabled = false;
-                if (target)
-                {
-                    yield return StartCoroutine(target.GetComponent<TurnBasedUnit>().TakeDamage(damage));
-                }
-                else
-                {
-                    yield return null;
-                }
+            length = Mathf.RoundToInt(Vector3.Distance(targetComp.transform.position, shootPoint.position));
+            float currentTime = 0.0f;
+            while (currentTime <= effectDuration)
+            {
+                CreateBeamEffect();
+                currentTime += Time.deltaTime;
+                yield return null;
+            }
+            line.enabled = false;
+            if (targetComp)
+            {
+                yield return StartCoroutine(targetComp.TakeDamage(damage));
+            }
+            else
+            {
+                yield return null;
             }
         }
         OnActivationComplete();

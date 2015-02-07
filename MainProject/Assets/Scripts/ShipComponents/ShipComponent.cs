@@ -9,6 +9,7 @@ public enum ComponentType { Weapon, Defense, Power, Support }
 public abstract class ShipComponent : MonoBehaviour , IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
 
+    #region Fields
     //Component info and stats
     [SerializeField]
     private ComponentType compType;
@@ -70,6 +71,10 @@ public abstract class ShipComponent : MonoBehaviour , IPointerClickHandler, IPoi
     public delegate void ComponentPointerExit(ShipComponent component);
     public event ComponentPointerExit OnComponentPointerExit = new ComponentPointerExit((ShipComponent) => { });
 
+
+    #endregion Fields
+
+    #region Methods
     public virtual void OnPointerClick(PointerEventData eventData)
     {
         Debug.Log("At component: Clicked on component " + componentName);
@@ -93,5 +98,26 @@ public abstract class ShipComponent : MonoBehaviour , IPointerClickHandler, IPoi
         //selectionHalo = transform.FindChild("SelectionHalo").gameObject;
         compHP = maxHP;
     }
+    public IEnumerator TakeDamage(float _amountOfDamage)
+    {
 
+        compHP -= _amountOfDamage;
+#if FULL_DEBUG
+        Debug.Log("damage taken. remaining HP: " + compHP);
+#endif
+        if (compHP <= 0)
+        {
+            yield return StartCoroutine(Destroy());
+        }
+    }
+
+    protected virtual IEnumerator Destroy()
+    {
+        Debug.Log(componentName + " Destroyed");
+
+        gameObject.SetActive(false);
+
+        yield return null;
+    }
+    #endregion Methods
 }

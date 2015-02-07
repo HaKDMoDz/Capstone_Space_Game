@@ -15,6 +15,15 @@ public abstract class Component_Weapon : ShipComponent
     protected Transform shootPoint;
 
 
+    public virtual IEnumerator Fire(ShipComponent targetComp, Action OnActivationComplete)
+    {
+        Debug.Log("Weapon fire");
+        yield return null;
+    }
+
+    /// /////////////////////////
+    /// temp overloading for AI
+    /// //////////////////////////
     public virtual IEnumerator Fire(Transform target, Action OnActivationComplete)
     {
         Debug.Log("Weapon fire");

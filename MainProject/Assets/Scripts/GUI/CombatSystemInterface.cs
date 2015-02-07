@@ -17,6 +17,7 @@ public struct CombatGUIFields
     public RectTransform compButtonParent;
     public GameObject openCompSelectionPanel;
     public GameObject closedCompSelectPanel;
+    public GameObject statsPanel;
     public Text powerText;
     public GameObject targetingPanel;
     public Text targetedShipName;
@@ -113,6 +114,10 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
         guiFields.targetingPanel.SetActive(show);
     }
     
+    public void ShowStatsPanel(bool show)
+    {
+        guiFields.statsPanel.SetActive(show);
+    }
 
     #endregion PublicMethods
 

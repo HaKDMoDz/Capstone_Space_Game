@@ -10,8 +10,9 @@ public class PlayerAttack : MonoBehaviour
     #region Internal
 
     private Transform trans;
-    private AI_Ship targetShip;
-    
+    //private AI_Ship targetShip;
+    private ShipComponent targetComponent;
+
     private bool targetConfirmed = false;
     private int targetShipIndex;
     private int numAiShips;
@@ -31,31 +32,36 @@ public class PlayerAttack : MonoBehaviour
         trans = transform;
     }
 
-    public IEnumerator ActivateComponents(List<ShipComponent> components, Action<float> activationComplete)
+    public IEnumerator ActivateComponents(List<ShipComponent> componentsToActivate, Action<float> activationComplete)
     {
         float totalPowerUsed = 0.0f;
         //if there are any weapons in the selection
-        if(components.Any(c=>c is Component_Weapon))
+        if(componentsToActivate.Any(c=>c is Component_Weapon))
         {
             yield return StartCoroutine(WeaponTargetingSequence());
             numWeaponsActivated = 0;
 
-            if(targetShip)
+            if(targetComponent)
             {
-                Transform targetShipTrans = targetShip.transform;
-                trans.LookAt(targetShipTrans);
+                //Transform targetShipTrans = targetShip.transform;
+                //trans.LookAt(targetShipTrans);
+                //Transform targetCompTrans = targetComponent.transform;
+                trans.LookAt(targetComponent.transform);
 
-                foreach (Component_Weapon weapon in components.Where(c => c is Component_Weapon))
+                foreach (Component_Weapon weapon in componentsToActivate.Where(c => c is Component_Weapon))
                 {
-                    Debug.Log("activate weapon");
-                    yield return StartCoroutine(
-                    weapon.Fire(targetShipTrans,
-                        () =>
-                        {
-                            numWeaponsActivated--;
-                            totalPowerUsed += weapon.ActivationCost;
-                        }));
-                    numWeaponsActivated++;
+                    if (targetComponent && targetComponent.CompHP > 0.0f)
+                    {
+                        Debug.Log("activate weapon");
+                        yield return StartCoroutine(
+                        weapon.Fire(targetComponent,
+                            () =>
+                            {
+                                numWeaponsActivated--;
+                                totalPowerUsed += weapon.ActivationCost;
+                            }));
+                        numWeaponsActivated++;
+                    }
                 }
             }
             #if !NO_DEBUG
@@ -84,7 +90,8 @@ public class PlayerAttack : MonoBehaviour
     {
         targetShipIndex = 0;
         targetConfirmed = false;
-        targetShip = null;
+        //targetShip = null;
+        targetComponent = null;
 
         List<AI_Ship> ai_ships = TurnBasedCombatSystem.Instance.ai_Ships;
         numAiShips = ai_ships.Count;
@@ -109,7 +116,8 @@ public class PlayerAttack : MonoBehaviour
             {
                 TargetShip(ai_ships[targetShipIndex], false);
                 targetConfirmed = true;
-                targetShip = null;
+                //targetShip = null;
+                targetComponent = null;
             }
             if (Input.GetKeyDown(KeyCode.Tab))
             {
@@ -120,17 +128,17 @@ public class PlayerAttack : MonoBehaviour
 
                 yield return StartCoroutine(CameraDirector.Instance.AimAtTarget(trans, ai_ships[targetShipIndex].transform, GlobalVars.CameraAimAtPeriod));
             }
-            if(Input.GetMouseButtonDown((int)MouseButton.Left))
-            {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-                if(Physics.Raycast(ray, out hit, 1000.0f, 1<<TagsAndLayers.AI_ShipLayer))
-                {
-                    Debug.Log(hit.collider.gameObject.name);
-                    targetConfirmed = true;
-                    targetShip = hit.collider.gameObject.GetComponent<AI_Ship>();
-                }
-            }
+            //if(Input.GetMouseButtonDown((int)MouseButton.Left))
+            //{
+            //    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            //    RaycastHit hit;
+            //    if(Physics.Raycast(ray, out hit, 1000.0f, 1<<TagsAndLayers.AI_ShipLayer))
+            //    {
+            //        Debug.Log(hit.collider.gameObject.name);
+            //        targetConfirmed = true;
+            //        targetShip = hit.collider.gameObject.GetComponent<AI_Ship>();
+            //    }
+            //}
             yield return null;
 
         }//while
@@ -178,8 +186,10 @@ public class PlayerAttack : MonoBehaviour
 
     void OnComponentClick(ShipComponent component)
     {
-        Debug.Log("mouse over component " + component.componentName);
+        Debug.Log("Selected target: " + component.componentName);
         component.Selected = true;
+        targetConfirmed = true;
+        targetComponent = component;
     }
 
     void DisplayTargetingLine(Vector3 targetPos, bool show)

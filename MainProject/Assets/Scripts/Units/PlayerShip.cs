@@ -12,6 +12,7 @@ public class PlayerShip : TurnBasedUnit
     #region Fields
 
     //references
+    private CombatSystemInterface combatInterface;
     public PlayerAttack playerAttack { get; private set; }
     private SpaceGround spaceGround;
     [SerializeField]
@@ -30,6 +31,7 @@ public class PlayerShip : TurnBasedUnit
     
     private List<ShipComponent> selectedComponents = new List<ShipComponent>();
 
+
     #endregion Internal
     #endregion Fields
 
@@ -38,6 +40,9 @@ public class PlayerShip : TurnBasedUnit
     public void Init(ShipBlueprint shipBP, ShipMove shipMove, PlayerAttack playerAttack)
     {
         base.Init(shipBP, shipMove);
+
+        combatInterface = CombatSystemInterface.Instance;
+
         this.playerAttack = playerAttack;
         this.playerAttack.Init();
 
@@ -75,9 +80,10 @@ public class PlayerShip : TurnBasedUnit
         continueTurn = true;
         totalActivationCost = 0.0f;
 
-        CombatSystemInterface.Instance.EnableComponentSelectionPanel(true);
-        CombatSystemInterface.Instance.ShowComponentActivationButtons( SelectAllComponents, components);
-        CombatSystemInterface.Instance.UpdatePower(CurrentPower);
+        combatInterface.EnableComponentSelectionPanel(true);
+        combatInterface.ShowStatsPanel(true);
+        combatInterface.ShowComponentActivationButtons(SelectAllComponents, components);
+        combatInterface.UpdatePower(CurrentPower);
 
         while (continueTurn)
         {
@@ -99,7 +105,7 @@ public class PlayerShip : TurnBasedUnit
                     (float activationCost)=>
                         {
                             CurrentPower -= activationCost;
-                            CombatSystemInterface.Instance.UpdatePower(CurrentPower); 
+                            combatInterface.UpdatePower(CurrentPower); 
                         }));
                 //componentSelectionOn = false;
                 firing = false;
@@ -115,7 +121,8 @@ public class PlayerShip : TurnBasedUnit
             yield return null;
         }
         takingTurn = false;
-        CombatSystemInterface.Instance.ShowComponentActivationButtons(null,null);
+        combatInterface.ShowComponentActivationButtons(null, null);
+        combatInterface.ShowStatsPanel(false);
     }
 
     public void SelectAllComponents(Type compType)
@@ -171,7 +178,7 @@ public class PlayerShip : TurnBasedUnit
                 selectedComponents.Add(component);
                 component.Selected = true;
                 totalActivationCost += component.ActivationCost;
-                CombatSystemInterface.Instance.UpdatePower(CurrentPower - totalActivationCost);
+                combatInterface.UpdatePower(CurrentPower - totalActivationCost);
             }
         }
         else
@@ -182,7 +189,7 @@ public class PlayerShip : TurnBasedUnit
                 selectedComponents.Remove(component);
                 component.Selected = false;
                 totalActivationCost -= component.ActivationCost;
-                CombatSystemInterface.Instance.UpdatePower(CurrentPower - totalActivationCost);
+                combatInterface.UpdatePower(CurrentPower - totalActivationCost);
             }
         }
         
