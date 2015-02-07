@@ -64,6 +64,8 @@ public class ShipBuilder
         
         hullBeingBuilt.Init();
 
+        TurnBasedUnit setupUnit;
+
         for (int i = 0; i < blueprintBeingBuilt.slot_component_table.Count; i++)
         {
             var slot_component = blueprintBeingBuilt.slot_component_table.ElementAt(i);
@@ -88,12 +90,15 @@ public class ShipBuilder
 #endif
         }
 
-        return GetFullySetupShip(shipType);
+        SetupScriptsOnShip(shipType, out setupUnit);
+
+        return setupUnit;
+        //return GetFullySetupShip(shipType);
     }
 
-    private TurnBasedUnit GetFullySetupShip(ShipType shipType)
+    private void SetupScriptsOnShip(ShipType shipType, out TurnBasedUnit setupUnit)
     {
-        TurnBasedUnit setupUnit = null;
+        setupUnit = null;
         switch (shipType)
         {
             case ShipType.PlayerShip:
@@ -119,7 +124,6 @@ public class ShipBuilder
             default:
                 break;
         }
-        return setupUnit;
     }
 
     #region UnityCallbacks

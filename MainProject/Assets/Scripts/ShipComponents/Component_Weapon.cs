@@ -29,4 +29,19 @@ public abstract class Component_Weapon : ShipComponent
         Debug.Log("Weapon fire");
         yield return null;
     }
+
+    protected IEnumerator DoDamage(ShipComponent targetComp)
+    {
+        float componentDamage = damage * (1.0f - hullDamagePercent / 100.0f);
+        
+        //if comp is armour
+        //  compDmg+=compDmg*armourMod%/100
+        if(targetComp is Comp_Def_Shield)
+        {
+            componentDamage += componentDamage * shieldDmgModifier / 100.0f;
+        }
+
+        yield return StartCoroutine(targetComp.TakeDamage(componentDamage));
+        yield return StartCoroutine(targetComp.ParentShip.TakeDamage(damage * hullDamagePercent / 100.0f));
+    }
 }

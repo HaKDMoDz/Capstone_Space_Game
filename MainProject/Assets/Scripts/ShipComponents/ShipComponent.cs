@@ -69,6 +69,7 @@ public abstract class ShipComponent : MonoBehaviour , IPointerClickHandler, IPoi
     [SerializeField]
     private Slider hpBar;
 
+    public TurnBasedUnit ParentShip { get; private set; }
 
     public delegate void ComponentClickEvent(ShipComponent component);
     public event ComponentClickEvent OnComponentClicked = new ComponentClickEvent((ShipComponent) => { });
@@ -99,19 +100,20 @@ public abstract class ShipComponent : MonoBehaviour , IPointerClickHandler, IPoi
         OnComponentPointerExit(this);
     }
 
-    public virtual void Init()
+    public virtual void Init(TurnBasedUnit parentShip)
     {
-        //selectionHalo = transform.FindChild("SelectionHalo").gameObject;
+        ParentShip = parentShip;
         compHP = maxHP;
+
     }
     public IEnumerator TakeDamage(float _amountOfDamage)
     {
 
         compHP -= _amountOfDamage;
         hpBar.value -= _amountOfDamage/maxHP;
-#if FULL_DEBUG
-        Debug.Log("damage taken. remaining HP: " + compHP);
-#endif
+        #if FULL_DEBUG
+        Debug.Log(componentName+ " takes "+ _amountOfDamage+" damage. Remaining HP: " + compHP);
+        #endif
         if (compHP <= 0)
         {
             yield return StartCoroutine(Destroy());

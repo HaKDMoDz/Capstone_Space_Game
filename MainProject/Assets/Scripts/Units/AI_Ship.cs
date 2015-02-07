@@ -17,7 +17,6 @@ public class AI_Ship : TurnBasedUnit
 
     //references
     public AI_Attack ai_Attack { get; private set; }
-    private Transform trans;
 
     List<ShipComponent> activeComponents = new List<ShipComponent>();
 
@@ -31,11 +30,11 @@ public class AI_Ship : TurnBasedUnit
         base.Init(shipBP, shipMove);
         this.ai_Attack = ai_Attack;
 
-        foreach (ShipComponent component in shipBP.slot_component_table.Values)
-        {
-            activeComponents.Add(component);
-            component.Init();
-        }
+        //foreach (ShipComponent component in shipBP.slot_component_table.Values)
+        //{
+        //    activeComponents.Add(component);
+        //    component.Init();
+        //}
 
         trans = transform;
 

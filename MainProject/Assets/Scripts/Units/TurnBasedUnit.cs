@@ -82,7 +82,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
     public ShipBlueprintMetaData shipBPMetaData { get; private set; }
     public ShipMove shipMove { get; private set; }
     protected ShipBlueprint shipBP;
-    private Transform trans;
+    protected Transform trans;
 
     //TEMP
     private float hullHP;
@@ -99,9 +99,9 @@ public abstract class TurnBasedUnit : MonoBehaviour
     {
         
         hullHP -= _amountOfDamage;
-#if FULL_DEBUG
-        Debug.Log("damage taken. remaining HP: " + hullHP);
-#endif
+        #if FULL_DEBUG
+        Debug.Log(name+ " taking "+ _amountOfDamage+ " damage. Remaining HP: " + hullHP);
+        #endif
         if (hullHP <= 0)
         {
             yield return StartCoroutine(Destroy());
@@ -154,7 +154,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
 
         foreach (ShipComponent component in shipBP.slot_component_table.Values)
         {
-            component.Init();
+            component.Init(this);
             components.Add(component);
         }
 

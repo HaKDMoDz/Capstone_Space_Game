@@ -14,17 +14,17 @@ public class Comp_Wpn_Laser : Component_Weapon
     private LineRenderer line;
     int length;
 
-    public override void Init()
+    public override void Init(TurnBasedUnit parentShip)
     {
-        base.Init();
+        base.Init(parentShip);
 
         line = GetComponentInChildren<LineRenderer>();
-#if FULL_DEBUG
+        #if FULL_DEBUG
         if (!line)
         {
             Debug.LogError("No line renderer found");
         }
-#endif
+        #endif
 
         line.enabled = false;
         //laserImpactEffect.Stop();
@@ -36,19 +36,14 @@ public class Comp_Wpn_Laser : Component_Weapon
         if (targetComp && targetComp.CompHP > 0.0f)
         {
             Debug.Log("Firing lasers");
-
             length = Mathf.RoundToInt(Vector3.Distance(targetComp.transform.position, shootPoint.position));
-            float currentTime = 0.0f;
-            while (currentTime <= effectDuration)
-            {
-                CreateBeamEffect();
-                currentTime += Time.deltaTime;
-                yield return null;
-            }
-            line.enabled = false;
+
+            yield return StartCoroutine(CreateBeamEffectForDuration());
+            
             if (targetComp)
             {
-                yield return StartCoroutine(targetComp.TakeDamage(damage));
+                //yield return StartCoroutine(targetComp.TakeDamage(damage));
+                yield return StartCoroutine(DoDamage(targetComp));
             }
             else
             {
@@ -57,11 +52,23 @@ public class Comp_Wpn_Laser : Component_Weapon
         }
         OnActivationComplete();
     }
+    private IEnumerator CreateBeamEffectForDuration()
+    {
+        float currentTime = 0.0f;
+        line.enabled = true;
+        line.SetVertexCount(length);
+
+        while (currentTime <= effectDuration)
+        {
+            CreateBeamEffect();
+            currentTime += Time.deltaTime;
+            yield return null;
+        }
+        line.enabled = false;
+    }
 
     private void CreateBeamEffect()
     {
-        line.enabled = true;
-        line.SetVertexCount(length);
         for (int i = 0; i < length; i++)
         {
             Vector3 newPos = shootPoint.position;
