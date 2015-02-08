@@ -17,6 +17,8 @@ public class GlobalVars : ScriptableObject
     private float cameraAimAtPeriod = 1.0f;
     [SerializeField]
     private float turnDelayFactor = 200.0f; //lower means higher penalty for having high power
+    [SerializeField]
+    private float rayCastRange = 1000.0f;
 
     //static vars for easy access
     public static float LerpDistanceEpsilon { get; private set; }
@@ -25,6 +27,7 @@ public class GlobalVars : ScriptableObject
     public static float CameraAimAtPeriod { get; private set; }
     public static float CameraMoveToFocusPeriod { get; private set; }
     public static float TurnDelayFactor { get; private set; }
+    public static float RayCastRange { get; private set; }
 
     private void OnEnable()
     {
@@ -34,5 +37,6 @@ public class GlobalVars : ScriptableObject
         CameraMoveToFocusPeriod = cameraMoveToFocusPeriod;
         CameraAimAtPeriod = cameraAimAtPeriod;
         TurnDelayFactor = turnDelayFactor;
+        RayCastRange = rayCastRange;
     }
 }

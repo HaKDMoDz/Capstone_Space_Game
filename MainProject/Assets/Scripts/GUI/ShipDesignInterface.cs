@@ -210,7 +210,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
             if (Input.GetMouseButtonDown(0) || dragging)
             {
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(ray, out hit, 1000.0f, 1 << TagsAndLayers.ComponentSlotLayer))
+                if (Physics.Raycast(ray, out hit, GlobalVars.RayCastRange, 1 << TagsAndLayers.ComponentSlotLayer))
                 {
                     dragging = true;
                     ComponentSlot slot = hit.transform.GetComponent<ComponentSlot>();

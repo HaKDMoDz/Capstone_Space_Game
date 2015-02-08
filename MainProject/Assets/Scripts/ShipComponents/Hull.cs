@@ -45,7 +45,7 @@ public class Hull : MonoBehaviour
         {
             //emptyComponentGrid[i].index = i;
             //Debug.Log("added a component");
-            index_slot_table.Add(i, EmptyComponentGrid[i]);
+            index_slot_table.Add(emptyComponentGrid[i].index, EmptyComponentGrid[i]);
         }
     }
 

@@ -263,7 +263,11 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
     {
         hullBeingBuilt = Instantiate(hull, Vector3.zero, Quaternion.Euler(0.0f, 90.0f, 0.0f)) as Hull;
         hullBeingBuilt.Init();
-        hullBeingBuilt.GetComponentInChildren<Camera>().gameObject.SetActive(false);
+        //turn off cameras in hull prefab
+        foreach (GameObject obj in hullBeingBuilt.GetComponentsInChildren<Camera>().Select(c=>c.gameObject))
+        {
+            obj.SetActive(false);
+        }
         blueprintBeingBuilt.GenerateMetaData();
         ShipDesignInterface.Instance.UpdateStatsPanel(blueprintBeingBuilt.metaData);
         //camera
@@ -280,7 +284,8 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
     private void AddComponentToScene(ComponentSlot slot, ShipComponent component)
     {
         ShipComponent builtComp = Instantiate(component, slot.transform.position, slot.transform.rotation) as ShipComponent;
-
+        //turn off GUI in component prefab
+        builtComp.GetComponentInChildren<Canvas>().gameObject.SetActive(false);
         //tracking components that are built for deletion
         componentsBeingBuilt.Add(builtComp);
         if(slot_compsBeingBuilt_table.ContainsKey(slot))

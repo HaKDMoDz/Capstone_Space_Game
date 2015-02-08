@@ -173,26 +173,44 @@ public class PlayerAttack : MonoBehaviour
         }
     }
 
-    void OnComponentPointerExit(ShipComponent component)
+    private void OnComponentPointerExit(ShipComponent component)
     {
         component.Selected = false;
     }
-    void OnComponentMouseOver(ShipComponent component)
+    private void OnComponentMouseOver(ShipComponent component)
     {
-        Debug.Log("Targeted component " + component.componentName);
-        DisplayTargetingLine(component.transform.position, true);
-        component.Selected = true;
+        //Debug.Log("Targeted component " + component.componentName);
+        if (targetComponent)
+        {
+            targetComponent.Selected = false;
+        }
+        targetComponent = GetFirstCompInDirection(component);
+        DisplayTargetingLine(targetComponent.transform.position, true);
+        targetComponent.Selected = true;
     }
 
-    void OnComponentClick(ShipComponent component)
+    private void OnComponentClick(ShipComponent component)
     {
-        Debug.Log("Selected target: " + component.componentName);
-        component.Selected = true;
+        //Debug.Log("Selected target: " + component.componentName);
+        if (targetComponent)
+        {
+            targetComponent.Selected = false;
+        }
+        targetComponent = GetFirstCompInDirection(component);
+        targetComponent.Selected = true;
         targetConfirmed = true;
-        targetComponent = component;
     }
-
-    void DisplayTargetingLine(Vector3 targetPos, bool show)
+    private ShipComponent GetFirstCompInDirection(ShipComponent component)
+    {
+        Ray ray = new Ray(trans.position, component.transform.position - trans.position);
+        RaycastHit hit;
+        if(Physics.Raycast(ray, out hit, GlobalVars.RayCastRange, 1<<TagsAndLayers.ComponentsLayer))
+        {
+            return hit.collider.GetComponent<ShipComponent>();
+        }
+        return component;
+    }
+    private void DisplayTargetingLine(Vector3 targetPos, bool show)
     {
         line.enabled = show;
         if(!show)
