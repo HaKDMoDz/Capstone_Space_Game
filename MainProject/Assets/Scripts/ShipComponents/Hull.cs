@@ -20,6 +20,7 @@ public class Hull : MonoBehaviour
     public List<ComponentSlot> EmptyComponentGrid
     {
         get { return emptyComponentGrid; }
+        set { emptyComponentGrid = value; }
     }
     #endregion EditorExposed
 
@@ -43,7 +44,8 @@ public class Hull : MonoBehaviour
         for (int i = 0; i < EmptyComponentGrid.Count; i++)
         {
             //emptyComponentGrid[i].index = i;
-            index_slot_table.Add(EmptyComponentGrid[i].index, EmptyComponentGrid[i]);
+            //Debug.Log("added a component");
+            index_slot_table.Add(i, EmptyComponentGrid[i]);
         }
     }
 

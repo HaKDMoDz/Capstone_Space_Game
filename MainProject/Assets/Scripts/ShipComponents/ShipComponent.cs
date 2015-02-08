@@ -14,6 +14,13 @@ public abstract class ShipComponent : MonoBehaviour , IPointerClickHandler, IPoi
 
     #region Fields
     //Component info and stats
+
+    private AI_Fleet.PlacementType placement;
+    public AI_Fleet.PlacementType Placement
+    {
+        get { return placement; }
+        set { placement = value; }
+    }
     [SerializeField]
     private ComponentType compType;
     public ComponentType CompType
