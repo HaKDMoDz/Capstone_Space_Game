@@ -7,20 +7,19 @@ using System;
 public class PlayerAttack : MonoBehaviour 
 {
     #region Fields
-    #region Internal
 
+    //internal references
     private Transform trans;
     private AI_Ship targetShip;
     private ShipComponent targetComponent;
+    public LineRenderer line;
 
+    //helper
     private bool targetConfirmed = false;
     private int targetShipIndex;
     private int numAiShips;
     private int numWeaponsActivated;
-
-    public LineRenderer line;
     
-    #endregion Internal
     #endregion Fields
 
     #region Methods
@@ -31,23 +30,29 @@ public class PlayerAttack : MonoBehaviour
     {
         trans = transform;
     }
-
+    /// <summary>
+    /// Activates the selected components and raises the ActivationComplete event with the amount of power consumed as a parameter.
+    /// Currently only handles logic to activate weapons.
+    /// </summary>
+    /// <param name="componentsToActivate"></param>
+    /// <param name="activationComplete"></param>
+    /// <returns></returns>
     public IEnumerator ActivateComponents(List<ShipComponent> componentsToActivate, Action<float> activationComplete)
     {
-        float totalPowerUsed = 0.0f;
+        float totalPowerUsed = 0.0f; //used to keep track of the power used in case all the selected components are not able to successfully activate
+
         //if there are any weapons in the selection
         if(componentsToActivate.Any(c=>c is Component_Weapon))
         {
             yield return StartCoroutine(WeaponTargetingSequence());
-            numWeaponsActivated = 0;
+
+            numWeaponsActivated = 0; //keeps tracks of the callbacks from the activated weapons to know when all the weapons are done firing
 
             if(targetComponent)
             {
-                //Transform targetShipTrans = targetShip.transform;
-                //trans.LookAt(targetShipTrans);
-                //Transform targetCompTrans = targetComponent.transform;
                 trans.LookAt(targetComponent.transform);
 
+                //Activates each weapon in turn
                 foreach (Component_Weapon weapon in componentsToActivate.Where(c => c is Component_Weapon))
                 {
                     if (targetComponent && targetComponent.CompHP > 0.0f)
@@ -71,14 +76,18 @@ public class PlayerAttack : MonoBehaviour
             }
             #endif
         }
-
+        //waits until all weapons have completes their animation
         while(numWeaponsActivated>0)
         {
             yield return null;
         }
+
+        //raises the event with the power consumed by the components who managed to activate successfully
         activationComplete(totalPowerUsed);
 
+        //removes the targeting panel once weapon activation is complete
         TargetShip(targetShip, false);
+        //focuses the camera back on the ship
         yield return StartCoroutine(CameraDirector.Instance.MoveToFocusOn(trans, GlobalVars.CameraMoveToFocusPeriod));
 
 
@@ -88,11 +97,12 @@ public class PlayerAttack : MonoBehaviour
 
     #region PrivateMethods
     
+    //Waits for the player to select the target ship and target component to fire the selected weapons at
     private IEnumerator WeaponTargetingSequence()
     {
+
         targetShipIndex = 0;
         targetConfirmed = false;
-        
         targetComponent = null;
 
         List<AI_Ship> ai_ships = TurnBasedCombatSystem.Instance.ai_Ships;
@@ -109,19 +119,22 @@ public class PlayerAttack : MonoBehaviour
             Debug.LogError("No ai ships found");
         }
         #endif
-        
+        //aims camera at the ship that iscurrently targeted 
         yield return StartCoroutine(CameraDirector.Instance.AimAtTarget(trans, ai_ships[targetShipIndex].transform, GlobalVars.CameraAimAtPeriod));
+        //shows the targeting panel for the target ship
         TargetShip(ai_ships[targetShipIndex], true);
 
+        //runs until a targetcomponent is successfully confirmed (until a component is clicked on)
         while(!targetConfirmed)
         {
+            //end targeting sequence upon hitting Esc
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 TargetShip(ai_ships[targetShipIndex], false);
                 targetConfirmed = true;
-                //targetShip = null;
                 targetComponent = null;
             }
+            //switch to the next ai ship 
             if (Input.GetKeyDown(KeyCode.Tab))
             {
                 TargetShip(ai_ships[targetShipIndex], false);
@@ -129,28 +142,19 @@ public class PlayerAttack : MonoBehaviour
                 targetShip = ai_ships[targetShipIndex];
                 //Debug.Log(targetShipIndex);
                 TargetShip(ai_ships[targetShipIndex], true);
-
                 yield return StartCoroutine(CameraDirector.Instance.AimAtTarget(trans, ai_ships[targetShipIndex].transform, GlobalVars.CameraAimAtPeriod));
             }
-            //if(Input.GetMouseButtonDown((int)MouseButton.Left))
-            //{
-            //    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            //    RaycastHit hit;
-            //    if(Physics.Raycast(ray, out hit, 1000.0f, 1<<TagsAndLayers.AI_ShipLayer))
-            //    {
-            //        Debug.Log(hit.collider.gameObject.name);
-            //        targetConfirmed = true;
-            //        targetShip = hit.collider.gameObject.GetComponent<AI_Ship>();
-            //    }
-            //}
             yield return null;
 
         }//while
 
-        //TargetShip(ai_ships[targetShipIndex], false);
-
     }//WeaponTargetingSequence
 
+    /// <summary>
+    /// Shows a line to indicate line of fire and shows the target ship's targeting panel for the player to select a component to target
+    /// </summary>
+    /// <param name="targetUnit"></param>
+    /// <param name="show"></param>
     private void TargetShip(TurnBasedUnit targetUnit, bool show)
     {
         if(!targetShip)
@@ -159,8 +163,9 @@ public class PlayerAttack : MonoBehaviour
         }
         if (!show)
         {
-            DisplayTargetingLine(Vector3.zero, false);
-            targetUnit.ShowTargetingPanel(false);
+            DisplayTargetingLine(Vector3.zero, false); //hide line
+            targetUnit.ShowTargetingPanel(false); //hide panel
+            //unsubscribe to component callbacks
             foreach (ShipComponent component in targetUnit.Components)
             {
                 component.OnComponentClicked -= OnComponentClick;
@@ -170,7 +175,6 @@ public class PlayerAttack : MonoBehaviour
         }
         else
         {
-            //DisplayTargetingLine(targetUnit.transform.position, true);
             targetUnit.ShowTargetingPanel(true);
             foreach (ShipComponent component in targetUnit.Components)
             {
@@ -180,7 +184,10 @@ public class PlayerAttack : MonoBehaviour
             }
         }
     }
-
+    /// <summary>
+    /// The pointer leaves a component. Target component is de-selected.
+    /// </summary>
+    /// <param name="component"></param>
     private void OnComponentPointerExit(ShipComponent component)
     {
         if (targetComponent)
@@ -189,6 +196,10 @@ public class PlayerAttack : MonoBehaviour
         }
         component.Selected = false;
     }
+    /// <summary>
+    /// Mouse over a component. The first component in the direction of the component moused over is selected
+    /// </summary>
+    /// <param name="component"></param>
     private void OnComponentMouseOver(ShipComponent component)
     {
         //Debug.Log("Targeted component " + component.componentName);
@@ -200,7 +211,10 @@ public class PlayerAttack : MonoBehaviour
         DisplayTargetingLine(targetComponent.transform.position, true);
         targetComponent.Selected = true;
     }
-
+    /// <summary>
+    /// Click on a component. The first component in the direction of the component clicked on is selected and confirmed as the target to fire weapons at
+    /// </summary>
+    /// <param name="component"></param>
     private void OnComponentClick(ShipComponent component)
     {
         //Debug.Log("Selected target: " + component.componentName);

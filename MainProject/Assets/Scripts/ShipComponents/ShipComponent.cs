@@ -89,19 +89,30 @@ public abstract class ShipComponent : MonoBehaviour , IPointerClickHandler, IPoi
     #endregion Fields
 
     #region Methods
+
+    /// <summary>
+    /// Called when a component is clicked on. Raises the OnComponentClicked event.
+    /// </summary>
+    /// <param name="eventData"></param>
     public virtual void OnPointerClick(PointerEventData eventData)
     {
         Debug.Log("At component: Clicked on component " + componentName);
         //Selected = !Selected;
         OnComponentClicked(this);
     }
-
+    /// <summary>
+    /// Called when a component is moused over. Raises the OnComponentMouseOver event.
+    /// </summary>
+    /// <param name="eventData"></param>
     public void OnPointerEnter(PointerEventData eventData)
     {
         //Debug.Log("Entered component " + componentName); 
         OnComponentMouseOver(this);
     }
-
+    /// <summary>
+    /// Called when a pointer leaves a component. Raises the OnComponentPointerExit event.
+    /// </summary>
+    /// <param name="eventData"></param>
     public void OnPointerExit(PointerEventData eventData)
     {
         OnComponentPointerExit(this);
@@ -113,6 +124,11 @@ public abstract class ShipComponent : MonoBehaviour , IPointerClickHandler, IPoi
         compHP = maxHP;
 
     }
+    /// <summary>
+    /// The component takes the specified amount of damage. Starts the destroy routine if HP reaches 0
+    /// </summary>
+    /// <param name="_amountOfDamage"></param>
+    /// <returns></returns>
     public IEnumerator TakeDamage(float _amountOfDamage)
     {
 
@@ -126,7 +142,10 @@ public abstract class ShipComponent : MonoBehaviour , IPointerClickHandler, IPoi
             yield return StartCoroutine(Destroy());
         }
     }
-
+    /// <summary>
+    /// Just sets the gameobject to inactive for now
+    /// </summary>
+    /// <returns></returns>
     protected virtual IEnumerator Destroy()
     {
         Debug.Log(componentName + " Destroyed");

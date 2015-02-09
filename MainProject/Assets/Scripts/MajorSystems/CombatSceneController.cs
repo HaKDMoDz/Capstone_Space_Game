@@ -87,10 +87,11 @@ public class CombatSceneController : Singleton<CombatSceneController>
             unit.transform.RotateAroundYAxis(180.0f);
         }
 
-        //combat start
+        //combat start 
+        //comment out this line for the combat system tester to work
         yield return StartCoroutine(TurnBasedCombatSystem.Instance.StartCombat());
         yield return null;
-    }
+    }//SetupScene
 
     private void Init()
     {

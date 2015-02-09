@@ -7,7 +7,6 @@ using System;
 public class ShipBlueprint
 {
     #region Fields
-    //public string blueprintName;
     public Hull hull { get; set; }
     public Dictionary<ComponentSlot, ShipComponent> slot_component_table { get; private set; }
     public ShipBlueprintMetaData metaData { get; set; }
@@ -15,19 +14,29 @@ public class ShipBlueprint
 
     #region Methods
 
+    /// <summary>
+    /// This constuctor should only be used for temporary initialization of a ShipBlueprint that is going to have a full blueprint assigned into it. 
+    /// The ShipBlueprint(Hull) constructor should be used to instantiate a ShipBlueprint ready for use by passing in the Hull to build the blueprint with.
+    /// </summary>
     public ShipBlueprint() 
     {
         Init();
     }
+    
     public ShipBlueprint(Hull hull)
     {
         Init();
         this.hull = hull;
     }
 
+    /// <summary>
+    /// Adds the specified component to the specified slot on the shipblueprint. Error checking should be done in advance to make sure the current slot is empty so a new component can be installed on it.
+    /// </summary>
+    /// <param name="slot"></param>
+    /// <param name="component"></param>
     public void AddComponent(ComponentSlot slot, ShipComponent component)
     {
-#if !NO_DEBUG
+#if FULL_DEBUG || LOW_DEBUG
         if(slot_component_table.ContainsKey(slot))
         {
             #if FULL_DEBUG
@@ -66,15 +75,18 @@ public class ShipBlueprint
         //slot.InstalledComponent = null;
 #endif
     }//RemoveComponent
+
     public void GenerateMetaData()
     {
         metaData.excessPower = CalculateExcessPower();
     }
+
     public void GenerateMetaData(string blueprintName)
     {
         metaData.blueprintName = blueprintName;
         GenerateMetaData();
     }
+
     public float CalculateExcessPower()
     {
         float excessPower = 0.0f;

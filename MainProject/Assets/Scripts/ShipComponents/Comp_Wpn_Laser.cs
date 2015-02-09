@@ -14,6 +14,7 @@ public class Comp_Wpn_Laser : Component_Weapon
     private LineRenderer line;
     int length;
 
+
     public override void Init(TurnBasedUnit parentShip)
     {
         base.Init(parentShip);
@@ -30,7 +31,6 @@ public class Comp_Wpn_Laser : Component_Weapon
         //laserImpactEffect.Stop();
     }
 
-    //public override IEnumerator Fire(Transform target, System.Action OnActivationComplete)
     public override IEnumerator Fire(ShipComponent targetComp, System.Action OnActivationComplete)
     {
         if (targetComp && targetComp.CompHP > 0.0f)
@@ -52,6 +52,11 @@ public class Comp_Wpn_Laser : Component_Weapon
         }
         OnActivationComplete();
     }
+
+    /// <summary>
+    /// Creates the beam effect for the predefined duration
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator CreateBeamEffectForDuration()
     {
         float currentTime = 0.0f;

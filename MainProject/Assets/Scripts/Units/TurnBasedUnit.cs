@@ -87,7 +87,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
 
     //TEMP
     private float hullHP;
-    public float HullHP
+    public float HullHP //set hp and hp bar
     {
         get { return hullHP; }
         private set 
@@ -100,7 +100,8 @@ public abstract class TurnBasedUnit : MonoBehaviour
 
     public float MaxShields { get; private set; }
     private float shieldStrength;
-    public float ShieldStrength {
+    public float ShieldStrength //set shield and shield bar
+    {
         get { return shieldStrength; }
         private set
         {
@@ -114,37 +115,37 @@ public abstract class TurnBasedUnit : MonoBehaviour
     private Slider hpBar;
     private Slider shieldBar;
 
-    //TEMP
+    #endregion Fields
+
+
+    #region Methods
+
+    #region PublicMethods
+
     /// <summary>
-    /// Coroutine for a ship taking Damage. Accounts for 0 or less hull HP
-    /// Will need to be replaced once component system is active
+    /// Coroutine for a ship taking Damage. Shield takes damage first.
     /// </summary>
     /// <param name="_amountOfDamage">The amount of Damage done to the ship</param>
     /// <returns>null or the Destroy() Coroutine</returns>
     public IEnumerator TakeDamage(float _amountOfDamage)
     {
-        
-        if(ShieldStrength>=_amountOfDamage)
+        if (ShieldStrength >= _amountOfDamage)
         {
             ShieldStrength -= _amountOfDamage;
-            //shieldBar.value -= _amountOfDamage / MaxShields;
         }
-        else
+        else //damage bleeds over to hull
         {
-            _amountOfDamage-=ShieldStrength;
+            _amountOfDamage -= ShieldStrength;
             ShieldStrength = 0.0f;
-            //shieldBar.value = HullHP -= _amountOfDamage;
-            //hpBar.value -= _amountOfDamage / MaxHullHP;
             HullHP -= _amountOfDamage;
             #if FULL_DEBUG
             Debug.Log(name + " taking " + _amountOfDamage + " damage. Remaining HP: " + hullHP);
             #endif
-    
         }
         if (hullHP <= 0)
         {
             yield return StartCoroutine(Destroy());
-        }    
+        }
     }
 
     /// <summary>
@@ -170,19 +171,15 @@ public abstract class TurnBasedUnit : MonoBehaviour
 
         yield return new WaitForSeconds(1.0f);
 
-#if FULL_DEBUG
-        Debug.Log("Ship Destroyed");
-#endif
+        #if FULL_DEBUG
+        Debug.Log(name+" Destroyed");
+        #endif
     }
-
-
-
-
-    #endregion Fields
-
-    #region Methods
-    #region PublicMethods
-
+    /// <summary>
+    /// sets up references
+    /// </summary>
+    /// <param name="shipBP"></param>
+    /// <param name="shipMove"></param>
     public virtual void Init(ShipBlueprint shipBP, ShipMove shipMove)
     {
         this.shipBP = shipBP;
@@ -204,21 +201,22 @@ public abstract class TurnBasedUnit : MonoBehaviour
 
         trans = transform;
 
-#if FULL_DEBUG
+        #if FULL_DEBUG
         if (trans.FindChild("ComponentCamera") == null)
         {
             Debug.LogError("No Component camera found");
         }
-#endif
+        #endif
         componentCamera = trans.FindChild("ComponentCamera").gameObject;
         componentCamera.SetActive(false);
 
-#if FULL_DEBUG
+        #if FULL_DEBUG
         if (trans.FindChild("TargetingCamera") == null)
         {
             Debug.LogError("No Targeting camera found");
         }
-#endif
+        #endif
+
         targetingCamera = trans.FindChild("TargetingCamera").gameObject;
         targetingCamera.SetActive(false);
 
@@ -242,7 +240,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
             }
         }
 
-#if FULL_DEBUG
+        #if FULL_DEBUG
         if (!hpBar)
         {
             Debug.LogError("Could not find HPbar");
@@ -251,7 +249,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
         {
             Debug.LogError("Could not find ShieldBar");
         }
-#endif
+        #endif
 
 
         ShowHPBars(false);
@@ -266,12 +264,15 @@ public abstract class TurnBasedUnit : MonoBehaviour
     }
 
 
-
+    /// <summary>
+    /// Base virtual method to start the turn. Sets power to max.
+    /// </summary>
+    /// <returns></returns>
     public virtual IEnumerator ExecuteTurn()
     {
-#if FULL_DEBUG
+        #if FULL_DEBUG
         Debug.Log(shipBPMetaData.blueprintName + " executing turn");
-#endif
+        #endif
         currentPower = MaxPower;
 
         yield return null;
@@ -296,10 +297,6 @@ public abstract class TurnBasedUnit : MonoBehaviour
     }
 
     #endregion PublicMethods
-
-    #region InternalCallbacks
-
-    #endregion InternalCallbacks
 
     #endregion Methods
 }

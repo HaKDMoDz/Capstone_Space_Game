@@ -14,7 +14,12 @@ public abstract class Component_Weapon : ShipComponent
     [SerializeField]
     protected Transform shootPoint;
 
-
+    /// <summary>
+    /// Fires the weapon at the specified component and raises the OnActivationComplete callback once the animation is complete.
+    /// </summary>
+    /// <param name="targetComp"></param>
+    /// <param name="OnActivationComplete"></param>
+    /// <returns></returns>
     public virtual IEnumerator Fire(ShipComponent targetComp, Action OnActivationComplete)
     {
         Debug.Log("Weapon fire");
@@ -30,6 +35,11 @@ public abstract class Component_Weapon : ShipComponent
         yield return null;
     }
 
+    /// <summary>
+    /// Calculates the damage to be done based on the target's shielding, and the weapon's stats for hull penetration, etc. Calls the TakeDamage coroutines on the target component and target ship.
+    /// </summary>
+    /// <param name="targetComp"></param>
+    /// <returns></returns>
     protected IEnumerator DoDamage(ShipComponent targetComp)
     {
         TurnBasedUnit targetShip = targetComp.ParentShip;
@@ -54,7 +64,6 @@ public abstract class Component_Weapon : ShipComponent
         //{
         //    componentDamage += componentDamage * shieldDmgModifier / 100.0f;
         //}
-        //yield return StartCoroutine(targetComp.ParentShip.TakeDamage(componentDamage, damage * hullDamagePercent / 100.0f));
 
         
     }

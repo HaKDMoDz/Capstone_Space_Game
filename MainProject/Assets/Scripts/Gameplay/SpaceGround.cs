@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
 
-public class SpaceGround : Singleton<SpaceGround>, IPointerClickHandler, IPointerUpHandler, IPointerDownHandler, IDragHandler
+public class SpaceGround : Singleton<SpaceGround>, IPointerUpHandler, IPointerDownHandler, IDragHandler
 {
     public delegate void GroundClick(Vector3 worldPosition);
     public event GroundClick OnGroundClick = new GroundClick((Vector3) => { });
@@ -13,21 +13,20 @@ public class SpaceGround : Singleton<SpaceGround>, IPointerClickHandler, IPointe
 
     private bool holding = false;
 
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        //if (eventData.button == PointerEventData.InputButton.Left)
-        //{
-        //    holding = true;
-        //    OnGroundClick(eventData.worldPosition);
-        //}
-    }
 
-
+    /// <summary>
+    /// Called the pointer is released on the space ground
+    /// </summary>
+    /// <param name="eventData"></param>
     public void OnPointerUp(PointerEventData eventData)
     {
         holding = false;
     }
 
+    /// <summary>
+    /// Called when the pointer is clicked on the space ground. Raises the OnGroundClick event with the worldPosition of where on the ground the click happened
+    /// </summary>
+    /// <param name="eventData"></param>
     public void OnPointerDown(PointerEventData eventData)
     {
         if (eventData.button == PointerEventData.InputButton.Left)
@@ -37,6 +36,19 @@ public class SpaceGround : Singleton<SpaceGround>, IPointerClickHandler, IPointe
         }
     }
     
+    /// <summary>
+    /// Called when the pointer is dragged on the space ground. Raises the OnGroundClick event with the worldPosition of where on the ground the drag happened
+    /// </summary>
+    /// <param name="eventData"></param>
+    public void OnDrag(PointerEventData eventData)
+    {
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            OnGroundClick(eventData.worldPosition);
+        }
+    }
+
+
     //private void Start()
     //{
     //    //InputManager.Instance.RegisterMouseButtonsHold(MouseDown, MouseButton.Left);
@@ -53,11 +65,5 @@ public class SpaceGround : Singleton<SpaceGround>, IPointerClickHandler, IPointe
     //    }
     //}
 
-    public void OnDrag(PointerEventData eventData)
-    {
-        if (eventData.button == PointerEventData.InputButton.Left)
-        {
-            OnGroundClick(eventData.worldPosition);
-        }
-    }
+
 }

@@ -88,7 +88,6 @@ public class AudioManager : Singleton<AudioManager>
 
     #region PrivateMethods
 
-
     private void PlaySound(Sound sound, Vector3 position)
     {
         SoundInfo soundInfo;

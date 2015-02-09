@@ -30,7 +30,10 @@ public class UI_Billboard : MonoBehaviour
 
     void OnCameraMove()
     {
-        trans.rotation = mainCamera.rotation;
+        if (trans)
+        {
+            trans.rotation = mainCamera.rotation;
+        }
     }
 	
 }

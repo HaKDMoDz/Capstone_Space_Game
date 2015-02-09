@@ -5,8 +5,8 @@ using System.Collections.Generic;
 public class CameraDirector : Singleton<CameraDirector>
 {
     #region Fields
-    #region EditorExposed
     
+    //EditorExposed
     [SerializeField]
     private float heightFocus = 200.0f;
     [SerializeField]
@@ -15,14 +15,11 @@ public class CameraDirector : Singleton<CameraDirector>
     private float distFocusAiming = 50.0f;
     [SerializeField]
     private float orbitSpeed = 30.0f;
-    #endregion EditorExposed
-
-    #region Internal
+    
+    //internal
     private float initialAngleX;
     private Quaternion initialRot;
     private Transform trans;
-    #endregion Internal
-
 
     public bool Shaking;
     private float ShakeDecay;
@@ -30,11 +27,10 @@ public class CameraDirector : Singleton<CameraDirector>
     private Vector3 OriginalPos;
     private Quaternion OriginalRot;
 
-    #region Events
+    //Events
     public delegate void CameraMoveEvent();
     public event CameraMoveEvent OnCameraMove = new CameraMoveEvent(() => { });
 
-    #endregion Events
 
     #endregion Fields
 
@@ -42,6 +38,12 @@ public class CameraDirector : Singleton<CameraDirector>
 
     #region PublicMethods
 
+    /// <summary>
+    /// Moves the camera to focus on the given target over the specified period. The Camera arrives at a location behind the camera and a predefined height
+    /// </summary>
+    /// <param name="target"></param>
+    /// <param name="period"></param>
+    /// <returns></returns>
     public IEnumerator MoveToFocusOn(Transform target, float period)
     {
         Vector3 targetPos = target.position;
@@ -49,6 +51,14 @@ public class CameraDirector : Singleton<CameraDirector>
         targetPos.z -= heightFocus / Mathf.Tan(initialAngleX);
         yield return StartCoroutine(MoveAndRotate(targetPos, initialRot, period));
     }
+
+    /// <summary>
+    /// The camera swoops down to orient itself almost horizationally and aims at the specified target over the specified perdiod. The height above the current focus is predefined.
+    /// </summary>
+    /// <param name="currentFocus"></param>
+    /// <param name="target"></param>
+    /// <param name="period"></param>
+    /// <returns></returns>
     public IEnumerator AimAtTarget(Transform currentFocus, Transform target, float period)
     {
         Vector3 targetToFocusDir = currentFocus.position - target.position;
@@ -59,6 +69,7 @@ public class CameraDirector : Singleton<CameraDirector>
         Vector3 desiredCamPos = target.position + targetToFocusDir + Vector3.up * heightAiming;
         yield return StartCoroutine(MoveAndRotate(desiredCamPos, desiredCamRotation, period));
     }
+
     public void OrbitAroundImmediate(Transform target, float xAngle, float yAngle)
     {
         float distanceToTarget = Vector3.Distance(target.position, trans.position);

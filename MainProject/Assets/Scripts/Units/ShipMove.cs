@@ -15,6 +15,10 @@ public class ShipMove : MonoBehaviour
     {
         trans = transform;
     }
+    /// <summary>
+    /// Starts moving towards the specified destination
+    /// </summary>
+    /// <returns></returns>
     public IEnumerator Move()
     {
         //Debug.Log("moving to " + destination);

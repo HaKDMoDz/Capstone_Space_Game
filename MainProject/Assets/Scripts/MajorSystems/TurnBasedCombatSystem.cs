@@ -160,7 +160,8 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
 
             CombatSystemInterface.Instance.AddShipButton(unit);
         }
-    }
+    }//PrepareForCombat
+
     /// <summary>
     /// Loops through each ship and calculates it's turn delay based on the formula
     /// </summary>
@@ -192,7 +193,7 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
             unit.TurnDelay = 1 / turnFrequency;
             //Debug.Log("Turn delay for " + unit.shipBPMetaData.blueprintName + ": " + unit.TurnDelay);
         }
-    }
+    }//CalculateTurnDelay
 
     /// <summary>
     /// called right before each ship takes it's turn. Checks if there are multiple units with the same turn delay and updates the GUI with the current turn order
@@ -231,7 +232,8 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
                 CombatSystemInterface.Instance.UpdateTurnOrderPanel(units);
             }
         }
-    }
+    }//PreTurnActions
+
     /// <summary>
     /// Called after a ship takes it's turn. Subtracts the current Time from each ship and other necessary work if there are multiple ships with the same time
     /// </summary>
@@ -263,7 +265,8 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
                 unit.TimeLeftToTurn -= currentTurnTime;
             }
         }
-    }
+    }//PostTurnActions
+
     /// <summary>
     /// Executes the turn for the first unit. Let's the camera know to focus on the current unit and then calls Execute Turn on the first unit
     /// </summary>
