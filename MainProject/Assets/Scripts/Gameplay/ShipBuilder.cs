@@ -28,7 +28,19 @@ public class ShipBuilder
     {
         saveSystem = new ShipBlueprintSaveSystem();
     }
-
+    /// <summary>
+    /// Temp method for AI building
+    /// </summary>
+    /// <param name="shipType"></param>
+    /// <param name="blueprint"></param>
+    /// <param name="position"></param>
+    /// <param name="rotation"></param>
+    /// <returns></returns>
+    public TurnBasedUnit BuildShip(ShipType shipType, ShipBlueprint blueprint, Vector3 position, Quaternion rotation)
+    {
+        blueprintBeingBuilt = blueprint;
+        return InstantiateShip(shipType, position, rotation); 
+    }
     public TurnBasedUnit BuildShip(ShipType shipType, string blueprintName, Vector3 position, Quaternion rotation)
     {
         #if !NO_DEBUG
