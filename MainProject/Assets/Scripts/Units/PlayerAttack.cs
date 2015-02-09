@@ -10,7 +10,7 @@ public class PlayerAttack : MonoBehaviour
     #region Internal
 
     private Transform trans;
-    //private AI_Ship targetShip;
+    private AI_Ship targetShip;
     private ShipComponent targetComponent;
 
     private bool targetConfirmed = false;
@@ -77,6 +77,8 @@ public class PlayerAttack : MonoBehaviour
             yield return null;
         }
         activationComplete(totalPowerUsed);
+
+        TargetShip(targetShip, false);
         yield return StartCoroutine(CameraDirector.Instance.MoveToFocusOn(trans, GlobalVars.CameraMoveToFocusPeriod));
 
 
@@ -90,11 +92,12 @@ public class PlayerAttack : MonoBehaviour
     {
         targetShipIndex = 0;
         targetConfirmed = false;
-        //targetShip = null;
+        
         targetComponent = null;
 
         List<AI_Ship> ai_ships = TurnBasedCombatSystem.Instance.ai_Ships;
         numAiShips = ai_ships.Count;
+        targetShip = ai_ships[targetShipIndex];
 
         #if UNITY_EDITOR
         Debug.Log("Select Target to fire upon: [Click] to confirm, [Esc] to cancel, [Tab] to switch targets");
@@ -123,6 +126,7 @@ public class PlayerAttack : MonoBehaviour
             {
                 TargetShip(ai_ships[targetShipIndex], false);
                 targetShipIndex = ++targetShipIndex % numAiShips;
+                targetShip = ai_ships[targetShipIndex];
                 //Debug.Log(targetShipIndex);
                 TargetShip(ai_ships[targetShipIndex], true);
 
@@ -143,12 +147,16 @@ public class PlayerAttack : MonoBehaviour
 
         }//while
 
-        TargetShip(ai_ships[targetShipIndex], false);
+        //TargetShip(ai_ships[targetShipIndex], false);
 
     }//WeaponTargetingSequence
 
     private void TargetShip(TurnBasedUnit targetUnit, bool show)
     {
+        if(!targetShip)
+        {
+            return;
+        }
         if (!show)
         {
             DisplayTargetingLine(Vector3.zero, false);
@@ -175,6 +183,10 @@ public class PlayerAttack : MonoBehaviour
 
     private void OnComponentPointerExit(ShipComponent component)
     {
+        if (targetComponent)
+        {
+            targetComponent.Selected = false;
+        }
         component.Selected = false;
     }
     private void OnComponentMouseOver(ShipComponent component)

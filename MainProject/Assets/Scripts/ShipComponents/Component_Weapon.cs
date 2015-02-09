@@ -32,16 +32,30 @@ public abstract class Component_Weapon : ShipComponent
 
     protected IEnumerator DoDamage(ShipComponent targetComp)
     {
-        float componentDamage = damage * (1.0f - hullDamagePercent / 100.0f);
+        TurnBasedUnit targetShip = targetComp.ParentShip;
+        if(targetShip.ShieldStrength>=damage)
+        {
+            yield return StartCoroutine(targetShip.TakeDamage(damage));
+        }
+        else
+        {
+            float remainingDamage = damage-targetShip.ShieldStrength;
+            float componentDamage = remainingDamage * (1.0f - hullDamagePercent / 100.0f);
+            float hullDamage = remainingDamage * hullDamagePercent / 100.0f;
+            yield return StartCoroutine(targetComp.TakeDamage(componentDamage));
+            yield return StartCoroutine(targetComp.ParentShip.TakeDamage(hullDamage));
+        }
+
+        
         
         //if comp is armour
         //  compDmg+=compDmg*armourMod%/100
-        if(targetComp is Comp_Def_Shield)
-        {
-            componentDamage += componentDamage * shieldDmgModifier / 100.0f;
-        }
+        //if(targetComp is Comp_Def_Shield)
+        //{
+        //    componentDamage += componentDamage * shieldDmgModifier / 100.0f;
+        //}
+        //yield return StartCoroutine(targetComp.ParentShip.TakeDamage(componentDamage, damage * hullDamagePercent / 100.0f));
 
-        yield return StartCoroutine(targetComp.TakeDamage(componentDamage));
-        yield return StartCoroutine(targetComp.ParentShip.TakeDamage(damage * hullDamagePercent / 100.0f));
+        
     }
 }

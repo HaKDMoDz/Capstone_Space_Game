@@ -31,7 +31,7 @@ public class ShipBlueprint
         if(slot_component_table.ContainsKey(slot))
         {
             #if FULL_DEBUG
-            //Debug.LogError("Slot " + slot.index + " already has component " + slot_component_table[slot].componentName + " installed...replacing");
+            Debug.LogError("Slot " + slot.index + " already has component " + slot_component_table[slot].componentName + " installed. We should explicitly clear the slot before installing a different component");
             #endif
             slot_component_table[slot] = component;
         }

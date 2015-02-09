@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class UI_Billboard : MonoBehaviour 
 {
-    [SerializeField]
+    //[SerializeField]
     private Transform mainCamera;
 
     private Transform trans;
@@ -12,8 +12,19 @@ public class UI_Billboard : MonoBehaviour
     void Start()
     {
         trans = transform;
-        mainCamera = GalaxyCamera.Instance.transform;
-        GalaxyCamera.Instance.OnCameraMove += OnCameraMove;
+        var mainCamScript = Camera.main.GetComponent<GalaxyCamera>();
+        if(mainCamScript)
+        {
+            mainCamera = GalaxyCamera.Instance.transform;
+            GalaxyCamera.Instance.OnCameraMove += OnCameraMove;
+        }
+        else
+        {
+            var camScript = Camera.main.GetComponent<CameraDirector>();
+            mainCamera = CameraDirector.Instance.transform;
+            CameraDirector.Instance.OnCameraMove += OnCameraMove;
+        }
+        
         OnCameraMove();
     }
 

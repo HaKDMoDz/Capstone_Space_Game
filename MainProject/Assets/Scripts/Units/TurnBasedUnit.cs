@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -78,7 +79,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
     {
         return expolosionObject;
     }
-    
+
     public ShipBlueprintMetaData shipBPMetaData { get; private set; }
     public ShipMove shipMove { get; private set; }
     protected ShipBlueprint shipBP;
@@ -86,7 +87,32 @@ public abstract class TurnBasedUnit : MonoBehaviour
 
     //TEMP
     private float hullHP;
-    public float HullHP { get { return hullHP; } private set { hullHP = value; } }
+    public float HullHP
+    {
+        get { return hullHP; }
+        private set 
+        {
+            float damage = hullHP - value;
+            hpBar.value -= damage / MaxHullHP;
+            hullHP = value; 
+        }
+    }
+
+    public float MaxShields { get; private set; }
+    private float shieldStrength;
+    public float ShieldStrength {
+        get { return shieldStrength; }
+        private set
+        {
+            float damage = shieldStrength - value;
+            shieldBar.value -= damage / MaxShields;
+            shieldStrength = value; 
+        }
+    }
+
+    [SerializeField]
+    private Slider hpBar;
+    private Slider shieldBar;
 
     //TEMP
     /// <summary>
@@ -98,14 +124,27 @@ public abstract class TurnBasedUnit : MonoBehaviour
     public IEnumerator TakeDamage(float _amountOfDamage)
     {
         
-        hullHP -= _amountOfDamage;
-        #if FULL_DEBUG
-        Debug.Log(name+ " taking "+ _amountOfDamage+ " damage. Remaining HP: " + hullHP);
-        #endif
+        if(ShieldStrength>=_amountOfDamage)
+        {
+            ShieldStrength -= _amountOfDamage;
+            //shieldBar.value -= _amountOfDamage / MaxShields;
+        }
+        else
+        {
+            _amountOfDamage-=ShieldStrength;
+            ShieldStrength = 0.0f;
+            //shieldBar.value = HullHP -= _amountOfDamage;
+            //hpBar.value -= _amountOfDamage / MaxHullHP;
+            HullHP -= _amountOfDamage;
+            #if FULL_DEBUG
+            Debug.Log(name + " taking " + _amountOfDamage + " damage. Remaining HP: " + hullHP);
+            #endif
+    
+        }
         if (hullHP <= 0)
         {
             yield return StartCoroutine(Destroy());
-        }
+        }    
     }
 
     /// <summary>
@@ -122,21 +161,21 @@ public abstract class TurnBasedUnit : MonoBehaviour
         //play explosion juice (screen shake, etc)
         yield return new WaitForSeconds(1.75f);
         Camera.main.GetComponent<CameraDirector>().DoShake();
-        
+
         //wait for explosion to finish
         yield return new WaitForSeconds(1.0f);
-        
+
         //remove ship
         TurnBasedCombatSystem.Instance.KillShip(this);
-        
+
         yield return new WaitForSeconds(1.0f);
 
-        #if FULL_DEBUG
+#if FULL_DEBUG
         Debug.Log("Ship Destroyed");
-        #endif  
+#endif
     }
 
- 
+
 
 
     #endregion Fields
@@ -152,36 +191,75 @@ public abstract class TurnBasedUnit : MonoBehaviour
         this.shipMove.Init();
         timeLeftToTurn = turnDelay;
 
+        MaxShields = 0.0f;
         foreach (ShipComponent component in shipBP.slot_component_table.Values)
         {
             component.Init(this);
             components.Add(component);
+            if (component is Comp_Def_Shield)
+            {
+                MaxShields += ((Comp_Def_Shield)component).shieldStrength;
+            }
         }
 
         trans = transform;
 
-        #if FULL_DEBUG
-        if (trans.FindChild("ComponentCamera")==null)
+#if FULL_DEBUG
+        if (trans.FindChild("ComponentCamera") == null)
         {
             Debug.LogError("No Component camera found");
         }
-        #endif
+#endif
         componentCamera = trans.FindChild("ComponentCamera").gameObject;
         componentCamera.SetActive(false);
 
-        #if FULL_DEBUG
+#if FULL_DEBUG
         if (trans.FindChild("TargetingCamera") == null)
         {
             Debug.LogError("No Targeting camera found");
         }
-        #endif
+#endif
         targetingCamera = trans.FindChild("TargetingCamera").gameObject;
         targetingCamera.SetActive(false);
 
         expolosionObject = trans.FindChild("Explosion").gameObject;
-       
+
+        Canvas gui = gameObject.GetComponentInChildren<Canvas>();
+        if (!gui)
+        {
+            Debug.LogError("could not find GUI");
+        }
+
+        foreach (Slider slider in GetComponentsInChildren<Slider>())
+        {
+            if (slider.name == "HPbar")
+            {
+                hpBar = slider;
+            }
+            else if (slider.name == "ShieldBar")
+            {
+                shieldBar = slider;
+            }
+        }
+
+#if FULL_DEBUG
+        if (!hpBar)
+        {
+            Debug.LogError("Could not find HPbar");
+        }
+        if (!shieldBar)
+        {
+            Debug.LogError("Could not find ShieldBar");
+        }
+#endif
+
+
+        ShowHPBars(false);
+
         maxHullHP = shipBP.hull.HullHP;
         hullHP = maxHullHP;
+
+        ShieldStrength = MaxShields;
 
         maxPower = shipBPMetaData.excessPower;
         currentPower = MaxPower;
@@ -191,9 +269,9 @@ public abstract class TurnBasedUnit : MonoBehaviour
 
     public virtual IEnumerator ExecuteTurn()
     {
-        #if FULL_DEBUG
+#if FULL_DEBUG
         Debug.Log(shipBPMetaData.blueprintName + " executing turn");
-        #endif
+#endif
         currentPower = MaxPower;
 
         yield return null;
@@ -208,12 +286,19 @@ public abstract class TurnBasedUnit : MonoBehaviour
     {
         CombatSystemInterface.Instance.ShowTargetingPanel(show, name);
         targetingCamera.SetActive(show);
+        ShowHPBars(show);
+    }
+
+    public void ShowHPBars(bool show)
+    {
+        hpBar.gameObject.SetActive(show);
+        shieldBar.gameObject.SetActive(show);
     }
 
     #endregion PublicMethods
 
     #region InternalCallbacks
-    
+
     #endregion InternalCallbacks
 
     #endregion Methods
