@@ -72,20 +72,22 @@ public class CombatSceneController : Singleton<CombatSceneController>
 
         //build AI fleet
 
-        foreach (string blueprintName in pirateFleetData.currentFleet_BlueprintNames)
-        {
-            TurnBasedUnit unit = shipBuilder.BuildShip(ShipType.AI_Ship, blueprintName, aiSpawnPos, Quaternion.identity);
-            #if FULL_DEBUG
-            if (unit == null)
-            {
-                Debug.Log("shipbuilder returned null");
-            }
-            #endif
+        //foreach (string blueprintName in pirateFleetData.currentFleet_BlueprintNames)
+        //{
+        //    TurnBasedUnit unit = shipBuilder.BuildShip(ShipType.AI_Ship, blueprintName, aiSpawnPos, Quaternion.identity);
+        //    #if FULL_DEBUG
+        //    if (unit == null)
+        //    {
+        //        Debug.Log("shipbuilder returned null");
+        //    }
+        //    #endif
             
-            TurnBasedCombatSystem.Instance.AddShip(unit);
-            aiSpawnPos.x -= spawnSpacing;
-            unit.transform.RotateAroundYAxis(180.0f);
-        }
+        //    TurnBasedCombatSystem.Instance.AddShip(unit);
+        //    aiSpawnPos.x -= spawnSpacing;
+        //    unit.transform.RotateAroundYAxis(180.0f);
+        //}
+
+
 
         //combat start 
         //comment out this line for the combat system tester to work

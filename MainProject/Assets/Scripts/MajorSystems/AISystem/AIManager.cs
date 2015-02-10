@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class AIManager : MonoBehaviour 
 {
@@ -17,28 +18,28 @@ public class AIManager : MonoBehaviour
     public Comp_Wpn_Railgun railgun;
     public Comp_Wpn_Repair_Beam repairBeam;
 
-    public Hull corvette, frigate, cruiser, battleship;
+    public static List<ShipBlueprint> blueprints;
 
-    public ComponentSlot componentSlot;
+    private ShipBuilder shipBuilder;
 
-	// Use this for initialization
 	void Awake () 
     {
         AI_Fleet.RandomManager.InitializeManager();
         pop1 = new AI_Fleet.Population(10, this);
-	}
+        blueprints = pop1.GenerateBluePrints();
 
-    public void OnMouseDown()
-    {
-        Debug.Log("AI_Debug");
-        //pop1.DebugDisplay();
+        Vector3 aiSpawnPos = new Vector3(0, 0, 100);
+        int spawnSpacing = 50;
 
-        pop1.GenerateBluePrints();
-    }
-	
-	// Update is called once per frame
-	void Update () 
-    {
-	
+        shipBuilder = new ShipBuilder();
+        //build random AI fleet
+        foreach (ShipBlueprint sbp in AIManager.blueprints)
+        {
+            TurnBasedUnit unit = shipBuilder.BuildShip(ShipType.AI_Ship, sbp, aiSpawnPos, Quaternion.identity);
+            TurnBasedCombatSystem.Instance.AddShip(unit);
+            aiSpawnPos.x -= spawnSpacing;
+            unit.transform.RotateAroundYAxis(180.0f);
+        }
+
 	}
 }

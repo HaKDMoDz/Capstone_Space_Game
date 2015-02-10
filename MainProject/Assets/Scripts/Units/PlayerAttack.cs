@@ -107,6 +107,7 @@ public class PlayerAttack : MonoBehaviour
 
         List<AI_Ship> ai_ships = TurnBasedCombatSystem.Instance.ai_Ships;
         numAiShips = ai_ships.Count;
+        Debug.Log(targetShipIndex);
         targetShip = ai_ships[targetShipIndex];
 
         #if UNITY_EDITOR

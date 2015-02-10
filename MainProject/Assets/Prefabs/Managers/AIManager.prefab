@@ -1,0 +1,77 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &111714
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 411714}
+  - 114: {fileID: 11411714}
+  - 135: {fileID: 13511714}
+  m_Layer: 0
+  m_Name: AIManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &411714
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 111714}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: .58640933, y: .0526435375, z: -.880857944}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+--- !u!114 &11411714
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 111714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d35ed90c5832db4781276288eed48c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  laser: {fileID: 11453040, guid: fefcdb3dd83588244adbb23ad13c2354, type: 2}
+  powerPlant: {fileID: 11400000, guid: 8374be886da01b34e976aeb47017201a, type: 2}
+  shield: {fileID: 11407202, guid: 875e5025256c66e4f80a3c62f54699c3, type: 2}
+  armour: {fileID: 11477078, guid: 99d4e8603f3c64a438b0c56b34f43213, type: 2}
+  thruster: {fileID: 11401294, guid: 20a23412d72e3544eac63af6bc3ab9ba, type: 2}
+  scanner: {fileID: 11444250, guid: 572d6d87e5661a64b9d13ddc9c3110c0, type: 2}
+  fighterBay: {fileID: 11400300, guid: c39269e99ac237f4b8542fc7e9873851, type: 2}
+  flakCannon: {fileID: 11419986, guid: 0856d01d826b09f448a0989800e6a384, type: 2}
+  missile: {fileID: 11401362, guid: 6f5f7af595eae194cadf7d55a6308216, type: 2}
+  railgun: {fileID: 11441394, guid: 3dfb89ba35a4a1a47aec7608aaf474c0, type: 2}
+  repairBeam: {fileID: 11420262, guid: 458c03e07fb28b445ba839162077ae98, type: 2}
+--- !u!135 &13511714
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 111714}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1.49000001
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 111714}
+  m_IsPrefabParent: 1
+  m_IsExploded: 1
