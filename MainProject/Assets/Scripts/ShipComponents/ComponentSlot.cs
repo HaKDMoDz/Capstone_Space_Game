@@ -19,7 +19,9 @@ public class ComponentSlot : MonoBehaviour
     public ShipComponent InstalledComponent
     {
         get { return installedComponent; }
-        set { installedComponent = value; }
+        set { installedComponent = value;
+        Debug.Log("Set installed component " + value);
+        }
     }
 
     #endregion Fields

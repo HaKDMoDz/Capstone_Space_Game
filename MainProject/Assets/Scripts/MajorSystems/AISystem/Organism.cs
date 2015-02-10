@@ -382,6 +382,8 @@ namespace AI_Fleet
             List<ComponentSlot> portComponentSlots = new List<ComponentSlot>();
             List<ComponentSlot> starboardComponentSlots = new List<ComponentSlot>();
 
+           // Debug.Log("hull grid count " + _bluePrint.hull.EmptyComponentGrid.Count);
+
             foreach (ComponentSlot slot in _bluePrint.hull.EmptyComponentGrid)
             {
                 switch (slot.Placement)
@@ -399,9 +401,10 @@ namespace AI_Fleet
                         starboardComponentSlots.Add(slot);
                         break;
                     case PlacementType.COUNT:
-                        Debug.Log("Invalid Placement Slot in BluePrintFromGene");
+                        Debug.LogError("Invalid Placement Slot in BluePrintFromGene");
                         break;
                     default:
+                        Debug.LogError("Invalid Placement Slot in BluePrintFromGene");
                         break;
                 }
             }
@@ -431,17 +434,23 @@ namespace AI_Fleet
             }
 
             //find an open spot
-
+            Debug.Log("collectionToCheck count " + collectionToCheck.Count);
             int nextOpenIndex = 0;
             foreach (ComponentSlot slot in collectionToCheck)
             {
+                Debug.Log("slot installed comp " + slot.InstalledComponent);
                 if (slot.InstalledComponent == null)
                 {
+                    //Debug.Log("Slot index " + slot.index+"is empty");
                     nextOpenIndex = slot.index;
                     break;
                 }
+                else
+                {
+                   // Debug.Log("Slot index " + slot.index + "NOT empty");
+                }
             }
-
+            Debug.Log("next open index: " + nextOpenIndex);
             _bluePrint.AddComponent(_bluePrint.hull.EmptyComponentGrid[nextOpenIndex], _component);
 
             ////add the component
