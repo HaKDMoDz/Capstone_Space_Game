@@ -9,7 +9,14 @@ public class ComponentTableEditor : Editor
 {
     int id;
     ShipComponent comp;
-    
+    IEnumerable<ComponentTableEntry> weapons;
+    IEnumerable<ComponentTableEntry> defenses;
+    IEnumerable<ComponentTableEntry> engineering;
+    IEnumerable<ComponentTableEntry> supports;
+
+    Vector3 rectXPos = new Vector3(0.09f, 0.19f, 0.75f);
+    float spacing = 0.02f;
+
     [MenuItem("Custom/Database/Create Component Table")]
     static void CreateTestData()
     {
@@ -39,49 +46,74 @@ public class ComponentTableEditor : Editor
             EditorGUI.LabelField(new Rect(0f, posY, Screen.width * 0.25f, EditorGUIUtility.singleLineHeight), "ID");
             EditorGUI.LabelField(new Rect(Screen.width * 0.26f, posY, Screen.width * 0.7f, EditorGUIUtility.singleLineHeight), "Component");
 
-            if (compTable.Comp_id_List.Where(entry => entry.component.CompType == ComponentType.Weapon).Count() > 0)
+            weapons = compTable.Comp_id_List.Where(entry => entry.component.CompType == ComponentType.Weapon);
+            defenses = compTable.Comp_id_List.Where(entry => entry.component.CompType == ComponentType.Defense);
+            engineering = compTable.Comp_id_List.Where(entry => entry.component.CompType == ComponentType.Engineering);
+            supports = compTable.Comp_id_List.Where(entry => entry.component.CompType == ComponentType.Support);
+
+            if (weapons.Count() > 0)
             {
                 posY += EditorGUIUtility.singleLineHeight;
                 EditorGUI.LabelField(new Rect(0f, posY, Screen.width, EditorGUIUtility.singleLineHeight), "Weapons");
-                foreach (ComponentTableEntry entry in compTable.Comp_id_List.Where(entry => entry.component.CompType == ComponentType.Weapon))
+                for (int i = 0; i < weapons.Count(); i++)
                 {
+                    ComponentTableEntry entry = weapons.ElementAt(i) ;
                     posY+=EditorGUIUtility.singleLineHeight;
-                    EditorGUI.IntField(new Rect(0f, posY, Screen.width*0.25f, EditorGUIUtility.singleLineHeight),entry.ID);
-                    EditorGUI.ObjectField(new Rect(Screen.width*.26f,posY, Screen.width,EditorGUIUtility.singleLineHeight),entry.component,typeof(ShipComponent),true);
+                    if(GUI.Button(new Rect(0.0f, posY, Screen.width*rectXPos.x, EditorGUIUtility.singleLineHeight),"-"))
+                    {
+                        compTable.RemoveEntry(entry.ID);
+                    }
+                    EditorGUI.IntField(new Rect(Screen.width*(rectXPos.x+spacing), posY, Screen.width*rectXPos.y, EditorGUIUtility.singleLineHeight),entry.ID);
+                    EditorGUI.ObjectField(new Rect(Screen.width*(rectXPos.y+spacing),posY, Screen.width*rectXPos.z,EditorGUIUtility.singleLineHeight),entry.component,typeof(ShipComponent),true);
                 }
             }
 
-            if (compTable.Comp_id_List.Where(entry => entry.component.CompType == ComponentType.Defense).Count() > 0)
+            if (defenses.Count() > 0)
             {
                 posY += EditorGUIUtility.singleLineHeight;
                 EditorGUI.LabelField(new Rect(0f, posY, Screen.width, EditorGUIUtility.singleLineHeight), "Defenses");
-                foreach (ComponentTableEntry entry in compTable.Comp_id_List.Where(entry => entry.component.CompType == ComponentType.Defense))
+                for (int i = 0; i < defenses.Count(); i++)
                 {
+                    ComponentTableEntry entry = defenses.ElementAt(i);
                     posY += EditorGUIUtility.singleLineHeight;
-                    EditorGUI.IntField(new Rect(0f, posY, Screen.width * 0.25f, EditorGUIUtility.singleLineHeight), entry.ID);
-                    EditorGUI.ObjectField(new Rect(Screen.width * .26f, posY, Screen.width, EditorGUIUtility.singleLineHeight), entry.component, typeof(ShipComponent), true);
+                    if (GUI.Button(new Rect(0.0f, posY, Screen.width * rectXPos.x, EditorGUIUtility.singleLineHeight), "-"))
+                    {
+                        compTable.RemoveEntry(entry.ID);
+                    }
+                    EditorGUI.IntField(new Rect(Screen.width * (rectXPos.x + spacing), posY, Screen.width * rectXPos.y, EditorGUIUtility.singleLineHeight), entry.ID);
+                    EditorGUI.ObjectField(new Rect(Screen.width * (rectXPos.y + spacing), posY, Screen.width * rectXPos.z, EditorGUIUtility.singleLineHeight), entry.component, typeof(ShipComponent), true);
                 }
             }
-            if (compTable.Comp_id_List.Where(entry => entry.component.CompType == ComponentType.Power).Count() > 0)
+            if (engineering.Count() > 0)
             {
                 posY += EditorGUIUtility.singleLineHeight;
-                EditorGUI.LabelField(new Rect(0f, posY, Screen.width, EditorGUIUtility.singleLineHeight), "Power");
-                foreach (ComponentTableEntry entry in compTable.Comp_id_List.Where(entry => entry.component.CompType == ComponentType.Power))
+                EditorGUI.LabelField(new Rect(0f, posY, Screen.width, EditorGUIUtility.singleLineHeight), "Engineering");
+                for (int i = 0; i < engineering.Count(); i++)
                 {
+                    ComponentTableEntry entry = engineering.ElementAt(i);
                     posY += EditorGUIUtility.singleLineHeight;
-                    EditorGUI.IntField(new Rect(0f, posY, Screen.width * 0.25f, EditorGUIUtility.singleLineHeight), entry.ID);
-                    EditorGUI.ObjectField(new Rect(Screen.width * .26f, posY, Screen.width, EditorGUIUtility.singleLineHeight), entry.component, typeof(ShipComponent), true);
+                    if (GUI.Button(new Rect(0.0f, posY, Screen.width * rectXPos.x, EditorGUIUtility.singleLineHeight), "-"))
+                    {
+                        compTable.RemoveEntry(entry.ID);
+                    }
+                    EditorGUI.IntField(new Rect(Screen.width * (rectXPos.x + spacing), posY, Screen.width * rectXPos.y, EditorGUIUtility.singleLineHeight), entry.ID);
+                    EditorGUI.ObjectField(new Rect(Screen.width * (rectXPos.y + spacing), posY, Screen.width * rectXPos.z, EditorGUIUtility.singleLineHeight), entry.component, typeof(ShipComponent), true);
                 }
             }
-            if (compTable.Comp_id_List.Where(entry => entry.component.CompType == ComponentType.Support).Count() > 0)
+            if (supports.Count() > 0)
             {
                 posY += EditorGUIUtility.singleLineHeight;
                 EditorGUI.LabelField(new Rect(0f, posY, Screen.width, EditorGUIUtility.singleLineHeight), "Support");
-                foreach (ComponentTableEntry entry in compTable.Comp_id_List.Where(entry => entry.component.CompType == ComponentType.Support))
+                for (int i = 0; i < supports.Count(); i++)
                 {
+                    ComponentTableEntry entry = supports.ElementAt(i);
                     posY += EditorGUIUtility.singleLineHeight;
-                    EditorGUI.IntField(new Rect(0f, posY, Screen.width * 0.25f, EditorGUIUtility.singleLineHeight), entry.ID);
-                    EditorGUI.ObjectField(new Rect(Screen.width * .26f, posY, Screen.width, EditorGUIUtility.singleLineHeight), entry.component, typeof(ShipComponent), true);
+                    if (GUI.Button(new Rect(0.0f, posY, Screen.width * rectXPos.x, EditorGUIUtility.singleLineHeight), "-"))
+                    {
+                        compTable.RemoveEntry(entry.ID);
+                    }
+                    EditorGUI.IntField(new Rect(Screen.width * (rectXPos.x + spacing), posY, Screen.width * rectXPos.y, EditorGUIUtility.singleLineHeight), entry.ID);
+                    EditorGUI.ObjectField(new Rect(Screen.width * (rectXPos.y + spacing), posY, Screen.width * rectXPos.z, EditorGUIUtility.singleLineHeight), entry.component, typeof(ShipComponent), true);
                 }
             }
 

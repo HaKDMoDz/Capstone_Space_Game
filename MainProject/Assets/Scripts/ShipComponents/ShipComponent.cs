@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System;
 #endregion Usings
 
-public enum ComponentType { Weapon, Defense, Power, Support }
+public enum ComponentType { Weapon, Defense, Engineering, Support }
 
 [Serializable]
 public abstract class ShipComponent : MonoBehaviour , IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler

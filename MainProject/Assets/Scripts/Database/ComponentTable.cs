@@ -76,6 +76,18 @@ public class ComponentTable : ScriptableObject
     {
         AddEntry(GenID(), comp);
     }
+    public void RemoveEntry(int _ID)
+    {
+        Debug.Log("Removing ID " + _ID);
+        ComponentTableEntry toDelete = comp_id_List.Find(c => c.ID == _ID);
+        if(toDelete == null)
+        {
+            Debug.LogError("Component to delete not found");
+            return;
+        }
+        comp_id_List.Remove(toDelete);
+
+    }
     public int GenID()
     {
         int genID = 0;

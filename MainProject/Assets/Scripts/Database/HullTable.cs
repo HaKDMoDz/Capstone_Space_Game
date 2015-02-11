@@ -68,6 +68,19 @@ public class HullTable : ScriptableObject
     {
         AddEntry(GenNextID(), hull);
     }
+
+    public void RemoveEntry(int _ID)
+    {
+        Debug.Log("Remove ID" + _ID);
+        HullTableEntry toDelete = Hull_id_List.Find(h => h.ID == _ID);
+        if(toDelete == null)
+        {
+            Debug.LogError("Hull to delete not found");
+            return;
+        }
+        hull_id_List.Remove(toDelete);
+    }
+
     public int GenNextID()
     {
         int genID = 0;

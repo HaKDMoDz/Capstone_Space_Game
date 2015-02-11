@@ -10,7 +10,8 @@ public class HullTableEditor : Editor
     int id;
     Hull hull;
 
-
+    Vector3 rectXPos = new Vector3(0.09f, 0.19f, 0.75f);
+    float spacing = 0.02f;
     [MenuItem("Custom/Database/Create Hull Table")]
     static void CreateHullTable()
     {
@@ -39,20 +40,26 @@ public class HullTableEditor : Editor
         { return; }
 
         float PosY = 50f;
-        
+
         EditorGUI.LabelField(new Rect(0f, PosY, Screen.width * .25f, EditorGUIUtility.singleLineHeight), "ID");
         EditorGUI.LabelField(new Rect(Screen.width * .26f, PosY, Screen.width * .7f, EditorGUIUtility.singleLineHeight), "Hull");
+
         if(hullTable.Hull_id_List==null)
         {
             Debug.Log("hull table null");
         }
-        foreach (HullTableEntry entry in hullTable.Hull_id_List)
-        {
-            PosY += EditorGUIUtility.singleLineHeight ;
-            EditorGUI.IntField(new Rect(0f, PosY, Screen.width * .25f, EditorGUIUtility.singleLineHeight), entry.ID);
-            EditorGUI.ObjectField(new Rect(Screen.width * .26f, PosY, Screen.width * .70f, EditorGUIUtility.singleLineHeight), entry.hull, typeof(Hull),true);
-            
 
+        for (int i = 0; i < hullTable.Hull_id_List.Count; i++)
+        {
+            HullTableEntry entry = hullTable.Hull_id_List[i];
+            PosY += EditorGUIUtility.singleLineHeight ;
+            if (GUI.Button(new Rect(0.0f, PosY, Screen.width * rectXPos.x, EditorGUIUtility.singleLineHeight), "-"))
+            {
+                hullTable.RemoveEntry(entry.ID);
+            }
+            EditorGUI.IntField(new Rect(Screen.width * (rectXPos.x + spacing), PosY, Screen.width * rectXPos.y, EditorGUIUtility.singleLineHeight), entry.ID);
+            EditorGUI.ObjectField(new Rect(Screen.width * (rectXPos.y + spacing), PosY, Screen.width * rectXPos.z, EditorGUIUtility.singleLineHeight), entry.hull, typeof(Hull), true);
+            
         }
 
         for (int i = 0; i < 5 + hullTable.Hull_id_List.Count * EditorGUIUtility.singleLineHeight / 6; i++)
