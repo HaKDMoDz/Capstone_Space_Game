@@ -58,8 +58,6 @@ public class Planet_Mission : MonoBehaviour
                 acceptAction = (() => invalidMission());
                 break;
         }
-
-
         MissionController.Instance.AddMission(ID, acceptAction);
 	}
 
