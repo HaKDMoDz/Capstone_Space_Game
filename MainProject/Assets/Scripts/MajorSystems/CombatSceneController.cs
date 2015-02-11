@@ -37,7 +37,12 @@ public class CombatSceneController : Singleton<CombatSceneController>
         playerFleetData = GameController.Instance.GameData.playerFleetData;
         pirateFleetData = GameController.Instance.GameData.pirates_AI_Data;
 
-        pirateFleetData.currentFleet_BlueprintNames = new List<string>(playerFleetData.currentFleet_BlueprintNames);
+        //pirate fleet init code
+        // pirateFleetData.currentFleet_BlueprintNames = new List<string>(playerFleetData.currentFleet_BlueprintNames);
+        List<string> ai_ships = new List<string>();
+        ai_ships.Add("ai1");
+        ai_ships.Add("ai2");
+        pirateFleetData.currentFleet_BlueprintNames = ai_ships;
 
         #if FULL_DEBUG
         if(playerFleetData.currentFleet_BlueprintNames.Count==0)
@@ -70,23 +75,23 @@ public class CombatSceneController : Singleton<CombatSceneController>
             spawnPos.x += spawnSpacing;
         }
 
-        AIManager.Instance.Init(shipBuilder);
+        //AIManager.Instance.Init(shipBuilder);
         //build AI fleet
 
-        //foreach (string blueprintName in pirateFleetData.currentFleet_BlueprintNames)
-        //{
-        //    TurnBasedUnit unit = shipBuilder.BuildShip(ShipType.AI_Ship, blueprintName, aiSpawnPos, Quaternion.identity);
-        //    #if FULL_DEBUG
-        //    if (unit == null)
-        //    {
-        //        Debug.Log("shipbuilder returned null");
-        //    }
-        //    #endif
-            
-        //    TurnBasedCombatSystem.Instance.AddShip(unit);
-        //    aiSpawnPos.x -= spawnSpacing;
-        //    unit.transform.RotateAroundYAxis(180.0f);
-        //}
+        foreach (string blueprintName in pirateFleetData.currentFleet_BlueprintNames)
+        {
+            TurnBasedUnit unit = shipBuilder.BuildShip(ShipType.AI_Ship, blueprintName, aiSpawnPos, Quaternion.identity);
+#if FULL_DEBUG
+            if (unit == null)
+            {
+                Debug.Log("shipbuilder returned null");
+            }
+#endif
+
+            TurnBasedCombatSystem.Instance.AddShip(unit);
+            aiSpawnPos.x -= spawnSpacing;
+            unit.transform.RotateAroundYAxis(180.0f);
+        }
 
 
 
