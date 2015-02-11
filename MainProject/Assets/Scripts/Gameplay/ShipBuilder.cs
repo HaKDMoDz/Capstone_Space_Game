@@ -41,21 +41,21 @@ public class ShipBuilder
         blueprintBeingBuilt = blueprint;
 #if FULL_DEBUG
         //if (shipType == ShipType.AI_Ship)
-        if(false)
-        {
-            Debug.LogError("BEFORE ... blueprint " + blueprintBeingBuilt);
-            Debug.LogError("hull.emptyCompGrid: ");
-            foreach (ComponentSlot slot in blueprintBeingBuilt.hull.EmptyComponentGrid)
-            {
-                Debug.LogError("ComponentSlot: " + slot.index + ": " + slot.InstalledComponent);
+        //if(false)
+        //{
+        //    Debug.LogError("BEFORE ... blueprint " + blueprintBeingBuilt);
+        //    Debug.LogError("hull.emptyCompGrid: ");
+        //    foreach (ComponentSlot slot in blueprintBeingBuilt.hull.EmptyComponentGrid)
+        //    {
+        //        Debug.LogError("ComponentSlot: " + slot.index + ": " + slot.InstalledComponent);
 
-            }
-            Debug.LogError("hull.index_slot_table: ");
-            foreach (var item in blueprintBeingBuilt.slot_component_table)
-            {
-                Debug.LogError("slot: " + item.Key + " comp: " + item.Value);
-            }
-        }
+        //    }
+        //    Debug.LogError("hull.index_slot_table: ");
+        //    foreach (var item in blueprintBeingBuilt.slot_component_table)
+        //    {
+        //        Debug.LogError("slot: " + item.Key + " comp: " + item.Value);
+        //    }
+        //}
         
 #endif
 
@@ -87,7 +87,7 @@ public class ShipBuilder
 
     private TurnBasedUnit InstantiateShip(ShipType shipType, Vector3 position, Quaternion rotation)
     {
-        hullBeingBuilt = GameObject.Instantiate(blueprintBeingBuilt.hull, position, rotation) as Hull;
+        hullBeingBuilt = GameObject.Instantiate(blueprintBeingBuilt.Hull, position, rotation) as Hull;
         #if FULL_DEBUG
         if (!hullBeingBuilt)
         {
@@ -103,9 +103,9 @@ public class ShipBuilder
            //  Debug.LogError("blueprint has: " + blueprintBeingBuilt.slot_component_table.Count);
         }
        
-        for (int i = 0; i < blueprintBeingBuilt.slot_component_table.Count; i++)
+        for (int i = 0; i < blueprintBeingBuilt.Slot_component_table.Count; i++)
         {
-            var slot_component = blueprintBeingBuilt.slot_component_table.ElementAt(i);
+            var slot_component = blueprintBeingBuilt.Slot_component_table.ElementAt(i);
             int slotIndex = slot_component.Key.index;
 
 #if !NO_DEBUG
@@ -117,7 +117,7 @@ public class ShipBuilder
                 {
                     //Debug.LogError("instantiated" + builtComponent + "in slotComp: " + slot_component.Key);
                 }
-                blueprintBeingBuilt.slot_component_table[slot_component.Key] = builtComponent;
+                blueprintBeingBuilt.Slot_component_table[slot_component.Key] = builtComponent;
                 builtComponent.transform.SetParent(slotTrans, true);
             }
             else

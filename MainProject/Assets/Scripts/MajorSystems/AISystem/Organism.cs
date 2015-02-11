@@ -296,30 +296,30 @@ namespace AI_Fleet
 
            // Debug.Log("hull grid count " + _bluePrint.hull.EmptyComponentGrid.Count);
 
-            foreach (ComponentSlot slot in _bluePrint.hull.EmptyComponentGrid)
-            {
-                switch (slot.Placement)
-                {
-                    case PlacementType.FORWARD:
-                        forwardComponentSlots.Add(slot);
-                        break;
-                    case PlacementType.AFT:
-                        aftComponentSlots.Add(slot);
-                        break;
-                    case PlacementType.PORT:
-                        portComponentSlots.Add(slot);
-                        break;
-                    case PlacementType.STARBOARD:
-                        starboardComponentSlots.Add(slot);
-                        break;
-                    case PlacementType.COUNT:
-                        Debug.LogError("Invalid Placement Slot in BluePrintFromGene");
-                        break;
-                    default:
-                        Debug.LogError("Invalid Placement Slot in BluePrintFromGene");
-                        break;
-                }
-            }
+            //foreach (ComponentSlot slot in _bluePrint.hull.EmptyComponentGrid)
+            //{
+            //    switch (slot.Placement)
+            //    {
+            //        case PlacementType.FORWARD:
+            //            forwardComponentSlots.Add(slot);
+            //            break;
+            //        case PlacementType.AFT:
+            //            aftComponentSlots.Add(slot);
+            //            break;
+            //        case PlacementType.PORT:
+            //            portComponentSlots.Add(slot);
+            //            break;
+            //        case PlacementType.STARBOARD:
+            //            starboardComponentSlots.Add(slot);
+            //            break;
+            //        case PlacementType.COUNT:
+            //            Debug.LogError("Invalid Placement Slot in BluePrintFromGene");
+            //            break;
+            //        default:
+            //            Debug.LogError("Invalid Placement Slot in BluePrintFromGene");
+            //            break;
+            //    }
+            //}
 
             //Debug.LogError("fwd: " + forwardComponentSlots.Count + " aft: " + aftComponentSlots.Count + " port: " + portComponentSlots.Count + "starb: " + starboardComponentSlots.Count);
 
@@ -387,7 +387,7 @@ namespace AI_Fleet
             if (nextOpenIndex != -1)
             {
                 //Debug.Log(nextOpenIndex + " " + _component);
-                _bluePrint.AddComponent(_bluePrint.hull.EmptyComponentGrid[nextOpenIndex], _component);
+                _bluePrint.AddComponent(_bluePrint.Hull.EmptyComponentGrid[nextOpenIndex], _component);
                 //Debug.Log(_bluePrint.hull.EmptyComponentGrid[nextOpenIndex].InstalledComponent);
                // _bluePrint.Display();
 
@@ -454,31 +454,31 @@ namespace AI_Fleet
 
         public void DebugDisplay()
         {
-            Debug.Log("Organism ID: " + ID + " hull: " + organismHull + " archetype: " + archetype);
-            Debug.Log("____________________________________________________________________");
-            foreach (Chromosome chromosome in genome)
-            {
-                chromosome.DebugDisplay();
-            }
-            Hull myHUll = OrganismHull2Hull(organismHull);
-            ShipBlueprint sbp = BluePrintFromGenes(genome[0].Alleles, myHUll);
-            sbp.hull = myHUll;
+            //Debug.Log("Organism ID: " + ID + " hull: " + organismHull + " archetype: " + archetype);
+            //Debug.Log("____________________________________________________________________");
+            //foreach (Chromosome chromosome in genome)
+            //{
+            //    chromosome.DebugDisplay();
+            //}
+            //Hull myHUll = OrganismHull2Hull(organismHull);
+            //ShipBlueprint sbp = BluePrintFromGenes(genome[0].Alleles, myHUll);
+            //sbp.hull = myHUll;
 
-            for (int i = 0; i < sbp.slot_component_table.Count; i++)
-            {
-                ComponentSlot cs = sbp.hull.index_slot_table[i];
-                if (cs.InstalledComponent == null)
-                {
-                    Debug.Log("{NULL_COMPONENT} ");
-                }
-                else
-                {
-                    Debug.Log("{" + sbp.slot_component_table[cs] + " ");
-                    Debug.Log(sbp.hull.index_slot_table[i].Placement + "} ");
-                }
-            }
-            GameObject.Destroy(myHUll);
-            Debug.Log("____________________________________________________________________");
+            //for (int i = 0; i < sbp.slot_component_table.Count; i++)
+            //{
+            //    ComponentSlot cs = sbp.hull.index_slot_table[i];
+            //    if (cs.InstalledComponent == null)
+            //    {
+            //        Debug.Log("{NULL_COMPONENT} ");
+            //    }
+            //    else
+            //    {
+            //        Debug.Log("{" + sbp.slot_component_table[cs] + " ");
+            //        Debug.Log(sbp.hull.index_slot_table[i].Placement + "} ");
+            //    }
+            //}
+            //GameObject.Destroy(myHUll);
+            //Debug.Log("____________________________________________________________________");
         }
     }
 }

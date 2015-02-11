@@ -10,13 +10,11 @@ public class ShipDesignTester : MonoBehaviour
 #if UNITY_EDITOR
 
     #region Fields
-    #region EditorExposed
+    //EditorExposed
     [SerializeField]
     private bool fastTest=true;
-    #endregion EditorExposed
-    #region Internal
+    //Internal
     private Dictionary<int, int> slotIndex_compID_table;
-    #endregion Internal
     #endregion Fields
 
     #region Methods
@@ -75,8 +73,8 @@ public class ShipDesignTester : MonoBehaviour
             .GetField("blueprintBeingBuilt", BindingFlags.NonPublic | BindingFlags.Instance)
             .GetValue(ShipDesignSystem.Instance) as ShipBlueprint;
         
-        int loadedHull_ID = HullTable.GetID(loadedBP.hull);
-        if (loadedHull_ID == hull_ID && loadedBP.slot_component_table.Count == 0)
+        int loadedHull_ID = HullTable.GetID(loadedBP.Hull);
+        if (loadedHull_ID == hull_ID && loadedBP.Slot_component_table.Count == 0)
         {
             Debug.Log("Loaded Blueprint matches");
         }
@@ -191,15 +189,15 @@ public class ShipDesignTester : MonoBehaviour
     #region Helper
     bool ValidateLoadedBlueprint(ShipBlueprint loadedBP, Dictionary<int, int> correct_slotIndex_compID_table, int correct_hull_ID)
     {
-        if (HullTable.GetID(loadedBP.hull) != correct_hull_ID)
+        if (HullTable.GetID(loadedBP.Hull) != correct_hull_ID)
         {
             return false;
         }
-        if (loadedBP.slot_component_table.Count != correct_slotIndex_compID_table.Count)
+        if (loadedBP.Slot_component_table.Count != correct_slotIndex_compID_table.Count)
         {
             return false;
         }
-        foreach (var slot_component in loadedBP.slot_component_table)
+        foreach (var slot_component in loadedBP.Slot_component_table)
         {
             int slotIndex = slot_component.Key.index;
             if(!correct_slotIndex_compID_table.ContainsKey(slotIndex))

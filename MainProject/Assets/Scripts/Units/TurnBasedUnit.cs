@@ -183,13 +183,13 @@ public abstract class TurnBasedUnit : MonoBehaviour
     public virtual void Init(ShipBlueprint shipBP, ShipMove shipMove)
     {
         this.shipBP = shipBP;
-        this.shipBPMetaData = shipBP.metaData;
+        this.shipBPMetaData = shipBP.MetaData;
         this.shipMove = shipMove;
         this.shipMove.Init();
         timeLeftToTurn = turnDelay;
 
         MaxShields = 0.0f;
-        foreach (ShipComponent component in shipBP.slot_component_table.Values)
+        foreach (ShipComponent component in shipBP.Slot_component_table.Values)
         {
             component.Init(this);
             components.Add(component);
@@ -254,12 +254,12 @@ public abstract class TurnBasedUnit : MonoBehaviour
 
         ShowHPBars(false);
 
-        maxHullHP = shipBP.hull.HullHP;
+        maxHullHP = shipBP.Hull.HullHP;
         hullHP = maxHullHP;
 
         ShieldStrength = MaxShields;
 
-        maxPower = shipBPMetaData.excessPower;
+        maxPower = shipBPMetaData.ExcessPower;
         currentPower = MaxPower;
     }
 
@@ -271,7 +271,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
     public virtual IEnumerator ExecuteTurn()
     {
         #if FULL_DEBUG
-        Debug.Log(shipBPMetaData.blueprintName + " executing turn");
+        Debug.Log(shipBPMetaData.BlueprintName + " executing turn");
         #endif
         currentPower = MaxPower;
 

@@ -68,17 +68,17 @@ public class CombatSystemTester : MonoBehaviour
         Debug.Log("Num turns for unit: ");
         foreach (var unit_turnCount in unit_turnCount_table)
         {
-            Debug.Log(unit_turnCount.Key.shipBPMetaData.blueprintName + " : " + unit_turnCount.Value + " turns");
+            Debug.Log(unit_turnCount.Key.shipBPMetaData.BlueprintName + " : " + unit_turnCount.Value + " turns");
         }
         TurnBasedUnit unitWithLeastTurns = unit_turnCount_table.Aggregate((current, next) =>
                                                 current.Value < next.Value ?
                                                 current : next)
                                                 .Key;
-        Debug.Log("Slowest unit: " + unitWithLeastTurns.shipBPMetaData.blueprintName);
+        Debug.Log("Slowest unit: " + unitWithLeastTurns.shipBPMetaData.BlueprintName);
         Debug.Log("Turn ratios: ");
         foreach (var unit_turnCount in unit_turnCount_table)
         {
-            Debug.Log(unit_turnCount.Key.shipBPMetaData.blueprintName + ": " + (float)unit_turnCount.Value / (float)unit_turnCount_table[unitWithLeastTurns]);
+            Debug.Log(unit_turnCount.Key.shipBPMetaData.BlueprintName + ": " + (float)unit_turnCount.Value / (float)unit_turnCount_table[unitWithLeastTurns]);
         }
 
         yield return null;

@@ -78,7 +78,7 @@ public class AI_Ship : TurnBasedUnit
         if (!receivedMoveCommand)
         {
             #if FULL_DEBUG
-            Debug.Log("Move command received " + shipBPMetaData.blueprintName);
+            Debug.Log("Move command received " + shipBPMetaData.BlueprintName);
             #endif
             Vector3 enemyPosition = targetPlayer.transform.position;
             Vector3 directionBetween = (transform.position - enemyPosition).normalized;
@@ -91,7 +91,7 @@ public class AI_Ship : TurnBasedUnit
         if (!receivedAttackCommand)
         {
             #if FULL_DEBUG
-            Debug.Log("Attack command received " + shipBPMetaData.blueprintName);
+            Debug.Log("Attack command received " + shipBPMetaData.BlueprintName);
             #endif
             receivedAttackCommand = true;
         }

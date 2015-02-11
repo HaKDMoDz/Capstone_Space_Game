@@ -99,7 +99,7 @@ public class PlayerShip : TurnBasedUnit
                 UnSelectComponents(false);
                 yield return StartCoroutine(shipMove.Move());
                 #if FULL_DEBUG
-                Debug.Log(shipBPMetaData.blueprintName + "- Movement end");
+                Debug.Log(shipBPMetaData.BlueprintName + "- Movement end");
                 #endif
             }
 
@@ -227,7 +227,7 @@ public class PlayerShip : TurnBasedUnit
         //Debug.Log("Click on ground at position: "+worldPosition);
         if (takingTurn && !receivedMoveCommand)
         {
-            Debug.Log("Move command received " + shipBPMetaData.blueprintName);
+            Debug.Log("Move command received " + shipBPMetaData.BlueprintName);
             shipMove.destination = worldPosition;
             receivedMoveCommand = true;
         }

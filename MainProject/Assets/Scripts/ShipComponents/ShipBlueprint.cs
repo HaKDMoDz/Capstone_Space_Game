@@ -7,10 +7,31 @@ using System;
 public class ShipBlueprint
 {
     #region Fields
-    public Hull hull { get; set; }
-    public Dictionary<ComponentSlot, ShipComponent> slot_component_table { get; private set; }
-    public ShipBlueprintMetaData metaData { get; set; }
+    [SerializeField]
+    private Hull hull;
+
+    public Hull Hull
+    {
+        get { return hull; }
+        set { hull = value; }
+    }
+    private Dictionary<ComponentSlot, ShipComponent> slot_component_table = new Dictionary<ComponentSlot, ShipComponent>();
+    public Dictionary<ComponentSlot, ShipComponent> Slot_component_table
+    {
+        get { return slot_component_table; }
+    }
+    [SerializeField]
+    private ShipBlueprintMetaData metaData;
+
+    public ShipBlueprintMetaData MetaData
+    {
+        get { return metaData; }
+        set { metaData = value; }
+    }
+    
     #endregion Fields
+
+
 
     #region Methods
 
@@ -79,12 +100,12 @@ public class ShipBlueprint
 
     public void GenerateMetaData()
     {
-        metaData.excessPower = CalculateExcessPower();
+        metaData.ExcessPower = CalculateExcessPower();
     }
 
     public void GenerateMetaData(string blueprintName)
     {
-        metaData.blueprintName = blueprintName;
+        metaData.BlueprintName = blueprintName;
         GenerateMetaData();
     }
 
@@ -106,11 +127,10 @@ public class ShipBlueprint
 
     private void Init()
     {
-        slot_component_table = new Dictionary<ComponentSlot, ShipComponent>();
         metaData = new ShipBlueprintMetaData();
     }
 
-#if FULL_DEBUG
+    #if FULL_DEBUG
     public void Display()
     {
         Debug.LogError("Contents of blueprint");
@@ -120,17 +140,16 @@ public class ShipBlueprint
             Debug.LogError("Slot " + slot_comp.Key + " Comp " + slot_comp.Value);
         }
     }
-#endif
+    #endif
     #endregion Methods
-
 }
 
 #region AdditionalStructs
 [Serializable]
 public class ShipBlueprintMetaData
 {
-    public string blueprintName { get; set; }
-    public float excessPower { get; set; }
+    public string BlueprintName;
+    public float ExcessPower;
 
     public ShipBlueprintMetaData()
     {
@@ -138,18 +157,18 @@ public class ShipBlueprintMetaData
     }
     public ShipBlueprintMetaData(string blueprintName, float excessPower)
     {
-        this.blueprintName = blueprintName;
-        this.excessPower = excessPower;
+        this.BlueprintName = blueprintName;
+        this.ExcessPower = excessPower;
     }
     public ShipBlueprintMetaData(ShipBlueprintMetaData metaData)
     {
-        this.blueprintName = metaData.blueprintName;
-        this.excessPower = metaData.excessPower;
+        this.BlueprintName = metaData.BlueprintName;
+        this.ExcessPower = metaData.ExcessPower;
     }
     public void Reset()
     {
-        blueprintName = "";
-        excessPower = 0.0f;
+        BlueprintName = "";
+        ExcessPower = 0.0f;
     }
 }
 #if FULL_DEBUG || LOW_DEBUG

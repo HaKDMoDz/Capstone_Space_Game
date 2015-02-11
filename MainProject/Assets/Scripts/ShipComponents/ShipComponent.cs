@@ -9,6 +9,7 @@ using System;
 
 public enum ComponentType { Weapon, Defense, Power, Support }
 
+[Serializable]
 public abstract class ShipComponent : MonoBehaviour , IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
 

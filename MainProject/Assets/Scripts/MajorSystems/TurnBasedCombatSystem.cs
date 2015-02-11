@@ -187,7 +187,7 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
         }
         #endif
 
-        float minPower = units.Min(s => s.shipBPMetaData.excessPower);
+        float minPower = units.Min(s => s.shipBPMetaData.ExcessPower);
         foreach (TurnBasedUnit unit in units)
         {
             float shipPower = unit.MaxPower;

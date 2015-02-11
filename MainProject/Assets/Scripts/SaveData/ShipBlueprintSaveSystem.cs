@@ -77,7 +77,7 @@ public class ShipBlueprintSaveSystem
         serializer.Serialize(fileStream, sz_ShipBP);
         fileStream.Close();
         //update saves list
-        savedBPList.Add(shipBP.metaData);
+        savedBPList.Add(shipBP.MetaData);
         //optimize
         SaveSavesList();
     }
@@ -149,7 +149,7 @@ public class ShipBlueprintSaveSystem
     {
         for (int i = savedBPList.count - 1; i >= 0; i--)
         {
-            DeleteBlueprint(savedBPList.blueprintMetaDataList[i].blueprintName);
+            DeleteBlueprint(savedBPList.blueprintMetaDataList[i].BlueprintName);
         }
     }
     #endregion Public
@@ -164,12 +164,12 @@ public class ShipBlueprintSaveSystem
     private void SerializeShipBP(ShipBlueprint shipBP)
     {
         sz_ShipBP.Clear();
-        sz_ShipBP.hull_ID = HullTable.GetID(shipBP.hull);
-        foreach (var slot_component in shipBP.slot_component_table)
+        sz_ShipBP.hull_ID = HullTable.GetID(shipBP.Hull);
+        foreach (var slot_component in shipBP.Slot_component_table)
         {
             sz_ShipBP.AddComponent(slot_component.Key.index, ComponentTable.GetID(slot_component.Value));
         }
-        sz_ShipBP.metaData = shipBP.metaData;
+        sz_ShipBP.metaData = shipBP.MetaData;
     }//Serialize
 
     /// <summary>
@@ -184,19 +184,19 @@ public class ShipBlueprintSaveSystem
     private void DeSerializeSipBP(SerializedShipBlueprint sz_ShipBP, out ShipBlueprint shipBP)
     {
         shipBP = new ShipBlueprint(HullTable.GetHull(sz_ShipBP.hull_ID));
-        shipBP.hull.Init();
+        shipBP.Hull.Init();
         foreach (var slotIndex_CompID in sz_ShipBP.slotIndex_CompID_Table)
         {
             #if FULL_DEBUG || LOW_DEBUG
             ShipComponent component = ComponentTable.GetComp(slotIndex_CompID.compID);
-            ComponentSlot slot = shipBP.hull.index_slot_table[slotIndex_CompID.slotIndex];
+            ComponentSlot slot = shipBP.Hull.index_slot_table[slotIndex_CompID.slotIndex];
             #else
             ShipComponent component = ComponentTable.GetComp(slotIndex_CompID.Value);
             ComponentSlot slot = shipBP.hull.index_slot_table[slotIndex_CompID.Key];
             #endif
             shipBP.AddComponent(slot, component);
         }
-        shipBP.metaData = sz_ShipBP.metaData;
+        shipBP.MetaData = sz_ShipBP.metaData;
     }//DeSerialize
     
     /// <summary>
@@ -299,7 +299,7 @@ public class SavedShipBPList //keeps track of all the saves ship blueprints
         #if FULL_DEBUG || LOW_DEBUG
         if(FileExists(fileName))
         {
-            blueprintMetaDataList.Remove(blueprintMetaDataList.FirstOrDefault(b => b.blueprintName == fileName));
+            blueprintMetaDataList.Remove(blueprintMetaDataList.FirstOrDefault(b => b.BlueprintName == fileName));
         }
         else
         {
@@ -311,7 +311,7 @@ public class SavedShipBPList //keeps track of all the saves ship blueprints
     }
     public bool FileExists(string fileName)
     {
-        return blueprintMetaDataList.Exists(b => b.blueprintName == fileName);
+        return blueprintMetaDataList.Exists(b => b.BlueprintName == fileName);
     }
 }
 

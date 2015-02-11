@@ -503,6 +503,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35f807f2f1c27f84ab43dc4d2d066e76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  blueprintBeingBuilt:
+    hull: {fileID: 0}
 --- !u!1 &66386475
 GameObject:
   m_ObjectHideFlags: 0
@@ -1218,6 +1220,54 @@ Prefab:
       propertyPath: m_Padding.m_Top
       value: 16
       objectReference: {fileID: 0}
+    - target: {fileID: 22400010, guid: b92b13eb87f472b41960f400b28a8ad5, type: 2}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 22400010, guid: b92b13eb87f472b41960f400b28a8ad5, type: 2}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 22400010, guid: b92b13eb87f472b41960f400b28a8ad5, type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 22400010, guid: b92b13eb87f472b41960f400b28a8ad5, type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: -35.2099113
+      objectReference: {fileID: 0}
+    - target: {fileID: 22400010, guid: b92b13eb87f472b41960f400b28a8ad5, type: 2}
+      propertyPath: m_SizeDelta.x
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 22400010, guid: b92b13eb87f472b41960f400b28a8ad5, type: 2}
+      propertyPath: m_SizeDelta.y
+      value: 38.4198227
+      objectReference: {fileID: 0}
+    - target: {fileID: 22400014, guid: b92b13eb87f472b41960f400b28a8ad5, type: 2}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 22400014, guid: b92b13eb87f472b41960f400b28a8ad5, type: 2}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 22400014, guid: b92b13eb87f472b41960f400b28a8ad5, type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 22400014, guid: b92b13eb87f472b41960f400b28a8ad5, type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: -81.4897308
+      objectReference: {fileID: 0}
+    - target: {fileID: 22400014, guid: b92b13eb87f472b41960f400b28a8ad5, type: 2}
+      propertyPath: m_SizeDelta.x
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 22400014, guid: b92b13eb87f472b41960f400b28a8ad5, type: 2}
+      propertyPath: m_SizeDelta.y
+      value: 38.4198227
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b92b13eb87f472b41960f400b28a8ad5, type: 2}
   m_RootGameObject: {fileID: 1658788617}
@@ -1915,6 +1965,7 @@ MonoBehaviour:
   tagsAndLayers: {fileID: 11400000, guid: dcb2f5a41ebe04f448874853c3319233, type: 2}
   gameConfig: {fileID: 11400000, guid: c1ac6d1b5787d9242b4322f67fd0de5a, type: 2}
   galaxyConfig: {fileID: 11400000, guid: d74f5e5526c93f24cad62c39395bfec3, type: 2}
+  bpTemplates: {fileID: 11400000, guid: 71899852d229c1048913b6ea9673eb84, type: 2}
 --- !u!4 &387374692
 Transform:
   m_ObjectHideFlags: 0

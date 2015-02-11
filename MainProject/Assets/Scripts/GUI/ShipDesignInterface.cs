@@ -356,7 +356,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
         {
             ShowStatsPanel(true);
         }
-        guiFields.statsPanel.UpdateStats(shipBPMetaData.blueprintName, shipBPMetaData.excessPower);
+        guiFields.statsPanel.UpdateStats(shipBPMetaData.BlueprintName, shipBPMetaData.ExcessPower);
     }
 
     #endregion GUIAccess

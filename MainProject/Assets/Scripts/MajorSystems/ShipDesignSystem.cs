@@ -6,32 +6,11 @@ using System.Linq;
 using System;
 #endregion Usings
 
-//#region AdditionalStructs
-//[Serializable]
-//public struct ShipBPSaveFields //inspector grouping
-//{
-//    public string fileExtension_ShipBP;
-//    public string saveDirectory_ShipBP;
-//    public string fileName_SaveList;
-//}
-//#endregion AdditionalStructs
-
 public class ShipDesignSystem : Singleton<ShipDesignSystem>
 {
     #region Fields
-    #region Private
-    #region EditorExposed
-    //Database References
-    //[SerializeField]
-    //private HullTable hullTableScriptableObject;
-    //[SerializeField]
-    //private ComponentTable compTableScriptableObject;
-    //[SerializeField]
-    //private ShipBPSaveFields saveFields;//vars used by saveSystem for saving blueprints
-    #endregion EditorExposed
 
-    #region Internal
-    //public Dictionary<string, ShipBlueprint> name_savedBP_table { get; private set; }
+    //Internal
     public PlayerFleetData playerFleetData { get; private set; }
 
     //References
@@ -39,12 +18,11 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
 
     //these vars keep track of various factors regarding building ships
     public bool buildingShip { get; private set; } //Whether a ship is actively being built
-    private ShipBlueprint blueprintBeingBuilt; //the blueprint representing the ship currently being built
+    [SerializeField] private ShipBlueprint blueprintBeingBuilt; //the blueprint representing the ship currently being built
     private Hull hullBeingBuilt; //the intantiated Hull GameObject
     private List<ShipComponent> componentsBeingBuilt; //the instantiated ShipComponent GameObjects
     private Dictionary<ComponentSlot, ShipComponent> slot_compsBeingBuilt_table; //The instantiated components corresponding to the ComponentSlots
-    #endregion Internal
-    #endregion Private
+    
     #endregion Fields
 
     #region Methods
@@ -62,13 +40,12 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
         if (!buildingShip)
         {
             blueprintBeingBuilt.Clear();
-            blueprintBeingBuilt.hull = HullTable.GetHull(hull_ID);
+            blueprintBeingBuilt.Hull = HullTable.GetHull(hull_ID);
             #if FULL_DEBUG
-            Debug.Log("Building hull: " + blueprintBeingBuilt.hull.hullName);
+            Debug.Log("Building hull: " + blueprintBeingBuilt.Hull.hullName);
             #endif
-            AddHullToScene(blueprintBeingBuilt.hull);
+            AddHullToScene(blueprintBeingBuilt.Hull);
             buildingShip = true;
-            
         }
         else
         {
@@ -112,7 +89,7 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
             AddComponentToScene(slot, component);
             blueprintBeingBuilt.AddComponent(slot, component);
             blueprintBeingBuilt.GenerateMetaData();
-            ShipDesignInterface.Instance.UpdateStatsPanel(blueprintBeingBuilt.metaData);
+            ShipDesignInterface.Instance.UpdateStatsPanel(blueprintBeingBuilt.MetaData);
         }
         else
         {
@@ -175,7 +152,7 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
     public void SaveBlueprint(string fileName)
     {
         blueprintBeingBuilt.GenerateMetaData(fileName);
-        ShipDesignInterface.Instance.UpdateStatsPanel(blueprintBeingBuilt.metaData);
+        ShipDesignInterface.Instance.UpdateStatsPanel(blueprintBeingBuilt.MetaData);
         saveSystem.SaveBlueprint(blueprintBeingBuilt, fileName);
     }
     /// <summary>
@@ -190,9 +167,9 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
 #if !NO_DEBUG
         if(saveSystem.LoadBlueprint(out blueprintBeingBuilt, fileName))
         {
-            AddHullToScene(blueprintBeingBuilt.hull);
+            AddHullToScene(blueprintBeingBuilt.Hull);
             //loop through all components listed in the blueprint and add them to the scene
-            foreach (var slot_component in blueprintBeingBuilt.slot_component_table)
+            foreach (var slot_component in blueprintBeingBuilt.Slot_component_table)
             {
                 //need to get the actual component slot that corresponds to the slot index in the blueprint
                 int slotIndex = slot_component.Key.index;
@@ -245,7 +222,7 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
     /// </returns>
     public List<string> GetSaveFileList()
     {
-        return saveSystem.savedBPList.blueprintMetaDataList.Select(b=>b.blueprintName).ToList();
+        return saveSystem.savedBPList.blueprintMetaDataList.Select(b=>b.BlueprintName).ToList();
     }
     #endregion SaveSystemInterface
 
@@ -269,7 +246,7 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
             obj.SetActive(false);
         }
         blueprintBeingBuilt.GenerateMetaData();
-        ShipDesignInterface.Instance.UpdateStatsPanel(blueprintBeingBuilt.metaData);
+        ShipDesignInterface.Instance.UpdateStatsPanel(blueprintBeingBuilt.MetaData);
         //camera
     }
     /// <summary>
