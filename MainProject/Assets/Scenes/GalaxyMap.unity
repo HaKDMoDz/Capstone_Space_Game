@@ -3273,6 +3273,7 @@ MonoBehaviour:
   completed: 0
   creditReward: 100
   missionText: 
+  id: 0
 --- !u!1 &228586395
 GameObject:
   m_ObjectHideFlags: 0
@@ -4079,6 +4080,10 @@ Prefab:
       propertyPath: destination
       value: 
       objectReference: {fileID: 976118084}
+    - target: {fileID: 11492448, guid: 0948f78bbef73984daf6f54210854028, type: 2}
+      propertyPath: id
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0948f78bbef73984daf6f54210854028, type: 2}
   m_RootGameObject: {fileID: 1153936324}
@@ -4348,6 +4353,45 @@ MeshFilter:
   m_PrefabInternal: {fileID: 434978102}
   m_GameObject: {fileID: 435837943}
   m_Mesh: {fileID: 4300004, guid: c1ed03dd3ca9f8541b23a7816ca6bf53, type: 3}
+--- !u!1 &449122111
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 449122113}
+  - 114: {fileID: 449122112}
+  m_Layer: 0
+  m_Name: MissionController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &449122112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 449122111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d08c024c606081e4daccb489b9c288f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &449122113
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 449122111}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
 --- !u!1 &449974606
 GameObject:
   m_ObjectHideFlags: 0
@@ -4869,7 +4913,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0749e1b93b5bc0a41a7a9f7f5e7cec19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainCamera: {fileID: 0}
 --- !u!1 &467113294
 GameObject:
   m_ObjectHideFlags: 0
@@ -5086,7 +5129,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0749e1b93b5bc0a41a7a9f7f5e7cec19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainCamera: {fileID: 0}
 --- !u!225 &538669565
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -9934,7 +9976,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0749e1b93b5bc0a41a7a9f7f5e7cec19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainCamera: {fileID: 0}
 --- !u!114 &896700428
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11546,6 +11587,7 @@ MonoBehaviour:
   completed: 0
   creditReward: 100
   missionText: Please take 500 coal to (sol 2)
+  id: 0
 --- !u!1 &987145519
 GameObject:
   m_ObjectHideFlags: 0
@@ -13433,6 +13475,7 @@ MonoBehaviour:
   completed: 0
   creditReward: 100
   missionText: Please take 500 coal to (sol 2)
+  id: 2
 --- !u!1 &1160630422
 GameObject:
   m_ObjectHideFlags: 0
@@ -15127,6 +15170,7 @@ MonoBehaviour:
   completed: 0
   creditReward: 100
   missionText: 
+  id: 0
 --- !u!1 &1328040846
 GameObject:
   m_ObjectHideFlags: 0
@@ -15276,8 +15320,9 @@ MonoBehaviour:
   destination: {fileID: 0}
   targets: []
   completed: 0
-  creditReward: 100
-  missionText: Please take 500 coal to (sol 2)
+  creditReward: 10000
+  missionText: Defend Us from Pirates!!
+  id: 1
 --- !u!1001 &1359023571
 Prefab:
   m_ObjectHideFlags: 0
@@ -15695,6 +15740,7 @@ MonoBehaviour:
   completed: 0
   creditReward: 100
   missionText: Please take 500 coal to (sol 2)
+  id: 0
 --- !u!1 &1460962435
 GameObject:
   m_ObjectHideFlags: 0
@@ -18561,7 +18607,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0749e1b93b5bc0a41a7a9f7f5e7cec19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainCamera: {fileID: 0}
 --- !u!1 &1578281857
 GameObject:
   m_ObjectHideFlags: 0
@@ -20328,7 +20373,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0749e1b93b5bc0a41a7a9f7f5e7cec19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainCamera: {fileID: 0}
 --- !u!1 &1638899863
 GameObject:
   m_ObjectHideFlags: 0
@@ -21975,6 +22019,7 @@ MonoBehaviour:
   completed: 0
   creditReward: 100
   missionText: 
+  id: 0
 --- !u!1 &1825555591
 GameObject:
   m_ObjectHideFlags: 0
@@ -22114,6 +22159,7 @@ MonoBehaviour:
   completed: 0
   creditReward: 100
   missionText: Please take 500 coal to (sol 2)
+  id: 0
 --- !u!1 &1852338099
 GameObject:
   m_ObjectHideFlags: 0
@@ -23089,6 +23135,7 @@ MonoBehaviour:
   completed: 0
   creditReward: 100
   missionText: 
+  id: 0
 --- !u!1 &2012445869
 GameObject:
   m_ObjectHideFlags: 0
@@ -23284,6 +23331,7 @@ MonoBehaviour:
   completed: 0
   creditReward: 100
   missionText: 
+  id: 0
 --- !u!1 &2057738812
 GameObject:
   m_ObjectHideFlags: 0
@@ -23415,6 +23463,18 @@ Prefab:
     - target: {fileID: 488264, guid: 0948f78bbef73984daf6f54210854028, type: 2}
       propertyPath: m_RootOrder
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 11492448, guid: 0948f78bbef73984daf6f54210854028, type: 2}
+      propertyPath: id
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11492448, guid: 0948f78bbef73984daf6f54210854028, type: 2}
+      propertyPath: missionText
+      value: Defend Us from Pirates!!
+      objectReference: {fileID: 0}
+    - target: {fileID: 11492448, guid: 0948f78bbef73984daf6f54210854028, type: 2}
+      propertyPath: creditReward
+      value: 10000
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0948f78bbef73984daf6f54210854028, type: 2}

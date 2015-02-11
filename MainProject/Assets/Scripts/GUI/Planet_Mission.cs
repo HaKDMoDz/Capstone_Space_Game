@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System;
 
 public class Planet_Mission : MonoBehaviour 
 {
@@ -30,9 +31,36 @@ public class Planet_Mission : MonoBehaviour
     }
     bool panelOpen = false;
 
+    [SerializeField]
+    private int id;
+    public int ID
+    {
+        get { return id; }
+        set { id = value; }
+    }
+    
+
 	void Awake () 
     {
-        
+        //ID = ++numMissions;
+
+        Action acceptAction;
+
+        switch (ID)
+        {
+            case 1:
+                acceptAction = (() => mission1());
+                break;
+            case 2:
+                acceptAction = (() => mission2());
+                break;
+            case 0: default:
+                acceptAction = (() => invalidMission());
+                break;
+        }
+
+
+        MissionController.Instance.AddMission(ID, acceptAction);
 	}
 
     public void showMissionPanel()
@@ -47,6 +75,22 @@ public class Planet_Mission : MonoBehaviour
     public void AcceptMission()
     {
         Debug.Log("Mission Accepted");
+        MissionController.Instance.AcceptMission(ID);
+    }
+
+    private void mission1()
+    {
+        Debug.Log("Mission 1 clicked");
+    }
+
+    private void mission2()
+    {
+        Debug.Log("Mission 2 clicked");
+    }
+
+    private void invalidMission()
+    {
+        Debug.LogError("AcceptMission: Invalid Mission ID: " + ID);
     }
 	
 }
