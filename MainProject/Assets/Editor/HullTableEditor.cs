@@ -53,7 +53,7 @@ public class HullTableEditor : Editor
         {
             HullTableEntry entry = hullTable.Hull_id_List[i];
             PosY += EditorGUIUtility.singleLineHeight ;
-            if (GUI.Button(new Rect(0.0f, PosY, Screen.width * rectXPos.x, EditorGUIUtility.singleLineHeight), "-"))
+            if (GUI.Button(new Rect(0.0f, PosY, Screen.width * rectXPos.x, EditorGUIUtility.singleLineHeight), "X"))
             {
                 hullTable.RemoveEntry(entry.ID);
             }

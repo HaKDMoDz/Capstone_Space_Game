@@ -14,6 +14,10 @@ public class BlueprintTemplates : ScriptableObject
     {
         get { return bpTemplateList; }
     }
+
+    //Database
+    public static List<BlueprintTemplate> BlueprintTemplateList { get; private set; }
+
     #endregion Fields
 
     #region Methods
@@ -48,6 +52,10 @@ public class BlueprintTemplates : ScriptableObject
         blueprintBeingBuilt.GenerateMetaData(name);
         BpTemplateList.Add(new BlueprintTemplate(blueprintBeingBuilt));
     }
+    public void RemoveBlueprint(string name)
+    {
+        Debug.Log("Remove blueprint " + name);
+    }
     public void Wipe()
     {
         if (bpTemplateList != null)
@@ -66,74 +74,77 @@ public class BlueprintTemplates : ScriptableObject
             Debug.LogWarning("No Blueprint templates found");
         }
         #endif
+
+        BlueprintTemplateList = bpTemplateList;
+
     }
     #endregion UnityCallbacks
     #endregion Methods
 
-    #region AdditionalStructs
-    [Serializable]
-    public class BlueprintTemplate
-    {
-        [SerializeField]
-        private Hull hull;
-        public Hull Hull
-        {
-            get { return hull; }
-            //set { hull = value; }
-        }
-
-        [SerializeField]
-        private ShipBlueprintMetaData metaData;
-        public ShipBlueprintMetaData MetaData
-        {
-            get { return metaData; }
-            //set { metaData = value; }
-        }
-
-        [SerializeField]
-        private List<SlotIndexCompEntry> slotIndex_Comp_List = new List<SlotIndexCompEntry>();
-        public List<SlotIndexCompEntry> SlotIndex_Comp_List
-        {
-            get { return slotIndex_Comp_List; }
-        }
-
-        /// <summary>
-        /// Creates a BlueprintTemplate form a blueprint. Validation of blueprint should be done already.
-        /// </summary>
-        /// <param name="blueprint"></param>
-        public BlueprintTemplate(ShipBlueprint blueprint)
-        {
-            this.hull = blueprint.Hull;
-            foreach (var slot_comp in blueprint.Slot_component_table)
-            {
-                SlotIndex_Comp_List.Add(
-                    new SlotIndexCompEntry
-                    {
-                        slotIndex = slot_comp.Key.index,
-                        component = slot_comp.Value
-                    });
-            }
-            this.metaData = blueprint.MetaData;
-        }
-
-        //public void GetBlueprint(ref ShipBlueprint blueprint)
-        //{
-        //    blueprint.Clear();
-        //    blueprint.Hull = this.hull;
-        //    blueprint.Slot_component_table = slotIndex_component_Table.ToDictionary(index_comp=>index_comp.)
-        //}
-
-        [Serializable]
-        public struct SlotIndexCompEntry
-        {
-            public int slotIndex;
-            public ShipComponent component;
-        }
-    }
-
-
-
-    #endregion AdditionalStructs
-
+    
 
 }
+#region AdditionalStructs
+[Serializable]
+public class BlueprintTemplate
+{
+    [SerializeField]
+    private Hull hull;
+    public Hull Hull
+    {
+        get { return hull; }
+        //set { hull = value; }
+    }
+
+    [SerializeField]
+    private ShipBlueprintMetaData metaData;
+    public ShipBlueprintMetaData MetaData
+    {
+        get { return metaData; }
+        //set { metaData = value; }
+    }
+
+    [SerializeField]
+    private List<SlotIndexCompEntry> slotIndex_Comp_List = new List<SlotIndexCompEntry>();
+    public List<SlotIndexCompEntry> SlotIndex_Comp_List
+    {
+        get { return slotIndex_Comp_List; }
+    }
+
+    /// <summary>
+    /// Creates a BlueprintTemplate form a blueprint. Validation of blueprint should be done already.
+    /// </summary>
+    /// <param name="blueprint"></param>
+    public BlueprintTemplate(ShipBlueprint blueprint)
+    {
+        this.hull = blueprint.Hull;
+        foreach (var slot_comp in blueprint.Slot_component_table)
+        {
+            SlotIndex_Comp_List.Add(
+                new SlotIndexCompEntry
+                {
+                    slotIndex = slot_comp.Key.index,
+                    component = slot_comp.Value
+                });
+        }
+        this.metaData = blueprint.MetaData;
+    }
+
+    //public void GetBlueprint(ref ShipBlueprint blueprint)
+    //{
+    //    blueprint.Clear();
+    //    blueprint.Hull = this.hull;
+    //    blueprint.Slot_component_table = slotIndex_component_Table.ToDictionary(index_comp=>index_comp.)
+    //}
+
+    [Serializable]
+    public struct SlotIndexCompEntry
+    {
+        public int slotIndex;
+        public ShipComponent component;
+    }
+}
+
+
+
+#endregion AdditionalStructs

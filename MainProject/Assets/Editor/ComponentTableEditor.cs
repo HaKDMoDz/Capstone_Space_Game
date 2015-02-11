@@ -59,7 +59,7 @@ public class ComponentTableEditor : Editor
                 {
                     ComponentTableEntry entry = weapons.ElementAt(i) ;
                     posY+=EditorGUIUtility.singleLineHeight;
-                    if(GUI.Button(new Rect(0.0f, posY, Screen.width*rectXPos.x, EditorGUIUtility.singleLineHeight),"-"))
+                    if(GUI.Button(new Rect(0.0f, posY, Screen.width*rectXPos.x, EditorGUIUtility.singleLineHeight),"X"))
                     {
                         compTable.RemoveEntry(entry.ID);
                     }
@@ -76,7 +76,7 @@ public class ComponentTableEditor : Editor
                 {
                     ComponentTableEntry entry = defenses.ElementAt(i);
                     posY += EditorGUIUtility.singleLineHeight;
-                    if (GUI.Button(new Rect(0.0f, posY, Screen.width * rectXPos.x, EditorGUIUtility.singleLineHeight), "-"))
+                    if (GUI.Button(new Rect(0.0f, posY, Screen.width * rectXPos.x, EditorGUIUtility.singleLineHeight), "X"))
                     {
                         compTable.RemoveEntry(entry.ID);
                     }
@@ -92,7 +92,7 @@ public class ComponentTableEditor : Editor
                 {
                     ComponentTableEntry entry = engineering.ElementAt(i);
                     posY += EditorGUIUtility.singleLineHeight;
-                    if (GUI.Button(new Rect(0.0f, posY, Screen.width * rectXPos.x, EditorGUIUtility.singleLineHeight), "-"))
+                    if (GUI.Button(new Rect(0.0f, posY, Screen.width * rectXPos.x, EditorGUIUtility.singleLineHeight), "X"))
                     {
                         compTable.RemoveEntry(entry.ID);
                     }
@@ -108,7 +108,7 @@ public class ComponentTableEditor : Editor
                 {
                     ComponentTableEntry entry = supports.ElementAt(i);
                     posY += EditorGUIUtility.singleLineHeight;
-                    if (GUI.Button(new Rect(0.0f, posY, Screen.width * rectXPos.x, EditorGUIUtility.singleLineHeight), "-"))
+                    if (GUI.Button(new Rect(0.0f, posY, Screen.width * rectXPos.x, EditorGUIUtility.singleLineHeight), "X"))
                     {
                         compTable.RemoveEntry(entry.ID);
                     }

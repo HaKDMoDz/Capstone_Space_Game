@@ -119,7 +119,6 @@ public class HullTable : ScriptableObject
     }
     #endregion GUI_Access
     #endregion Public
-    #region Private
     #region UnityCallbacks
     private void OnEnable()
     {
@@ -127,7 +126,6 @@ public class HullTable : ScriptableObject
     }
 
     #endregion UnityCallbacks
-    #endregion Private
     #endregion Methods
 
 }
