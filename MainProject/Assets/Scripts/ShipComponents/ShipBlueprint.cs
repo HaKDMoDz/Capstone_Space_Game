@@ -109,6 +109,18 @@ public class ShipBlueprint
         slot_component_table = new Dictionary<ComponentSlot, ShipComponent>();
         metaData = new ShipBlueprintMetaData();
     }
+
+#if FULL_DEBUG
+    public void Display()
+    {
+        Debug.LogError("Contents of blueprint");
+        Debug.LogError("Hull : " + hull.hullName);
+        foreach (var slot_comp in slot_component_table)
+        {
+            Debug.LogError("Slot " + slot_comp.Key + " Comp " + slot_comp.Value);
+        }
+    }
+#endif
     #endregion Methods
 
 }

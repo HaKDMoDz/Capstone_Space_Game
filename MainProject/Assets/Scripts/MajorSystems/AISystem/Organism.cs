@@ -94,6 +94,7 @@ namespace AI_Fleet
             get { return slots; }
             set { slots = value; }
         }
+        private SlotsPerSection maxSlots;
 
         private List<Chromosome> genome;
         public List<Chromosome> Genome
@@ -153,15 +154,16 @@ namespace AI_Fleet
         public Organism(AIManager _aiManager)
         {
             //assign a completely random genome
-            organismHull = (OrganismHull)(RandomManager.rollDwhatever((int)OrganismHull.COUNT));
+            organismHull = (OrganismHull)(RandomManager.rollDwhatever(2));
             archetype = (OrganismArchetype)(RandomManager.rollDwhatever((int)OrganismArchetype.COUNT));
             genome = new List<Chromosome>();
 
             initOrganism(_aiManager);
             SlotsPerSection remainingSlots = slots;
+            maxSlots = slots;
             
             int numGenes = NumGenesByHull(organismHull);
-            genome = GenerateChromosomes(2);
+            genome = GenerateChromosomes(1);
 
             foreach (Chromosome chromosome in genome)
             {
@@ -259,121 +261,31 @@ namespace AI_Fleet
             return returnHull;
         }
 
-        //private ShipBlueprint BluePrintFromGene(Gene _gene, Hull _hull)
-        //{
-        //    ShipBlueprint blueprint = new ShipBlueprint();
-
-        //    List<ComponentSlot> forwardComponentSlots = new List<ComponentSlot>();
-        //    List<ComponentSlot> aftComponentSlots = new List<ComponentSlot>();
-        //    List<ComponentSlot> portComponentSlots = new List<ComponentSlot>();
-        //    List<ComponentSlot> starboardComponentSlots = new List<ComponentSlot>();
-
-        //    foreach (ComponentSlot slot in _hull.EmptyComponentGrid)
-        //    {
-        //        switch (slot.Placement)
-        //        {
-        //            case PlacementType.FORWARD:
-        //                forwardComponentSlots.Add(slot);
-        //                break;
-        //            case PlacementType.AFT:
-        //                aftComponentSlots.Add(slot);
-        //                break;
-        //            case PlacementType.PORT:
-        //                portComponentSlots.Add(slot);
-        //                break;
-        //            case PlacementType.STARBOARD:
-        //                starboardComponentSlots.Add(slot);
-        //                break;
-        //            case PlacementType.COUNT:
-        //                Debug.Log("Invalid Placement Slot in BluePrintFromGene");
-        //                break;
-        //            default:
-        //                break;
-        //        }
-        //    }
-
-
-        //    for (int i = 0; i < _gene.Count; i++)
-        //    {
-        //        switch (_gene.Placement)
-        //        {
-        //            case PlacementType.FORWARD:
-        //                forwardComponentSlots[i].InstalledComponent = GetComponentByType(_gene.Type);
-
-        //                break;
-        //            case PlacementType.AFT:
-        //                aftComponentSlots[i].InstalledComponent = GetComponentByType(_gene.Type);
-        //                break;
-        //            case PlacementType.PORT:
-        //                portComponentSlots[i].InstalledComponent = GetComponentByType(_gene.Type);
-        //                break;
-        //            case PlacementType.STARBOARD:
-        //                starboardComponentSlots[i].InstalledComponent = GetComponentByType(_gene.Type);
-        //                break;
-        //            case PlacementType.COUNT:
-        //                break;
-        //            default:
-        //                break;
-        //        }
-        //    }
-
-        //    foreach (ComponentSlot comp in forwardComponentSlots)
-        //    {
-        //        if (comp.InstalledComponent != null)
-        //        {
-        //            comp.InstalledComponent.Placement = PlacementType.FORWARD;
-        //            blueprint.AddComponent(comp, comp.InstalledComponent);
-        //        }
-        //    }
-        //    foreach (ComponentSlot comp in aftComponentSlots)
-        //    {
-        //        if (comp.InstalledComponent != null)
-        //        {
-        //            comp.InstalledComponent.Placement = PlacementType.AFT;
-        //            blueprint.AddComponent(comp, comp.InstalledComponent);
-        //        }
-        //    }
-        //    foreach (ComponentSlot comp in portComponentSlots)
-        //    {
-        //        if (comp.InstalledComponent != null)
-        //        {
-        //            comp.InstalledComponent.Placement = PlacementType.PORT;
-        //            blueprint.AddComponent(comp, comp.InstalledComponent);
-        //        }
-        //    }
-        //    foreach (ComponentSlot comp in starboardComponentSlots)
-        //    {
-        //        if (comp.InstalledComponent != null)
-        //        {
-        //            comp.InstalledComponent.Placement = PlacementType.STARBOARD;
-        //            blueprint.AddComponent(comp, comp.InstalledComponent);
-        //        }
-        //    }
-
-        //    return blueprint;
-        //}
-
-
         private ShipBlueprint BluePrintFromGenes(List<Gene> _genes, Hull _hull)
         {
-            ShipBlueprint blueprint = new ShipBlueprint();
+            ShipBlueprint blueprint = new ShipBlueprint(_hull);
 
-            blueprint.hull = _hull;
-
+           // Debug.LogError("BLUEPRINT FROM GENES CALLED...");
+           // blueprint.hull = _hull;
+            int count = 0;
             foreach (Gene gene in _genes)
 	        {
+                //Debug.LogError(gene.Count + " " + gene.Placement + " " + gene.Type);
                 for (int i = 0; i < gene.Count; i++)
                 {
+                    count++;
                     ShipComponent component = GetComponentByType(gene.Type);
                     component.Placement = gene.Placement;
-                    AddComponentToBluePrint(ref blueprint, component);
+                    AddComponentToBluePrint(blueprint, component);
                 }
 	        }
+            //blueprint.Display();
             return blueprint;
         }
 
-        private void AddComponentToBluePrint(ref ShipBlueprint _bluePrint, ShipComponent _component)
+        private void AddComponentToBluePrint(ShipBlueprint _bluePrint, ShipComponent _component)
         {
+            
             //determine placement
             PlacementType componentPlacement = _component.Placement; 
 
@@ -409,6 +321,8 @@ namespace AI_Fleet
                 }
             }
 
+            //Debug.LogError("fwd: " + forwardComponentSlots.Count + " aft: " + aftComponentSlots.Count + " port: " + portComponentSlots.Count + "starb: " + starboardComponentSlots.Count);
+
             List<ComponentSlot> collectionToCheck;
 
             switch (componentPlacement)
@@ -432,38 +346,53 @@ namespace AI_Fleet
                     collectionToCheck = new List<ComponentSlot>();
                     break;
             }
-
+             
             //find an open spot
-            Debug.Log("collectionToCheck count " + collectionToCheck.Count);
-            int nextOpenIndex = 0;
+            int nextOpenIndex = -1;
+
             foreach (ComponentSlot slot in collectionToCheck)
             {
-                Debug.Log("slot installed comp " + slot.InstalledComponent);
                 if (slot.InstalledComponent == null)
                 {
-                    //Debug.Log("Slot index " + slot.index+"is empty");
+                    //Debug.Log("Slot index " + slot.index + " is empty");
                     nextOpenIndex = slot.index;
                     break;
                 }
                 else
                 {
-                   // Debug.Log("Slot index " + slot.index + "NOT empty");
+                   // Debug.Log("Slot index " + slot.index + " NOT empty: " + slot.InstalledComponent);
                 }
             }
-            Debug.Log("next open index: " + nextOpenIndex);
-            _bluePrint.AddComponent(_bluePrint.hull.EmptyComponentGrid[nextOpenIndex], _component);
 
-            ////add the component
-            //_bluePrint.hull.EmptyComponentGrid[nextOpenIndex].InstalledComponent = _component;
+            switch (componentPlacement)
+            {
+                case PlacementType.FORWARD:
+                    break;
+                case PlacementType.AFT:
+                    nextOpenIndex += maxSlots.getSlot(PlacementType.FORWARD);
+                    break;
+                case PlacementType.PORT:
+                    nextOpenIndex += (maxSlots.getSlot(PlacementType.FORWARD) + maxSlots.getSlot(PlacementType.AFT));
+                    break;
+                case PlacementType.STARBOARD:
+                    nextOpenIndex += (maxSlots.getSlot(PlacementType.FORWARD) + maxSlots.getSlot(PlacementType.AFT) + maxSlots.getSlot(PlacementType.PORT));
+                    break;
+                case PlacementType.COUNT:
+                    break;
+                default:
+                    break;
+            }
 
-            //foreach (ComponentSlot comp in _bluePrint.hull.EmptyComponentGrid)
-            //{
-            //    if (comp.InstalledComponent != null)
-            //    {
-            //        comp.InstalledComponent.Placement = _component.Placement;
-            //        _bluePrint.AddComponent(comp, comp.InstalledComponent);
-            //    }      
-            //}     
+            //Debug.LogError("next open index: " + nextOpenIndex);
+            if (nextOpenIndex != -1)
+            {
+                //Debug.Log(nextOpenIndex + " " + _component);
+                _bluePrint.AddComponent(_bluePrint.hull.EmptyComponentGrid[nextOpenIndex], _component);
+                //Debug.Log(_bluePrint.hull.EmptyComponentGrid[nextOpenIndex].InstalledComponent);
+               // _bluePrint.Display();
+
+            }
+  
         }
 
 
@@ -474,37 +403,37 @@ namespace AI_Fleet
             switch (_type)
             {
                 case GeneType.LASER:
-                    returnComponent = aiManager.laser;
+                    returnComponent = ComponentTable.GetComp(0);
                     break;
                 case GeneType.MISSILE:
-                    returnComponent = aiManager.missile;
+                    returnComponent = ComponentTable.GetComp(0);
                     break;
                 case GeneType.RAILGUN:
-                    returnComponent = aiManager.railgun;
+                    returnComponent = ComponentTable.GetComp(0);
                     break;
                 case GeneType.FLAK_CANNON:
-                    returnComponent = aiManager.flakCannon;
+                    returnComponent = ComponentTable.GetComp(0);
                     break;
                 case GeneType.FIGHTER_BAY:
-                    returnComponent = aiManager.fighterBay;
+                    returnComponent = ComponentTable.GetComp(0);
                     break;
                 case GeneType.REPAIR_BEAM:
-                    returnComponent = aiManager.repairBeam;
+                    returnComponent = ComponentTable.GetComp(0);
                     break;
                 case GeneType.ARMOUR:
-                    returnComponent = aiManager.armour;
+                    returnComponent = ComponentTable.GetComp(3);
                     break;
                 case GeneType.SHIELD:
-                    returnComponent = aiManager.shield;
+                    returnComponent = ComponentTable.GetComp(1);
                     break;
                 case GeneType.POWERPLANT:
-                    returnComponent = aiManager.powerPlant;
+                    returnComponent = ComponentTable.GetComp(2);
                     break;
                 case GeneType.THRUSTER:
-                    returnComponent = aiManager.thruster;
+                    returnComponent = ComponentTable.GetComp(2);
                     break;
                 case GeneType.SCANNER:
-                    returnComponent = aiManager.scanner;
+                    returnComponent = ComponentTable.GetComp(2);
                     break;
                 default:
                     returnComponent = null;
@@ -514,18 +443,12 @@ namespace AI_Fleet
             return returnComponent;
         }
 
-        private ShipBlueprint BluePrintFromChromosomes(List<Chromosome> _genome)
-        {
-
-            return new ShipBlueprint();
-        }
-
         public ShipBlueprint GenerateBluePrint()
         {
             Hull myHUll = OrganismHull2Hull(organismHull);
             ShipBlueprint sbp = BluePrintFromGenes(genome[0].Alleles, myHUll);
-            sbp.hull = myHUll;
-
+            //sbp.hull = myHUll;
+            //sbp.Display();
             return sbp;
         }
 
@@ -546,7 +469,7 @@ namespace AI_Fleet
                 ComponentSlot cs = sbp.hull.index_slot_table[i];
                 if (cs.InstalledComponent == null)
                 {
-                    Debug.Log("{NULL_COMPONENT} "); 
+                    Debug.Log("{NULL_COMPONENT} ");
                 }
                 else
                 {

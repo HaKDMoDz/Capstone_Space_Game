@@ -39,6 +39,27 @@ public class ShipBuilder
     public TurnBasedUnit BuildShip(ShipType shipType, ShipBlueprint blueprint, Vector3 position, Quaternion rotation)
     {
         blueprintBeingBuilt = blueprint;
+#if FULL_DEBUG
+        //if (shipType == ShipType.AI_Ship)
+        if(false)
+        {
+            Debug.LogError("BEFORE ... blueprint " + blueprintBeingBuilt);
+            Debug.LogError("hull.emptyCompGrid: ");
+            foreach (ComponentSlot slot in blueprintBeingBuilt.hull.EmptyComponentGrid)
+            {
+                Debug.LogError("ComponentSlot: " + slot.index + ": " + slot.InstalledComponent);
+
+            }
+            Debug.LogError("hull.index_slot_table: ");
+            foreach (var item in blueprintBeingBuilt.slot_component_table)
+            {
+                Debug.LogError("slot: " + item.Key + " comp: " + item.Value);
+            }
+        }
+        
+#endif
+
+
         return InstantiateShip(shipType, position, rotation); 
     }
     public TurnBasedUnit BuildShip(ShipType shipType, string blueprintName, Vector3 position, Quaternion rotation)
@@ -77,7 +98,11 @@ public class ShipBuilder
         hullBeingBuilt.Init();
 
         TurnBasedUnit setupUnit;
-
+        if (shipType == ShipType.AI_Ship)
+        {
+           //  Debug.LogError("blueprint has: " + blueprintBeingBuilt.slot_component_table.Count);
+        }
+       
         for (int i = 0; i < blueprintBeingBuilt.slot_component_table.Count; i++)
         {
             var slot_component = blueprintBeingBuilt.slot_component_table.ElementAt(i);
@@ -88,6 +113,10 @@ public class ShipBuilder
             {
                 Transform slotTrans = hullBeingBuilt.index_slot_table[slotIndex].transform;
                 ShipComponent builtComponent = GameObject.Instantiate(slot_component.Value, slotTrans.position, slotTrans.rotation) as ShipComponent;
+                if (shipType == ShipType.AI_Ship)
+                {
+                    //Debug.LogError("instantiated" + builtComponent + "in slotComp: " + slot_component.Key);
+                }
                 blueprintBeingBuilt.slot_component_table[slot_component.Key] = builtComponent;
                 builtComponent.transform.SetParent(slotTrans, true);
             }

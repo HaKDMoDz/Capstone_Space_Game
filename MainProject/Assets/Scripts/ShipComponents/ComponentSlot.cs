@@ -19,8 +19,10 @@ public class ComponentSlot : MonoBehaviour
     public ShipComponent InstalledComponent
     {
         get { return installedComponent; }
-        set { installedComponent = value;
-        Debug.Log("Set installed component " + value);
+        set 
+        {
+            installedComponent = value;
+            //Debug.LogError("Set installed component " + value);
         }
     }
 

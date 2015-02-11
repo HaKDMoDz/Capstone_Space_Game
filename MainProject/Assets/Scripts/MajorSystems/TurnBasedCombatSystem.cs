@@ -76,6 +76,8 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
     public void AddShip(TurnBasedUnit unit)
     {
 #if FULL_DEBUG
+        //Debug.Log(units);
+        //Debug.Log(unit);
         if (units.Contains(unit))
         {
             Debug.LogError("Unit already exists in list");

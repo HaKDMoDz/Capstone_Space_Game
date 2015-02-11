@@ -70,6 +70,7 @@ public class CombatSceneController : Singleton<CombatSceneController>
             spawnPos.x += spawnSpacing;
         }
 
+        AIManager.Instance.Init(shipBuilder);
         //build AI fleet
 
         //foreach (string blueprintName in pirateFleetData.currentFleet_BlueprintNames)
@@ -105,6 +106,7 @@ public class CombatSceneController : Singleton<CombatSceneController>
     private IEnumerator Start()
     {
         Init();
+
         yield return StartCoroutine(SetupScene());
     }
     

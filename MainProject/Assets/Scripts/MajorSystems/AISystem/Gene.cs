@@ -124,6 +124,7 @@ namespace AI_Fleet
 
         public void ChangeCount(int _newCount)
         {
+            
             count = _newCount;
             m_activationCost = activationCost * (float)count;
             m_powerDrain = powerDrain * (float)count;

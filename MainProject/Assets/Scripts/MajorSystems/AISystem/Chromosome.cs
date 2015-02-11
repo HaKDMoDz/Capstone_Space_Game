@@ -37,18 +37,20 @@ namespace AI_Fleet
 
         private void addOrAppend(Gene _gene, ref SlotsPerSection _remainingSlots)
         {
-            if (alleles.Count > 0)
+            if (alleles.Count > 1)
             {
                 for (int i = 0; i < alleles.Count; i++)
                 {
                     if (alleles[i].Placement == _gene.Placement && alleles[i].Type == _gene.Type)
                     {
                         alleles[i].ChangeCount(alleles[i].Count + _gene.Count);
+                        _remainingSlots.setSlot(_gene.Placement, _remainingSlots.getSlot(_gene.Placement) - _gene.Count);
                         break;
                     }
                     else
                     {
                         alleles.Add(_gene);
+                        _remainingSlots.setSlot(_gene.Placement, _remainingSlots.getSlot(_gene.Placement) - _gene.Count);
                         break;
                     }
                 }
@@ -56,6 +58,7 @@ namespace AI_Fleet
             else
             {
                 alleles.Add(_gene);
+                _remainingSlots.setSlot(_gene.Placement, _remainingSlots.getSlot(_gene.Placement) - _gene.Count);
             }
         }
 
@@ -84,7 +87,7 @@ namespace AI_Fleet
                     }
                     else
                     {
-                        _gene = new Gene(GeneType.POWERPLANT, RandomManager.randomInt(1,3), _gene.Placement);
+                        _gene = new Gene(GeneType.POWERPLANT, RandomManager.randomInt(1,_gene.Count), _gene.Placement);
                     }
                 }
                 else

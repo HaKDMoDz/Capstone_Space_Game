@@ -20,7 +20,6 @@ public class Hull : MonoBehaviour
     public List<ComponentSlot> EmptyComponentGrid
     {
         get { return emptyComponentGrid; }
-        set { emptyComponentGrid = value; }
     }
     #endregion EditorExposed
 
