@@ -60,7 +60,22 @@ public class ShipBuilder
 #endif
 
 
-        return InstantiateShip(shipType, position, rotation); 
+        return InstantiateShip(false, shipType, position, rotation); 
+    }
+
+    public TurnBasedUnit BuildShip(ShipType shipType, BlueprintTemplate bpTemplate, Vector3 position, Quaternion rotation)
+    {
+        hullBeingBuilt = GameObject.Instantiate(bpTemplate.Hull, position, rotation) as Hull;
+        #if FULL_DEBUG ||LOW_DEBUG
+        if (!hullBeingBuilt)
+        {
+            Debug.LogError("ship null");
+        }
+        #endif
+        hullBeingBuilt.Init();
+
+        bpTemplate.GetBlueprint(ref blueprintBeingBuilt, hullBeingBuilt);
+        return InstantiateShip(true, shipType, position, rotation);
     }
     public TurnBasedUnit BuildShip(ShipType shipType, string blueprintName, Vector3 position, Quaternion rotation)
     {
@@ -78,25 +93,26 @@ public class ShipBuilder
         saveSystem.LoadBlueprint(out blueprintBeingBuilt, blueprintName)
         #endif
 
-        return InstantiateShip(shipType, position, rotation);
+        return InstantiateShip(false, shipType, position, rotation);
     }
 
     #endregion Public
 
     #region Private
 
-    private TurnBasedUnit InstantiateShip(ShipType shipType, Vector3 position, Quaternion rotation)
+    private TurnBasedUnit InstantiateShip(bool hullSpawnedAlready, ShipType shipType, Vector3 position, Quaternion rotation)
     {
-        hullBeingBuilt = GameObject.Instantiate(blueprintBeingBuilt.Hull, position, rotation) as Hull;
-        #if FULL_DEBUG
-        if (!hullBeingBuilt)
+        if (!hullSpawnedAlready)
         {
-            Debug.LogError("ship null");
+            hullBeingBuilt = GameObject.Instantiate(blueprintBeingBuilt.Hull, position, rotation) as Hull;
+            #if FULL_DEBUG ||LOW_DEBUG
+            if (!hullBeingBuilt)
+            {
+                Debug.LogError("ship null");
+            }
+            #endif
+            hullBeingBuilt.Init();
         }
-        #endif
-        
-        hullBeingBuilt.Init();
-
         TurnBasedUnit setupUnit;
         if (shipType == ShipType.AI_Ship)
         {

@@ -35,14 +35,9 @@ public class CombatSceneController : Singleton<CombatSceneController>
 
         //get the saved player fleet
         playerFleetData = GameController.Instance.GameData.playerFleetData;
-        pirateFleetData = GameController.Instance.GameData.pirates_AI_Data;
+        //pirateFleetData = GameController.Instance.GameData.pirates_AI_Data;
 
-        //pirate fleet init code
-        // pirateFleetData.currentFleet_BlueprintNames = new List<string>(playerFleetData.currentFleet_BlueprintNames);
-        List<string> ai_ships = new List<string>();
-        ai_ships.Add("ai1");
-        ai_ships.Add("ai2");
-        pirateFleetData.currentFleet_BlueprintNames = ai_ships;
+        
 
         #if FULL_DEBUG
         if(playerFleetData.currentFleet_BlueprintNames.Count==0)
@@ -52,10 +47,10 @@ public class CombatSceneController : Singleton<CombatSceneController>
 	    #endif
 
         #if FULL_DEBUG
-        if (pirateFleetData.currentFleet_BlueprintNames.Count == 0)
-        {
-            Debug.LogError("Empty enemy fleet");
-        }
+        //if (pirateFleetData.currentFleet_BlueprintNames.Count == 0)
+        //{
+        //    Debug.LogError("Empty enemy fleet");
+        //}
         #endif
 
         /////positioning ships automatically for now
@@ -77,16 +72,22 @@ public class CombatSceneController : Singleton<CombatSceneController>
 
         //AIManager.Instance.Init(shipBuilder);
         //build AI fleet
+        //pirate fleet init code
 
-        foreach (string blueprintName in pirateFleetData.currentFleet_BlueprintNames)
+        List<string> ai_ships = new List<string> { "AI_Corvette", "AI_Frigate"};
+        
+        //pirateFleetData.currentFleet_BlueprintNames = ai_ships;
+
+        //foreach (string blueprintName in pirateFleetData.currentFleet_BlueprintNames)
+        foreach (string bpTemplateName in ai_ships)
         {
-            TurnBasedUnit unit = shipBuilder.BuildShip(ShipType.AI_Ship, blueprintName, aiSpawnPos, Quaternion.identity);
-#if FULL_DEBUG
+            TurnBasedUnit unit = shipBuilder.BuildShip(ShipType.AI_Ship, BlueprintTemplates.GetBPTemplate(bpTemplateName), aiSpawnPos, Quaternion.identity);
+            #if FULL_DEBUG
             if (unit == null)
             {
                 Debug.Log("shipbuilder returned null");
             }
-#endif
+            #endif
 
             TurnBasedCombatSystem.Instance.AddShip(unit);
             aiSpawnPos.x -= spawnSpacing;

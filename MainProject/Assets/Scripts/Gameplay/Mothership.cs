@@ -89,7 +89,7 @@ public class Mothership : MonoBehaviour
         {
             inSystem = true;
             #if FULL_DEBUG
-            Debug.Log("In System: " + inSystem);
+            //Debug.Log("In System: " + inSystem);
             #endif
         }
         if (other.tag == TagsAndLayers.PlanetTag)
@@ -152,7 +152,7 @@ public class Mothership : MonoBehaviour
     
     void OnGroundClick(Vector3 worldPosition)
     {
-        Debug.Log("mothership click");
+        //Debug.Log("mothership click");
         destination = worldPosition;
         orbiting = false;
         if (!moving)

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
+using System.Linq;
 
 [CustomEditor(typeof(BlueprintTemplates))]
 public class BPTemplatesEditor : Editor
@@ -37,7 +38,7 @@ public class BPTemplatesEditor : Editor
                 EditorUtility.SetDirty(bpTemplates);
             }
             EditorGUILayout.TextField(bp.MetaData.BlueprintName);
-            EditorGUILayout.ObjectField(bp.Hull, typeof(Hull));
+            EditorGUILayout.ObjectField(bp.Hull, typeof(Hull),false);
 
             EditorGUILayout.EndHorizontal();
 
@@ -49,9 +50,12 @@ public class BPTemplatesEditor : Editor
                 EditorGUILayout.TextField("Excess Power: ", bp.MetaData.ExcessPower.ToString());
                 EditorGUILayout.LabelField("Component List:");
                 EditorGUILayout.LabelField("Slot Index          Component");
-                foreach (var slotIndex_comp in bp.SlotIndex_Comp_List)
+                foreach (var slotIndex_comp in bp.SlotIndex_Comp_List.OrderBy(s=>s.slotIndex))
                 {
-                    EditorGUILayout.ObjectField(slotIndex_comp.slotIndex.ToString(),slotIndex_comp.component, typeof(ShipComponent));
+                    EditorGUILayout.BeginHorizontal();
+                    EditorGUILayout.LabelField(slotIndex_comp.slotIndex.ToString(),GUILayout.Width(40.0f));
+                    EditorGUILayout.ObjectField(slotIndex_comp.component, typeof(ShipComponent));
+                    EditorGUILayout.EndHorizontal();
                 }
             }
             EditorGUI.indentLevel--;
@@ -109,6 +113,10 @@ public class BPTemplatesEditor : Editor
 
     void OnEnable()
     {
+        if(BlueprintTemplates.BlueprintTemplateList==null)
+        {
+            return;
+        }
         for (int i = 0; i < BlueprintTemplates.BlueprintTemplateList.Count; i++)
         {
             foldouts.Add(false);

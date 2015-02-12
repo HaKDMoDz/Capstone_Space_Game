@@ -17,12 +17,20 @@ public class BlueprintTemplates : ScriptableObject
 
     //Database
     public static List<BlueprintTemplate> BlueprintTemplateList { get; private set; }
-
+    public static Dictionary<string, BlueprintTemplate> Name_BpTemplate_Table {get; private set;}
     #endregion Fields
 
     #region Methods
 
     #region Public
+    #region DatabaseAccess
+    public static BlueprintTemplate GetBPTemplate(string name)
+    {
+        return Name_BpTemplate_Table[name];
+    }
+    #endregion DatabaseAccess
+
+    #region GUIAccess
     public bool BlueprintExists(string name)
     {
         return (BpTemplateList.Any(bp => bp.MetaData.BlueprintName == name));
@@ -46,8 +54,9 @@ public class BlueprintTemplates : ScriptableObject
         if (blueprintBeingBuilt.Slot_component_table == null
             || blueprintBeingBuilt.Slot_component_table.Count == 0)
         {
-            Debug.LogError("No components in blueprint");
+            Debug.LogWarning("No components in blueprint");
         }
+
 
         blueprintBeingBuilt.GenerateMetaData(name);
         BpTemplateList.Add(new BlueprintTemplate(blueprintBeingBuilt));
@@ -72,7 +81,7 @@ public class BlueprintTemplates : ScriptableObject
             bpTemplateList.Clear();
         }
     }
-
+    #endregion GUIAccess
     #endregion Public
     #region UnityCallbacks
     private void OnEnable()
@@ -85,6 +94,7 @@ public class BlueprintTemplates : ScriptableObject
         #endif
 
         BlueprintTemplateList = bpTemplateList;
+        Name_BpTemplate_Table = bpTemplateList.ToDictionary(bp=>bp.MetaData.BlueprintName, bp=>bp);
 
     }
     #endregion UnityCallbacks
@@ -136,15 +146,19 @@ public class BlueprintTemplate
                     component = slot_comp.Value
                 });
         }
-        this.metaData = blueprint.MetaData;
+        this.metaData = new ShipBlueprintMetaData(blueprint.MetaData);
     }
 
-    //public void GetBlueprint(ref ShipBlueprint blueprint)
-    //{
-    //    blueprint.Clear();
-    //    blueprint.Hull = this.hull;
-    //    blueprint.Slot_component_table = slotIndex_component_Table.ToDictionary(index_comp=>index_comp.)
-    //}
+    public void GetBlueprint(ref ShipBlueprint blueprint, Hull hullBeingBuilt)
+    {
+        blueprint.Clear();
+        blueprint.Hull = this.hull;
+        foreach (var slotIndex_Comp in SlotIndex_Comp_List)
+        {
+            blueprint.AddComponent(hullBeingBuilt.index_slot_table[slotIndex_Comp.slotIndex], slotIndex_Comp.component);
+        }
+        blueprint.MetaData = new ShipBlueprintMetaData(MetaData);
+    }
 
     [Serializable]
     public struct SlotIndexCompEntry

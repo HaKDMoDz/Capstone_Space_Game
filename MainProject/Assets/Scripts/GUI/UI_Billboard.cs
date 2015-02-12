@@ -44,7 +44,7 @@ public class UI_Billboard : MonoBehaviour
 
     void OnCameraMove()
     {
-        if (isActive)
+        if (isActive && trans)
         {
             trans.rotation = mainCamera.rotation;
         }
