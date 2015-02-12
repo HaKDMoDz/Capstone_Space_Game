@@ -45,5 +45,6 @@ public class SerializedGameData
         gameData.nextScene = nextScene;
 
         sz_playerFleetData.DeSerialize(ref gameData.playerFleetData);
+        sz_pirates_AI_Data.DeSerialize(ref gameData.pirates_AI_Data);
     }
 }

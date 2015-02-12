@@ -11,8 +11,6 @@ public class MissionController : Singleton<MissionController>
     public void Awake()
     {
         acceptMissionFunctions[0] = null;
-        //acceptMissionFunctions[1] = (() => mission1());
-        //acceptMissionFunctions[2] = (() => mission2());
     }
 
     public void AddMission(int _index, Action F)
@@ -24,10 +22,5 @@ public class MissionController : Singleton<MissionController>
     {
         Action accpetMission = acceptMissionFunctions[_index];
         accpetMission();
-    }
-
-    private void mission2()
-    {
-        Debug.Log("Mission 2 clicked");
     }
 }

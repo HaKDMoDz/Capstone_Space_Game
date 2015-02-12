@@ -35,7 +35,7 @@ public class CombatSceneController : Singleton<CombatSceneController>
 
         //get the saved player fleet
         playerFleetData = GameController.Instance.GameData.playerFleetData;
-        //pirateFleetData = GameController.Instance.GameData.pirates_AI_Data;
+        pirateFleetData = GameController.Instance.GameData.pirates_AI_Data;
 
         
 
@@ -74,12 +74,14 @@ public class CombatSceneController : Singleton<CombatSceneController>
         //build AI fleet
         //pirate fleet init code
 
-        List<string> ai_ships = new List<string> { "AI_Corvette", "AI_Frigate"};
+        //List<string> ai_ships = new List<string> { "AI_Corvette", "AI_Frigate"};
         
         //pirateFleetData.currentFleet_BlueprintNames = ai_ships;
 
-        //foreach (string blueprintName in pirateFleetData.currentFleet_BlueprintNames)
-        foreach (string bpTemplateName in ai_ships)
+       // Debug.LogError(pirateFleetData.currentFleet_BlueprintNames.Count);
+
+        foreach (string bpTemplateName in pirateFleetData.currentFleet_BlueprintNames)
+        //foreach (string bpTemplateName in ai_ships)
         {
             TurnBasedUnit unit = shipBuilder.BuildShip(ShipType.AI_Ship, BlueprintTemplates.GetBPTemplate(bpTemplateName), aiSpawnPos, Quaternion.identity);
             #if FULL_DEBUG

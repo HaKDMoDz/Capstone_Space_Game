@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using System;
+using System.Collections.Generic;
 
 public class Planet_Mission : MonoBehaviour 
 {
@@ -79,11 +80,22 @@ public class Planet_Mission : MonoBehaviour
     private void mission1()
     {
         Debug.Log("Mission 1 clicked");
+
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames = new List<string>();
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("AI_Corvette");
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("AI_Corvette");
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("AI_Corvette");
+        GameController.Instance.ChangeScene(GameScene.CombatScene);
     }
 
     private void mission2()
     {
         Debug.Log("Mission 2 clicked");
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames = new List<string>();
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("AI_Frigate");
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("AI_Frigate");
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("AI_Frigate");
+        GameController.Instance.ChangeScene(GameScene.CombatScene);
     }
 
     private void invalidMission()

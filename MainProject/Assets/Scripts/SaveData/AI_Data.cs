@@ -26,7 +26,7 @@ public class SerializedAI_Data
 {
     public List<string> currentFleet_BlueprintNames;
 
-    public void DeSerialize(ref PlayerFleetData AIFleetData)
+    public void DeSerialize(ref AI_Data AIFleetData)
     {
         AIFleetData.currentFleet_BlueprintNames = currentFleet_BlueprintNames;
     }
