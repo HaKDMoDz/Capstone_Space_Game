@@ -62,6 +62,7 @@ public class ComponentTableEditor : Editor
                     if(GUI.Button(new Rect(0.0f, posY, Screen.width*rectXPos.x, EditorGUIUtility.singleLineHeight),"X"))
                     {
                         compTable.RemoveEntry(entry.ID);
+                        EditorUtility.SetDirty(compTable);
                     }
                     EditorGUI.IntField(new Rect(Screen.width*(rectXPos.x+spacing), posY, Screen.width*rectXPos.y, EditorGUIUtility.singleLineHeight),entry.ID);
                     EditorGUI.ObjectField(new Rect(Screen.width*(rectXPos.y+spacing),posY, Screen.width*rectXPos.z,EditorGUIUtility.singleLineHeight),entry.component,typeof(ShipComponent),true);

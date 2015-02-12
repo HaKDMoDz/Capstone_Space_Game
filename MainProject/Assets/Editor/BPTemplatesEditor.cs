@@ -22,14 +22,11 @@ public class BPTemplatesEditor : Editor
         }
 
         //Display Data
-        //float posY = 50.0f;
-
         EditorGUILayout.BeginVertical();
 
         for (int i = 0; i < bpTemplates.BpTemplateList.Count; i++)
         {
             BlueprintTemplate bp = bpTemplates.BpTemplateList[i];
-            //posY += EditorGUIUtility.singleLineHeight;
 
             EditorGUILayout.BeginHorizontal();
 
@@ -37,33 +34,27 @@ public class BPTemplatesEditor : Editor
             {
                 bpTemplates.RemoveBlueprint(bp.MetaData.BlueprintName);
                 foldouts.RemoveAt(i);
+                EditorUtility.SetDirty(bpTemplates);
             }
             EditorGUILayout.TextField(bp.MetaData.BlueprintName);
             EditorGUILayout.ObjectField(bp.Hull, typeof(Hull));
 
             EditorGUILayout.EndHorizontal();
 
-            EditorGUI.indentLevel += 2;
-            //Debug.Log("index " + i);
-            //Debug.Log("foldouts.Count " + foldouts.Count);
+            EditorGUI.indentLevel ++ ;
             foldouts[i] = EditorGUILayout.Foldout(foldouts[i], "Blueprint Info");
             if (foldouts[i])
             {
-                //EditorGUILayout.BeginVertical();
                 EditorGUILayout.Space();
                 EditorGUILayout.TextField("Excess Power: ", bp.MetaData.ExcessPower.ToString());
                 EditorGUILayout.LabelField("Component List:");
                 EditorGUILayout.LabelField("Slot Index          Component");
                 foreach (var slotIndex_comp in bp.SlotIndex_Comp_List)
                 {
-                    EditorGUILayout.BeginHorizontal();
-                    EditorGUILayout.TextArea(slotIndex_comp.slotIndex.ToString());
-                    EditorGUILayout.ObjectField(slotIndex_comp.component, typeof(ShipComponent));
-                    EditorGUILayout.EndHorizontal();
+                    EditorGUILayout.ObjectField(slotIndex_comp.slotIndex.ToString(),slotIndex_comp.component, typeof(ShipComponent));
                 }
-                //EditorGUILayout.EndVertical();
             }
-            EditorGUI.indentLevel-=2;
+            EditorGUI.indentLevel--;
             EditorGUILayout.Space();
         }//for bps
 

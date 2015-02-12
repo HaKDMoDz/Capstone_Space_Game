@@ -56,6 +56,7 @@ public class HullTableEditor : Editor
             if (GUI.Button(new Rect(0.0f, PosY, Screen.width * rectXPos.x, EditorGUIUtility.singleLineHeight), "X"))
             {
                 hullTable.RemoveEntry(entry.ID);
+                EditorUtility.SetDirty(hullTable);
             }
             EditorGUI.IntField(new Rect(Screen.width * (rectXPos.x + spacing), PosY, Screen.width * rectXPos.y, EditorGUIUtility.singleLineHeight), entry.ID);
             EditorGUI.ObjectField(new Rect(Screen.width * (rectXPos.y + spacing), PosY, Screen.width * rectXPos.z, EditorGUIUtility.singleLineHeight), entry.hull, typeof(Hull), true);

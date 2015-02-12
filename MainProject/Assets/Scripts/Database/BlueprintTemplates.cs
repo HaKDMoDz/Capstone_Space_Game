@@ -55,6 +55,15 @@ public class BlueprintTemplates : ScriptableObject
     public void RemoveBlueprint(string name)
     {
         Debug.Log("Remove blueprint " + name);
+        if(BlueprintExists(name))
+        {
+            bpTemplateList.Remove(bpTemplateList.Find(b => b.MetaData.BlueprintName == name));
+            BlueprintTemplateList.Remove(BlueprintTemplateList.Find(b => b.MetaData.BlueprintName == name));
+        }
+        else
+        {
+            Debug.LogError("Blueprint " + name + " not found");
+        }
     }
     public void Wipe()
     {
