@@ -70,18 +70,7 @@ public class CombatSceneController : Singleton<CombatSceneController>
             spawnPos.x += spawnSpacing;
         }
 
-        //AIManager.Instance.Init(shipBuilder);
-        //build AI fleet
-        //pirate fleet init code
-
-        //List<string> ai_ships = new List<string> { "AI_Corvette", "AI_Frigate"};
-        
-        //pirateFleetData.currentFleet_BlueprintNames = ai_ships;
-
-       // Debug.LogError(pirateFleetData.currentFleet_BlueprintNames.Count);
-
         foreach (string bpTemplateName in pirateFleetData.currentFleet_BlueprintNames)
-        //foreach (string bpTemplateName in ai_ships)
         {
             TurnBasedUnit unit = shipBuilder.BuildShip(ShipType.AI_Ship, BlueprintTemplates.GetBPTemplate(bpTemplateName), aiSpawnPos, Quaternion.identity);
             #if FULL_DEBUG
@@ -95,8 +84,6 @@ public class CombatSceneController : Singleton<CombatSceneController>
             aiSpawnPos.x -= spawnSpacing;
             unit.transform.RotateAroundYAxis(180.0f);
         }
-
-
 
         //combat start 
         //comment out this line for the combat system tester to work

@@ -39,7 +39,8 @@ public class Planet_Mission : MonoBehaviour
         get { return id; }
         set { id = value; }
     }
-    
+
+    private Transform missionUIPanel;
 
 	void Awake () 
     {
@@ -66,7 +67,6 @@ public class Planet_Mission : MonoBehaviour
     {
         panelOpen = !panelOpen;
         transform.FindChild("PlanetUI").FindChild("MissionPanel").gameObject.SetActive(panelOpen);
-        Debug.Log(transform.FindChild("PlanetUI").FindChild("MissionPanel").FindChild("Text"));
         transform.FindChild("PlanetUI").FindChild("MissionPanel").FindChild("Text").GetComponent<Text>().text = missionText;
 
     }
