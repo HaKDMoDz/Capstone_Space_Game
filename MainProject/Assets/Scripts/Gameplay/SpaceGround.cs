@@ -3,25 +3,13 @@ using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
 
-public class SpaceGround : Singleton<SpaceGround>, IPointerUpHandler, IPointerDownHandler, IDragHandler
+public class SpaceGround : Singleton<SpaceGround>, IPointerDownHandler, IDragHandler
 {
     public delegate void GroundClick(Vector3 worldPosition);
     public event GroundClick OnGroundClick = new GroundClick((Vector3) => { });
 
     public delegate void GroundHold(Vector3 worldPosition);
     public event GroundHold OnGroundHold = new GroundHold((Vector3) => { });
-
-    private bool holding = false;
-
-
-    /// <summary>
-    /// Called the pointer is released on the space ground
-    /// </summary>
-    /// <param name="eventData"></param>
-    public void OnPointerUp(PointerEventData eventData)
-    {
-        holding = false;
-    }
 
     /// <summary>
     /// Called when the pointer is clicked on the space ground. Raises the OnGroundClick event with the worldPosition of where on the ground the click happened
@@ -31,7 +19,6 @@ public class SpaceGround : Singleton<SpaceGround>, IPointerUpHandler, IPointerDo
     {
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            holding = true;
             OnGroundClick(eventData.worldPosition);
         }
     }

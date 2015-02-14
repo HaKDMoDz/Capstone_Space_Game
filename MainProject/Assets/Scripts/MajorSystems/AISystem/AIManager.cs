@@ -7,7 +7,7 @@ public class AIManager : Singleton<AIManager>
     private AI_Fleet.Population pop1;
 
     public Comp_Wpn_Laser laser;
-    public Comp_Pwr_PowerPlant powerPlant;
+    public Comp_Eng_PowerPlant powerPlant;
     public Comp_Def_Shield shield;
     public Comp_Def_Armour armour;
     public Comp_Eng_Thruster thruster;

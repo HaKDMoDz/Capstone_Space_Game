@@ -229,6 +229,7 @@ public class PlayerShip : TurnBasedUnit
         {
             Debug.Log("Move command received " + shipBPMetaData.BlueprintName);
             shipMove.destination = worldPosition;
+            Debug.Log("Distance to dest " + Vector3.Distance(trans.position, worldPosition));
             receivedMoveCommand = true;
         }
     }

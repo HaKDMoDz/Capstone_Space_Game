@@ -13,8 +13,8 @@ public class CameraDirector : Singleton<CameraDirector>
     private float heightAiming = 40.0f;
     [SerializeField]
     private float distFocusAiming = 50.0f;
-    [SerializeField]
-    private float orbitSpeed = 30.0f;
+    //[SerializeField]
+    //private float orbitSpeed = 30.0f;
     
     //internal
     private float initialAngleX;
