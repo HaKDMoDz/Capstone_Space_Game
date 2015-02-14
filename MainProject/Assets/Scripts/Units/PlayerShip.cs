@@ -87,7 +87,7 @@ public class PlayerShip : TurnBasedUnit
         //setups up the GUI for the player ship
         combatInterface.EnableComponentSelectionPanel(true);
         combatInterface.ShowStatsPanel(true);
-        combatInterface.ShowComponentActivationButtons(SelectAllComponents, components);
+        combatInterface.ShowComponentActivationButtons(SelectAllComponents, components.Where(c=>c.CanActivate));
         combatInterface.ShowPower(CurrentPower);
 
         //run until the the player hits Return or until power reaches 0

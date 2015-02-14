@@ -58,7 +58,7 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
     /// </summary>
     /// <param name="activationMethod"></param>
     /// <param name="components"></param>
-    public void ShowComponentActivationButtons(UnityAction<Type> activationMethod, List<ShipComponent> components)
+    public void ShowComponentActivationButtons(UnityAction<Type> activationMethod, IEnumerable<ShipComponent> components)
     {
         for (int i = compButtons.Count - 1; i >= 0; i--)
         {

@@ -51,6 +51,12 @@ public abstract class ShipComponent : MonoBehaviour , IPointerClickHandler, IPoi
     {
         get { return compHP; }
     }
+    [SerializeField]
+    private bool canActivate;
+    public bool CanActivate
+    {
+        get { return canActivate; }
+    }
 
     //interface
     private bool selected;
