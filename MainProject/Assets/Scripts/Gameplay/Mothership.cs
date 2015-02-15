@@ -133,9 +133,10 @@ public class Mothership : MonoBehaviour
             //orbitalRotation = otherTrans.rotation;
             orbiting = true;
             orbitID = otherTrans.gameObject.GetComponent<Planet_Mission>().ID;
-            Debug.Log("OrbitID: " + orbitID);
+            //Debug.Log("OrbitID: " + orbitID);
 
-            StopCoroutine(Move());
+            //StopCoroutine(Move());
+            StopAllCoroutines();
             StartCoroutine(Orbit());
 
             StartCoroutine(GalaxyCamera.Instance.MoveToFocusOn(otherTrans));
