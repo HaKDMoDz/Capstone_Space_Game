@@ -54,7 +54,7 @@ public class BPTemplatesEditor : Editor
                 {
                     EditorGUILayout.BeginHorizontal();
                     EditorGUILayout.LabelField(slotIndex_comp.slotIndex.ToString(),GUILayout.Width(40.0f));
-                    EditorGUILayout.ObjectField(slotIndex_comp.component, typeof(ShipComponent));
+                    EditorGUILayout.ObjectField(slotIndex_comp.component, typeof(ShipComponent),false);
                     EditorGUILayout.EndHorizontal();
                 }
             }

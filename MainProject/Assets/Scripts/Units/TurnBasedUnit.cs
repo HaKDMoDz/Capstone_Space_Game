@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public abstract class TurnBasedUnit : MonoBehaviour
 {
@@ -23,6 +24,12 @@ public abstract class TurnBasedUnit : MonoBehaviour
         get { return timeLeftToTurn; }
         set
         {
+            #if FULL_DEBUG || LOW_DEBUG
+            if(value < 0.0f)
+            {
+                Debug.LogError("Time left to turn is being set to a negative number: " + value);
+            }
+            #endif
             if (value <= 0.0f)
             {
                 timeLeftToTurn = turnDelay;
@@ -52,6 +59,8 @@ public abstract class TurnBasedUnit : MonoBehaviour
         get { return currentPower; }
         protected set { currentPower = value; }
     }
+
+    public float MoveCost {get; private set;}
 
     protected List<ShipComponent> components = new List<ShipComponent>();
     public List<ShipComponent> Components
@@ -186,82 +195,11 @@ public abstract class TurnBasedUnit : MonoBehaviour
         this.shipBPMetaData = shipBP.MetaData;
         this.shipMove = shipMove;
         this.shipMove.Init();
-        timeLeftToTurn = turnDelay;
 
-        MaxShields = 0.0f;
-        foreach (ShipComponent component in shipBP.Slot_component_table.Values)
-        {
-            component.Init(this);
-            components.Add(component);
-            if (component is Comp_Def_Shield)
-            {
-                MaxShields += ((Comp_Def_Shield)component).shieldStrength;
-            }
-        }
+        InitStats();
+        InitReferences();
 
-        trans = transform;
-
-        #if FULL_DEBUG
-        if (trans.FindChild("ComponentCamera") == null)
-        {
-            Debug.LogError("No Component camera found");
-        }
-        #endif
-        componentCamera = trans.FindChild("ComponentCamera").gameObject;
-        componentCamera.SetActive(false);
-
-        #if FULL_DEBUG
-        if (trans.FindChild("TargetingCamera") == null)
-        {
-            Debug.LogError("No Targeting camera found");
-        }
-        #endif
-
-        targetingCamera = trans.FindChild("TargetingCamera").gameObject;
-        targetingCamera.SetActive(false);
-
-        expolosionObject = trans.FindChild("Explosion").gameObject;
-
-        Canvas gui = gameObject.GetComponentInChildren<Canvas>();
-        if (!gui)
-        {
-            Debug.LogError("could not find GUI");
-        }
-
-        foreach (Slider slider in GetComponentsInChildren<Slider>())
-        {
-            if (slider.name == "HPbar")
-            {
-                hpBar = slider;
-            }
-            else if (slider.name == "ShieldBar")
-            {
-                shieldBar = slider;
-            }
-        }
-
-        #if FULL_DEBUG
-        if (!hpBar)
-        {
-            Debug.LogError("Could not find HPbar");
-        }
-        if (!shieldBar)
-        {
-            Debug.LogError("Could not find ShieldBar");
-        }
-        #endif
-
-
-        ShowHPBars(false);
-
-        maxHullHP = shipBP.Hull.HullHP;
-        hullHP = maxHullHP;
-
-        ShieldStrength = MaxShields;
-
-        maxPower = shipBPMetaData.ExcessPower;
-        currentPower = MaxPower;
-    }
+    }//Init
 
 
     /// <summary>
@@ -297,6 +235,100 @@ public abstract class TurnBasedUnit : MonoBehaviour
     }
 
     #endregion PublicMethods
+
+
+    #region PrivateMethods
+
+    //Helper
+    private void InitStats()
+    {
+        timeLeftToTurn = turnDelay;
+
+        foreach (Slider slider in GetComponentsInChildren<Slider>())
+        {
+            if (slider.name == "HPbar")
+            {
+                hpBar = slider;
+            }
+            else if (slider.name == "ShieldBar")
+            {
+                shieldBar = slider;
+            }
+        }
+
+        #if FULL_DEBUG
+        if (!hpBar)
+        {
+            Debug.LogError("Could not find HPbar");
+        }
+        if (!shieldBar)
+        {
+            Debug.LogError("Could not find ShieldBar");
+        }
+        #endif
+        ShowHPBars(false);
+
+        maxHullHP = shipBP.Hull.HullHP;
+        hullHP = maxHullHP;
+
+
+        MaxShields = 0.0f;
+        foreach (ShipComponent component in shipBP.Slot_component_table.Values)
+        {
+            component.Init(this);
+            components.Add(component);
+            if (component is Comp_Def_Shield)
+            {
+                MaxShields += ((Comp_Def_Shield)component).shieldStrength;
+            }
+        }
+        ShieldStrength = MaxShields;
+
+        maxPower = shipBPMetaData.ExcessPower;
+        currentPower = MaxPower;
+
+        int numThrusters = components.Count(c => c is Comp_Eng_Thruster);
+        #if FULL_DEBUG || LOW_DEBUG
+        if (numThrusters <= 0)
+        {
+            Debug.LogError("No Thrusters on Ship");
+        }
+        #endif
+        
+        float thrust = ((Comp_Eng_Thruster)components.Find(c => c is Comp_Eng_Thruster)).Thrust;
+        float totalThrust = thrust * numThrusters;
+        int mass = shipBP.Hull.EmptyComponentGrid.Count;
+        MoveCost = mass / totalThrust * 1.5f;
+    }
+
+    private void InitReferences()
+    {
+        trans = transform;
+
+        #if FULL_DEBUG
+        if (trans.FindChild("ComponentCamera") == null)
+        {
+            Debug.LogError("No Component camera found");
+        }
+        #endif
+        componentCamera = trans.FindChild("ComponentCamera").gameObject;
+        componentCamera.SetActive(false);
+
+        #if FULL_DEBUG
+        if (trans.FindChild("TargetingCamera") == null)
+        {
+            Debug.LogError("No Targeting camera found");
+        }
+        #endif
+
+        targetingCamera = trans.FindChild("TargetingCamera").gameObject;
+        targetingCamera.SetActive(false);
+
+        expolosionObject = trans.FindChild("Explosion").gameObject;
+
+        
+    }
+    #endregion PrivateMethods
 
     #endregion Methods
 }

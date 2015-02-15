@@ -47,10 +47,10 @@ namespace AI_Fleet
         private float powerDrain;
         private float activationCost;
         private float damage;
-        private float range;
+        //private float range;
         private float hullDamagePercent;
-        private float armourDmgModifier;
-        private float shieldDmgModifier;
+        //private float armourDmgModifier;
+        //private float shieldDmgModifier;
         private float shieldStrength;
         private bool unlocked;
 
@@ -146,60 +146,60 @@ namespace AI_Fleet
                     powerDrain = 20;
                     maxHP = 100;
                     damage = 50;
-                    range = 0;
+                    //range = 0;
                     hullDamagePercent = 0;
-                    armourDmgModifier = 0;
-                    shieldDmgModifier = 0;
+                    //armourDmgModifier = 0;
+                    //shieldDmgModifier = 0;
                     break;
                 case GeneType.MISSILE:
                     activationCost = 20;
                     powerDrain = 20;
                     maxHP = 100;
                     damage = 50;
-                    range = 0;
+                    //range = 0;
                     hullDamagePercent = 0;
-                    armourDmgModifier = 0;
-                    shieldDmgModifier = 0;
+                    //armourDmgModifier = 0;
+                    //shieldDmgModifier = 0;
                     break;
                 case GeneType.RAILGUN:
                     activationCost = 20;
                     powerDrain = 20;
                     maxHP = 100;
                     damage = 50;
-                    range = 0;
+                    //range = 0;
                     hullDamagePercent = 0;
-                    armourDmgModifier = 0;
-                    shieldDmgModifier = 0;
+                    //armourDmgModifier = 0;
+                    //shieldDmgModifier = 0;
                     break;
                 case GeneType.FLAK_CANNON:
                     activationCost = 20;
                     powerDrain = 20;
                     maxHP = 100;
                     damage = 50;
-                    range = 0;
+                    //range = 0;
                     hullDamagePercent = 0;
-                    armourDmgModifier = 0;
-                    shieldDmgModifier = 0;
+                    //armourDmgModifier = 0;
+                    //shieldDmgModifier = 0;
                     break;
                 case GeneType.FIGHTER_BAY:
                     activationCost = 20;
                     powerDrain = 20;
                     maxHP = 100;
                     damage = 50;
-                    range = 0;
+                    //range = 0;
                     hullDamagePercent = 0;
-                    armourDmgModifier = 0;
-                    shieldDmgModifier = 0;
+                    //armourDmgModifier = 0;
+                    //shieldDmgModifier = 0;
                     break;
                 case GeneType.REPAIR_BEAM:
                     activationCost = 20;
                     powerDrain = 20;
                     maxHP = 100;
                     damage = 50;
-                    range = 0;
+                    //range = 0;
                     hullDamagePercent = -100;
-                    armourDmgModifier = 0;
-                    shieldDmgModifier = -0.15f;
+                    //armourDmgModifier = 0;
+                    //shieldDmgModifier = -0.15f;
                     break;
 
                     // defensive 6-7

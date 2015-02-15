@@ -127,7 +127,7 @@ public class ComponentTableEditor : Editor
 
         EditorGUILayout.LabelField("Add entry to Component Table");
 
-        id = EditorGUILayout.IntField("num", id);
+        id = EditorGUILayout.IntField("ID", id);
         if(compTable.IDExists(id))
         {
             EditorGUILayout.HelpBox("ID already exists in table", MessageType.Error, true);
@@ -146,6 +146,7 @@ public class ComponentTableEditor : Editor
             if(comp)
             {
                 compTable.AutoGenIDandAdd(comp);
+                id = compTable.GenID();
                 EditorUtility.SetDirty(compTable);
                 Clear();            
             }
@@ -161,6 +162,7 @@ public class ComponentTableEditor : Editor
             if (comp)
             {
                 compTable.AddEntry(id, comp);
+                id = compTable.GenID();
                 EditorUtility.SetDirty(compTable);
                 Clear();
             }

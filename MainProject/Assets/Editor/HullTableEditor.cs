@@ -92,6 +92,7 @@ public class HullTableEditor : Editor
             if (hull)
             {
                 hullTable.AutoGenIDAndAdd(hull);
+                id = hullTable.GenNextID();
                 EditorUtility.SetDirty(hullTable);
                 Clear();
             }
@@ -106,6 +107,7 @@ public class HullTableEditor : Editor
             if (hull)
             {
                 hullTable.AddEntry(id, hull);
+                id = hullTable.GenNextID();
                 EditorUtility.SetDirty(hullTable);
                 Clear();
             }

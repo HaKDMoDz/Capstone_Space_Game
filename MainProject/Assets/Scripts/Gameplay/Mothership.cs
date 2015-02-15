@@ -16,7 +16,7 @@ public class Mothership : MonoBehaviour
     private float moveSpeed = 0.5f;
     [SerializeField]
     private float orbitSpeed = 0.01f;
-    private Quaternion orbitalRotation;
+    //private Quaternion orbitalRotation;
     private bool orbiting;
 
     private float angle = 0.0f;
@@ -100,7 +100,7 @@ public class Mothership : MonoBehaviour
             float deltaZ = otherTrans.position.z - trans.position.z;
             float deltaX = otherTrans.position.x - trans.position.x;
             angle = (180.0f + ((Mathf.Atan2(deltaZ,deltaX) * 180.0f) / Mathf.PI))%360.0f;
-            orbitalRotation = otherTrans.rotation;
+            //orbitalRotation = otherTrans.rotation;
             orbiting = true;
         }
     }

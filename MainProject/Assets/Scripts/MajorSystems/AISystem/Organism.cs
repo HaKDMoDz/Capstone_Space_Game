@@ -86,7 +86,7 @@ namespace AI_Fleet
 
     class Organism
     {
-        private AIManager aiManager;
+        //private AIManager aiManager;
 
         private SlotsPerSection slots;
         public AI_Fleet.SlotsPerSection Slots
@@ -182,7 +182,7 @@ namespace AI_Fleet
 
         private void initOrganism(AIManager _aiManager)
         {
-            aiManager = _aiManager;
+            //aiManager = _aiManager;
             incrementIDs();
             assignSlots();
         }
