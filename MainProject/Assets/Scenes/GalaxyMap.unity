@@ -16282,6 +16282,7 @@ GameObject:
   - 54: {fileID: 976118086}
   - 114: {fileID: 976118088}
   - 114: {fileID: 976118087}
+  - 114: {fileID: 976118089}
   m_Layer: 20
   m_Name: Planet
   m_TagString: Planet
@@ -16379,6 +16380,23 @@ MonoBehaviour:
   - three
   - four
   id: 3
+--- !u!114 &976118089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 976118082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5807f68ff37ec74099b6317c4a86121, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  destination: {fileID: 0}
+  targets: []
+  completed: 0
+  creditReward: 0
+  missionText: 
+  id: 0
 --- !u!1 &987145519
 GameObject:
   m_ObjectHideFlags: 0
