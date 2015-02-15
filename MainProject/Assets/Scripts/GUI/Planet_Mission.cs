@@ -91,11 +91,17 @@ public class Planet_Mission : MonoBehaviour
     private void mission2()
     {
         Debug.Log("Mission 2 clicked");
-        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames = new List<string>();
-        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("AI_Frigate");
-        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("AI_Frigate");
-        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("AI_Frigate");
-        GameController.Instance.ChangeScene(GameScene.CombatScene);
+        //GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames = new List<string>();
+        //GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("AI_Frigate");
+        //GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("AI_Frigate");
+        //GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("AI_Frigate");
+        //GameController.Instance.ChangeScene(GameScene.CombatScene);
+        destination.transform.FindChild("PlanetUI").gameObject.SetActive(true);
+        destination.transform.FindChild("PlanetUI").FindChild("MissionCompleteButton").gameObject.SetActive(true);
+        destination.GetComponent<Planet_MissionComplete>().InitMissionComplete(ID);
+
+        transform.FindChild("PlanetUI").FindChild("MissionButton").gameObject.SetActive(false);
+        transform.FindChild("PlanetUI").FindChild("MissionPanel").gameObject.SetActive(false);
     }
 
     private void invalidMission()

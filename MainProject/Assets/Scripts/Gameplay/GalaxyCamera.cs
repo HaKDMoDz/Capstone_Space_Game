@@ -30,6 +30,8 @@ public class GalaxyCamera : Singleton<GalaxyCamera>
     #region Methods
     public IEnumerator MoveToFocusOn(Transform target)
     {
+        Debug.Log("MoveToFocusOn called...");
+        StopCoroutine("FollowMothership");
         Vector3 targetPos = target.position;
         targetPos.y += zoomedOutHeight;
         targetPos.z -= zoomedOutHeight / Mathf.Tan(initialAngleX);
@@ -38,6 +40,8 @@ public class GalaxyCamera : Singleton<GalaxyCamera>
 
     public IEnumerator FollowMothership(Transform ship, bool inSystem)
     {
+        Debug.Log("FollowMothershipCalled...");
+        StopCoroutine("MoveToFocusOn");
         Vector3 targetPos = ship.position;
         if (inSystem)
         {

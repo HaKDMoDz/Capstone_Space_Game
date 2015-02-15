@@ -110,6 +110,7 @@ public class CameraDirector : Singleton<CameraDirector>
     #region UnityCallbacks
     private void Awake()
     {
+        transform.position = Vector3.zero;
         trans = transform;
         initialRot = trans.rotation;
         initialAngleX = Mathf.Deg2Rad * initialRot.eulerAngles.x;

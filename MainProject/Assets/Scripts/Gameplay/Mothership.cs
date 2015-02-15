@@ -23,6 +23,7 @@ public class Mothership : MonoBehaviour
 
     public bool Orbiting { get { return orbiting; } set { orbiting = value; } }
 
+    public int orbitID = -1;
 
     //cached
     private Transform trans;
@@ -71,6 +72,35 @@ public class Mothership : MonoBehaviour
         yield return null;
     }
 
+    private IEnumerator Orbit()
+    {
+        Vector3 moveDir;
+        moving = true;
+        moveDir = destination - trans.position;
+
+        if (movementMode == MovementMode.Translate)
+        {
+            while (moveDir.magnitude > moveSpeed * Time.deltaTime)
+            {
+                Vector3 moveDirNorm = moveDir.normalized;
+                trans.LookAt(destination);
+                trans.position += moveDirNorm * moveSpeed * Time.deltaTime;
+                moveDir = destination - trans.position;
+                //StartCoroutine(GalaxyCamera.Instance.FollowMothership(trans, inSystem));
+                yield return null;
+
+            }
+        }
+        while (moveDir.magnitude > GlobalVars.LerpDistanceEpsilon)
+        {
+            trans.LookAt(destination);
+            trans.position = Vector3.Lerp(trans.position, destination, moveSpeed * .01f * Time.deltaTime);
+            //StartCoroutine(GalaxyCamera.Instance.FollowMothership(trans, inSystem));
+            moveDir = destination - trans.position;
+            yield return null;
+        }
+    }
+
     #region UnityCallbacks
     private void Awake()
     {
@@ -80,7 +110,7 @@ public class Mothership : MonoBehaviour
     {
         spaceGround.OnGroundClick += OnGroundClick;
         spaceGround.OnGroundHold += OnGroundClick;
-        StartCoroutine(GalaxyCamera.Instance.MoveToFocusOn(trans));
+        StartCoroutine(GalaxyCamera.Instance.FollowMothership(trans, false));
     }
 
     private void OnTriggerEnter(Collider other)
@@ -94,7 +124,7 @@ public class Mothership : MonoBehaviour
         }
         if (other.tag == TagsAndLayers.PlanetTag)
         {
-            Debug.Log("entering planter orbit");
+            Debug.Log("entering planetary orbit");
             //TODO: add code for setting initial angle
             Transform otherTrans = other.transform;
             float deltaZ = otherTrans.position.z - trans.position.z;
@@ -102,6 +132,14 @@ public class Mothership : MonoBehaviour
             angle = (180.0f + ((Mathf.Atan2(deltaZ,deltaX) * 180.0f) / Mathf.PI))%360.0f;
             //orbitalRotation = otherTrans.rotation;
             orbiting = true;
+            orbitID = otherTrans.gameObject.GetComponent<Planet_Mission>().ID;
+            Debug.Log("OrbitID: " + orbitID);
+
+            StopCoroutine(Move());
+            StartCoroutine(Orbit());
+
+            StartCoroutine(GalaxyCamera.Instance.MoveToFocusOn(otherTrans));
+
         }
     }
     private void OnTriggerStay(Collider other)
@@ -109,16 +147,17 @@ public class Mothership : MonoBehaviour
         if (other.tag == TagsAndLayers.PlanetTag && orbiting)
         {
             //Debug.Log("<<<" + other.name + ">>>");
-
+            Debug.Log("still in Planetary Orbit...");
+            
             angle = (angle + orbitSpeed) % 360.0f;
             //Debug.Log(angle);
             Transform otherTrans = other.transform;
-
             trans.position = PointOnCircle(((SphereCollider)other).radius - 10.0f, angle, otherTrans.position);
             destination = PointOnCircle(((SphereCollider)other).radius - 10.0f, (angle + 2.0f) % 360.0f, otherTrans.position);
 
             trans.LookAt(destination);
             moving = false;
+           
         }
     }
 
@@ -141,9 +180,13 @@ public class Mothership : MonoBehaviour
             Debug.Log("In System: " + inSystem);
             #endif
         }
-        if (other.tag == TagsAndLayers.PlanetTag)
+        if (other.tag == TagsAndLayers.PlanetTag && orbitID == other.gameObject.GetComponent<Planet_Mission>().ID)
         {
             orbiting = false;
+            moving = true;
+            StopCoroutine(Orbit());
+            StartCoroutine(Move());
+            StartCoroutine(GalaxyCamera.Instance.FollowMothership(trans, false));
         }
     }
     #endregion UnityCallbacks
