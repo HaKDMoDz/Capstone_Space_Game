@@ -99,7 +99,8 @@ public class Planet_Mission : MonoBehaviour
         destination.transform.FindChild("PlanetUI").gameObject.SetActive(true);
         destination.transform.FindChild("PlanetUI").FindChild("MissionCompleteButton").gameObject.SetActive(true);
         destination.GetComponent<Planet_MissionComplete>().InitMissionComplete(ID);
-
+        GameObject.Find("missionSelector").SetActive(true);
+        GameObject.Find("missionSelector").GetComponent<MissionSelector>().CurrentDestination = destination.transform;
         transform.FindChild("PlanetUI").FindChild("MissionButton").gameObject.SetActive(false);
         transform.FindChild("PlanetUI").FindChild("MissionPanel").gameObject.SetActive(false);
     }

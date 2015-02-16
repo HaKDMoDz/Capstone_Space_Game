@@ -96,6 +96,7 @@ public class Planet_MissionComplete : MonoBehaviour
     private void mission2()
     {
         Debug.Log("Mission 2 completed");
+        //GameObject.Find("missionSelector").SetActive(false);
         toggleMissionCompletePanel();
     }
 

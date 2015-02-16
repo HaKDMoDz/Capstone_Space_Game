@@ -9,6 +9,8 @@ public class MissionController : Singleton<MissionController>
     private Action[] acceptMissionFunctions = new Action[10];
     private Action[] completeMissionFunctions = new Action[10];
 
+    public Transform CurrentDestination;
+
     public void Awake()
     {
         acceptMissionFunctions[0] = null;
