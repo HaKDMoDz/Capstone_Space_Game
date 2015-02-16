@@ -21,6 +21,10 @@ public struct CombatGUIFields
     public Text powerText;
     public GameObject targetingPanel;
     public Text targetedShipName;
+    public RectTransform mainCanvas;
+    public GameObject moveUICanvas;
+    public Text moveDistance;
+    public Text movePowerCost;
 }
 #endregion AdditionalStructs
 public class CombatSystemInterface : Singleton<CombatSystemInterface>
@@ -35,6 +39,9 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
     //internal
     private Dictionary<TurnBasedUnit, ButtonWithContent> unit_buttonRect_table = new Dictionary<TurnBasedUnit, ButtonWithContent>();
     private List<ButtonWithContent> compButtons = new List<ButtonWithContent>();
+
+    //references
+    private RectTransform moveCostUITrans;
     #endregion Fields
 
     #region Methods
@@ -81,6 +88,22 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
             buttonClone.transform.SetParent(guiFields.compButtonParent, false);
         }
     }//ShowComponentActivationButtons
+
+    public void ShowMoveCostUI(Vector3 position , float distance, float powerCost)
+    {
+        Vector2 viewPortPos = RectTransformUtility.WorldToScreenPoint(Camera.main, position);
+        //moveCostUITrans.anchorMin = viewPortPos;
+        //moveCostUITrans.anchorMax = viewPortPos;
+        moveCostUITrans.anchoredPosition = viewPortPos - guiFields.mainCanvas.sizeDelta*0.5f;
+        //moveCostUITrans.position = position;
+        guiFields.moveDistance.text = distance.ToString("0 m");
+        guiFields.movePowerCost.text = powerCost.ToString("0") ;
+        guiFields.moveUICanvas.SetActive(true);
+    }
+    public void HideMoveUI()
+    {
+        guiFields.moveUICanvas.SetActive(false);
+    }
 
     //public void UpdateStats(TurnBasedUnit unit)
     //{
@@ -156,6 +179,18 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
 
     #endregion PublicMethods
 
-    
+    private void Awake()
+    {
+        moveCostUITrans = (RectTransform)guiFields.moveUICanvas.transform;
+        #if FULL_DEBUG
+        if(!moveCostUITrans)
+        {
+            Debug.LogError("MoveUICanvas not found");
+        }
+        #endif
+        HideMoveUI();
+    }
+
+
     #endregion Methods
 }

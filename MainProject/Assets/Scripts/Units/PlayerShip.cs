@@ -27,6 +27,8 @@ public class PlayerShip : TurnBasedUnit
     private bool takingTurn = false;
     private bool firing = false;
     private float totalActivationCost = 0.0f;
+    private Vector3 mousePosOnGround = Vector3.zero;
+    private float moveDistance = 0.0f;
     
     
     private List<ShipComponent> selectedComponents = new List<ShipComponent>();
@@ -61,7 +63,7 @@ public class PlayerShip : TurnBasedUnit
             (key) => { continueTurn = false; },
            KeyCode.KeypadEnter, KeyCode.Return
             );
-
+        InputManager.Instance.OnMouseMoveEvent += OnMouseMove;
         
         spaceGround = SpaceGround.Instance;
         foreach (ShipComponent component in components)
@@ -70,6 +72,8 @@ public class PlayerShip : TurnBasedUnit
         }
         spaceGround.OnGroundClick += SpaceGroundClick;
     }
+
+    
 
     /// <summary>
     /// Starts the turn for the player ship. Starts listening for commands to move or to activate components
@@ -93,10 +97,14 @@ public class PlayerShip : TurnBasedUnit
         //run until the the player hits Return or until power reaches 0
         while (continueTurn)
         {
+            //Show movement UI
+            ShowMovementUI(true);
+
             //move the ship - does not use power right now
             if (receivedMoveCommand)
             {
                 UnSelectComponents(false);
+                ShowMovementUI(false);
                 yield return StartCoroutine(shipMove.Move());
                 #if FULL_DEBUG
                 Debug.Log(shipBPMetaData.BlueprintName + "- Movement end");
@@ -106,6 +114,7 @@ public class PlayerShip : TurnBasedUnit
             //if the player has started selecting components
             if (componentSelectionOn)
             {
+                ShowMovementUI(false);
                 //lets the player select whatever components he/she wants
                 yield return StartCoroutine(ComponentSelectionSequence());
                 Debug.Log("activating components");
@@ -132,6 +141,7 @@ public class PlayerShip : TurnBasedUnit
         }
         takingTurn = false;
         //de-activate GUI
+        ShowMovementUI(false);
         combatInterface.ShowComponentActivationButtons(null, null);
         combatInterface.ShowStatsPanel(false);
 
@@ -160,6 +170,33 @@ public class PlayerShip : TurnBasedUnit
 
 
     #region PrivateMethods
+    private void ShowMovementUI(bool show)
+    {
+        //show line
+        //show distance
+        //show power
+        //red for out of range
+        //check collision
+        DisplayLineRenderer(mousePosOnGround, show);
+        if(show)
+        {
+            combatInterface.ShowMoveCostUI(mousePosOnGround, moveDistance, moveDistance * MoveCost);
+        }
+        else
+        {
+            combatInterface.HideMoveUI();
+        }
+        //if(show)
+        //{
+        //    line.enabled = true;
+            
+        //}
+        //else
+        //{
+        //    line.enabled = false;
+        //}
+    }
+    
     /// <summary>
     /// Start the component selection sequence - let's the player click on components in the component selection panel
     /// </summary>
@@ -251,7 +288,10 @@ public class PlayerShip : TurnBasedUnit
 
         SelectComponent(component, !selectedComponents.Contains(component));
     }
-
+    void OnMouseMove(Vector2 direction)
+    {
+        GetMouseOverPosOnSpaceGround();
+    }
     #endregion InternalCallbacks
 
     //Helper
@@ -269,6 +309,43 @@ public class PlayerShip : TurnBasedUnit
 
         playerAttack.line = line;
         line.enabled = false;
+    }
+
+    private void DisplayLineRenderer(Vector3 targetPos, bool show)
+    {
+        line.enabled = show;
+        if (!show)
+        {
+            return;
+        }
+
+        Vector3 targetDir = targetPos - trans.position;
+        int lineLength = Mathf.RoundToInt(targetDir.magnitude) + 1;
+        targetDir.Normalize();
+
+        line.SetVertexCount(lineLength);
+
+        for (int i = 0; i < lineLength; i++)
+        {
+            Vector3 newPos = trans.position;
+            Vector3 offset = Vector3.zero;
+            offset.x = newPos.x + i * targetDir.x;
+            offset.y = newPos.y + i * targetDir.y;
+            offset.z = newPos.z + i * targetDir.z;
+            newPos = offset;
+            line.SetPosition(i, newPos);
+        }
+    }
+
+    private void GetMouseOverPosOnSpaceGround()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        if(Physics.Raycast(ray, out hit, GlobalVars.RayCastRange, 1<<TagsAndLayers.SpaceGroundLayer))
+        {
+            mousePosOnGround = hit.point;
+            moveDistance = Vector3.Distance(mousePosOnGround, trans.position);
+        }
     }
     #endregion PrivateMethods
     #endregion Methods
