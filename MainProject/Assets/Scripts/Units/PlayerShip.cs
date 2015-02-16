@@ -15,8 +15,10 @@ public class PlayerShip : TurnBasedUnit
     private CombatSystemInterface combatInterface;
     public PlayerAttack playerAttack { get; private set; }
     private SpaceGround spaceGround;
-    [SerializeField]
     private LineRenderer line;
+    private Material lineMat;
+    private Color validColour = Color.cyan;
+    private Color invalidColour = Color.red;
 
     //helper
     private bool continueTurn = true;
@@ -29,6 +31,7 @@ public class PlayerShip : TurnBasedUnit
     private float totalActivationCost = 0.0f;
     private Vector3 mousePosOnGround = Vector3.zero;
     private float moveDistance = 0.0f;
+    private float movePowerCost = 0.0f;
     
     
     private List<ShipComponent> selectedComponents = new List<ShipComponent>();
@@ -83,7 +86,10 @@ public class PlayerShip : TurnBasedUnit
     {
         takingTurn = true;
         yield return StartCoroutine(base.ExecuteTurn());
+
+        #if FULL_DEBUG
         Debug.Log("Player unit turn");
+        #endif
 
         continueTurn = true;
         totalActivationCost = 0.0f;
@@ -99,12 +105,14 @@ public class PlayerShip : TurnBasedUnit
         {
             //Show movement UI
             ShowMovementUI(true);
+            GetMouseOverPosOnSpaceGround();
 
             //move the ship - does not use power right now
             if (receivedMoveCommand)
             {
                 UnSelectComponents(false);
                 ShowMovementUI(false);
+                CurrentPower -= movePowerCost;
                 yield return StartCoroutine(shipMove.Move());
                 #if FULL_DEBUG
                 Debug.Log(shipBPMetaData.BlueprintName + "- Movement end");
@@ -124,7 +132,7 @@ public class PlayerShip : TurnBasedUnit
                     (float activationCost)=> //callback with the power used by components successfully activated
                         {
                             CurrentPower -= activationCost;
-                            combatInterface.ShowPower(CurrentPower); 
+                            
                         }));
                 //componentSelectionOn = false;
                 firing = false;
@@ -170,31 +178,30 @@ public class PlayerShip : TurnBasedUnit
 
 
     #region PrivateMethods
+
+    /// <summary>
+    /// Show a line renderer going to the mouse position and set's the colour based whether the ship has enough power. Also shows asks the combat Interface to show the Movement GUI
+    /// </summary>
+    /// <param name="show"></param>
     private void ShowMovementUI(bool show)
     {
-        //show line
-        //show distance
-        //show power
-        //red for out of range
-        //check collision
-        DisplayLineRenderer(mousePosOnGround, show);
         if(show)
         {
+            Color lineColour = validColour;
+            if(movePowerCost > CurrentPower)
+            {
+                lineColour = invalidColour;
+            }
+            DisplayLineRenderer(mousePosOnGround, true, lineColour);
             combatInterface.ShowMoveCostUI(mousePosOnGround, moveDistance, moveDistance * MoveCost);
         }
         else
         {
             combatInterface.HideMoveUI();
+            DisplayLineRenderer(mousePosOnGround, false, validColour);
         }
-        //if(show)
-        //{
-        //    line.enabled = true;
-            
-        //}
-        //else
-        //{
-        //    line.enabled = false;
-        //}
+
+        //TODO: check collision
     }
     
     /// <summary>
@@ -262,14 +269,10 @@ public class PlayerShip : TurnBasedUnit
     void SpaceGroundClick(Vector3 worldPosition)
     {
         //Debug.Log("Click on ground at position: "+worldPosition);
-        if (takingTurn && !receivedMoveCommand)
+        if (takingTurn && !receivedMoveCommand && movePowerCost <= CurrentPower)
         {
             Debug.Log("Move command received " + shipBPMetaData.BlueprintName);
             shipMove.destination = worldPosition;
-
-            float distToDest = Vector3.Distance(trans.position, worldPosition);
-            float powerCostToMove = distToDest*MoveCost;
-            Debug.Log("Distance to dest " +  distToDest + "; Power Cost: "+powerCostToMove);
             receivedMoveCommand = true;
         }
     }
@@ -288,6 +291,11 @@ public class PlayerShip : TurnBasedUnit
 
         SelectComponent(component, !selectedComponents.Contains(component));
     }
+
+    /// <summary>
+    /// Called whenever the mouse is moved
+    /// </summary>
+    /// <param name="direction"></param>
     void OnMouseMove(Vector2 direction)
     {
         GetMouseOverPosOnSpaceGround();
@@ -295,8 +303,9 @@ public class PlayerShip : TurnBasedUnit
     #endregion InternalCallbacks
 
     //Helper
+
     /// <summary>
-    /// gets the lineRenderer prefab from Resources, instantiates and assigns to the playership
+    /// Gets the lineRenderer prefab from Resources, instantiates and assigns to the playership
     /// </summary>
     private void ConfigurePlayerShip()
     {
@@ -306,13 +315,20 @@ public class PlayerShip : TurnBasedUnit
         GameObject lineObj = Instantiate(linePrefab) as GameObject;
         lineObj.transform.SetParent(transform, false);
         line = lineObj.GetComponent<LineRenderer>();
-
+        lineMat = line.renderer.material;
         playerAttack.line = line;
         line.enabled = false;
     }
 
-    private void DisplayLineRenderer(Vector3 targetPos, bool show)
+    /// <summary>
+    /// Displays the line renderer going to the target position and set's the colour.
+    /// </summary>
+    /// <param name="targetPos"> the end point for the line renderer</param>
+    /// <param name="show">Whether to show the line renderer or not</param>
+    /// <param name="color">The colour for the line </param>
+    private void DisplayLineRenderer(Vector3 targetPos, bool show , Color color)
     {
+        lineMat.SetColor("_TintColor", color);
         line.enabled = show;
         if (!show)
         {
@@ -336,7 +352,9 @@ public class PlayerShip : TurnBasedUnit
             line.SetPosition(i, newPos);
         }
     }
-
+    /// <summary>
+    /// Gets the world position on the space ground from the mouse position
+    /// </summary>
     private void GetMouseOverPosOnSpaceGround()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -345,6 +363,8 @@ public class PlayerShip : TurnBasedUnit
         {
             mousePosOnGround = hit.point;
             moveDistance = Vector3.Distance(mousePosOnGround, trans.position);
+            movePowerCost = Mathf.Round(moveDistance * MoveCost);
+            
         }
     }
     #endregion PrivateMethods

@@ -89,6 +89,12 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
         }
     }//ShowComponentActivationButtons
 
+    /// <summary>
+    /// Shows a UI element including the distance and power cost passed in
+    /// </summary>
+    /// <param name="position"></param>
+    /// <param name="distance"></param>
+    /// <param name="powerCost"></param>
     public void ShowMoveCostUI(Vector3 position , float distance, float powerCost)
     {
         Vector2 viewPortPos = RectTransformUtility.WorldToScreenPoint(Camera.main, position);
@@ -100,6 +106,9 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
         guiFields.movePowerCost.text = powerCost.ToString("0") ;
         guiFields.moveUICanvas.SetActive(true);
     }
+    /// <summary>
+    /// Deactivates the movement UI
+    /// </summary>
     public void HideMoveUI()
     {
         guiFields.moveUICanvas.SetActive(false);

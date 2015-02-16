@@ -57,7 +57,11 @@ public abstract class TurnBasedUnit : MonoBehaviour
     public float CurrentPower
     {
         get { return currentPower; }
-        protected set { currentPower = value; }
+        protected set 
+        { 
+            currentPower = value;
+            CombatSystemInterface.Instance.ShowPower(CurrentPower); 
+        }
     }
 
     public float MoveCost {get; private set;}
