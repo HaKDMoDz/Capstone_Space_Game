@@ -8,12 +8,11 @@ public class DisableEffectAfterTime : MonoBehaviour
     {
         gameObject.SetActive(true);
         yield return new WaitForSeconds(2.0f);
-        StartCoroutine(StopEffect());
+        StopEffect();
     }
 
-    public IEnumerator StopEffect()
+    public void StopEffect()
     {
         gameObject.SetActive(false);
-        yield return null;
     }
 }

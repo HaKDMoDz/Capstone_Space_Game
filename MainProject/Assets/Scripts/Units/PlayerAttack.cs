@@ -109,6 +109,7 @@ public class PlayerAttack : MonoBehaviour
         numAiShips = ai_ships.Count;
         Debug.Log(targetShipIndex);
         targetShip = ai_ships[targetShipIndex];
+        Transform aiTargetTrans;
 
         #if UNITY_EDITOR
         Debug.Log("Select Target to fire upon: [Click] to confirm, [Esc] to cancel, [Tab] to switch targets");
@@ -120,10 +121,13 @@ public class PlayerAttack : MonoBehaviour
             Debug.LogError("No ai ships found");
         }
         #endif
-        //aims camera at the ship that iscurrently targeted 
-        yield return StartCoroutine(CameraDirector.Instance.AimAtTarget(trans, ai_ships[targetShipIndex].transform, GlobalVars.CameraAimAtPeriod));
+        //aims camera at the ship that is currently targeted 
+        aiTargetTrans = targetShip.transform;
+        yield return StartCoroutine(CameraDirector.Instance.OverheadAimAt(trans, aiTargetTrans, GlobalVars.CameraAimAtPeriod));
+        trans.LookAt(aiTargetTrans);
+        
         //shows the targeting panel for the target ship
-        TargetShip(ai_ships[targetShipIndex], true);
+        TargetShip(targetShip, true);
 
         //runs until a targetcomponent is successfully confirmed (until a component is clicked on)
         while(!targetConfirmed)
@@ -131,19 +135,22 @@ public class PlayerAttack : MonoBehaviour
             //end targeting sequence upon hitting Esc
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                TargetShip(ai_ships[targetShipIndex], false);
+                TargetShip(targetShip, false);
                 targetConfirmed = true;
                 targetComponent = null;
             }
             //switch to the next ai ship 
             if (Input.GetKeyDown(KeyCode.Tab))
             {
-                TargetShip(ai_ships[targetShipIndex], false);
+                TargetShip(targetShip, false);
                 targetShipIndex = ++targetShipIndex % numAiShips;
                 targetShip = ai_ships[targetShipIndex];
-                //Debug.Log(targetShipIndex);
-                TargetShip(ai_ships[targetShipIndex], true);
-                yield return StartCoroutine(CameraDirector.Instance.AimAtTarget(trans, ai_ships[targetShipIndex].transform, GlobalVars.CameraAimAtPeriod));
+                TargetShip(targetShip, true);
+
+                //aims camera at the ship that is currently targeted 
+                aiTargetTrans = targetShip.transform;
+                yield return StartCoroutine(CameraDirector.Instance.OverheadAimAt(trans, aiTargetTrans, GlobalVars.CameraAimAtPeriod));
+                trans.LookAt(aiTargetTrans);
             }
             yield return null;
 

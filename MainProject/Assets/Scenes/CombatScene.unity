@@ -194,6 +194,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 224: {fileID: 238874428}
+  - 225: {fileID: 238874429}
   m_Layer: 14
   m_Name: MoveUI
   m_TagString: Untagged
@@ -222,6 +223,17 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: .5, y: .5}
+--- !u!225 &238874429
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 238874427}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &313176794
 GameObject:
   m_ObjectHideFlags: 0
@@ -2367,6 +2379,8 @@ MonoBehaviour:
   heightFocus: 150
   heightAiming: 40
   distFocusAiming: 100
+  overheadRotation: {x: -.49999997, y: .49999997, z: -.49999997, w: -.49999997}
+  minOverheadHeight: 200
   Shaking: 0
 --- !u!114 &962537997
 MonoBehaviour:

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class CameraDirector : Singleton<CameraDirector>
 {
     #region Fields
-    
+
     //EditorExposed
     [SerializeField]
     private float heightFocus = 200.0f;
@@ -13,13 +13,18 @@ public class CameraDirector : Singleton<CameraDirector>
     private float heightAiming = 40.0f;
     [SerializeField]
     private float distFocusAiming = 50.0f;
+    [SerializeField]
+    private Quaternion overheadRotation = Quaternion.Euler(90.0f, 270.0f, 0.0f);
+    [SerializeField]
+    private float minOverheadHeight = 100.0f;
     //[SerializeField]
     //private float orbitSpeed = 30.0f;
-    
+
     //internal
     private float initialAngleX;
     private Quaternion initialRot;
     private Transform trans;
+    private Camera cam;
 
     public bool Shaking;
     private float ShakeDecay;
@@ -70,6 +75,29 @@ public class CameraDirector : Singleton<CameraDirector>
         yield return StartCoroutine(MoveAndRotate(desiredCamPos, desiredCamRotation, period));
     }
 
+    /// <summary>
+    /// The camera goes into an overhead view that includes the current focus and the target. Will not zoom in lower than minOverheadHeight
+    /// </summary>
+    /// <param name="currentFocus"></param>
+    /// <param name="target"></param>
+    /// <param name="period"></param>
+    /// <returns></returns>
+    public IEnumerator OverheadAimAt(Transform currentFocus, Transform target, float period)
+    {
+        
+        Vector3 desiredCamPos = (currentFocus.position + target.position) * 0.5f;
+        Vector3 directionToTarget = target.position - currentFocus.position;
+        float camHeight = directionToTarget.magnitude * 0.5f / Mathf.Tan(cam.fieldOfView * 0.5f * Mathf.Deg2Rad);
+        desiredCamPos.y = camHeight < minOverheadHeight ? minOverheadHeight : camHeight;
+        float angle = Vector3.Angle(Vector3.forward, directionToTarget);
+        Vector3 perp = Vector3.Cross(Vector3.forward, directionToTarget);
+        float dot = Vector3.Dot(perp, currentFocus.up);
+        angle = dot > 0.0f ? angle : -angle;
+        Quaternion desiredRotation = Quaternion.Euler(overheadRotation.eulerAngles.x, overheadRotation.eulerAngles.y + angle, overheadRotation.eulerAngles.z);
+
+        yield return StartCoroutine(MoveAndRotate(desiredCamPos, desiredRotation, period));
+    }
+
     public void OrbitAroundImmediate(Transform target, float xAngle, float yAngle)
     {
         float distanceToTarget = Vector3.Distance(target.position, trans.position);
@@ -97,7 +125,7 @@ public class CameraDirector : Singleton<CameraDirector>
         float time = 0.0f;
         Vector3 startPos = trans.position;
         Quaternion startRot = trans.rotation;
-        while(time<1.0f)
+        while (time < 1.0f)
         {
             trans.position = Vector3.Lerp(startPos, destination, time);
             trans.rotation = Quaternion.Slerp(startRot, desiredRot, time);
@@ -115,6 +143,8 @@ public class CameraDirector : Singleton<CameraDirector>
         initialRot = trans.rotation;
         initialAngleX = Mathf.Deg2Rad * initialRot.eulerAngles.x;
         Shaking = false;
+        cam = camera;
+
     }
 
     //TODO refactor camera shake with coroutines if performance becomes an issue
