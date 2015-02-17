@@ -172,11 +172,11 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
     /// </summary>
     /// <param name="show"></param>
     /// <param name="targetName"></param>
-    public void ShowTargetingPanel(bool show, string targetName)
-    {
-        guiFields.targetedShipName.text = targetName;
-        guiFields.targetingPanel.SetActive(show);
-    }
+    //public void ShowTargetingPanel(bool show, string targetName)
+    //{
+    //    guiFields.targetedShipName.text = targetName;
+    //    guiFields.targetingPanel.SetActive(show);
+    //}
     /// <summary>
     /// Show/Hide the stats panel
     /// </summary>

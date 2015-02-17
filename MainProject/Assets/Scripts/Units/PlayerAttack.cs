@@ -172,7 +172,7 @@ public class PlayerAttack : MonoBehaviour
         if (!show)
         {
             DisplayTargetingLine(Vector3.zero, false); //hide line
-            targetUnit.ShowTargetingPanel(false); //hide panel
+            targetUnit.ShowTargetingPanel(false,null); //hide panel
             //unsubscribe to component callbacks
             foreach (ShipComponent component in targetUnit.Components)
             {
@@ -183,7 +183,7 @@ public class PlayerAttack : MonoBehaviour
         }
         else
         {
-            targetUnit.ShowTargetingPanel(true);
+            targetUnit.ShowTargetingPanel(true, trans);
             foreach (ShipComponent component in targetUnit.Components)
             {
                 component.OnComponentClicked += OnComponentClick;

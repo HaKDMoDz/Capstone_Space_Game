@@ -125,9 +125,11 @@ public abstract class TurnBasedUnit : MonoBehaviour
         }
     }
 
-    [SerializeField]
     private Slider hpBar;
     private Slider shieldBar;
+
+    private Vector3 defaultTargetCamEuler;
+    private Transform targetCamTrans;
 
     #endregion Fields
 
@@ -228,10 +230,24 @@ public abstract class TurnBasedUnit : MonoBehaviour
         componentCamera.SetActive(show);
     }
 
-    public void ShowTargetingPanel(bool show)
+    public void ShowTargetingPanel(bool show, Transform targeter)
     {
-        CombatSystemInterface.Instance.ShowTargetingPanel(show, name);
+        //CombatSystemInterface.Instance.ShowTargetingPanel(show, name);
+
         targetingCamera.SetActive(show);
+        if (show)
+        {
+            Vector3 directionToTarget = targeter.position - trans.position;
+            float angle = Vector3.Angle(trans.forward, directionToTarget);
+            Vector3 perp = Vector3.Cross(trans.forward, directionToTarget);
+            float dot = Vector3.Dot(perp, trans.up);
+            angle = dot > 0.0f ? angle : -angle;
+            Debug.Log("Angle to targeter " + angle);
+            //targetCamTrans.rotation = Quaternion.Euler(defaultTargetCamRot.eulerAngles.x, defaultTargetCamRot.eulerAngles.y+angle , defaultTargetCamRot.eulerAngles.z);
+            targetCamTrans.localEulerAngles = new Vector3(defaultTargetCamEuler.x, defaultTargetCamEuler.y + angle, defaultTargetCamEuler.z);
+        }
+        
+
         ShowHPBars(show);
     }
 
@@ -322,13 +338,14 @@ public abstract class TurnBasedUnit : MonoBehaviour
         componentCamera.SetActive(false);
 
         #if FULL_DEBUG
-        if (trans.FindChild("TargetingCamera") == null)
+        targetCamTrans = trans.FindChild("TargetingCamera");
+        if (targetCamTrans == null)
         {
             Debug.LogError("No Targeting camera found");
         }
         #endif
-
-        targetingCamera = trans.FindChild("TargetingCamera").gameObject;
+        defaultTargetCamEuler = targetCamTrans.eulerAngles;
+        targetingCamera = targetCamTrans.gameObject;
         targetingCamera.SetActive(false);
 
         expolosionObject = trans.FindChild("Explosion").gameObject;
