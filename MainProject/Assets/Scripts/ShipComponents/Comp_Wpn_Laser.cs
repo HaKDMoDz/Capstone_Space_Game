@@ -13,7 +13,7 @@ public class Comp_Wpn_Laser : Component_Weapon
 
     private LineRenderer line;
     int length;
-
+    private Transform targetTrans;
 
     public override void Init(TurnBasedUnit parentShip)
     {
@@ -36,7 +36,8 @@ public class Comp_Wpn_Laser : Component_Weapon
         if (targetComp && targetComp.CompHP > 0.0f)
         {
             Debug.Log("Firing lasers");
-            length = Mathf.RoundToInt(Vector3.Distance(targetComp.transform.position, shootPoint.position));
+            targetTrans = targetComp.transform;
+            length = Mathf.RoundToInt(Vector3.Distance(targetTrans.position, shootPoint.position));
 
             yield return StartCoroutine(CreateBeamEffectForDuration());
             
@@ -63,25 +64,28 @@ public class Comp_Wpn_Laser : Component_Weapon
         float currentTime = 0.0f;
         line.enabled = true;
         line.SetVertexCount(length);
-
+        Vector3 targetDir = (targetTrans.position - shootPoint.position).normalized;
         while (currentTime <= effectDuration)
         {
-            CreateBeamEffect();
+            CreateBeamEffect(targetDir);
             currentTime += Time.deltaTime;
             yield return null;
         }
         line.enabled = false;
     }
 
-    private void CreateBeamEffect()
+    private void CreateBeamEffect(Vector3 targetDir)
     {
         for (int i = 0; i < length; i++)
         {
             Vector3 newPos = shootPoint.position;
             Vector3 offset = Vector3.zero;
-            offset.x = newPos.x + i * shootPoint.forward.x + Random.Range(-lineNoise, lineNoise);
-            offset.y = newPos.y + i * shootPoint.forward.y + Random.Range(-lineNoise, lineNoise);
-            offset.z = newPos.z + i * shootPoint.forward.z + Random.Range(-lineNoise, lineNoise);
+            //offset.x = newPos.x + i * shootPoint.forward.x + Random.Range(-lineNoise, lineNoise);
+            //offset.y = newPos.y + i * shootPoint.forward.y + Random.Range(-lineNoise, lineNoise);
+            //offset.z = newPos.z + i * shootPoint.forward.z + Random.Range(-lineNoise, lineNoise);
+            offset.x = newPos.x + i * targetDir.x + Random.Range(-lineNoise, lineNoise);
+            offset.y = newPos.y + i * targetDir.y + Random.Range(-lineNoise, lineNoise);
+            offset.z = newPos.z + i * targetDir.z + Random.Range(-lineNoise, lineNoise);
             newPos = offset;
             line.SetPosition(i, newPos);
 

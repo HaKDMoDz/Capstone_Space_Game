@@ -50,6 +50,8 @@ public class PlayerAttack : MonoBehaviour
 
             if(targetComponent)
             {
+                DisplayTargetingLine(Vector3.zero, false);
+
                 trans.LookAt(targetComponent.transform);
 
                 //Activates each weapon in turn
