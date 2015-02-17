@@ -7,6 +7,7 @@ using System.Linq;
 public abstract class TurnBasedUnit : MonoBehaviour
 {
     #region Fields
+
     [SerializeField]
     private float turnDelay;
     public float TurnDelay
@@ -145,6 +146,8 @@ public abstract class TurnBasedUnit : MonoBehaviour
         if (ShieldStrength >= _amountOfDamage)
         {
             ShieldStrength -= _amountOfDamage;
+            //display shield damage effect
+            StartCoroutine(trans.FindChild("ShieldEffect").GetComponent<DisableEffectAfterTime>().StartEffect());
         }
         else //damage bleeds over to hull
         {

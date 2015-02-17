@@ -44,6 +44,7 @@ public class Comp_Wpn_Laser : Component_Weapon
             {
                 //yield return StartCoroutine(targetComp.TakeDamage(damage));
                 yield return StartCoroutine(DoDamage(targetComp));
+
             }
             else
             {
