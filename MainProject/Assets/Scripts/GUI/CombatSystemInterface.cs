@@ -56,7 +56,7 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
     public void AddShipButton(TurnBasedUnit unit)
     {
         ButtonWithContent buttonClone = Instantiate(guiFields.buttonPrefab) as ButtonWithContent;
-        buttonClone.buttonText.text = unit.shipBPMetaData.BlueprintName;
+        buttonClone.buttonText.text = unit.ShipBPMetaData.BlueprintName;
         buttonClone.transform.SetParent(guiFields.turnOrderButtonParent, false);
         unit_buttonRect_table.Add(unit, buttonClone);
     }
@@ -139,7 +139,7 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
         for (int i = 0; i < units.Count; i++)
         {
             ButtonWithContent button = unit_buttonRect_table[units[i]];
-            button.buttonText.text = units[i].shipBPMetaData.BlueprintName;
+            button.buttonText.text = units[i].ShipBPMetaData.BlueprintName;
             button.transform.SetSiblingIndex(i);
         }
     }

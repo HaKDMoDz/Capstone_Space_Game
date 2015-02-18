@@ -94,12 +94,17 @@ public abstract class TurnBasedUnit : MonoBehaviour
         return expolosionObject;
     }
 
-    public ShipBlueprintMetaData shipBPMetaData { get; private set; }
+    private ShipBlueprintMetaData shipBPMetaData;
+    public ShipBlueprintMetaData ShipBPMetaData
+    {
+        get { return shipBPMetaData; }
+        private set { shipBPMetaData = value; }
+    }
+
     public ShipMove shipMove { get; private set; }
     protected ShipBlueprint shipBP;
     protected Transform trans;
 
-    //TEMP
     private float hullHP;
     public float HullHP //set hp and hp bar
     {
@@ -211,7 +216,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
     public virtual void Init(ShipBlueprint shipBP, ShipMove shipMove)
     {
         this.shipBP = shipBP;
-        this.shipBPMetaData = shipBP.MetaData;
+        this.ShipBPMetaData = shipBP.MetaData;
         this.shipMove = shipMove;
         this.shipMove.Init();
 
@@ -228,7 +233,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
     public virtual IEnumerator ExecuteTurn()
     {
         #if FULL_DEBUG
-        Debug.Log(shipBPMetaData.BlueprintName + " executing turn");
+        Debug.Log(ShipBPMetaData.BlueprintName + " executing turn");
         #endif
         currentPower = MaxPower;
 
@@ -250,7 +255,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
             Vector3 perp = Vector3.Cross(trans.forward, directionToTarget);
             float dot = Vector3.Dot(perp, trans.up);
             angle = dot > 0.0f ? angle : -angle;
-            Debug.Log("Angle to targeter " + angle);
+            //Debug.Log("Angle to targeter " + angle);
             targetCamTrans.localEulerAngles = new Vector3(defaultTargetCamEuler.x, defaultTargetCamEuler.y + angle, defaultTargetCamEuler.z);
         }
         
@@ -314,7 +319,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
         }
         ShieldStrength = MaxShields;
 
-        maxPower = shipBPMetaData.ExcessPower;
+        maxPower = ShipBPMetaData.ExcessPower;
         currentPower = MaxPower;
 
         int numThrusters = components.Count(c => c is Comp_Eng_Thruster);

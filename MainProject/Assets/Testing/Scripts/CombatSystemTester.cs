@@ -58,7 +58,6 @@ public class CombatSystemTester : MonoBehaviour
         //get 1st unit
         for (int i = 0; i < numCycles; i++)
         {
-            Debug.Log("Cycle # " + i);
             PreTurnMethod.Invoke(combatSystem, null);
             unit_turnCount_table[combatSystem.firstUnit]++;
             //Debug.Log(firstUnit.shipBPMetaData.blueprintName + " takes it's turn");
@@ -68,17 +67,17 @@ public class CombatSystemTester : MonoBehaviour
         Debug.Log("Num turns for unit: ");
         foreach (var unit_turnCount in unit_turnCount_table)
         {
-            Debug.Log(unit_turnCount.Key.shipBPMetaData.BlueprintName + " : " + unit_turnCount.Value + " turns");
+            Debug.Log(unit_turnCount.Key.ShipBPMetaData.BlueprintName + " : " + unit_turnCount.Value + " turns");
         }
         TurnBasedUnit unitWithLeastTurns = unit_turnCount_table.Aggregate((current, next) =>
                                                 current.Value < next.Value ?
                                                 current : next)
                                                 .Key;
-        Debug.Log("Slowest unit: " + unitWithLeastTurns.shipBPMetaData.BlueprintName);
+        Debug.Log("Slowest unit: " + unitWithLeastTurns.ShipBPMetaData.BlueprintName);
         Debug.Log("Turn ratios: ");
         foreach (var unit_turnCount in unit_turnCount_table)
         {
-            Debug.Log(unit_turnCount.Key.shipBPMetaData.BlueprintName + ": " + (float)unit_turnCount.Value / (float)unit_turnCount_table[unitWithLeastTurns]);
+            Debug.Log(unit_turnCount.Key.ShipBPMetaData.BlueprintName + ": " + (float)unit_turnCount.Value / (float)unit_turnCount_table[unitWithLeastTurns]);
         }
 
         yield return null;

@@ -74,7 +74,8 @@ public class ShipBuilder
         #endif
         hullBeingBuilt.Init();
 
-        bpTemplate.GetBlueprint(ref blueprintBeingBuilt, hullBeingBuilt);
+        bpTemplate.GetBlueprint(out blueprintBeingBuilt, hullBeingBuilt);
+        
         return InstantiateShip(true, shipType, position, rotation);
     }
     public TurnBasedUnit BuildShip(ShipType shipType, string blueprintName, Vector3 position, Quaternion rotation)
@@ -113,11 +114,6 @@ public class ShipBuilder
             #endif
             hullBeingBuilt.Init();
         }
-        TurnBasedUnit setupUnit;
-        if (shipType == ShipType.AI_Ship)
-        {
-           //  Debug.LogError("blueprint has: " + blueprintBeingBuilt.slot_component_table.Count);
-        }
        
         for (int i = 0; i < blueprintBeingBuilt.Slot_component_table.Count; i++)
         {
@@ -129,10 +125,6 @@ public class ShipBuilder
             {
                 Transform slotTrans = hullBeingBuilt.index_slot_table[slotIndex].transform;
                 ShipComponent builtComponent = GameObject.Instantiate(slot_component.Value, slotTrans.position, slotTrans.rotation) as ShipComponent;
-                if (shipType == ShipType.AI_Ship)
-                {
-                    //Debug.LogError("instantiated" + builtComponent + "in slotComp: " + slot_component.Key);
-                }
                 blueprintBeingBuilt.Slot_component_table[slot_component.Key] = builtComponent;
                 builtComponent.transform.SetParent(slotTrans, true);
             }
@@ -147,15 +139,11 @@ public class ShipBuilder
 #endif
         }
 
-        SetupScriptsOnShip(shipType, out setupUnit);
-
-        return setupUnit;
-        //return GetFullySetupShip(shipType);
+        return SetupScriptsOnShip(shipType);
     }
 
-    private void SetupScriptsOnShip(ShipType shipType, out TurnBasedUnit setupUnit)
+    private TurnBasedUnit SetupScriptsOnShip(ShipType shipType)
     {
-        setupUnit = null;
         switch (shipType)
         {
             case ShipType.PlayerShip:
@@ -163,24 +151,26 @@ public class ShipBuilder
                 ShipMove shipMove = hullBeingBuilt.gameObject.AddComponent<ShipMove>();
                 PlayerAttack playerAttack = hullBeingBuilt.gameObject.AddComponent<PlayerAttack>();
                 playerShip.Init(blueprintBeingBuilt, shipMove, playerAttack);
-                playerShip.gameObject.name = "Player " + playerShip.gameObject.name;
-                setupUnit = playerShip;
+                playerShip.gameObject.name = "Player " + blueprintBeingBuilt.MetaData.BlueprintName;
                 
-                break;
+                return playerShip;
+                
             case ShipType.AI_Ship:
                 AI_Ship ai_ship = hullBeingBuilt.gameObject.AddComponent<AI_Ship>();
                 ShipMove ai_shipMove = hullBeingBuilt.gameObject.AddComponent<ShipMove>();
                 AI_Attack ai_attack = hullBeingBuilt.gameObject.AddComponent<AI_Attack>();
                 ai_ship.Init(blueprintBeingBuilt, ai_shipMove, ai_attack);
                 ai_ship.gameObject.layer = TagsAndLayers.AI_ShipLayer;
-                ai_ship.gameObject.name = "AI " + ai_ship.gameObject.name;
-                setupUnit = ai_ship;
-                break;
+                ai_ship.gameObject.name = blueprintBeingBuilt.MetaData.BlueprintName;
+                
+                return ai_ship;
+
             case ShipType.NPC_Ship:
                 break;
             default:
                 break;
         }
+        return null;
     }
 
     #region UnityCallbacks

@@ -133,11 +133,11 @@ public class ShipBlueprint
     #if FULL_DEBUG
     public void Display()
     {
-        Debug.LogError("Contents of blueprint");
-        Debug.LogError("Hull : " + hull.hullName);
+        Debug.Log("Contents of blueprint");
+        Debug.Log("Hull : " + hull.hullName);
         foreach (var slot_comp in slot_component_table)
         {
-            Debug.LogError("Slot " + slot_comp.Key + " Comp " + slot_comp.Value);
+            Debug.Log("Slot " + slot_comp.Key + " Comp " + slot_comp.Value);
         }
     }
     #endif
@@ -148,7 +148,13 @@ public class ShipBlueprint
 [Serializable]
 public class ShipBlueprintMetaData
 {
-    public string BlueprintName;
+    private string blueprintName;
+    public string BlueprintName
+    {
+        get { return blueprintName; }
+        set {blueprintName = value; }
+    }
+    //public string BlueprintName;
     public float ExcessPower;
 
     public ShipBlueprintMetaData()

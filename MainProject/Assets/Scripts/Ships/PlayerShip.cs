@@ -115,7 +115,7 @@ public class PlayerShip : TurnBasedUnit
                 CurrentPower -= movePowerCost;
                 yield return StartCoroutine(shipMove.Move());
                 #if FULL_DEBUG
-                Debug.Log(shipBPMetaData.BlueprintName + "- Movement end");
+                Debug.Log(ShipBPMetaData.BlueprintName + "- Movement end");
                 #endif
             }
 
@@ -270,7 +270,7 @@ public class PlayerShip : TurnBasedUnit
         //Debug.Log("Click on ground at position: "+worldPosition);
         if (takingTurn && !receivedMoveCommand && movePowerCost <= CurrentPower)
         {
-            Debug.Log("Move command received " + shipBPMetaData.BlueprintName);
+            Debug.Log("Move command received " + ShipBPMetaData.BlueprintName);
             shipMove.destination = worldPosition;
             receivedMoveCommand = true;
         }

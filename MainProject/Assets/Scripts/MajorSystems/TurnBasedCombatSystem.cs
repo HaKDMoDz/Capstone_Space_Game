@@ -64,9 +64,8 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
 
             PostTurnActions();
         }
-
-        Debug.Log("Combat Complete!");
-        GameController.Instance.ChangeScene(GameScene.GalaxyMap);
+        EndCombat();
+        
     }
 
     /// <summary>
@@ -76,8 +75,7 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
     public void AddShip(TurnBasedUnit unit)
     {
 #if FULL_DEBUG
-        //Debug.Log(units);
-        //Debug.Log(unit);
+        
         if (units.Contains(unit))
         {
             Debug.LogError("Unit already exists in list");
@@ -87,8 +85,24 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
         {
             Debug.Log("adding null unit");
         }
-       // Debug.Log("Adding unit " + unit.shipBPMetaData.blueprintName + " to combat with excess power: " + unit.shipBPMetaData.excessPower);
         units.Add(unit);
+        
+        CombatSystemInterface.Instance.AddShipButton(unit);
+
+        if (unit is PlayerShip)
+        {
+            playerShips.Add((PlayerShip)unit);
+        }
+        else if (unit is AI_Ship)
+        {
+            ai_Ships.Add((AI_Ship)unit);
+        }
+        #if FULL_DEBUG
+        else
+        {
+            Debug.LogWarning("Not player nor AI");
+        }
+        #endif
 #else
         units.Add(unit);
 #endif
@@ -141,27 +155,6 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
     private void PrepareForCombat()
     {
         CalculateTurnDelay();
-
-        //add each ship to the turn order list in the GUI
-        foreach (TurnBasedUnit unit in units)
-        {
-            if(unit is PlayerShip)
-            {
-                playerShips.Add((PlayerShip)unit);
-            }
-            else if(unit is AI_Ship)
-            {
-                ai_Ships.Add((AI_Ship)unit);
-            }
-            #if FULL_DEBUG
-            else
-            {
-                Debug.LogWarning("Not player nor AI");
-            }
-            #endif
-
-            CombatSystemInterface.Instance.AddShipButton(unit);
-        }
     }//PrepareForCombat
 
     /// <summary>
@@ -180,20 +173,20 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
             {
                 Debug.Log("item "+i+" null");
             }
-                if(units[i].shipBPMetaData==null)
+                if(units[i].ShipBPMetaData==null)
                 {
                     Debug.Log(i + "meta null");
                 }
         }
         #endif
 
-        float minPower = units.Min(s => s.shipBPMetaData.ExcessPower);
+        float minPower = units.Min(s => s.ShipBPMetaData.ExcessPower);
         foreach (TurnBasedUnit unit in units)
         {
             float shipPower = unit.MaxPower;
             float turnFrequency = shipPower / minPower - (shipPower - minPower) /GlobalVars.TurnDelayFactor;
             unit.TurnDelay = 1 / turnFrequency;
-            //Debug.Log("Turn delay for " + unit.shipBPMetaData.blueprintName + ": " + unit.TurnDelay);
+            //Debug.Log("Turn delay for " + unit.ShipBPMetaData.BlueprintName + ": " + unit.TurnDelay);
         }
     }//CalculateTurnDelay
 
@@ -283,7 +276,10 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
     }
     private void EndCombat()
     {
-
+        #if FULL_DEBUG
+        Debug.LogWarning("Combat Complete!");
+        #endif  
+        GameController.Instance.ChangeScene(GameScene.GalaxyMap);
     }
     
     #endregion PrivateMethods

@@ -59,7 +59,7 @@ public class PlayerAttack : MonoBehaviour
                 {
                     if (targetComponent && targetComponent.CompHP > 0.0f)
                     {
-                        Debug.Log("activate weapon");
+                        //Debug.Log("activate weapon");
                         yield return StartCoroutine(
                         weapon.Fire(targetComponent,
                             () =>
@@ -109,7 +109,7 @@ public class PlayerAttack : MonoBehaviour
 
         List<AI_Ship> ai_ships = TurnBasedCombatSystem.Instance.ai_Ships;
         numAiShips = ai_ships.Count;
-        Debug.Log(targetShipIndex);
+        //Debug.Log(targetShipIndex);
         targetShip = ai_ships[targetShipIndex];
         Transform aiTargetTrans;
 

@@ -149,10 +149,9 @@ public class BlueprintTemplate
         this.metaData = new ShipBlueprintMetaData(blueprint.MetaData);
     }
 
-    public void GetBlueprint(ref ShipBlueprint blueprint, Hull hullBeingBuilt)
+    public void GetBlueprint(out ShipBlueprint blueprint, Hull hullBeingBuilt)
     {
-        blueprint.Clear();
-        blueprint.Hull = this.hull;
+        blueprint = new ShipBlueprint(hull);
         foreach (var slotIndex_Comp in SlotIndex_Comp_List)
         {
             blueprint.AddComponent(hullBeingBuilt.index_slot_table[slotIndex_Comp.slotIndex], slotIndex_Comp.component);

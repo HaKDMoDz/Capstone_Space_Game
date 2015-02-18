@@ -16,9 +16,9 @@ public class Comp_Wpn_Missile : Component_Weapon
 
     public override IEnumerator Fire(ShipComponent targetComp, Action OnActivationComplete)
     {
-#if FULL_DEBUG
-        Debug.Log("Firing Missile");
-#endif
+        #if FULL_DEBUG
+        //Debug.Log("Firing Missile");
+        #endif
         targetTrans = targetComp.transform;
         shootPoint.LookAt(targetTrans);
         Projectile_Missile missileClone = Instantiate(missilePrefab, shootPoint.position, shootPoint.rotation) as Projectile_Missile;

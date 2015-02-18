@@ -70,6 +70,7 @@ public class CombatSceneController : Singleton<CombatSceneController>
             spawnPos.x += spawnSpacing;
         }
 
+
         foreach (string bpTemplateName in pirateFleetData.currentFleet_BlueprintNames)
         {
             TurnBasedUnit unit = shipBuilder.BuildShip(ShipType.AI_Ship, BlueprintTemplates.GetBPTemplate(bpTemplateName), aiSpawnPos, Quaternion.identity);
@@ -84,18 +85,20 @@ public class CombatSceneController : Singleton<CombatSceneController>
             aiSpawnPos.x -= spawnSpacing;
             unit.transform.RotateAroundYAxis(180.0f);
         }
-
+        
         //combat start 
-        //comment out this line for the combat system tester to work
         #if UNITY_EDITOR
         if (!GameObject.Find("CombatSystemTester"))
         {
             yield return StartCoroutine(TurnBasedCombatSystem.Instance.StartCombat());
         }
+        else
+        {
+            yield return null;
+        }
         #else
         yield return StartCoroutine(TurnBasedCombatSystem.Instance.StartCombat());
         #endif
-        yield return null;
     }//SetupScene
 
     private void Init()

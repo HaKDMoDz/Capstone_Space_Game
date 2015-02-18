@@ -15,7 +15,10 @@ public class OpenSavesLocation
     [MenuItem("Custom/Saves/Delete All Saves")]
     static void DeleteAllSaves()
     {
-        Debug.LogWarning("Deleting all saves");
-        Directory.Delete(Application.persistentDataPath, true);
+        if (EditorUtility.DisplayDialog("Confirm Saves Deletion", "Are you sure you want to delete all save files?", "Delete", "Cancel"))
+        {
+            Debug.LogWarning("Deleting all saves");
+            Directory.Delete(Application.persistentDataPath, true);
+        }
     }
 }

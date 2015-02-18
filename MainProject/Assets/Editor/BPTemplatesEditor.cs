@@ -101,7 +101,7 @@ public class BPTemplatesEditor : Editor
         }
         if (GUILayout.Button("Wipe Database"))
         {
-            if (EditorUtility.DisplayDialog("Confirm Wipe", "Are you sure you want to wipe the hull table?", "Wipe", "Cancel"))
+            if (EditorUtility.DisplayDialog("Confirm Wipe", "Are you sure you want to wipe the blueprint templates?", "Wipe", "Cancel"))
             {
                 bpTemplates.Wipe();
                 foldouts.Clear();
