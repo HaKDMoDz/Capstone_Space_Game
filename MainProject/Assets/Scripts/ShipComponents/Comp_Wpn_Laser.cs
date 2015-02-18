@@ -13,7 +13,7 @@ public class Comp_Wpn_Laser : Component_Weapon
 
     private LineRenderer line;
     int length;
-    private Transform targetTrans;
+    
 
     public override void Init(TurnBasedUnit parentShip)
     {
@@ -35,7 +35,10 @@ public class Comp_Wpn_Laser : Component_Weapon
     {
         if (targetComp && targetComp.CompHP > 0.0f)
         {
+            #if FULL_DEBUG
             Debug.Log("Firing lasers");
+            #endif
+
             targetTrans = targetComp.transform;
             length = Mathf.RoundToInt(Vector3.Distance(targetTrans.position, shootPoint.position));
 

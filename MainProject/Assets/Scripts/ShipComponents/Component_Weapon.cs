@@ -14,6 +14,8 @@ public abstract class Component_Weapon : ShipComponent
     [SerializeField]
     protected Transform shootPoint;
 
+    protected Transform targetTrans;
+
     /// <summary>
     /// Fires the weapon at the specified component and raises the OnActivationComplete callback once the animation is complete.
     /// </summary>

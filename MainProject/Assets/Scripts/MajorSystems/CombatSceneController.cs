@@ -87,7 +87,14 @@ public class CombatSceneController : Singleton<CombatSceneController>
 
         //combat start 
         //comment out this line for the combat system tester to work
+        #if UNITY_EDITOR
+        if (!GameObject.Find("CombatSystemTester"))
+        {
+            yield return StartCoroutine(TurnBasedCombatSystem.Instance.StartCombat());
+        }
+        #else
         yield return StartCoroutine(TurnBasedCombatSystem.Instance.StartCombat());
+        #endif
         yield return null;
     }//SetupScene
 

@@ -12,11 +12,12 @@ public class ShipShield : MonoBehaviour
     private Material shieldMat;
 
     private Transform trans;
+    private Color originalColour; 
 
     public void TakeDamage(Vector3 hitPoint)
     {
         Vector3 localHitPoint = trans.InverseTransformPoint(hitPoint);
-        Debug.Log("Hit Point: " + hitPoint + " Local: " + localHitPoint);
+        //Debug.Log("Hit Point: " + hitPoint + " Local: " + localHitPoint);
         shieldMat.SetVector("_Position", localHitPoint.GetVector4());
         StartCoroutine(ShieldEffect());
     }
@@ -24,19 +25,27 @@ public class ShipShield : MonoBehaviour
     private IEnumerator ShieldEffect()
     {
         float currentTime = 0.0f;
+
+        shieldMat.SetColor("_Color", originalColour);
+        Color currentColour = originalColour;
+        Color targetColour = originalColour.WithAplha(0.0f);
         while(currentTime <= effectDuration)
         {
             shieldMat.SetFloat("_Offset", Mathf.Repeat(currentTime*effectSpeed, 1.0f));
+            currentColour = Color.Lerp(currentColour, targetColour, currentTime);
+            shieldMat.SetColor("_Color", currentColour);
+
             currentTime += Time.deltaTime;
             yield return null;
         }
-        gameObject.SetActive(false);
+        //gameObject.SetActive(false);
     }
 
     private void Awake()
     {
         trans = transform;
         shieldMat = renderer.material;
+        originalColour = shieldMat.GetColor("_Color");
     }
 
 }
