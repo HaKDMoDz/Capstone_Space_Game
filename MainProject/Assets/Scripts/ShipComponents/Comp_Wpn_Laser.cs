@@ -44,14 +44,14 @@ public class Comp_Wpn_Laser : Component_Weapon
 
             yield return StartCoroutine(CreateBeamEffectForDuration());
             
-            if (targetComp)
+            //if (targetComp)
             {
                 yield return StartCoroutine(DoDamage(targetComp));
             }
-            else
-            {
-                yield return null;
-            }
+            //else
+            //{
+            //    yield return null;
+            //}
         }
         OnActivationComplete();
     }
