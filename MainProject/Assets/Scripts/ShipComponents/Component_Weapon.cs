@@ -45,6 +45,7 @@ public abstract class Component_Weapon : ShipComponent
         TurnBasedUnit targetShip = targetComp.ParentShip;
         if(targetShip.ShieldStrength>=damage)
         {
+            DamageShields(targetComp.ParentShip);
             yield return StartCoroutine(targetShip.TakeDamage(damage));
         }
         else
@@ -55,16 +56,29 @@ public abstract class Component_Weapon : ShipComponent
             yield return StartCoroutine(targetComp.TakeDamage(componentDamage));
             yield return StartCoroutine(targetComp.ParentShip.TakeDamage(hullDamage));
         }
-
-        
-        
         //if comp is armour
         //  compDmg+=compDmg*armourMod%/100
         //if(targetComp is Comp_Def_Shield)
         //{
         //    componentDamage += componentDamage * shieldDmgModifier / 100.0f;
         //}
+    }
 
-        
+    protected void DamageShields(TurnBasedUnit ship)
+    {
+        Vector3 hitPoint=-Vector3.zero;
+        Ray ray = new Ray(shootPoint.position, ship.transform.position - shootPoint.position);
+        RaycastHit hit;
+        if(Physics.Raycast(ray, out hit, GlobalVars.RayCastRange, 1<<TagsAndLayers.ShipShieldLayer))
+        {
+            hitPoint = hit.point;
+            ship.PlayShieldEffect(hitPoint);
+        }
+        #if FULL_DEBUG
+        else
+        {
+            Debug.LogError("Weapon did not hit shields but was expected to");
+        }
+        #endif
     }
 }

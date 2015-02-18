@@ -5,6 +5,26 @@ using System.Collections.Generic;
 //this class adds extended functionality to various built in classes like Transform, GameObject, etc.
 public static class ExtensionMethods
 {
+    #region Vector Extensions
+    /// <summary>
+    /// Returns a Vector2 composed of the x and y components of the Vector3 
+    /// </summary>
+    /// <param name="vec3"></param>
+    /// <returns></returns>
+    public static Vector2 GetVector2(this Vector3 vec3)
+    {
+        return new Vector2(vec3.x, vec3.y);
+    }
+    /// <summary>
+    /// Returns a Vector4 with 1.0f padded after the Vector3
+    /// </summary>
+    /// <param name="vec3"></param>
+    /// <returns></returns>
+    public static Vector4 GetVector4(this Vector3 vec3)
+    {
+        return new Vector4(vec3.x, vec3.y, vec3.z, 1.0f);
+    }
+    #endregion Vector Extensions
 
     #region Transform Extensions
     /// <summary>

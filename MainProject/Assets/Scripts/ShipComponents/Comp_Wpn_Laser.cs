@@ -43,9 +43,7 @@ public class Comp_Wpn_Laser : Component_Weapon
             
             if (targetComp)
             {
-                //yield return StartCoroutine(targetComp.TakeDamage(damage));
                 yield return StartCoroutine(DoDamage(targetComp));
-
             }
             else
             {
@@ -80,15 +78,11 @@ public class Comp_Wpn_Laser : Component_Weapon
         {
             Vector3 newPos = shootPoint.position;
             Vector3 offset = Vector3.zero;
-            //offset.x = newPos.x + i * shootPoint.forward.x + Random.Range(-lineNoise, lineNoise);
-            //offset.y = newPos.y + i * shootPoint.forward.y + Random.Range(-lineNoise, lineNoise);
-            //offset.z = newPos.z + i * shootPoint.forward.z + Random.Range(-lineNoise, lineNoise);
             offset.x = newPos.x + i * targetDir.x + Random.Range(-lineNoise, lineNoise);
             offset.y = newPos.y + i * targetDir.y + Random.Range(-lineNoise, lineNoise);
             offset.z = newPos.z + i * targetDir.z + Random.Range(-lineNoise, lineNoise);
             newPos = offset;
             line.SetPosition(i, newPos);
-
         }
     }
 }

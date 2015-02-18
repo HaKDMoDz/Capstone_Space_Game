@@ -125,6 +125,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
         }
     }
 
+    private ShipShield shipShield;
     private Slider hpBar;
     private Slider shieldBar;
 
@@ -148,6 +149,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
         if (ShieldStrength >= _amountOfDamage)
         {
             ShieldStrength -= _amountOfDamage;
+            
             //display shield damage effect
             StartCoroutine(trans.FindChild("ShieldEffect").GetComponent<DisableEffectAfterTime>().StartEffect());
         }
@@ -165,7 +167,15 @@ public abstract class TurnBasedUnit : MonoBehaviour
             yield return StartCoroutine(Destroy());
         }
     }
-
+    /// <summary>
+    /// This method only plays the directional shield effect, does not do any actual damage
+    /// </summary>
+    /// <param name="hitPoint"></param>
+    public void PlayShieldEffect(Vector3 hitPoint)
+    {
+        shipShield.gameObject.SetActive(true);
+        shipShield.TakeDamage(hitPoint);
+    }
     /// <summary>
     /// Coroutine for Destroying ships when HP is 0 (or less)
     /// </summary>
@@ -232,8 +242,6 @@ public abstract class TurnBasedUnit : MonoBehaviour
 
     public void ShowTargetingPanel(bool show, Transform targeter)
     {
-        //CombatSystemInterface.Instance.ShowTargetingPanel(show, name);
-
         targetingCamera.SetActive(show);
         if (show)
         {
@@ -243,7 +251,6 @@ public abstract class TurnBasedUnit : MonoBehaviour
             float dot = Vector3.Dot(perp, trans.up);
             angle = dot > 0.0f ? angle : -angle;
             Debug.Log("Angle to targeter " + angle);
-            //targetCamTrans.rotation = Quaternion.Euler(defaultTargetCamRot.eulerAngles.x, defaultTargetCamRot.eulerAngles.y+angle , defaultTargetCamRot.eulerAngles.z);
             targetCamTrans.localEulerAngles = new Vector3(defaultTargetCamEuler.x, defaultTargetCamEuler.y + angle, defaultTargetCamEuler.z);
         }
         
@@ -350,6 +357,13 @@ public abstract class TurnBasedUnit : MonoBehaviour
 
         expolosionObject = trans.FindChild("Explosion").gameObject;
 
+        shipShield = GetComponentInChildren<ShipShield>();
+        #if FULL_DEBUG 
+        if(!shipShield)
+        {
+            Debug.LogError("Ship shield not found");
+        }
+        #endif
         
     }
     #endregion PrivateMethods

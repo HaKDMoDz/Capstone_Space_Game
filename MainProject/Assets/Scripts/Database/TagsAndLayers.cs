@@ -18,6 +18,8 @@ public class TagsAndLayers : ScriptableObject
     private int componentsLayer = 12;
     [SerializeField]
     private int ai_ShipLayer = 13;
+    [SerializeField]
+    private int shipShieldLayer = 16;
 
 
     public static int UI_Layer { get; private set; }
@@ -27,6 +29,7 @@ public class TagsAndLayers : ScriptableObject
     public static int SpaceGroundLayer { get; private set; }
     public static int ComponentsLayer { get; private set; }
     public static int AI_ShipLayer { get; private set; }
+    public static int ShipShieldLayer { get; private set; }
 
     [SerializeField]
     private string motherShipTag = "MotherShip";
@@ -49,6 +52,7 @@ public class TagsAndLayers : ScriptableObject
         SpaceGroundLayer = spaceGroundLayer;
         ComponentsLayer = componentsLayer;
         AI_ShipLayer = ai_ShipLayer;
+        ShipShieldLayer = shipShieldLayer;
 
         MotherShipTag = motherShipTag;
         SolarSystemTag = solarSystemTag;

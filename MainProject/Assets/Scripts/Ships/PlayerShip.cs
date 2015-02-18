@@ -127,14 +127,13 @@ public class PlayerShip : TurnBasedUnit
                 yield return StartCoroutine(ComponentSelectionSequence());
                 Debug.Log("activating components");
                 firing = true;
-                //activates the components
+                //activates the components with a callback when the activation is complete with the power used by components successfully activated
                 yield return StartCoroutine(playerAttack.ActivateComponents(selectedComponents, 
-                    (float activationCost)=> //callback with the power used by components successfully activated
+                    (float activationCost)=> 
                         {
                             CurrentPower -= activationCost;
-                            
                         }));
-                //componentSelectionOn = false;
+
                 firing = false;
                 UnSelectComponents(false);
             }
