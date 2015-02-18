@@ -35,12 +35,12 @@ public class Comp_Wpn_Railgun : Component_Weapon
         if(targetComp && targetComp.CompHP > 0.0f)
         {
             #if FULL_DEBUG
-            Debug.Log("Firing Railgun");
+            //Debug.Log("Firing Railgun");
             #endif
 
             targetTrans = targetComp.transform;
+            shootPoint.LookAt(targetTrans);
             length = Mathf.RoundToInt(Vector3.Distance(targetTrans.position, shootPoint.position));
-
             yield return StartCoroutine(CreateRailEffect());
             yield return StartCoroutine(DoDamage(targetComp));
         }

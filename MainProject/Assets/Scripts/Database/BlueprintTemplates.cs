@@ -26,11 +26,22 @@ public class BlueprintTemplates : ScriptableObject
     #region DatabaseAccess
     public static BlueprintTemplate GetBPTemplate(string name)
     {
+#if FULL_DEBUG
+        BlueprintTemplate bpTemplate=null;
+        if(!Name_BpTemplate_Table.TryGetValue(name, out bpTemplate))
+        {
+            Debug.LogError("Blueprint Template named " + name + " not found");
+        }
+        return bpTemplate;
+#else
         return Name_BpTemplate_Table[name];
+#endif
     }
+
     #endregion DatabaseAccess
 
     #region GUIAccess
+#if UNITY_EDITOR
     public bool BlueprintExists(string name)
     {
         return (BpTemplateList.Any(bp => bp.MetaData.BlueprintName == name));
@@ -56,8 +67,6 @@ public class BlueprintTemplates : ScriptableObject
         {
             Debug.LogWarning("No components in blueprint");
         }
-
-
         blueprintBeingBuilt.GenerateMetaData(name);
         BpTemplateList.Add(new BlueprintTemplate(blueprintBeingBuilt));
     }
@@ -81,6 +90,8 @@ public class BlueprintTemplates : ScriptableObject
             bpTemplateList.Clear();
         }
     }
+#endif
+
     #endregion GUIAccess
     #endregion Public
     #region UnityCallbacks
@@ -94,6 +105,9 @@ public class BlueprintTemplates : ScriptableObject
         #endif
 
         BlueprintTemplateList = bpTemplateList;
+
+        bpTemplateList.ForEach(bp => Debug.Log("Blueprint Template : " + bp.MetaData.BlueprintName));
+
         Name_BpTemplate_Table = bpTemplateList.ToDictionary(bp=>bp.MetaData.BlueprintName, bp=>bp);
 
     }
@@ -112,7 +126,6 @@ public class BlueprintTemplate
     public Hull Hull
     {
         get { return hull; }
-        //set { hull = value; }
     }
 
     [SerializeField]
@@ -120,7 +133,6 @@ public class BlueprintTemplate
     public ShipBlueprintMetaData MetaData
     {
         get { return metaData; }
-        //set { metaData = value; }
     }
 
     [SerializeField]
@@ -146,7 +158,7 @@ public class BlueprintTemplate
                     component = slot_comp.Value
                 });
         }
-        this.metaData = new ShipBlueprintMetaData(blueprint.MetaData);
+        this.metaData = blueprint.MetaData;
     }
 
     public void GetBlueprint(out ShipBlueprint blueprint, Hull hullBeingBuilt)
@@ -156,7 +168,7 @@ public class BlueprintTemplate
         {
             blueprint.AddComponent(hullBeingBuilt.index_slot_table[slotIndex_Comp.slotIndex], slotIndex_Comp.component);
         }
-        blueprint.MetaData = new ShipBlueprintMetaData(MetaData);
+        blueprint.GenerateMetaData(MetaData.BlueprintName);
     }
 
     [Serializable]

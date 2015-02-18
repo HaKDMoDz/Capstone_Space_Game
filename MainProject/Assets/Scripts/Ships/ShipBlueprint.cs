@@ -148,6 +148,7 @@ public class ShipBlueprint
 [Serializable]
 public class ShipBlueprintMetaData
 {
+    [SerializeField]
     private string blueprintName;
     public string BlueprintName
     {

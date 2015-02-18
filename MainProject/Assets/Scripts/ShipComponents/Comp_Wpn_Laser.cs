@@ -43,15 +43,7 @@ public class Comp_Wpn_Laser : Component_Weapon
             length = Mathf.RoundToInt(Vector3.Distance(targetTrans.position, shootPoint.position));
 
             yield return StartCoroutine(CreateBeamEffectForDuration());
-            
-            //if (targetComp)
-            {
-                yield return StartCoroutine(DoDamage(targetComp));
-            }
-            //else
-            //{
-            //    yield return null;
-            //}
+            yield return StartCoroutine(DoDamage(targetComp));
         }
         OnActivationComplete();
     }

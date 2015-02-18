@@ -66,19 +66,16 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
     /// </param>
     public void BuildComponent(ComponentSlot slot, ShipComponent component)
     {
-        #if FULL_DEBUG
-        Debug.Log("Building component " + component.componentName + " on slot " + slot.index);
-        #endif
+
 #if !NO_DEBUG
         if(buildingShip)
         {
             if(slot.InstalledComponent)
             {
-                //if upgraded components don't have the same ID
-                //if(ComponentTable.GetID(slot.InstalledComponent) == ComponentTable.GetID(component))
-                //{
-                //    return;
-                //}
+                if (ComponentTable.GetID(slot.InstalledComponent) == ComponentTable.GetID(component))
+                {
+                    return;
+                }
 
                 //if a component is already present, delete it from the scene and blueprint
                 ShipComponent otherComp = slot_compsBeingBuilt_table[slot];
@@ -86,6 +83,9 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
                 Destroy(otherComp.gameObject);
                 blueprintBeingBuilt.RemoveComponent(slot);
             }
+            #if FULL_DEBUG
+            Debug.Log("Building component " + component.componentName + " on slot " + slot.index);
+            #endif
             AddComponentToScene(slot, component);
             blueprintBeingBuilt.AddComponent(slot, component);
             blueprintBeingBuilt.GenerateMetaData();

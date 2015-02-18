@@ -45,24 +45,36 @@ public class ComponentTable : ScriptableObject
     #region DatabaseAccess
     public static ShipComponent GetComp(int compID)
     {
-        //if (id_comp_table == null)
-        //{
-        //    Debug.Log("force init");
-        //    FindObjectOfType<ComponentTable>().OnEnable();
-        //}
+#if FULL_DEBUG
+        ShipComponent comp = null;
+        if(!id_comp_table.TryGetValue(compID, out comp))
+        {
+            Debug.LogError("Component with ID " + compID + " not found");
+        }
+        return comp;
+#else
         return id_comp_table[compID];
+#endif
     }
     public static int GetID(ShipComponent component)
     {
-        //if (comp_id_table == null)
-        //{
-        //    Debug.Log("force init");
-        //    FindObjectOfType<ComponentTable>().OnEnable();
-        //}
+#if FULL_DEBUG
+        int compID;
+        if(!comp_id_table.TryGetValue(component, out compID))
+        {
+            Debug.LogError("Component " + component.componentName + " not found");
+        }
+        return compID;
+#else
         return comp_id_table[component];
+#endif
     }
+
     #endregion DatabaseAccess
+
     #region GUI_Access
+#if UNITY_EDITOR
+    
     public void AddEntry(int ID, ShipComponent component)
     {
         if(Comp_id_List == null)
@@ -124,7 +136,8 @@ public class ComponentTable : ScriptableObject
             Comp_id_List.Clear();
         }
     }
-    
+#endif
+
     #endregion GUI_Access
     #endregion Public
     #region UnityCallbacks

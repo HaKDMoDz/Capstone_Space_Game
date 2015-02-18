@@ -47,14 +47,33 @@ public class HullTable : ScriptableObject
     #region DatabaseAccess
     public static Hull GetHull(int hull_ID)
     {
+#if FULL_DEBUG
+        Hull hull = null;
+        if(!id_hull_table.TryGetValue(hull_ID, out hull))
+        {
+            Debug.LogError("Hull with ID " + hull_ID + " not found");
+        }
+        return hull;
+#else
         return id_hull_table[hull_ID];
+#endif
     }
     public static int GetID(Hull hull)
     {
+#if FULL_DEBUG
+        int hull_ID;
+        if (!hull_id_table.TryGetValue(hull, out hull_ID))
+        {
+            Debug.LogError("Hull " +hull.hullName + " not found");
+        }
+        return hull_ID;
+#else
         return hull_id_table[hull];
+#endif
     }
     #endregion DatabaseAccess
     #region GUI_Access
+#if UNITY_EDITOR
     public void AddEntry(int _ID, Hull _hull)
     {
         if (Hull_id_List == null)
@@ -117,6 +136,8 @@ public class HullTable : ScriptableObject
             Hull_id_List.Clear();
         }
     }
+#endif
+
     #endregion GUI_Access
     #endregion Public
     #region UnityCallbacks
