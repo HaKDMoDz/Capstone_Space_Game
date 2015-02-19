@@ -27,6 +27,10 @@ public class ComponentSlot : MonoBehaviour
         }
     }
 
+    public void Init()
+    {
+        InstalledComponent = null;
+    }
     #endregion Fields
 
 }

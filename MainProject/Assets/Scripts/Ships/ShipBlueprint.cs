@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 
 [Serializable]
 public class ShipBlueprint
@@ -76,7 +77,21 @@ public class ShipBlueprint
         slot.InstalledComponent = component;
 #endif
     }//AddComponent
-
+    public void RemoveComponent(int slotIndex)
+    {
+        ComponentSlot slot = slot_component_table.Keys.FirstOrDefault(s => s.index == slotIndex);
+        #if FULL_DEBUG
+        if (!slot)
+        {
+            Debug.LogError("No slot found with index " + slotIndex);
+        }
+        else
+        #endif
+        {
+            slot_component_table.Remove(slot);
+            slot.InstalledComponent = null;
+        }
+    }
     public void RemoveComponent(ComponentSlot slot)
     {
 #if !NO_DEBUG

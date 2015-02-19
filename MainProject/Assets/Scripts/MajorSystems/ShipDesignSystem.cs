@@ -82,7 +82,7 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
                 ShipComponent otherComp = slot_compsBeingBuilt_table[slot];
                 componentsBeingBuilt.Remove(otherComp);
                 Destroy(otherComp.gameObject);
-                blueprintBeingBuilt.RemoveComponent(slot);
+                blueprintBeingBuilt.RemoveComponent(slot.index);
             }
             #if FULL_DEBUG
             Debug.Log("Building component " + component.componentName + " on slot " + slot.index);
@@ -176,6 +176,7 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
                 int slotIndex = slot_component.Key.index;
                 ComponentSlot slotToBuildOn = hullBeingBuilt.index_slot_table[slotIndex];
                 AddComponentToScene(slotToBuildOn, slot_component.Value);
+                slotToBuildOn.InstalledComponent = slot_component.Value;
             }
             buildingShip = true;
         }

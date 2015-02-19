@@ -263,12 +263,20 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     }
     public void DeleteSelectedBP()
     {
+        if (selectedBP==null || selectedBP == "")
+        {
+            return;
+        }
         Debug.Log("Delete selected BP: "+selectedBP);
         DeleteBlueprint(selectedBP);
         selectedBP = "";
     }
     public void LoadSelectedBP()
     {
+        if (selectedBP == null || selectedBP == "")
+        {
+            return;
+        }
         Debug.Log("Load selected BP: "+selectedBP);
         LoadBlueprint(selectedBP);
         selectedBP = "";
