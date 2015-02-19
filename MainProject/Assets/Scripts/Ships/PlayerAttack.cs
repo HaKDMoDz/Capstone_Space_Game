@@ -40,17 +40,22 @@ public class PlayerAttack : MonoBehaviour
     public IEnumerator ActivateComponents(List<ShipComponent> componentsToActivate, Action<float> activationComplete)
     {
         float totalPowerUsed = 0.0f; //used to keep track of the power used in case all the selected components are not able to successfully activate
-
+        int originalCamCulling = Camera.main.cullingMask;
         //if there are any weapons in the selection
         if(componentsToActivate.Any(c=>c is Component_Weapon))
         {
             yield return StartCoroutine(WeaponTargetingSequence());
 
-            numWeaponsActivated = 0; //keeps tracks of the callbacks from the activated weapons to know when all the weapons are done firing
+           numWeaponsActivated = 0; //keeps tracks of the callbacks from the activated weapons to know when all the weapons are done firing
 
             if(targetComponent)
             {
                 DisplayTargetingLine(Vector3.zero, false);
+                TargetShip(targetShip, false);
+                targetShip.ShowHPBars(true);
+                yield return StartCoroutine(CameraDirector.Instance.ZoomInFromAbove(targetComponent.ParentShip.transform, GlobalVars.CameraAimAtPeriod));
+
+                Camera.main.cullingMask = originalCamCulling | 1 << TagsAndLayers.ComponentsLayer | 1 << TagsAndLayers.ComponentSlotLayer;
 
                 trans.LookAt(targetComponent.transform);
 
@@ -84,11 +89,13 @@ public class PlayerAttack : MonoBehaviour
             yield return null;
         }
 
+        Camera.main.cullingMask = originalCamCulling;
+        targetShip.ShowHPBars(false);
         //raises the event with the power consumed by the components who managed to activate successfully
         activationComplete(totalPowerUsed);
 
         //removes the targeting panel once weapon activation is complete
-        TargetShip(targetShip, false);
+        //TargetShip(targetShip, false);
         //focuses the camera back on the ship
         yield return StartCoroutine(CameraDirector.Instance.MoveToFocusOn(trans, GlobalVars.CameraMoveToFocusPeriod));
 

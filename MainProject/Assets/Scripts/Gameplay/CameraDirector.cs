@@ -17,6 +17,8 @@ public class CameraDirector : Singleton<CameraDirector>
     private Quaternion overheadRotation = Quaternion.Euler(90.0f, 270.0f, 0.0f);
     [SerializeField]
     private float minOverheadHeight = 100.0f;
+    [SerializeField]
+    private float zoomAboveHeight = 60.0f;
     //[SerializeField]
     //private float orbitSpeed = 30.0f;
 
@@ -96,6 +98,13 @@ public class CameraDirector : Singleton<CameraDirector>
         Quaternion desiredRotation = Quaternion.Euler(overheadRotation.eulerAngles.x, overheadRotation.eulerAngles.y + angle, overheadRotation.eulerAngles.z);
 
         yield return StartCoroutine(MoveAndRotate(desiredCamPos, desiredRotation, period));
+    }
+
+    public IEnumerator ZoomInFromAbove(Transform target, float period)
+    {
+        Vector3 desiredPos = target.position + Vector3.up * zoomAboveHeight;
+        //Quaternion desiredRotation = Quaternion.Euler(overheadRotation.eulerAngles);
+        yield return StartCoroutine(MoveAndRotate(desiredPos, trans.rotation, period));
     }
 
     public void OrbitAroundImmediate(Transform target, float xAngle, float yAngle)

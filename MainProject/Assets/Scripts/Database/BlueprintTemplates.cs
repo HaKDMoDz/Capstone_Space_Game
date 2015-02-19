@@ -105,9 +105,6 @@ public class BlueprintTemplates : ScriptableObject
         #endif
 
         BlueprintTemplateList = bpTemplateList;
-
-        bpTemplateList.ForEach(bp => Debug.Log("Blueprint Template : " + bp.MetaData.BlueprintName));
-
         Name_BpTemplate_Table = bpTemplateList.ToDictionary(bp=>bp.MetaData.BlueprintName, bp=>bp);
 
     }

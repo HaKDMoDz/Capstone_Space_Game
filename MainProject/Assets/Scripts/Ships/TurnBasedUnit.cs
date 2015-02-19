@@ -258,9 +258,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
             //Debug.Log("Angle to targeter " + angle);
             targetCamTrans.localEulerAngles = new Vector3(defaultTargetCamEuler.x, defaultTargetCamEuler.y + angle, defaultTargetCamEuler.z);
         }
-        
-
-        ShowHPBars(show);
+        //ShowHPBars(show);
     }
 
     public void ShowHPBars(bool show)

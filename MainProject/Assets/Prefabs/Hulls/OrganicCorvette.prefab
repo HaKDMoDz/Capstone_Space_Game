@@ -85,6 +85,23 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
+--- !u!1 &127180
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 224: {fileID: 22427180}
+  - 222: {fileID: 22227180}
+  - 114: {fileID: 11427180}
+  m_Layer: 5
+  m_Name: BarsPanel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &145504
 GameObject:
   m_ObjectHideFlags: 0
@@ -3793,6 +3810,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 658fb838befa16042a798646ec4a1f2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &11427180
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 127180}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
 --- !u!114 &11445504
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4694,6 +4732,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 30
+  installedComponent: {fileID: 0}
 --- !u!114 &11482590
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4706,6 +4745,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 29
+  installedComponent: {fileID: 0}
 --- !u!114 &11482592
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4718,6 +4758,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 28
+  installedComponent: {fileID: 11400000, guid: 8374be886da01b34e976aeb47017201a, type: 2}
 --- !u!114 &11482594
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4730,6 +4771,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 27
+  installedComponent: {fileID: 0}
 --- !u!114 &11482596
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4742,6 +4784,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 26
+  installedComponent: {fileID: 0}
 --- !u!114 &11482598
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4754,6 +4797,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 25
+  installedComponent: {fileID: 11407202, guid: 875e5025256c66e4f80a3c62f54699c3, type: 2}
 --- !u!114 &11482600
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4766,6 +4810,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 24
+  installedComponent: {fileID: 0}
 --- !u!114 &11482602
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4778,6 +4823,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 23
+  installedComponent: {fileID: 11401294, guid: 20a23412d72e3544eac63af6bc3ab9ba, type: 2}
 --- !u!114 &11482604
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4790,6 +4836,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 22
+  installedComponent: {fileID: 11401294, guid: 20a23412d72e3544eac63af6bc3ab9ba, type: 2}
 --- !u!114 &11482606
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4802,6 +4849,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 21
+  installedComponent: {fileID: 0}
 --- !u!114 &11482608
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4814,6 +4862,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 20
+  installedComponent: {fileID: 0}
 --- !u!114 &11482610
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4826,6 +4875,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 19
+  installedComponent: {fileID: 11401362, guid: 6f5f7af595eae194cadf7d55a6308216, type: 2}
 --- !u!114 &11482612
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4838,6 +4888,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 18
+  installedComponent: {fileID: 11401362, guid: 6f5f7af595eae194cadf7d55a6308216, type: 2}
 --- !u!114 &11482614
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4850,6 +4901,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 17
+  installedComponent: {fileID: 0}
 --- !u!114 &11482616
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4862,6 +4914,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 16
+  installedComponent: {fileID: 11401294, guid: 20a23412d72e3544eac63af6bc3ab9ba, type: 2}
 --- !u!114 &11482618
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4874,6 +4927,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 15
+  installedComponent: {fileID: 11401294, guid: 20a23412d72e3544eac63af6bc3ab9ba, type: 2}
 --- !u!114 &11482620
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4886,6 +4940,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 14
+  installedComponent: {fileID: 11407202, guid: 875e5025256c66e4f80a3c62f54699c3, type: 2}
 --- !u!114 &11482622
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4898,6 +4953,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 13
+  installedComponent: {fileID: 11407202, guid: 875e5025256c66e4f80a3c62f54699c3, type: 2}
 --- !u!114 &11482624
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4910,6 +4966,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 12
+  installedComponent: {fileID: 11400000, guid: 8374be886da01b34e976aeb47017201a, type: 2}
 --- !u!114 &11482626
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4922,6 +4979,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 11
+  installedComponent: {fileID: 11400000, guid: 8374be886da01b34e976aeb47017201a, type: 2}
 --- !u!114 &11482628
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4934,6 +4992,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 10
+  installedComponent: {fileID: 11400000, guid: 8374be886da01b34e976aeb47017201a, type: 2}
 --- !u!114 &11482630
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4946,6 +5005,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 9
+  installedComponent: {fileID: 11400000, guid: 8374be886da01b34e976aeb47017201a, type: 2}
 --- !u!114 &11482632
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4958,6 +5018,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 8
+  installedComponent: {fileID: 11400000, guid: 8374be886da01b34e976aeb47017201a, type: 2}
 --- !u!114 &11482634
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4970,6 +5031,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 7
+  installedComponent: {fileID: 0}
 --- !u!114 &11482636
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4982,6 +5044,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 6
+  installedComponent: {fileID: 11401362, guid: 6f5f7af595eae194cadf7d55a6308216, type: 2}
 --- !u!114 &11482638
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4994,6 +5057,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 5
+  installedComponent: {fileID: 11401362, guid: 6f5f7af595eae194cadf7d55a6308216, type: 2}
 --- !u!114 &11482640
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5006,6 +5070,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 4
+  installedComponent: {fileID: 11400000, guid: 8374be886da01b34e976aeb47017201a, type: 2}
 --- !u!114 &11482642
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5018,6 +5083,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 3
+  installedComponent: {fileID: 11401362, guid: 6f5f7af595eae194cadf7d55a6308216, type: 2}
 --- !u!114 &11482644
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5030,6 +5096,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 2
+  installedComponent: {fileID: 0}
 --- !u!114 &11482646
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5042,6 +5109,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 1
+  installedComponent: {fileID: 0}
 --- !u!114 &11482648
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5054,6 +5122,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 0
+  installedComponent: {fileID: 0}
 --- !u!114 &11485106
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -15871,6 +15940,12 @@ ParticleSystemRenderer:
   m_Mesh1: {fileID: 0}
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
+--- !u!222 &22227180
+CanvasRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 127180}
 --- !u!222 &22276562
 CanvasRenderer:
   m_ObjectHideFlags: 1
@@ -15924,6 +15999,25 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
+--- !u!224 &22427180
+RectTransform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 127180}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 22476550}
+  - {fileID: 22476572}
+  m_Father: {fileID: 22476548}
+  m_RootOrder: 0
+  m_AnchorMin: {x: 0, y: .787852705}
+  m_AnchorMax: {x: 1, y: 1.00013387}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: .5, y: .5}
 --- !u!224 &22476548
 RectTransform:
   m_ObjectHideFlags: 1
@@ -15934,14 +16028,13 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: .100000001, y: .100000001, z: .100000001}
   m_Children:
-  - {fileID: 22476550}
-  - {fileID: 22476572}
+  - {fileID: 22427180}
   m_Father: {fileID: 482650}
   m_RootOrder: 6
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 13}
-  m_SizeDelta: {x: 393, y: 136.190002}
+  m_AnchoredPosition: {x: 0, y: 1.46000004}
+  m_SizeDelta: {x: 393, y: 421.070007}
   m_Pivot: {x: .5, y: .5}
 --- !u!224 &22476550
 RectTransform:
@@ -15956,12 +16049,12 @@ RectTransform:
   - {fileID: 22476552}
   - {fileID: 22476554}
   - {fileID: 22476558}
-  m_Father: {fileID: 22476548}
+  m_Father: {fileID: 22427180}
   m_RootOrder: 0
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 32}
-  m_SizeDelta: {x: 0, y: -63}
+  m_AnchoredPosition: {x: 0, y: 22.5}
+  m_SizeDelta: {x: 0, y: -45}
   m_Pivot: {x: .5, y: .5}
 --- !u!224 &22476552
 RectTransform:
@@ -16150,12 +16243,12 @@ RectTransform:
   - {fileID: 22476570}
   - {fileID: 22476568}
   - {fileID: 22476564}
-  m_Father: {fileID: 22476548}
+  m_Father: {fileID: 22427180}
   m_RootOrder: 1
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -26.1000004}
-  m_SizeDelta: {x: 0, y: -52.0999985}
+  m_AnchoredPosition: {x: 0, y: -22.4999924}
+  m_SizeDelta: {x: 0, y: -45.0000114}
   m_Pivot: {x: .5, y: .5}
 --- !u!1001 &100100000
 Prefab:
