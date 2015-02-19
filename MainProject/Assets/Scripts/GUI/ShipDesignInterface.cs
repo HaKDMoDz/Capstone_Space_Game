@@ -40,15 +40,17 @@ public struct InterfaceGUI_Fields //Inspector Grouping
 public class ShipDesignInterface : Singleton<ShipDesignInterface>
 {
     #region Fields
-    #region EditorExposed
+    //Editor Exposed
     [SerializeField]
     private InterfaceGUI_Fields guiFields; //all gui related vars from the inspector
-    #endregion EditorExposed
 
-    #region Internal
+    //Internal
     private Dictionary<string, List<GameObject>> blueprintName_button_table;
     private string selectedBP;
-    #endregion Internal
+
+    //References
+    ShipDesignSystem shipDesignSystem;
+    
     #endregion Fields
 
     #region Methods
@@ -58,6 +60,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     private void Awake()
     {
         blueprintName_button_table = new Dictionary<string, List<GameObject>>();
+        shipDesignSystem = ShipDesignSystem.Instance;
     }
 
     #endregion UnityCallbacks
@@ -94,7 +97,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
                 });
         }
         //Add blueprint buttons to Load Panel and Fleet Panel
-        foreach (string blueprintName in ShipDesignSystem.Instance.GetSaveFileList())
+        foreach (string blueprintName in shipDesignSystem.GetSaveFileList())
         {
             AddBlueprintButton(blueprintName);
         }
@@ -218,7 +221,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
                 {
                     dragging = true;
                     ComponentSlot slot = hit.transform.GetComponent<ComponentSlot>();
-                    ShipDesignSystem.Instance.BuildComponent(slot, selectedComponent);
+                    shipDesignSystem.BuildComponent(slot, selectedComponent);
                 }
             }
             if (Input.GetMouseButtonUp(0) || Input.GetKeyDown(KeyCode.Escape))
@@ -306,7 +309,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     /// <param name="componentID"></param>
     public void SelectComponentToBuild(int componentID)
     {
-        if (!ShipDesignSystem.Instance.buildingShip)
+        if (!shipDesignSystem.buildingShip)
         {
 #if FULL_DEBUG
             Debug.Log("Not building a ship");
@@ -348,7 +351,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
             guiFields.saveDialogueBox.gameObject.SetActive(false);
         }
         //showing dialogue box
-        else if (ShipDesignSystem.Instance.buildingShip)
+        else if (shipDesignSystem.buildingShip)
         {
             guiFields.saveDialogueBox.gameObject.SetActive(true);
             EventSystem.current.SetSelectedGameObject(guiFields.saveDialogueBox.inputField.gameObject, null);
@@ -391,7 +394,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     /// </summary>
     public void SaveFleet()
     {
-        ShipDesignSystem.Instance.SaveFleet();
+        shipDesignSystem.SaveFleet();
     }
 
     /// <summary>
@@ -416,7 +419,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     /// <param name="hull_ID"></param>
     public void BuildHull(int hull_ID)
     {
-        ShipDesignSystem.Instance.BuildHull(hull_ID);
+        shipDesignSystem.BuildHull(hull_ID);
         ShowStatsPanel(true);
     }
     /// <summary>
@@ -426,7 +429,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     /// <param name="component"></param>
     public void BuildComponent(ComponentSlot slot, ShipComponent component)
     {
-        ShipDesignSystem.Instance.BuildComponent(slot, component);
+        shipDesignSystem.BuildComponent(slot, component);
     }
     //GUI should not access directly
     /// <summary>
@@ -436,13 +439,24 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     /// <param name="fileName"></param>
     private void SaveBlueprint(string fileName)
     {
-        ClearGUI();
-        if (!ShipDesignSystem.Instance.FileExists(fileName))
+        if(shipDesignSystem.FileExists(fileName))
+        {
+            ShowModalPanel(true);
+            guiFields.modalPanel.ShowMessageWithYesCancel("A Blueprint named \"" + fileName + "\" already exists. Overwrite?",
+                ()=>
+                {
+                    shipDesignSystem.DeleteBlueprint(fileName);
+                    shipDesignSystem.SaveBlueprint(fileName);
+                    ClearGUI();
+                },
+                null);
+        }
+        else
         {
             AddBlueprintButton(fileName);
+            shipDesignSystem.SaveBlueprint(fileName);
+            ClearGUI();
         }
-        ShipDesignSystem.Instance.SaveBlueprint(fileName);
-
     }
     //GUI should not access directly
     /// <summary>
@@ -452,7 +466,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     private void LoadBlueprint(string fileName)
     {
         ClearGUI();
-        ShipDesignSystem.Instance.LoadBlueprint(fileName);
+        shipDesignSystem.LoadBlueprint(fileName);
     }
     /// <summary>
     /// Calls DeleteBlueprint on the ShipDesignSystem
@@ -460,7 +474,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     /// <param name="fileName"></param>
     public void DeleteBlueprint(string fileName)
     {
-        ShipDesignSystem.Instance.DeleteBlueprint(fileName);
+        shipDesignSystem.DeleteBlueprint(fileName);
         RemoveBlueprintButton(fileName);
         if (FleetManager.Instance.CurrentFleetContains(fileName))
         {
@@ -480,7 +494,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
         }
         ClearCurrentFleet();
         ClearGUI();
-        ShipDesignSystem.Instance.DeleteAllBlueprints();
+        shipDesignSystem.DeleteAllBlueprints();
     }
     /// <summary>
     /// Clears the GUI and calls ClearScreen on the ShipDesignSystem
@@ -489,7 +503,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     {
         ClearGUI();
         ShowStatsPanel(false);
-        ShipDesignSystem.Instance.ClearScreen();
+        shipDesignSystem.ClearScreen();
     }
     #endregion DesignSystemAccess
     #endregion Public

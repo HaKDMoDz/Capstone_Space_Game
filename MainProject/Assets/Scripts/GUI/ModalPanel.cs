@@ -38,6 +38,12 @@ public class ModalPanel : MonoBehaviour
                 yesButton.buttonText.text = "Yes";
             });
     }
+    /// <summary>
+    /// Show a modal box with a message; yes button and cancel button. The corresponding actions will be called by the buttons.
+    /// </summary>
+    /// <param name="message"></param>
+    /// <param name="yesAction"></param>
+    /// <param name="cancelAction"></param>
     public void ShowMessageWithYesCancel(string message, UnityAction yesAction, UnityAction cancelAction)
     {
         SetMessage(message);
