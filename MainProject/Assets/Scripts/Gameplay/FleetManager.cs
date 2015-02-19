@@ -50,6 +50,10 @@ public class FleetManager : Singleton<FleetManager>
         currentFleet.Remove(shipBP);
 #endif
     }
+    public bool CurrentFleetContains(string blueprintName)
+    {
+        return currentFleet.Contains(blueprintName);
+    }
     #endregion GUIAccess
     #endregion Public
 

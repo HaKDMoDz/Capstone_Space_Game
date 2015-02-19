@@ -15,7 +15,7 @@ public class ComponentSlot : MonoBehaviour
     //    get { return placement; }
     //    set { placement = value; }
     //}
-
+    [SerializeField]
     private ShipComponent installedComponent = null;
     public ShipComponent InstalledComponent
     {

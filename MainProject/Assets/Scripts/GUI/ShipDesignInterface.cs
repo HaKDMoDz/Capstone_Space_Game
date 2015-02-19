@@ -45,7 +45,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     //private Dictionary<string, GameObject> fileName_button_table; //reference to the Load buttons corresponding to the filenames (used to remove the button when a file is deleted)
     //private Dictionary<string, GameObject> savedBP_button_table; //same as above - used in the fleet management planel
     private Dictionary<string, List<GameObject>> blueprintName_button_table;
-
+    private string selectedBP;
     #endregion Internal
     #endregion Fields
 
@@ -118,7 +118,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     }
 
     /// <summary>
-    /// Helper method to add a blueprint button
+    /// Helper method to add a blueprint button to the load panel and the fleet panel
     /// </summary>
     /// <param name="fileName">
     /// the fileName that the button will correspond to
@@ -130,7 +130,9 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
         loadButtonClone.buttonText.text = fileName;
         loadButtonClone.button.onClick.AddListener(() =>
             {
-                LoadBlueprint(fileName);
+                //LoadBlueprint(fileName);
+                loadButtonClone.button.Select();
+                SelectBlueprintToLoad(fileName);
             });
 
         ButtonWithContent fleetPanel_savedBP_ButtonClone = Instantiate(guiFields.buttonPrefab) as ButtonWithContent;
@@ -253,6 +255,25 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
         SetupGUI();
     }
     #region GUIAccess
+
+    public void SelectBlueprintToLoad(string bpName)
+    {
+        Debug.Log("Selected " + bpName);
+        selectedBP = bpName;
+    }
+    public void DeleteSelectedBP()
+    {
+        Debug.Log("Delete selected BP: "+selectedBP);
+        DeleteBlueprint(selectedBP);
+        selectedBP = "";
+    }
+    public void LoadSelectedBP()
+    {
+        Debug.Log("Load selected BP: "+selectedBP);
+        LoadBlueprint(selectedBP);
+        selectedBP = "";
+    }
+    
     /// <summary>
     /// Selects the component to build and starts the placement sequence
     /// </summary>
@@ -322,6 +343,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     public void ShowLoadPanel(bool show)
     {
         guiFields.loadPanel.SetActive(show);
+        //selectedBP = "";
     }
 
     /// <summary>
@@ -409,7 +431,12 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     public void DeleteBlueprint(string fileName)
     {
         ShipDesignSystem.Instance.DeleteBlueprint(fileName);
-        ClearCurrentFleet();
+        RemoveBlueprintButton(fileName);
+        if (FleetManager.Instance.CurrentFleetContains(fileName))
+        {
+            Debug.Log("Clearing Fleet as it includes " + fileName);
+            ClearCurrentFleet();
+        }
     }
     /// <summary>
     /// Removes all Load Buttons from the Load Panel and calls DeleteAllBlueprints on the ShipDesignSystem

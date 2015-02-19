@@ -85,12 +85,12 @@ public class ShipBlueprint
             slot_component_table.Remove(slot);
             slot.InstalledComponent = null;
         }
+        #if FULL_DEBUG
         else
         {
-            #if FULL_DEBUG
-            Debug.Log("slot " + slot.index + " is not populated in the blueprint");
-            #endif
+            Debug.LogError("slot " + slot.index + " is not populated in the blueprint");
         }
+        #endif
 
 #else
         slot_component_table.Remove(slot);

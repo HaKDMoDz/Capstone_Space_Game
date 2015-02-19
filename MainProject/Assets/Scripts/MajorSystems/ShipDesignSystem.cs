@@ -78,6 +78,7 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
                 }
 
                 //if a component is already present, delete it from the scene and blueprint
+                Debug.Log("Replacing component");
                 ShipComponent otherComp = slot_compsBeingBuilt_table[slot];
                 componentsBeingBuilt.Remove(otherComp);
                 Destroy(otherComp.gameObject);
