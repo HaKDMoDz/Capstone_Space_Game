@@ -52,7 +52,7 @@ public class Comp_Wpn_Railgun : Component_Weapon
         line.enabled = true;
         int factor = 2;
         line.SetVertexCount(length*factor);
-        Vector3 targetDir = (targetTrans.position - shootPoint.position).normalized;
+        //Vector3 targetDir = (targetTrans.position - shootPoint.position).normalized;
 
         for (int i = 0; i < length*factor; i++)
         {

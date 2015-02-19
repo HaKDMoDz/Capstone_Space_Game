@@ -226,6 +226,15 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
     {
         return saveSystem.savedBPList.blueprintMetaDataList.Select(b=>b.BlueprintName).ToList();
     }
+    /// <summary>
+    /// Returns whether a file with the name already exists
+    /// </summary>
+    /// <param name="filename"></param>
+    /// <returns></returns>
+    public bool FileExists(string filename)
+    {
+        return saveSystem.savedBPList.Contains(filename);
+    }
     #endregion SaveSystemInterface
 
     #endregion Public
@@ -320,7 +329,7 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
     {
         foreach (string blueprintName in playerFleetData.currentFleet_BlueprintNames)
         {
-            if(!saveSystem.savedBPList.FileExists(blueprintName))
+            if(!saveSystem.savedBPList.Contains(blueprintName))
             {
                 return false;
             }

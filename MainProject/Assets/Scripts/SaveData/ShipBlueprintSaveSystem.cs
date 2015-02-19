@@ -67,6 +67,14 @@ public class ShipBlueprintSaveSystem
     /// </param>
     public void SaveBlueprint(ShipBlueprint shipBP, string fileName)
     {
+        #if FULL_DEBUG || LOW_DEBUG
+        if(savedBPList.Contains(fileName))
+        {
+            Debug.LogError("Blueprint " + fileName + " already exists...replacing. We should detect and delete a pre-existing file in advance");
+            DeleteBlueprint(fileName);
+        }
+	    #endif
+
         SerializeShipBP(shipBP);
         path = BuildPathString(fileName); 
         #if FULL_DEBUG
@@ -123,7 +131,7 @@ public class ShipBlueprintSaveSystem
     public void DeleteBlueprint(string fileName)
     {
         #if !NO_DEBUG
-        if (savedBPList.FileExists(fileName))
+        if (savedBPList.Contains(fileName))
         {
             path = BuildPathString(fileName);
             File.Delete(path);
@@ -283,21 +291,18 @@ public class SavedShipBPList //keeps track of all the saves ship blueprints
     public SavedShipBPList()
     {
         count = 0;
-        //fileNames = new List<string>();
         blueprintMetaDataList = new List<ShipBlueprintMetaData>();
     }
     public void Add(ShipBlueprintMetaData metaData)
     {
         count++;
-        //fileNames.Add(fileName);
         blueprintMetaDataList.Add(new ShipBlueprintMetaData(metaData));
     }
     public void Remove(string fileName)
     {
         count--;
-        //fileNames.Remove(fileName);
         #if FULL_DEBUG || LOW_DEBUG
-        if(FileExists(fileName))
+        if(Contains(fileName))
         {
             blueprintMetaDataList.Remove(blueprintMetaDataList.FirstOrDefault(b => b.BlueprintName == fileName));
         }
@@ -306,10 +311,10 @@ public class SavedShipBPList //keeps track of all the saves ship blueprints
             Debug.LogError("Blueprint " + fileName + " not found");
         }
         #else
-        blueprintMetaDataList.Remove(blueprintMetaDataList.FirstOrDefault(b => b.blueprintName == fileName));
+        blueprintMetaDataList.Remove(blueprintMetaDataList.FirstOrDefault(b => b.BlueprintName == fileName));
         #endif
     }
-    public bool FileExists(string fileName)
+    public bool Contains(string fileName)
     {
         return blueprintMetaDataList.Exists(b => b.BlueprintName == fileName);
     }
