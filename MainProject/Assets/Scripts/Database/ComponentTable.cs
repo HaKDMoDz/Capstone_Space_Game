@@ -69,7 +69,17 @@ public class ComponentTable : ScriptableObject
         return comp_id_table[component];
 #endif
     }
-
+    public static IEnumerable<ShipComponent> GetShipComponentsOfType(ComponentType type) 
+    {
+        #if FULL_DEBUG
+        if(comp_id_table == null || comp_id_table.Count == 0)
+        {
+            Debug.LogError("No components in table");
+            return null;
+        }
+        #endif
+        return comp_id_table.Keys.Where(comp => comp.CompType == type);
+    }
     #endregion DatabaseAccess
 
     #region GUI_Access

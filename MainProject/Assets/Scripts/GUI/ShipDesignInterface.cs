@@ -14,6 +14,7 @@ using System.Linq;
 public struct InterfaceGUI_Fields //Inspector Grouping
 {
     public ButtonWithContent buttonPrefab;
+
     //building panels
     public RectTransform hullButtonParent; //the parent panel for instantiated Hull buttons 
     public RectTransform compButtonParent; //the parent panel for instantiated Component buttons 
@@ -41,8 +42,41 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
 {
     #region Fields
     //Editor Exposed
+    
+    //Prefabs
     [SerializeField]
-    private InterfaceGUI_Fields guiFields; //all gui related vars from the inspector
+    private ButtonWithContent buttonPrefab;
+    [SerializeField]
+    private HeaderText headerPrefab;
+    [SerializeField]
+    private GameObject separatorPrefab;
+    //building panels
+    [SerializeField]
+    private RectTransform hullButtonParent;
+    [SerializeField]
+    private RectTransform compButtonParent;
+    //saving
+    [SerializeField]
+    private InputDialogueBox saveDialogueBox;
+    //loading
+    [SerializeField]
+    private GameObject loadPanel;
+    [SerializeField]
+    private RectTransform loadButtonParent;
+    //fleet panel
+    [SerializeField]
+    private GameObject fleetPanel;
+    [SerializeField]
+    private RectTransform currentFleetParent;
+    [SerializeField]
+    private RectTransform savedBPsParent;
+    //stats
+    [SerializeField]
+    private ShipStatsPanel statsPanel;
+    //modal box
+    [SerializeField]
+    private ModalPanel modalPanel;
+
 
     //Internal
     private Dictionary<string, List<GameObject>> blueprintName_button_table;
@@ -75,27 +109,19 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
         foreach (var id_hull in HullTable.id_hull_table)
         {
             //create the button and position it
-            ButtonWithContent buttonClone = Instantiate(guiFields.buttonPrefab) as ButtonWithContent;
-            buttonClone.transform.SetParent(guiFields.hullButtonParent, false);
-            buttonClone.buttonText.text = id_hull.Value.hullName;
+            ButtonWithContent buttonClone = Instantiate(buttonPrefab) as ButtonWithContent;
+            buttonClone.transform.SetParent(hullButtonParent, false);
+            buttonClone.SetText(id_hull.Value.hullName);
             int hull_ID = id_hull.Key;
-            buttonClone.button.onClick.AddListener(() =>
+            buttonClone.AddOnClickListener(()=>
             {
-                BuildHull(hull_ID); //the method to call when the button is clicked
+                //the method to call when the button is clicked
+                BuildHull(hull_ID);
             });
         }
-        //Setup Component Buttons
-        foreach (var id_comp in ComponentTable.id_comp_table)
-        {
-            ButtonWithContent buttonClone = Instantiate(guiFields.buttonPrefab) as ButtonWithContent;
-            buttonClone.transform.SetParent(guiFields.compButtonParent, false);
-            buttonClone.buttonText.text = id_comp.Value.componentName;
-            int compID = id_comp.Key;
-            buttonClone.button.onClick.AddListener(() =>
-                {
-                    SelectComponentToBuild(compID);
-                });
-        }
+
+        SetupComponentButtons();
+        
         //Add blueprint buttons to Load Panel and Fleet Panel
         foreach (string blueprintName in shipDesignSystem.GetSaveFileList())
         {
@@ -105,23 +131,84 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
 
 
         //Setup Save dialogue box
-        guiFields.saveDialogueBox.inputField.characterValidation = InputField.CharacterValidation.Alphanumeric;
-        guiFields.saveDialogueBox.inputField.onEndEdit.AddListener((value) =>
+        saveDialogueBox.inputField.characterValidation = InputField.CharacterValidation.Name;
+        saveDialogueBox.inputField.onEndEdit.AddListener((value) =>
             {
-                SaveInputFieldSubmit(guiFields.saveDialogueBox.inputField.text);
+                SaveInputFieldSubmit(saveDialogueBox.inputField.text);
             });
-        guiFields.saveDialogueBox.submitButton.onClick.AddListener(() =>
+        saveDialogueBox.submitButton.onClick.AddListener(() =>
             {
-                SaveBlueprint(guiFields.saveDialogueBox.inputField.text);
+                SaveBlueprint(saveDialogueBox.inputField.text);
             });
-        guiFields.saveDialogueBox.cancelButton.onClick.AddListener(() =>
+        saveDialogueBox.cancelButton.onClick.AddListener(() =>
             {
                 ShowSaveDialogueBox(false);
             });
 
 
     }
+    private void SetupComponentButtons()
+    {
+        //foreach (var id_comp in ComponentTable.id_comp_table)
+        //{
+        //    ButtonWithContent buttonClone = Instantiate(buttonPrefab) as ButtonWithContent;
+        //    buttonClone.transform.SetParent(compButtonParent, false);
+        //    buttonClone.SetText(id_comp.Value.componentName);
+        //    int compID = id_comp.Key;
+        //    buttonClone.AddOnClickListener(() =>
+        //    {
+        //        SelectComponentToBuild(compID);
+        //    });
+        //}
 
+        var weapons = ComponentTable.GetShipComponentsOfType(ComponentType.Weapon);
+        var defenses = ComponentTable.GetShipComponentsOfType(ComponentType.Defense);
+        var engineering = ComponentTable.GetShipComponentsOfType(ComponentType.Engineering);
+        var supports = ComponentTable.GetShipComponentsOfType(ComponentType.Support);
+
+        if(weapons.Count() > 0)
+        {
+            AddHeader(ComponentType.Weapon);
+            AddComponentButtons(weapons);
+            GameObject sep = Instantiate(separatorPrefab) as GameObject;
+            sep.transform.SetParent(compButtonParent, false);
+        }
+        if(defenses.Count()>0)
+        {
+            AddHeader(ComponentType.Defense);
+            AddComponentButtons(defenses);
+            GameObject sep = Instantiate(separatorPrefab) as GameObject;
+            sep.transform.SetParent(compButtonParent, false);
+        }
+        if(engineering.Count()>0)
+        {
+            AddHeader(ComponentType.Engineering);
+            AddComponentButtons(engineering);
+            GameObject sep = Instantiate(separatorPrefab) as GameObject;
+            sep.transform.SetParent(compButtonParent, false);
+        }
+        if(supports.Count()>0)
+        {
+            AddHeader(ComponentType.Support);
+            AddComponentButtons(supports);
+        }
+    }
+    private void AddHeader(ComponentType type)
+    {
+        HeaderText headerClone = Instantiate(headerPrefab) as HeaderText;
+        headerClone.transform.SetParent(compButtonParent, false);
+        headerClone.SetText(type.ToString());
+    }
+    private void AddComponentButtons(IEnumerable<ShipComponent> components)
+    {
+        foreach (var comp in components)
+        {
+            ButtonWithContent buttonClone = Instantiate(buttonPrefab) as ButtonWithContent;
+            buttonClone.transform.SetParent(compButtonParent, false);
+            buttonClone.SetText(comp.componentName);
+            buttonClone.AddOnClickListener(() => SelectComponentToBuild(comp));
+        }
+    }
     /// <summary>
     /// Helper method to add a blueprint button to the load panel and the fleet panel
     /// </summary>
@@ -130,25 +217,23 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     /// </param>
     private void AddBlueprintButton(string fileName)
     {
-        ButtonWithContent loadButtonClone = Instantiate(guiFields.buttonPrefab) as ButtonWithContent;
-        loadButtonClone.transform.SetParent(guiFields.loadButtonParent, false);
-        loadButtonClone.buttonText.text = fileName;
-        loadButtonClone.button.onClick.AddListener(() =>
+        ButtonWithContent loadButtonClone = Instantiate(buttonPrefab) as ButtonWithContent;
+        loadButtonClone.transform.SetParent(loadButtonParent, false);
+        loadButtonClone.SetText( fileName);
+        loadButtonClone.AddOnClickListener(() =>
             {
-                //LoadBlueprint(fileName);
-                loadButtonClone.button.Select();
+                loadButtonClone.Button.Select();
                 SelectBlueprintToLoad(fileName);
             });
 
-        ButtonWithContent fleetPanel_savedBP_ButtonClone = Instantiate(guiFields.buttonPrefab) as ButtonWithContent;
-        fleetPanel_savedBP_ButtonClone.transform.SetParent(guiFields.savedBlueprintsButtonsParent, false);
-        fleetPanel_savedBP_ButtonClone.buttonText.text = fileName;
-        fleetPanel_savedBP_ButtonClone.button.onClick.AddListener(() =>
+        ButtonWithContent fleetPanel_savedBP_ButtonClone = Instantiate(buttonPrefab) as ButtonWithContent;
+        fleetPanel_savedBP_ButtonClone.transform.SetParent(savedBPsParent, false);
+        fleetPanel_savedBP_ButtonClone.SetText(fileName);
+        fleetPanel_savedBP_ButtonClone.AddOnClickListener(() =>
             {
                 FleetManager.Instance.AddShipToFleet(fileName);
                 AddCurrentFleetButton(fileName);
             });
-
 
         blueprintName_button_table.Add(fileName, new List<GameObject> { loadButtonClone.gameObject, fleetPanel_savedBP_ButtonClone.gameObject });
     }
@@ -185,10 +270,10 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
 
     public void AddCurrentFleetButton(string fileName)
     {
-        ButtonWithContent buttonClone = Instantiate(guiFields.buttonPrefab) as ButtonWithContent;
-        buttonClone.transform.SetParent(guiFields.currentFleetButtonsParent, false);
-        buttonClone.buttonText.text = fileName;
-        buttonClone.button.onClick.AddListener(() =>
+        ButtonWithContent buttonClone = Instantiate(buttonPrefab) as ButtonWithContent;
+        buttonClone.transform.SetParent(currentFleetParent, false);
+        buttonClone.SetText( fileName);
+        buttonClone.AddOnClickListener(() =>
             {
                 FleetManager.Instance.RemoveShipFromFleet(fileName);
                 Destroy(buttonClone.gameObject);
@@ -243,13 +328,14 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     }
     private void ShowModalPanel(bool show)
     {
-        guiFields.modalPanel.gameObject.SetActive(show);
+        modalPanel.gameObject.SetActive(show);
     }
 
     #region Helper
+    
     private void ClearCurrentFleet()
     {
-        foreach (Transform child in guiFields.currentFleetButtonsParent)
+        foreach (Transform child in currentFleetParent)
         {
             Destroy(child.gameObject);
         }
@@ -267,7 +353,9 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
 
     public void SelectBlueprintToLoad(string bpName)
     {
+        #if FULL_DEBUG
         Debug.Log("Selected " + bpName);
+        #endif
         selectedBP = bpName;
     }
     public void DeleteSelectedBP()
@@ -276,9 +364,8 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
         {
             return;
         }
-
         ShowModalPanel(true);
-        guiFields.modalPanel.ShowMessageWithYesCancel("Delete blueprint: "+selectedBP+" ?",
+        modalPanel.ShowMessageWithYesCancel("Delete blueprint: "+selectedBP+" ?",
             ()=>
             {
                 #if FULL_DEBUG
@@ -298,7 +385,6 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
         #if FULL_DEBUG
         Debug.Log("Load selected BP: " + selectedBP);
         #endif
-
         LoadBlueprint(selectedBP);
         selectedBP = "";
     }
@@ -311,15 +397,29 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     {
         if (!shipDesignSystem.buildingShip)
         {
-#if FULL_DEBUG
+            #if FULL_DEBUG
             Debug.Log("Not building a ship");
-#endif
+            #endif
             return;
         }
-#if FULL_DEBUG
+        #if FULL_DEBUG
         Debug.Log("Selected component: " + ComponentTable.GetComp(componentID).componentName);
-#endif
+        #endif
         StartCoroutine(StartPlacementSequence(ComponentTable.GetComp(componentID)));
+    }
+    public void SelectComponentToBuild(ShipComponent component)
+    {
+        if (!shipDesignSystem.buildingShip)
+        {
+            #if FULL_DEBUG
+            Debug.Log("Not building a ship");
+            #endif
+            return;
+        }
+        #if FULL_DEBUG
+        Debug.Log("Selected component: " + component.componentName);
+        #endif
+        StartCoroutine(StartPlacementSequence(component));
     }
     /// <summary>
     /// The OnEndEdit event for input fields are called at various points, including when the input field loses focus etc...which doesn't necessarily mean that the InputField was meant to be submitted
@@ -348,14 +448,14 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     {
         if (!show)
         {
-            guiFields.saveDialogueBox.gameObject.SetActive(false);
+            saveDialogueBox.gameObject.SetActive(false);
         }
         //showing dialogue box
         else if (shipDesignSystem.buildingShip)
         {
-            guiFields.saveDialogueBox.gameObject.SetActive(true);
-            EventSystem.current.SetSelectedGameObject(guiFields.saveDialogueBox.inputField.gameObject, null);
-            guiFields.saveDialogueBox.inputField.ActivateInputField();
+            saveDialogueBox.gameObject.SetActive(true);
+            EventSystem.current.SetSelectedGameObject(saveDialogueBox.inputField.gameObject);
+            saveDialogueBox.inputField.ActivateInputField();
         }
 #if FULL_DEBUG
         else
@@ -371,8 +471,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     /// <param name="show"></param>
     public void ShowLoadPanel(bool show)
     {
-        guiFields.loadPanel.SetActive(show);
-        //selectedBP = "";
+        loadPanel.SetActive(show);
     }
 
     /// <summary>
@@ -381,12 +480,12 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     /// <param name="show"></param>
     public void ShowFleetPanel(bool show)
     {
-        guiFields.fleetPanel.SetActive(show);
+        fleetPanel.SetActive(show);
     }
 
     public void ShowStatsPanel(bool show)
     {
-        guiFields.statsPanel.gameObject.SetActive(show);
+        statsPanel.gameObject.SetActive(show);
     }
 
     /// <summary>
@@ -403,11 +502,11 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     /// <param name="shipBPMetaData"></param>
     public void UpdateStatsPanel(ShipBlueprintMetaData shipBPMetaData)
     {
-        if (!guiFields.statsPanel.gameObject.activeSelf)
+        if (!statsPanel.gameObject.activeSelf)
         {
             ShowStatsPanel(true);
         }
-        guiFields.statsPanel.UpdateStats(shipBPMetaData.BlueprintName, shipBPMetaData.ExcessPower);
+        statsPanel.UpdateStats(shipBPMetaData.BlueprintName, shipBPMetaData.ExcessPower);
     }
 
     #endregion GUIAccess
@@ -442,7 +541,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
         if(shipDesignSystem.FileExists(fileName))
         {
             ShowModalPanel(true);
-            guiFields.modalPanel.ShowMessageWithYesCancel("A Blueprint named \"" + fileName + "\" already exists. Overwrite?",
+            modalPanel.ShowMessageWithYesCancel("A Blueprint named \"" + fileName + "\" already exists. Overwrite?",
                 ()=>
                 {
                     shipDesignSystem.DeleteBlueprint(fileName);

@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public class Comp_Wpn_Repair_Beam : Component_Weapon
+public class Comp_Wpn_Repair_Beam: ShipComponent
 {
-    public override void Init(TurnBasedUnit _parentShip)
-    {
-        base.Init(_parentShip);
-    }
+    
 }

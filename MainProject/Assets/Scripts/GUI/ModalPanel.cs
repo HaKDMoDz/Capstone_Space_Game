@@ -30,12 +30,12 @@ public class ModalPanel : MonoBehaviour
     {
         SetMessage(message);
         ShowButtons(true, false, false);
-        yesButton.buttonText.text = "Ok";
+        yesButton.SetText("Ok");
         SetActionForButton(yesButton,
             () => 
             { 
                 okAction();
-                yesButton.buttonText.text = "Yes";
+                yesButton.SetText("Yes");
             });
     }
     /// <summary>
@@ -65,8 +65,8 @@ public class ModalPanel : MonoBehaviour
     }
     private void SetActionForButton(ButtonWithContent button, UnityAction action)
     {
-        button.button.onClick.RemoveAllListeners();
-        button.button.onClick.AddListener(
+        button.RemoveOnClickListeners();
+        button.AddOnClickListener(
             () =>
             {
                 if(action != null) action();
