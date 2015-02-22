@@ -250,6 +250,7 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
     private void AddHullToScene(Hull hull)
     {
         hullBeingBuilt = Instantiate(hull, Vector3.zero, Quaternion.Euler(0.0f, 90.0f, 0.0f)) as Hull;
+        ShipDesignCamera.Instance.SetCameraForHull(hull);
         hullBeingBuilt.Init();
         //turn off cameras in hull prefab
         foreach (GameObject obj in hullBeingBuilt.GetComponentsInChildren<Camera>().Select(c=>c.gameObject))
