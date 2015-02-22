@@ -46,26 +46,7 @@ public class Planet_MissionComplete : MonoBehaviour
         
     }
 
-    public void InitMissionComplete(int _ID)
-    {
-        ID = _ID;
-        Action completeAction;
 
-        switch (ID)
-        {
-            case 1:
-                completeAction = (() => mission1());
-                break;
-            case 2:
-                completeAction = (() => mission2());
-                break;
-            case 0:
-            default:
-                completeAction = (() => invalidMission());
-                break;
-        }
-        MissionController.Instance.AddMission(ID, completeAction);
-    }
 
     public void toggleMissionCompletePanel()
     {
@@ -75,16 +56,11 @@ public class Planet_MissionComplete : MonoBehaviour
         
         if (!panelOpen)
         {
-            transform.Find("PlanetUI").FindChild("MissionCompleteButton").gameObject.SetActive(false);
+            transform.Find("PlanetUI").FindChild("MissionCompletePanel").gameObject.SetActive(false);
         }
-
     }
 
-    public void CompleteMission()
-    {
-        Debug.Log("Mission Completed");
-        MissionController.Instance.CompleteMission(ID);
-    }
+
 
     private void mission1()
     {

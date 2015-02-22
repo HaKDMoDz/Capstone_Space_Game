@@ -6,6 +6,8 @@ using System;
 
 public class MissionController : Singleton<MissionController>
 {
+    public static int currentMission;
+
     private Action[] acceptMissionFunctions = new Action[10];
     private Action[] completeMissionFunctions = new Action[10];
 
@@ -28,13 +30,18 @@ public class MissionController : Singleton<MissionController>
 
     public void AcceptMission(int _index)
     {
-        Action accpetMission = acceptMissionFunctions[_index];
-        accpetMission();
+        Action acceptMission = acceptMissionFunctions[_index];
+        acceptMission();
+        currentMission = _index;
+        Debug.Log("Accepted Mission: " + _index);
     }
+
+
 
     public void CompleteMission(int _index)
     {
         Action completeMission = completeMissionFunctions[_index];
         completeMission();
+        Debug.Log("completing Mission: " + _index);
     }
 }

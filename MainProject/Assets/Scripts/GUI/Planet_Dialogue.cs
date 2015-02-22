@@ -17,19 +17,20 @@ public class Planet_Dialogue : MonoBehaviour
     
     bool panelOpen = false;
 
-    [SerializeField]
+    private static int numPlanets = 0;
+
     private int id;
     public int ID
     {
         get { return id; }
-        set { id = value; }
+       private set { id = value; }
     }
 
     private int currentIndex = 0;
 
     void Awake()
     {
-        
+        id = ++numPlanets;
     }
 
     public void OpenPanel()

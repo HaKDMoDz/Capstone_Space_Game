@@ -10,11 +10,12 @@ public struct SystemObjectInfo
 {
     public Vector3 scenePosition;
     public Vector3 sceneScale;
-
 }
 public class SolarSystem : MonoBehaviour
 {
     #region Fields
+
+    public List<Transform> planets = new List<Transform>();
 
     [SerializeField]
     private GameObject systemRingGUI;

@@ -1,5 +1,57 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &104462
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 224: {fileID: 22404462}
+  - 222: {fileID: 22204462}
+  - 114: {fileID: 11404464}
+  m_Layer: 20
+  m_Name: MissionPanel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!1 &104464
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 224: {fileID: 22404464}
+  - 222: {fileID: 22204464}
+  - 114: {fileID: 11404466}
+  - 114: {fileID: 11404468}
+  m_Layer: 20
+  m_Name: Button
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &104466
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 224: {fileID: 22404466}
+  - 222: {fileID: 22204466}
+  - 114: {fileID: 11404470}
+  m_Layer: 20
+  m_Name: Text
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &106032
 GameObject:
   m_ObjectHideFlags: 1
@@ -62,7 +114,7 @@ GameObject:
   - 222: {fileID: 22209778}
   - 114: {fileID: 11409780}
   m_Layer: 20
-  m_Name: MissionPanel
+  m_Name: MissionCompletePanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -97,7 +149,6 @@ GameObject:
   - 222: {fileID: 22236958}
   - 114: {fileID: 11436958}
   - 114: {fileID: 11436960}
-  - 114: {fileID: 11492446}
   m_Layer: 20
   m_Name: MissionButton
   m_TagString: Untagged
@@ -122,7 +173,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &136962
 GameObject:
   m_ObjectHideFlags: 1
@@ -133,13 +184,13 @@ GameObject:
   - 224: {fileID: 22436962}
   - 222: {fileID: 22236962}
   - 114: {fileID: 11436966}
-  m_Layer: 20
+  m_Layer: 5
   m_Name: Ring
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &136964
 GameObject:
   m_ObjectHideFlags: 0
@@ -225,8 +276,9 @@ GameObject:
   - 114: {fileID: 11488270}
   - 135: {fileID: 13582472}
   - 54: {fileID: 5474772}
-  - 114: {fileID: 11492448}
   - 114: {fileID: 11409786}
+  - 114: {fileID: 11482910}
+  - 114: {fileID: 11488682}
   m_Layer: 20
   m_Name: Planet
   m_TagString: Planet
@@ -332,8 +384,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 188264}
-  m_LocalRotation: {x: .520343304, y: 0, z: 0, w: .853957236}
-  m_LocalPosition: {x: 100.800003, y: 0, z: 79.5}
+  m_LocalRotation: {x: .520343184, y: 0, z: 0, w: .853957236}
+  m_LocalPosition: {x: -15, y: 0, z: -135}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 488262}
@@ -532,6 +584,127 @@ Animation:
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
   m_CullingType: 0
+--- !u!114 &11404464
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 104462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: .39199999}
+  m_Sprite: {fileID: 21300000, guid: 9bf687b47f36eee4c8b850c6e7a1fa7f, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+--- !u!114 &11404466
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 104464}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: 21300000, guid: b708daaae77cfcc4aab077ea03ea2ca4, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+--- !u!114 &11404468
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 104464}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1392445389, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: .960784316, g: .960784316, b: .960784316, a: 1}
+    m_PressedColor: {r: .784313738, g: .784313738, b: .784313738, a: 1}
+    m_DisabledColor: {r: .784313738, g: .784313738, b: .784313738, a: .501960814}
+    m_ColorMultiplier: 1
+    m_FadeDuration: .100000001
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 11404466}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11488682}
+        m_MethodName: AcceptMission
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+--- !u!114 &11404470
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 104466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 86
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 10
+    m_MaxSize: 40
+    m_Alignment: 1
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: New Text
 --- !u!114 &11406032
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -722,12 +895,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d14f68bb6e64540489a67b08b8b911d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialogueText:
-  - one
-  - two
-  - three
-  - four
-  id: 3
+  dialogueText: []
 --- !u!114 &11436958
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -788,8 +956,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11492448}
-        m_MethodName: showMissionPanel
+      - m_Target: {fileID: 11482910}
+        m_MethodName: enableMissionPanel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -972,7 +1140,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 11437180}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 11482910}
+        m_MethodName: enableMissionCompletePanel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &11437180
@@ -996,6 +1176,24 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &11482910
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 188264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06e909cf237a8c648aeefeff8cbb0dfe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uiRing: {fileID: 136962}
+  missionButton: {fileID: 136958}
+  missionCompleteButton: {fileID: 137180}
+  dialogueButton: {fileID: 136960}
+  planetDialog: {fileID: 11409786}
+  missionPanel: {fileID: 104462}
+  missionCompletePanel: {fileID: 109778}
 --- !u!114 &11488268
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1019,6 +1217,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cb456d5b9b09c24498e8668f842b719, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &11488682
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 188264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5807f68ff37ec74099b6317c4a86121, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mothershipUI: {fileID: 0}
+  uiManager: {fileID: 11482910}
+  startSystem: {fileID: 0}
+  endSystem: {fileID: 0}
+  startPlanet: {fileID: 188264}
+  endPlanet: {fileID: 0}
+  startDialog:
+  - please take this to there
+  - test secondary message
+  endDialog:
+  - thanks for the delivery
+  - test secondart message
+  rewardAmount: 100
+  completed: 0
+  id: 1
 --- !u!114 &11491466
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1058,8 +1282,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11492448}
-        m_MethodName: AcceptMission
+      - m_Target: {fileID: 11488682}
+        m_MethodName: CompleteMission
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1093,40 +1317,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &11492446
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 136958}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c5807f68ff37ec74099b6317c4a86121, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  destination: {fileID: 0}
-  targets: []
-  completed: 0
-  creditReward: 100
-  missionText: 
-  id: 0
---- !u!114 &11492448
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 188264}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c5807f68ff37ec74099b6317c4a86121, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  destination: {fileID: 0}
-  targets: []
-  completed: 0
-  creditReward: 100
-  missionText: Please take 500 coal to (sol 2)
-  id: 0
 --- !u!135 &13582472
 SphereCollider:
   m_ObjectHideFlags: 1
@@ -1151,6 +1341,24 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 10
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!222 &22204462
+CanvasRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 104462}
+--- !u!222 &22204464
+CanvasRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 104464}
+--- !u!222 &22204466
+CanvasRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 104466}
 --- !u!222 &22206032
 CanvasRenderer:
   m_ObjectHideFlags: 1
@@ -1228,6 +1436,59 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
+--- !u!224 &22404462
+RectTransform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 104462}
+  m_LocalRotation: {x: -5.8989076e-07, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: .52005291, y: .520053148, z: .520053148}
+  m_Children:
+  - {fileID: 22404466}
+  - {fileID: 22404464}
+  m_Father: {fileID: 22436964}
+  m_RootOrder: 5
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 336, y: 263}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: .5, y: .5}
+--- !u!224 &22404464
+RectTransform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 104464}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 2.57346821, y: 2.01639557, z: 2.21269417}
+  m_Children: []
+  m_Father: {fileID: 22404462}
+  m_RootOrder: 1
+  m_AnchorMin: {x: .0927777663, y: .0845517814}
+  m_AnchorMax: {x: .892103016, y: .194000006}
+  m_AnchoredPosition: {x: 1, y: 0}
+  m_SizeDelta: {x: -249.337997, y: -27.1190872}
+  m_Pivot: {x: .5, y: .5}
+--- !u!224 &22404466
+RectTransform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 104466}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: .676097989, y: .676098228, z: .676098228}
+  m_Children: []
+  m_Father: {fileID: 22404462}
+  m_RootOrder: 0
+  m_AnchorMin: {x: .0335882939, y: .216132939}
+  m_AnchorMax: {x: .957193494, y: .962190449}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 154, y: 139}
+  m_Pivot: {x: .5, y: .5}
 --- !u!224 &22406032
 RectTransform:
   m_ObjectHideFlags: 1
@@ -1244,7 +1505,7 @@ RectTransform:
   m_RootOrder: 4
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 336, y: -131}
+  m_AnchoredPosition: {x: 336, y: 9}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: .5, y: .5}
 --- !u!224 &22406034
@@ -1287,17 +1548,17 @@ RectTransform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 109778}
-  m_LocalRotation: {x: -5.8989076e-07, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 3.06607617e-05}
+  m_LocalRotation: {x: -5.07614345e-07, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: .52005291, y: .520053148, z: .520053148}
   m_Children:
   - {fileID: 22409776}
   - {fileID: 22491466}
   m_Father: {fileID: 22436964}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 336, y: 149.000031}
+  m_AnchoredPosition: {x: 336, y: -248}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: .5, y: .5}
 --- !u!224 &22409780
@@ -1383,6 +1644,7 @@ RectTransform:
   - {fileID: 22437180}
   - {fileID: 22436958}
   - {fileID: 22406032}
+  - {fileID: 22404462}
   - {fileID: 22409778}
   m_Father: {fileID: 488264}
   m_RootOrder: 3

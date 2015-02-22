@@ -124,17 +124,17 @@ public class Mothership : MonoBehaviour
         }
         if (other.tag == TagsAndLayers.PlanetTag)
         {
-            Debug.Log("entering planetary orbit");
-            //TODO: add code for setting initial angle
+            //Debug.Log("entering planetary orbit");
+            
             Transform otherTrans = other.transform;
             float deltaZ = otherTrans.position.z - trans.position.z;
             float deltaX = otherTrans.position.x - trans.position.x;
             angle = (180.0f + ((Mathf.Atan2(deltaZ,deltaX) * 180.0f) / Mathf.PI))%360.0f;
             //orbitalRotation = otherTrans.rotation;
             orbiting = true;
-            orbitID = otherTrans.gameObject.GetComponent<Planet_Mission>().ID;
+            orbitID = otherTrans.gameObject.GetComponent<Planet_Dialogue>().ID;
             //Debug.Log("OrbitID: " + orbitID);
-
+            StartCoroutine(otherTrans.gameObject.GetComponent<PlanetUIManager>().enableUIRing());
             //StopCoroutine(Move());
             StopAllCoroutines();
             StartCoroutine(Orbit());
@@ -148,7 +148,7 @@ public class Mothership : MonoBehaviour
         if (other.tag == TagsAndLayers.PlanetTag && orbiting)
         {
             //Debug.Log("<<<" + other.name + ">>>");
-            Debug.Log("still in Planetary Orbit...");
+           // Debug.Log("still in Planetary Orbit...");
             
             angle = (angle + orbitSpeed) % 360.0f;
             //Debug.Log(angle);
@@ -177,16 +177,17 @@ public class Mothership : MonoBehaviour
         if (other.tag == TagsAndLayers.SolarSystemTag)
         {
             inSystem = false;
-            #if FULL_DEBUG
-            Debug.Log("In System: " + inSystem);
-            #endif
+#if FULL_DEBUG
+            //Debug.Log("In System: " + inSystem);
+#endif
         }
-        if (other.tag == TagsAndLayers.PlanetTag && orbitID == other.gameObject.GetComponent<Planet_Mission>().ID)
+        if (other.tag == TagsAndLayers.PlanetTag && orbitID == other.gameObject.GetComponent<Planet_Dialogue>().ID)
         {
             orbiting = false;
             moving = true;
             StopCoroutine(Orbit());
             StartCoroutine(Move());
+            StartCoroutine(other.gameObject.GetComponent<PlanetUIManager>().disableUIRing());
             StartCoroutine(GalaxyCamera.Instance.FollowMothership(trans, false));
         }
     }
