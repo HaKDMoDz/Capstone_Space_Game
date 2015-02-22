@@ -6,23 +6,12 @@ using System.Collections.Generic;
 public class ShipStatsPanel : MonoBehaviour
 {
     [SerializeField]
-    private Text nameText;
-    [SerializeField]
-    private string blueprintName;
-    public string BlueprintName
-    {
-        get { return blueprintName; }
-        set
-        {
-            blueprintName = value;
-            nameText.text = blueprintName;
-        }
-    }
-
+    private InputField inputField;
     [SerializeField]
     private Text excessPowerText;
-    [SerializeField]
-    private float excessPower;
+
+    
+    private float excessPower=0.0f;
     public float ExcessPower
     {
         get { return excessPower; }
@@ -33,9 +22,17 @@ public class ShipStatsPanel : MonoBehaviour
         }
     }
 
+    public string GetBlueprintName()
+    {
+        return inputField.text;
+    }
+    public void SetBlueprintName(string bpName)
+    {
+        inputField.text = bpName;
+    }
     public void UpdateStats(string blueprintName, float excessPower)
     {
-        BlueprintName = blueprintName;
+        SetBlueprintName(blueprintName);
         ExcessPower = excessPower;
     }
 

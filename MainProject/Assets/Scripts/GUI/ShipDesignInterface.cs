@@ -131,20 +131,21 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
 
 
         //Setup Save dialogue box
-        saveDialogueBox.inputField.characterValidation = InputField.CharacterValidation.Name;
-        saveDialogueBox.inputField.onEndEdit.AddListener((value) =>
-            {
-                SaveInputFieldSubmit(saveDialogueBox.inputField.text);
-            });
-        saveDialogueBox.submitButton.onClick.AddListener(() =>
-            {
-                SaveBlueprint(saveDialogueBox.inputField.text);
-            });
-        saveDialogueBox.cancelButton.onClick.AddListener(() =>
-            {
-                ShowSaveDialogueBox(false);
-            });
+        //saveDialogueBox.inputField.characterValidation = InputField.CharacterValidation.Name;
+        //saveDialogueBox.inputField.onEndEdit.AddListener((value) =>
+        //    {
+        //        SaveInputFieldSubmit(saveDialogueBox.inputField.text);
+        //    });
+        //saveDialogueBox.submitButton.onClick.AddListener(() =>
+        //    {
+        //        SaveBlueprint(saveDialogueBox.inputField.text);
+        //    });
+        //saveDialogueBox.cancelButton.onClick.AddListener(() =>
+        //    {
+        //        ShowSaveDialogueBox(false);
+        //    });
 
+        saveDialogueBox.Setup(InputField.CharacterValidation.EmailAddress, (fileName) => SaveBlueprint(fileName), ()=>ShowSaveDialogueBox(false));
 
     }
     private void SetupComponentButtons()
@@ -206,7 +207,8 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
             ButtonWithContent buttonClone = Instantiate(buttonPrefab) as ButtonWithContent;
             buttonClone.transform.SetParent(compButtonParent, false);
             buttonClone.SetText(comp.componentName);
-            buttonClone.AddOnClickListener(() => SelectComponentToBuild(comp));
+            ShipComponent tempCompVar = comp;
+            buttonClone.AddOnClickListener(() => SelectComponentToBuild(tempCompVar));
         }
     }
     /// <summary>
@@ -421,25 +423,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
         #endif
         StartCoroutine(StartPlacementSequence(component));
     }
-    /// <summary>
-    /// The OnEndEdit event for input fields are called at various points, including when the input field loses focus etc...which doesn't necessarily mean that the InputField was meant to be submitted
-    /// This method acts as a filter and only actually submits the info from the input field if the Input Axis "Submit" is activated (Return, etc.)
-    /// Also hides the dialogue box upon Input Axis "Cancel" (Esc, etc.)
-    /// </summary>
-    /// <param name="inputText">
-    /// InputField text
-    /// </param>
-    public void SaveInputFieldSubmit(string inputText)
-    {
-        if (Input.GetButtonDown("Submit"))
-        {
-            SaveBlueprint(inputText);
-        }
-        if (Input.GetButtonDown("Cancel"))
-        {
-            ShowSaveDialogueBox(false);
-        }
-    }
+    
     /// <summary>
     /// Shows the Save Dialogue Box for the user to enter the name of the blueprint to save as
     /// </summary>
@@ -454,8 +438,8 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
         else if (shipDesignSystem.buildingShip)
         {
             saveDialogueBox.gameObject.SetActive(true);
-            EventSystem.current.SetSelectedGameObject(saveDialogueBox.inputField.gameObject);
-            saveDialogueBox.inputField.ActivateInputField();
+            EventSystem.current.SetSelectedGameObject(saveDialogueBox.InputFieldEx.gameObject);
+            saveDialogueBox.GetInputField().ActivateInputField();
         }
 #if FULL_DEBUG
         else
@@ -538,6 +522,8 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     /// <param name="fileName"></param>
     private void SaveBlueprint(string fileName)
     {
+        
+        Debug.Log("Saving " + fileName);
         if(shipDesignSystem.FileExists(fileName))
         {
             ShowModalPanel(true);
