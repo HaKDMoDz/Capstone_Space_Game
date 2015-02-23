@@ -63,11 +63,23 @@ public class PlanetUIManager : MonoBehaviour
         //check for missions
         if (gameObject.GetComponent<Planet_Mission>() != null)
         {
-            missionButton.SetActive(true);
+            if (!gameObject.GetComponent<Planet_Mission>().Completed)
+            {
+                missionButton.SetActive(true);
+            }
         }
         
         //check for mission complete
-        
+        if (MissionController.Instance.currentMission != null)
+        {
+            if (MissionController.Instance.currentMission.EndPlanet == gameObject)
+            {
+                if (!MissionController.Instance.currentMission.Completed)
+                {
+                    missionCompleteButton.SetActive(true);
+                }
+            }
+        }
 
         //check for dialog
         if (planetDialog.DialogueText.Length > 0)
@@ -86,6 +98,11 @@ public class PlanetUIManager : MonoBehaviour
         uiRing.SetActive(false);
 
         yield return null;
+    }
+
+    public void disableMissionButton()
+    {
+        missionButton.SetActive(false);
     }
 
     public void enableMissionPanel()

@@ -64,7 +64,7 @@ public class Planet_Mission : MonoBehaviour
         set { rewardAmount = value; }
     }
     [SerializeField]
-    private bool completed;
+    private bool completed = false;
     public bool Completed
     {
         get { return completed; }
@@ -85,7 +85,7 @@ public class Planet_Mission : MonoBehaviour
 
 	void Awake () 
     {
-
+        Completed = false;
         Action acceptAction;
         switch (ID)
         {
@@ -122,10 +122,14 @@ public class Planet_Mission : MonoBehaviour
     public void CompleteMission()
     {
         Debug.Log("Mission Completed");
-        MissionController.Instance.CompleteMission(MissionController.currentMission);
+        MissionController.Instance.CompleteMission(MissionController.currentMissionIndex);
         uiManager.disableMissionCompleteButton();
         uiManager.disableMissionCompletePanel();
-        StartCoroutine(mothershipUI.disableWaypointUI());
+        //Debug.LogError(GameObject.Find("Mothership").GetComponent<MothershipUIManager>()); //linkage test
+        //mothershipUI.disableWaypointUI(); //causes a null reference exception
+        GameObject.Find("Mothership").GetComponent<MothershipUIManager>().disableWaypointUI(); //same code with new linkage
+        MissionController.Instance.currentMission.Completed = true;
+        MissionController.Instance.currentMission = null;
     }
 
     private void advanceStartText()
@@ -149,7 +153,9 @@ public class Planet_Mission : MonoBehaviour
             Debug.Log("Mission Accepted");
             MissionController.Instance.AcceptMission(ID);
             uiManager.disableMissionPanel();
-            StartCoroutine(mothershipUI.enableWaypointUI());
+            mothershipUI.enableWaypointUI(endPlanet.transform);
+            MissionController.Instance.currentMission = this;
+            uiManager.disableMissionButton();
         }
     }
 
@@ -169,19 +175,13 @@ public class Planet_Mission : MonoBehaviour
         Debug.Log("Mission 2 clicked");
         mothershipUI.PlanetDestination = endPlanet.transform;
         mothershipUI.SystemDestination = endSystem.transform;
-        PlanetUIManager endPlanetUI = endPlanet.GetComponent<PlanetUIManager>();
-        endPlanetUI.MissionCompleteButton.SetActive(true);
-        completed = true;
     }
 
     private void missioncomplete2()
     {
-
         PlanetUIManager planetUIManager = endPlanet.GetComponent<PlanetUIManager>();
         planetUIManager.disableMissionCompleteButton();
         planetUIManager.disableMissionCompletePanel();
-
-        //uiManager.disableMissionCompletePanel();
     }
 
     private void invalidMission()

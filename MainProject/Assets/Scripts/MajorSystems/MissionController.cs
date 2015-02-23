@@ -6,7 +6,9 @@ using System;
 
 public class MissionController : Singleton<MissionController>
 {
-    public static int currentMission;
+    public static int currentMissionIndex;
+
+    public Planet_Mission currentMission;
 
     private Action[] acceptMissionFunctions = new Action[10];
     private Action[] completeMissionFunctions = new Action[10];
@@ -32,7 +34,7 @@ public class MissionController : Singleton<MissionController>
     {
         Action acceptMission = acceptMissionFunctions[_index];
         acceptMission();
-        currentMission = _index;
+        currentMissionIndex = _index;
         Debug.Log("Accepted Mission: " + _index);
     }
 

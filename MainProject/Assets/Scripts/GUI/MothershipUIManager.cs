@@ -12,6 +12,13 @@ public class MothershipUIManager : MonoBehaviour
     }
 
     [SerializeField]
+    private MissionSelector waypointUIScript;
+    public MissionSelector WaypointUIScript
+    {
+        get { return waypointUIScript; }
+        set { waypointUIScript = value; }
+    }
+    [SerializeField]
     private Transform systemDestination;
     public Transform SystemDestination
     {
@@ -26,17 +33,15 @@ public class MothershipUIManager : MonoBehaviour
         get { return planetDestination; }
         set { planetDestination = value; }
     }
-    public IEnumerator enableWaypointUI()
+    public void enableWaypointUI( Transform _destination)
     {
         waypointUIElement.SetActive(true);
-
-        yield return null;
+        planetDestination = _destination;
+        waypointUIScript.CurrentDestination = planetDestination;
     }
 
-    public IEnumerator disableWaypointUI()
+    public void disableWaypointUI()
     {
         waypointUIElement.SetActive(false);
-
-        yield return null;
     }
 }

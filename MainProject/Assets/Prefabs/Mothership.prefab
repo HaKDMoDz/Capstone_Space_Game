@@ -170,6 +170,55 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &167364
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 467364}
+  - 33: {fileID: 3367368}
+  - 23: {fileID: 2367368}
+  m_Layer: 0
+  m_Name: Quad
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &167366
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 467366}
+  - 114: {fileID: 11467366}
+  m_Layer: 0
+  m_Name: missionSelector
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!1 &167368
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 467368}
+  - 108: {fileID: 10867368}
+  m_Layer: 0
+  m_Name: Directional light
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &198504
 GameObject:
   m_ObjectHideFlags: 0
@@ -183,6 +232,7 @@ GameObject:
   - 54: {fileID: 5406534}
   - 135: {fileID: 13528558}
   - 135: {fileID: 13591044}
+  - 114: {fileID: 11467368}
   m_Layer: 0
   m_Name: Mothership
   m_TagString: MotherShip
@@ -485,6 +535,43 @@ Transform:
   m_Children: []
   m_Father: {fileID: 423232}
   m_RootOrder: 3
+--- !u!4 &467364
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 167364}
+  m_LocalRotation: {x: .707106829, y: 0, z: 0, w: .707106829}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 8, y: 8, z: 8}
+  m_Children: []
+  m_Father: {fileID: 467366}
+  m_RootOrder: 0
+--- !u!4 &467366
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 167366}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 4.3499999, z: 0}
+  m_LocalScale: {x: 7.17563152, y: 7.17563772, z: 7.17563772}
+  m_Children:
+  - {fileID: 467364}
+  m_Father: {fileID: 498504}
+  m_RootOrder: 4
+--- !u!4 &467368
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 167368}
+  m_LocalRotation: {x: .753387988, y: 0, z: 0, w: .657576323}
+  m_LocalPosition: {x: 0, y: 7.15999985, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 498504}
+  m_RootOrder: 3
 --- !u!4 &498504
 Transform:
   m_ObjectHideFlags: 1
@@ -498,6 +585,8 @@ Transform:
   - {fileID: 498506}
   - {fileID: 423218}
   - {fileID: 423232}
+  - {fileID: 467368}
+  - {fileID: 467366}
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!4 &498506
@@ -629,6 +718,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 498508}
   m_RootOrder: 7
+--- !u!23 &2367368
+Renderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 167364}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_LightmapIndex: 255
+  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_Materials:
+  - {fileID: 2100000, guid: 17ad4d294d7b7b647b484bf43e96e542, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_LightProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
 --- !u!23 &2398510
 Renderer:
   m_ObjectHideFlags: 1
@@ -789,6 +898,13 @@ Renderer:
   m_ScaleInLightmap: 1
   m_SortingLayerID: 0
   m_SortingOrder: 0
+--- !u!33 &3367368
+MeshFilter:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 167364}
+  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!33 &3398510
 MeshFilter:
   m_ObjectHideFlags: 1
@@ -872,6 +988,41 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 16.378067, y: 8.14518356, z: 40.3078766}
   m_Center: {x: .10389328, y: 2.05961037, z: -.833343506}
+--- !u!108 &10867368
+Light:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 167368}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Type: 1
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Intensity: .389999986
+  m_Range: 10
+  m_SpotAngle: 30
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 0
+    m_Resolution: -1
+    m_Strength: 1
+    m_Bias: .0500000007
+    m_Softness: 4
+    m_SoftnessFade: 1
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_ActuallyLightmapped: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_Lightmapping: 1
+  m_ShadowSamples: 1
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
+  m_IndirectIntensity: 1
+  m_AreaSize: {x: 1, y: 1}
 --- !u!114 &11455734
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -883,9 +1034,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7b583b6030009641acfc4037411ba56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  movementMode: 1
   spaceGround: {fileID: 0}
-  moveSpeed: 1
+  moveSpeed: 150
   orbitSpeed: 1
+  orbitID: -1
+--- !u!114 &11467366
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 167366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a586d2808dc08c647abb9f31894cfb28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentDestination: {fileID: 0}
+--- !u!114 &11467368
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 198504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 089ba94267798d24c83d185614a9ba78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waypointUIElement: {fileID: 167366}
+  waypointUIScript: {fileID: 11467366}
+  systemDestination: {fileID: 0}
+  planetDestination: {fileID: 0}
 --- !u!114 &11498524
 MonoBehaviour:
   m_ObjectHideFlags: 1

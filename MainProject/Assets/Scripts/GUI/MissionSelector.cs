@@ -5,7 +5,7 @@ public class MissionSelector : MonoBehaviour
 {
     [SerializeField]
     private Transform currentDestination;
-    public UnityEngine.Transform CurrentDestination
+    public Transform CurrentDestination
     {
         get { return currentDestination; }
         set { 
