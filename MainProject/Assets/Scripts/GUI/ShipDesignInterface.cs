@@ -129,23 +129,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
         }
         //Add current fleet buttons
 
-
-        //Setup Save dialogue box
-        //saveDialogueBox.inputField.characterValidation = InputField.CharacterValidation.Name;
-        //saveDialogueBox.inputField.onEndEdit.AddListener((value) =>
-        //    {
-        //        SaveInputFieldSubmit(saveDialogueBox.inputField.text);
-        //    });
-        //saveDialogueBox.submitButton.onClick.AddListener(() =>
-        //    {
-        //        SaveBlueprint(saveDialogueBox.inputField.text);
-        //    });
-        //saveDialogueBox.cancelButton.onClick.AddListener(() =>
-        //    {
-        //        ShowSaveDialogueBox(false);
-        //    });
-
-        saveDialogueBox.Setup(InputField.CharacterValidation.EmailAddress, (fileName) => SaveBlueprint(fileName), ()=>ShowSaveDialogueBox(false));
+        saveDialogueBox.Setup((fileName) => SaveBlueprint(fileName), () => ShowSaveDialogueBox(false));
 
     }
     private void SetupComponentButtons()

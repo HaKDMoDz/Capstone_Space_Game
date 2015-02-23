@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 public class InputDialogueBox : MonoBehaviour 
 {
@@ -13,22 +14,26 @@ public class InputDialogueBox : MonoBehaviour
         get { return inputFieldEx; }
         set { inputFieldEx = value; }
     }
-    //[SerializeField]
-    //private Text inputText;
     [SerializeField]
     private Button submitButton;
     [SerializeField]
     private Button cancelButton;
 
+    Regex inputValidateRegex = new Regex(@"^[\w\-. ]+$");
+
     public InputField GetInputField()
     {
         return inputFieldEx.InputField;
     }
-    public void Setup(InputField.CharacterValidation validation, UnityAction<string> onSubmitAction, UnityAction onCancelAction)
+    public void Setup(UnityAction<string> onSubmitAction, UnityAction onCancelAction)
     {
-        inputFieldEx.InputField.characterValidation = validation;
         AddOnSubmitListener(onSubmitAction);
         AddOnCancelListener(onCancelAction);
+        inputFieldEx.InputField.onValidateInput += ValidateInput;
+    }
+    private char ValidateInput(string str, int num, char chr)
+    {
+        return inputValidateRegex.IsMatch(chr.ToString()) ? chr : '\0';
     }
     public void AddOnSubmitListener(UnityAction<string> action)
     {
