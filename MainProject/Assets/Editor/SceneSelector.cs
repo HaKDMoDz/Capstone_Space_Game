@@ -2,10 +2,16 @@
 using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
-
-public class SceneSelector : Editor 
+using System.IO;
+using System.Linq;
+public class SceneSelector : EditorWindow 
 {
-    const string menuName = "Open Scene";
+    private const string menuName = "Open Scene";
+    
+    private string scenesFolder = Application.dataPath + "/Assets/Scenes";
+
+    private IEnumerable<string> sceneNames;
+    private Vector2 scroll;
 
     [MenuItem(menuName + "/Main Menu")]
     public static void OpenMainMenu()
@@ -44,4 +50,77 @@ public class SceneSelector : Editor
             EditorApplication.OpenScene("Assets/Scenes/" + name + ".unity");
         }
     }
+    [MenuItem(menuName+"/Scene Selector")]
+    private static void OpenSceneSelector()
+    {
+        EditorWindow.GetWindow(typeof(SceneSelector));
+    }
+    private void FindInScenesDir()
+    {
+        string dir = scenesFolder;
+        Debug.Log("Searching for scenes in directory " + dir);
+        var info = new DirectoryInfo(dir);
+        sceneNames = info.GetFiles()
+            .Select(f => f.Name)
+            .Where(f => f.Contains(".unity") && !f.Contains(".meta"));
+    }
+    private void FindScenesInProject()
+    {
+        string directory = Application.dataPath;
+        sceneNames = Directory.GetFiles(directory, "*.unity", SearchOption.AllDirectories);
+        foreach (var scene in sceneNames)
+        {
+            Debug.Log(scene.Replace(Application.dataPath, ""));
+        }
+    }
+    private void OnGUI()
+    {
+        if(sceneNames==null || sceneNames.Count()==0)
+        {
+            FindInScenesDir();
+        }
+
+        scroll = GUILayout.BeginScrollView(scroll);
+
+        if (sceneNames == null || sceneNames.Count() == 0)
+        {
+            Debug.LogError("No scenes found");
+        }
+        else
+        {
+            foreach (string scene in sceneNames)
+            {
+                string sceneName = scene.Replace(Application.dataPath, "");
+                sceneName = scene.Replace(".unity", "");
+                if (GUILayout.Button(sceneName))
+                {
+                    if (EditorApplication.SaveCurrentSceneIfUserWantsTo())
+                    {
+                        EditorApplication.OpenScene(Application.dataPath + "/" + scenesFolder + "/" + scene);
+                    }
+                }
+            }
+        }
+        EditorGUILayout.Space();
+        EditorGUILayout.Space();
+        EditorGUILayout.Space();
+
+        if(GUILayout.Button("Search in Scenes folder"))
+        {
+            Debug.Log("Searching for scene files in " + scenesFolder);
+            FindInScenesDir();
+        }
+        if(GUILayout.Button("Search in project"))
+        {
+            Debug.LogWarning("Searching for scene files in project");
+            FindScenesInProject();
+        }
+
+        GUILayout.EndScrollView();
+    }
+    private void Awake()
+    {
+        scenesFolder = Application.dataPath + "/Scenes";
+    }
+    
 }
