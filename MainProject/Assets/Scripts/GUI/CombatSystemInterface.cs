@@ -29,8 +29,8 @@ public struct CombatGUIFields
     public GameObject statsPanel;
     public Text powerText;
     //targeting panel
-    public GameObject targetingPanel;
-    public Text targetedShipName;
+    //public GameObject targetingPanel;
+    //public Text targetedShipName;
     //move UI
     public GameObject moveUI;
     public Text moveDistance;
