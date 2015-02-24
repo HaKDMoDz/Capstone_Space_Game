@@ -89,9 +89,10 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
 
         if (components == null || activationMethod==null)
         {
+            guiFields.compHotkeysPanel.SetActive(false);
             return;
         }
-   
+        guiFields.compHotkeysPanel.SetActive(true);
         foreach (Type type in components.Select(c => c.GetType()).Distinct())
         {
             Type currentType = type;

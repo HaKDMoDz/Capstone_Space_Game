@@ -125,6 +125,7 @@ public class PlayerShip : TurnBasedUnit
                 ShowMovementUI(false);
                 //lets the player select whatever components he/she wants
                 yield return StartCoroutine(ComponentSelectionSequence());
+                combatInterface.ShowComponentSelectionPanel(false);
                 Debug.Log("activating components");
                 firing = true;
                 //activates the components with a callback when the activation is complete with the power used by components successfully activated
@@ -334,22 +335,25 @@ public class PlayerShip : TurnBasedUnit
             return;
         }
 
-        Vector3 targetDir = targetPos - trans.position;
-        int lineLength = Mathf.RoundToInt(targetDir.magnitude) + 1;
-        targetDir.Normalize();
+        line.SetVertexCount(2);
+        line.SetPosition(0, trans.position);
+        line.SetPosition(1, targetPos);
+        //Vector3 targetDir = targetPos - trans.position;
+        //int lineLength = Mathf.RoundToInt(targetDir.magnitude) + 1;
+        //targetDir.Normalize();
 
-        line.SetVertexCount(lineLength);
+        //line.SetVertexCount(lineLength);
 
-        for (int i = 0; i < lineLength; i++)
-        {
-            Vector3 newPos = trans.position;
-            Vector3 offset = Vector3.zero;
-            offset.x = newPos.x + i * targetDir.x;
-            offset.y = newPos.y + i * targetDir.y;
-            offset.z = newPos.z + i * targetDir.z;
-            newPos = offset;
-            line.SetPosition(i, newPos);
-        }
+        //for (int i = 0; i < lineLength; i++)
+        //{
+        //    Vector3 newPos = trans.position;
+        //    Vector3 offset = Vector3.zero;
+        //    offset.x = newPos.x + i * targetDir.x;
+        //    offset.y = newPos.y + i * targetDir.y;
+        //    offset.z = newPos.z + i * targetDir.z;
+        //    newPos = offset;
+        //    line.SetPosition(i, newPos);
+        //}
     }
     /// <summary>
     /// Gets the world position on the space ground from the mouse position
