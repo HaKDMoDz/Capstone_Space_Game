@@ -101,7 +101,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
         private set { shipBPMetaData = value; }
     }
 
-    public ShipMove shipMove { get; private set; }
+    protected ShipMove shipMove { get; private set; }
     protected ShipBlueprint shipBP;
     protected Transform trans;
 

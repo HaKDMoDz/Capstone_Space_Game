@@ -64,15 +64,6 @@ public class SceneSelector : EditorWindow
             .Select(f => f.Name)
             .Where(f => f.Contains(".unity") && !f.Contains(".meta"));
     }
-    private void FindScenesInProject()
-    {
-        string directory = Application.dataPath;
-        sceneNames = Directory.GetFiles(directory, "*.unity", SearchOption.AllDirectories);
-        foreach (var scene in sceneNames)
-        {
-            Debug.Log(scene.Replace(Application.dataPath, ""));
-        }
-    }
     private void OnGUI()
     {
         if(sceneNames==null || sceneNames.Count()==0)
@@ -96,7 +87,7 @@ public class SceneSelector : EditorWindow
                 {
                     if (EditorApplication.SaveCurrentSceneIfUserWantsTo())
                     {
-                        EditorApplication.OpenScene(Application.dataPath + "/" + scenesFolder + "/" + scene);
+                        EditorApplication.OpenScene(scenesFolder + "/" + scene);
                     }
                 }
             }
@@ -109,11 +100,6 @@ public class SceneSelector : EditorWindow
         {
             Debug.Log("Searching for scene files in " + scenesFolder);
             FindInScenesDir();
-        }
-        if(GUILayout.Button("Search in project"))
-        {
-            Debug.LogWarning("Searching for scene files in project");
-            FindScenesInProject();
         }
 
         GUILayout.EndScrollView();

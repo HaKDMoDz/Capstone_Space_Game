@@ -12,17 +12,27 @@ using System.Linq;
 [Serializable]
 public struct CombatGUIFields
 {
+    //prefabs
     public ButtonWithContent buttonPrefab;
+    public TextExtended textFieldPrefab;
+    //canvas
+    public RectTransform mainCanvas;
+    //turn order list
     public RectTransform turnOrderButtonParent;
-    public RectTransform compButtonParent;
+    //comp hotkeys
+    public GameObject compHotkeysPanel;
+    public RectTransform compHotkeysParent;
+    //comp selection panel
     public GameObject openCompSelectionPanel;
     public GameObject closedCompSelectPanel;
+    //stats panel
     public GameObject statsPanel;
     public Text powerText;
+    //targeting panel
     public GameObject targetingPanel;
     public Text targetedShipName;
-    public RectTransform mainCanvas;
-    public GameObject moveUICanvas;
+    //move UI
+    public GameObject moveUI;
     public Text moveDistance;
     public Text movePowerCost;
 }
@@ -35,9 +45,8 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
     private CombatGUIFields guiFields;
     #endregion EditorExposed
 
-
     //internal
-    private Dictionary<TurnBasedUnit, ButtonWithContent> unit_buttonRect_table = new Dictionary<TurnBasedUnit, ButtonWithContent>();
+    private Dictionary<TurnBasedUnit, TextExtended> unit_buttonRect_table = new Dictionary<TurnBasedUnit, TextExtended>();
     private List<ButtonWithContent> compButtons = new List<ButtonWithContent>();
 
     //references
@@ -55,10 +64,15 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
     /// <param name="unit"></param>
     public void AddShipButton(TurnBasedUnit unit)
     {
-        ButtonWithContent buttonClone = Instantiate(guiFields.buttonPrefab) as ButtonWithContent;
-        buttonClone.SetText(unit.ShipBPMetaData.BlueprintName);
-        buttonClone.transform.SetParent(guiFields.turnOrderButtonParent, false);
-        unit_buttonRect_table.Add(unit, buttonClone);
+        //ButtonWithContent buttonClone = Instantiate(guiFields.buttonPrefab) as ButtonWithContent;
+        //buttonClone.SetText(unit.ShipBPMetaData.BlueprintName);
+        //buttonClone.transform.SetParent(guiFields.turnOrderButtonParent, false);
+        //unit_buttonRect_table.Add(unit, buttonClone);
+
+        TextExtended textClone = Instantiate(guiFields.textFieldPrefab) as TextExtended;
+        textClone.SetText( unit.ShipBPMetaData.BlueprintName);
+        textClone.transform.SetParent(guiFields.turnOrderButtonParent, false);
+        unit_buttonRect_table.Add(unit, textClone);
     }
     /// <summary>
     /// Shows buttons along the bottom to activate all components of a type at once. Pass in null to remove the buttons from the screen.
@@ -85,7 +99,7 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
             buttonClone.SetText(components.First(c => c.GetType() == currentType).componentName);
             buttonClone.AddOnClickListener(() => activationMethod(currentType));
             compButtons.Add(buttonClone);
-            buttonClone.transform.SetParent(guiFields.compButtonParent, false);
+            buttonClone.transform.SetParent(guiFields.compHotkeysParent, false);
         }
     }//ShowComponentActivationButtons
 
@@ -104,14 +118,14 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
         //moveCostUITrans.position = position;
         guiFields.moveDistance.text = distance.ToString("0 m");
         guiFields.movePowerCost.text = powerCost.ToString("0") ;
-        guiFields.moveUICanvas.SetActive(true);
+        guiFields.moveUI.SetActive(true);
     }
     /// <summary>
     /// Deactivates the movement UI
     /// </summary>
     public void HideMoveUI()
     {
-        guiFields.moveUICanvas.SetActive(false);
+        guiFields.moveUI.SetActive(false);
     }
 
     //public void UpdateStats(TurnBasedUnit unit)
@@ -138,9 +152,9 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
     {
         for (int i = 0; i < units.Count; i++)
         {
-            ButtonWithContent button = unit_buttonRect_table[units[i]];
-            button.SetText( units[i].ShipBPMetaData.BlueprintName);
-            button.transform.SetSiblingIndex(i);
+            TextExtended button = unit_buttonRect_table[units[i]];
+            //button.SetText( units[i].ShipBPMetaData.BlueprintName);
+            button.Trans.SetSiblingIndex(i);
         }
     }
     /// <summary>
@@ -190,7 +204,7 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
 
     private void Awake()
     {
-        moveCostUITrans = (RectTransform)guiFields.moveUICanvas.transform;
+        moveCostUITrans = (RectTransform)guiFields.moveUI.transform;
         #if FULL_DEBUG
         if(!moveCostUITrans)
         {
