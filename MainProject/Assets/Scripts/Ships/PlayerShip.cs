@@ -37,7 +37,7 @@ public class PlayerShip : TurnBasedUnit
     private List<ShipComponent> selectedComponents = new List<ShipComponent>();
 
 
-    #endregion Fields
+    #endregion Fields   
 
     #region Methods
     #region PublicMethods
@@ -75,9 +75,17 @@ public class PlayerShip : TurnBasedUnit
         }
         spaceGround.OnGroundClick += SpaceGroundClick;
     }
-
-    
-
+    protected override void PreTurnActions()
+    {
+        continueTurn = true;
+        totalActivationCost = 0.0f;
+        SubscribeToAIShipMouseEvents(true);
+        //setups up the GUI for the player ship
+        combatInterface.EnableComponentSelectionPanel(true);
+        combatInterface.ShowStatsPanel(true);
+        combatInterface.ShowComponentActivationButtons(SelectAllComponents, components.Where(c => c.CanActivate));
+        combatInterface.ShowPower(CurrentPower);
+    }
     /// <summary>
     /// Starts the turn for the player ship. Starts listening for commands to move or to activate components
     /// </summary>
@@ -86,19 +94,10 @@ public class PlayerShip : TurnBasedUnit
     {
         takingTurn = true;
         yield return StartCoroutine(base.ExecuteTurn());
-
         #if FULL_DEBUG
         Debug.Log("Player unit turn");
         #endif
-
-        continueTurn = true;
-        totalActivationCost = 0.0f;
-
-        //setups up the GUI for the player ship
-        combatInterface.EnableComponentSelectionPanel(true);
-        combatInterface.ShowStatsPanel(true);
-        combatInterface.ShowComponentActivationButtons(SelectAllComponents, components.Where(c=>c.CanActivate));
-        combatInterface.ShowPower(CurrentPower);
+        PreTurnActions();
 
         //run until the the player hits Return or until power reaches 0
         while (continueTurn)
@@ -118,7 +117,6 @@ public class PlayerShip : TurnBasedUnit
                 Debug.Log(ShipBPMetaData.BlueprintName + "- Movement end");
                 #endif
             }
-
             //if the player has started selecting components
             if (componentSelectionOn)
             {
@@ -134,26 +132,29 @@ public class PlayerShip : TurnBasedUnit
                         {
                             CurrentPower -= activationCost;
                         }));
-
                 firing = false;
                 UnSelectComponents(false);
             }
             receivedMoveCommand = false;
-
             if(CurrentPower <=0) //end turn
             {
                 continueTurn = false;
             }
-
             yield return null;
         }
+        PostTurnActions();
+
+    }//ExecuteTurn
+
+    protected override void PostTurnActions()
+    {
         takingTurn = false;
+        SubscribeToAIShipMouseEvents(false);
         //de-activate GUI
         ShowMovementUI(false);
         combatInterface.ShowComponentActivationButtons(null, null);
         combatInterface.ShowStatsPanel(false);
-
-    }//ExecuteTurn
+    }
 
     /// <summary>
     /// Called by the gui interface to select all components of a given type
@@ -260,6 +261,44 @@ public class PlayerShip : TurnBasedUnit
             }
         }
     }//SelectComponent
+    private void SubscribeToAIShipMouseEvents(bool subscribe)
+    {
+        if(subscribe)
+        {
+            foreach (AI_Ship aiShip in TurnBasedCombatSystem.Instance.ai_Ships)
+            {
+                aiShip.OnShipClick += aiShip_OnShipClick;
+                aiShip.OnShipMouseEnter += aiShip_OnShipMouseEnter;
+                aiShip.OnShipMouseExit += aiShip_OnShipMouseExit;
+            }
+        }
+        else
+        {
+            foreach (AI_Ship aiShip in TurnBasedCombatSystem.Instance.ai_Ships)
+            {
+                aiShip.OnShipClick -= aiShip_OnShipClick;
+                aiShip.OnShipMouseEnter -= aiShip_OnShipMouseEnter;
+                aiShip.OnShipMouseExit -= aiShip_OnShipMouseExit;
+            }
+        }
+    }
+
+    void aiShip_OnShipMouseExit(AI_Ship ship)
+    {
+        //Debug.Log("Mouse exit " +name);
+        combatInterface.ShowAttackCursor(false);
+    }
+    void aiShip_OnShipMouseEnter(AI_Ship ship)
+    {
+        //Debug.Log("Mouse over " + name);
+        combatInterface.ShowAttackCursor(true);
+    }
+    void aiShip_OnShipClick(AI_Ship ship)
+    {
+        //Debug.Log("Mouse click " +name);
+        combatInterface.ShowAttackCursor(false);
+        componentSelectionOn = true;
+    }
 
     #region InternalCallbacks
     /// <summary>
@@ -286,9 +325,8 @@ public class PlayerShip : TurnBasedUnit
         {
             return;
         }
-        Debug.Log("At PlayerShip: "+ component.componentName + " clicked");
+        //Debug.Log("At PlayerShip: "+ component.componentName + " clicked");
         componentSelectionOn = true;
-
         SelectComponent(component, !selectedComponents.Contains(component));
     }
 
@@ -334,26 +372,9 @@ public class PlayerShip : TurnBasedUnit
         {
             return;
         }
-
         line.SetVertexCount(2);
         line.SetPosition(0, trans.position);
         line.SetPosition(1, targetPos);
-        //Vector3 targetDir = targetPos - trans.position;
-        //int lineLength = Mathf.RoundToInt(targetDir.magnitude) + 1;
-        //targetDir.Normalize();
-
-        //line.SetVertexCount(lineLength);
-
-        //for (int i = 0; i < lineLength; i++)
-        //{
-        //    Vector3 newPos = trans.position;
-        //    Vector3 offset = Vector3.zero;
-        //    offset.x = newPos.x + i * targetDir.x;
-        //    offset.y = newPos.y + i * targetDir.y;
-        //    offset.z = newPos.z + i * targetDir.z;
-        //    newPos = offset;
-        //    line.SetPosition(i, newPos);
-        //}
     }
     /// <summary>
     /// Gets the world position on the space ground from the mouse position

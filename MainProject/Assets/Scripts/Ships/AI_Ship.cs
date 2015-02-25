@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
+using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-public class AI_Ship : TurnBasedUnit
+public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     #region Fields
-    #region Internal
+    
     private bool receivedMoveCommand;
     private bool receivedAttackCommand;
 
@@ -20,7 +21,14 @@ public class AI_Ship : TurnBasedUnit
 
     List<ShipComponent> activeComponents = new List<ShipComponent>();
 
-    #endregion Internal
+    //Events
+    public delegate void ShipClickEvent(AI_Ship ship);
+    public event ShipClickEvent OnShipClick = new ShipClickEvent((AI_Ship) => { });
+    public delegate void ShipMouseEnterEvent(AI_Ship ship);
+    public event ShipMouseEnterEvent OnShipMouseEnter = new ShipMouseEnterEvent((AI_Ship) => { });
+    public delegate void ShipMouseExitEvent(AI_Ship ship);
+    public event ShipMouseExitEvent OnShipMouseExit = new ShipMouseExitEvent((AI_Ship) => { });
+
     #endregion Fields
 
     #region Methods
@@ -37,7 +45,11 @@ public class AI_Ship : TurnBasedUnit
         //}
 
         trans = transform;
+    }
 
+    protected override void PreTurnActions()
+    {
+        
     }
     public override IEnumerator ExecuteTurn()
     {
@@ -45,7 +57,8 @@ public class AI_Ship : TurnBasedUnit
         #if FULL_DEBUG
         Debug.Log("AI unit turn");
         #endif
-        // AI doesn't wait for space to be pressed...
+
+        PreTurnActions();
 
         PlayerShip targetPlayer = TargetEnemy(TurnBasedCombatSystem.Instance.playerShips);
         //move phase
@@ -58,10 +71,8 @@ public class AI_Ship : TurnBasedUnit
             Debug.Log(name + "- Movement end");
             #endif
         }
-
         //attack phase
         Attack();
-
         if (receivedAttackCommand)
         {
             yield return StartCoroutine(ai_Attack.Attack(targetPlayer, damagePerAttack, activeComponents));
@@ -70,7 +81,12 @@ public class AI_Ship : TurnBasedUnit
             Debug.Log(name + "- Attack end");
             #endif
         }
-        yield return null;
+        PostTurnActions();
+    }
+
+    protected override void PostTurnActions()
+    {
+        
     }
 
     public void Move(PlayerShip targetPlayer)
@@ -117,4 +133,24 @@ public class AI_Ship : TurnBasedUnit
 
     #endregion PublicMethods
     #endregion Methods
+
+    #region InternalCallbacks
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        //Debug.Log("Mouse over " + name);
+        OnShipMouseEnter(this);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        //Debug.Log("Mouse exit " + name);
+        OnShipMouseExit(this);
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        //Debug.Log("Mouse click " + name);
+        OnShipClick(this);
+    }
+    #endregion InternalCallbacks
 }

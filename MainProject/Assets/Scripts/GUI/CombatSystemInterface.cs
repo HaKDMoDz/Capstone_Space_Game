@@ -28,14 +28,15 @@ public struct CombatGUIFields
     //stats panel
     public GameObject statsPanel;
     public Text powerText;
-    //targeting panel
-    //public GameObject targetingPanel;
-    //public Text targetedShipName;
     //move UI
     public GameObject moveUI;
     public Text moveDistance;
     public Text movePowerCost;
+    //Cursors
+    public Texture2D defaultCursor;
+    public Texture2D attackCursor;
 }
+
 #endregion AdditionalStructs
 public class CombatSystemInterface : Singleton<CombatSystemInterface>
 {
@@ -48,7 +49,7 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
     //internal
     private Dictionary<TurnBasedUnit, TextExtended> unit_buttonRect_table = new Dictionary<TurnBasedUnit, TextExtended>();
     private List<ButtonWithContent> compButtons = new List<ButtonWithContent>();
-
+    private Vector2 attackCursorOffset, defaultCursorOffset;
     //references
     private RectTransform moveCostUITrans;
     #endregion Fields
@@ -144,6 +145,18 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
         guiFields.powerText.text = currentPower.ToString();
     }
     #endregion GUISetup
+    
+    public void ShowAttackCursor(bool show)
+    {
+        if(show)
+        {
+            Cursor.SetCursor(guiFields.attackCursor,attackCursorOffset , CursorMode.Auto);
+        }
+        else
+        {
+            Cursor.SetCursor(guiFields.defaultCursor, defaultCursorOffset, CursorMode.Auto);
+        }
+    }
 
     /// <summary>
     /// Shows the units in the turn order list, in the order that it was passed in (top to bottom)
@@ -213,7 +226,12 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
         }
         #endif
         HideMoveUI();
+
+        attackCursorOffset = new Vector2(guiFields.attackCursor.width * 0.5f, guiFields.attackCursor.height * 0.5f);
+        defaultCursorOffset = new Vector2(guiFields.defaultCursor.width * 0.1f, guiFields.defaultCursor.height * 0.1f);
+        ShowAttackCursor(false);
     }
+    
 
 
     #endregion Methods

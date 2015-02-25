@@ -70,21 +70,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     #region Private
 
     #region UnityCallbacks
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            compPanelAnim.enabled = true;
-            compPanelAnim.Play("CompPanelMoveIn");
-            hullPanelAnim.enabled = true;
-            hullPanelAnim.Play("CompPanelMoveOut");
-        }
-        if(Input.GetKeyDown(KeyCode.Backspace))
-        {
-            compPanelAnim.Play("CompPanelMoveOut");
-            hullPanelAnim.Play("CompPanelMoveIn");
-        }
-    }
+    
     private void Awake()
     {
         blueprintName_button_table = new Dictionary<string, List<GameObject>>();
@@ -550,6 +536,8 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     {
         ClearGUI();
         shipDesignSystem.LoadBlueprint(fileName);
+        ShowStatsPanel(true);
+        ShowComponentPanel();
     }
     /// <summary>
     /// Calls DeleteBlueprint on the ShipDesignSystem

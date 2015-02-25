@@ -103,7 +103,9 @@ public abstract class ShipComponent : MonoBehaviour , IPointerClickHandler, IPoi
     /// <param name="eventData"></param>
     public virtual void OnPointerClick(PointerEventData eventData)
     {
-        Debug.Log("At component: Clicked on component " + componentName);
+        #if FULL_DEBUG
+        //Debug.Log("At component: Clicked on component " + componentName);
+        #endif
         //Selected = !Selected;
         OnComponentClicked(this);
     }

@@ -225,7 +225,8 @@ public abstract class TurnBasedUnit : MonoBehaviour
 
     }//Init
 
-
+    protected abstract void PreTurnActions();
+    protected abstract void PostTurnActions();
     /// <summary>
     /// Base virtual method to start the turn. Sets power to max.
     /// </summary>
