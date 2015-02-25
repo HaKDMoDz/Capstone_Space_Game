@@ -19,7 +19,11 @@ public class SolarSystem : MonoBehaviour
 
     [SerializeField]
     private GameObject systemRingGUI;
-
+    public GameObject SystemRingGUI
+    {
+        get { return systemRingGUI; }
+        set { systemRingGUI = value; }
+    }
     //Internal
     private string systemName;
     private Text systemLabel;

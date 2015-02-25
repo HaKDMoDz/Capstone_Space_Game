@@ -14,28 +14,28 @@ public class Planet_Mission : MonoBehaviour
 
     [SerializeField]
     public GameObject startSystem;
-    public UnityEngine.GameObject StartSystem
+    public GameObject StartSystem
     {
         get { return startSystem; }
         set { startSystem = value; }
     }
     [SerializeField]
     public GameObject endSystem;
-    public UnityEngine.GameObject EndSystem
+    public GameObject EndSystem
     {
         get { return endSystem; }
         set { endSystem = value; }
     }
     [SerializeField]
     public GameObject startPlanet;
-    public UnityEngine.GameObject StartPlanet
+    public GameObject StartPlanet
     {
         get { return startPlanet; }
         set { startPlanet = value; }
     }
     [SerializeField]
-    public GameObject endPlanet;
-    public UnityEngine.GameObject EndPlanet
+    private GameObject endPlanet;
+    public GameObject EndPlanet
     {
         get { return endPlanet; }
         set { endPlanet = value; }
@@ -117,6 +117,8 @@ public class Planet_Mission : MonoBehaviour
                 break;
         }
         MissionController.Instance.AddMissionComplete(ID, completeAction);
+
+        //MissionController.Instance.AddPlanetMission(this);
 	}
 
     public void CompleteMission()
@@ -151,6 +153,8 @@ public class Planet_Mission : MonoBehaviour
         else
         {
             Debug.Log("Mission Accepted");
+            Debug.LogError(endPlanet);
+            Debug.LogError(EndPlanet);
             MissionController.Instance.AcceptMission(ID);
             uiManager.disableMissionPanel();
             mothershipUI.enableWaypointUI(endPlanet.transform);
