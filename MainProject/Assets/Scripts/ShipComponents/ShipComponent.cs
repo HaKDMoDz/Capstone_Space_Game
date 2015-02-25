@@ -82,6 +82,7 @@ public abstract class ShipComponent : MonoBehaviour , IPointerClickHandler, IPoi
     private GameObject selectionHalo;
     [SerializeField]
     private Slider hpBar;
+    
 
     public TurnBasedUnit ParentShip { get; private set; }
 

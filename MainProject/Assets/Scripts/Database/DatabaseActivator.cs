@@ -20,6 +20,8 @@ public class DatabaseActivator : MonoBehaviour
     private GalaxyConfig galaxyConfig;
     [SerializeField]
     private BlueprintTemplates bpTemplates;
+    [SerializeField]
+    private ResourceManager resourceManager;
 
 	
 }

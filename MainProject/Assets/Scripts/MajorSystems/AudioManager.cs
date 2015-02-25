@@ -6,25 +6,6 @@ using System.Linq;
 using System;
 #endregion Usings
 
-#region AdditionStructs
-public enum Sound
-{
-    //tracks
-    TestTrack,
-    //effects
-    LaserBeam
-}
-[Serializable]
-public struct SoundInfo
-{
-    public Sound sound;
-    public AudioClip audioClip;
-    public float defaultVolume;
-    public int priority;
-}
-
-#endregion AdditionStructs
-
 public class AudioManager : Singleton<AudioManager>
 {
 
@@ -32,12 +13,9 @@ public class AudioManager : Singleton<AudioManager>
     //EditorExposed
     [SerializeField]
     private int numSources = 32;
-    [SerializeField]
-    private List<SoundInfo> soundInfoList;
 
     //Internal
     private Queue<AudioSource> availableSources = new Queue<AudioSource>();
-    private Dictionary<Sound, SoundInfo> sound_info_table;
     private AudioSource mainTrackSource;
     private Transform audioSrcParent;
 
@@ -70,9 +48,7 @@ public class AudioManager : Singleton<AudioManager>
     /// <param name="parent"></param>
     public void PlayEffectAndAttachTo(Sound sound, Transform parent)
     {
-        SoundInfo soundInfo;
-        GetSoundInfo(sound, out soundInfo);
-        StartCoroutine(PlayEffectAndAttach(soundInfo, parent));
+        StartCoroutine(PlayEffectAndAttach(GetSoundInfo(sound), parent));
     }
     /// <summary>
     /// Set the main track. Will replace the previously playing main track, if there is one.
@@ -80,9 +56,8 @@ public class AudioManager : Singleton<AudioManager>
     /// <param name="sound"></param>
     public void SetMainTrack(Sound sound)
     {
-        SoundInfo soundInfo;
-        GetSoundInfo(sound, out soundInfo);
-        SetMainTrack(soundInfo);
+        
+        SetMainTrack(GetSoundInfo(sound));
     }
     #endregion PublicMethods
 
@@ -90,8 +65,6 @@ public class AudioManager : Singleton<AudioManager>
 
     private void PlaySound(Sound sound, Vector3 position)
     {
-        SoundInfo soundInfo;
-        GetSoundInfo(sound, out soundInfo);
         if(availableSources.Count == 0)
         {
             Debug.LogError("No available sources found");
@@ -99,7 +72,7 @@ public class AudioManager : Singleton<AudioManager>
         }
         else
         {
-            StartCoroutine(PlayEffect(soundInfo, position));
+            StartCoroutine(PlayEffect(GetSoundInfo(sound), position));
         }
     
     }
@@ -151,17 +124,9 @@ public class AudioManager : Singleton<AudioManager>
         availableSources.Enqueue(source);
     }
 
-    private void GetSoundInfo(Sound sound, out SoundInfo soundInfo)
+    private SoundInfo GetSoundInfo(Sound sound)
     {
-        #if FULL_DEBUG || LOW_DEBUG
-        if (!sound_info_table.TryGetValue(sound, out soundInfo))
-        {
-            Debug.LogError("No info found for " + sound);
-            return;
-        }
-        #else
-        soundInfo = sound_info_table[sound];
-        #endif
+        return ResourceManager.GetSoundInfo(sound);
     }
 
     #endregion PrivateMethods
@@ -171,14 +136,6 @@ public class AudioManager : Singleton<AudioManager>
     
     private void Awake()
     {
-        #if FULL_DEBUG
-        if(soundInfoList==null || soundInfoList.Count==0)
-        {
-            Debug.LogError("No sound info found");
-        }
-        #endif
-        sound_info_table = soundInfoList.ToDictionary(s => s.sound, s => s);
-
         GameObject audioSrcParentObj = new GameObject("AudioSources");
         audioSrcParent = audioSrcParentObj.transform;
         audioSrcParent.SetParent(transform, false);

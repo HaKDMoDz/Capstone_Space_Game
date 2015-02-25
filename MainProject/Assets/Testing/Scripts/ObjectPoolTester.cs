@@ -16,7 +16,7 @@ public class ObjectPoolTester : MonoBehaviour
         InputManager.Instance.RegisterMouseButtonsDown(Shoot, MouseButton.Left);
         FindObjectOfType<SpaceGround>().OnGroundClick += GroundClick;
         trans = transform;
-        //AudioManager.Instance.SetMainTrack(Sound.TestTrack);
+        AudioManager.Instance.SetMainTrack(Sound.TestTrack);
     }
 
     void GroundClick(Vector3 worldPosition)
@@ -29,7 +29,7 @@ public class ObjectPoolTester : MonoBehaviour
     {
         GameObject currentBullet = ObjectPool.Instance.GetPooledObject(bulletPrefab, false);
         currentBullet.transform.position = trans.position;
-        AudioManager.Instance.PlayEffectAndAttachTo(Sound.LaserBeam, currentBullet.transform);
+        AudioManager.Instance.PlayEffectAndAttachTo(Sound.Laser, currentBullet.transform);
         currentBullet.rigidbody.AddForce(trans.forward * 300.0f);
         StartCoroutine(currentBullet.GetSafeComponent<TimedAction>().SetTimedAction(2.0f,
             () =>
