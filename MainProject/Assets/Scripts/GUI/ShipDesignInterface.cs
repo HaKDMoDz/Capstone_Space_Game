@@ -9,34 +9,7 @@ using System;
 using System.Linq;
 #endregion Usings
 
-#region AdditionalStructs
-[Serializable]
-public struct InterfaceGUI_Fields //Inspector Grouping
-{
-    public ButtonWithContent buttonPrefab;
 
-    //building panels
-    public RectTransform hullButtonParent; //the parent panel for instantiated Hull buttons 
-    public RectTransform compButtonParent; //the parent panel for instantiated Component buttons 
-
-    public InputDialogueBox saveDialogueBox; //Dialogue box for providing the name of a Blueprint to save
-
-    //load panel
-    public GameObject loadPanel; //The load panel lists all saved blueprints
-    public RectTransform loadButtonParent; //the parent panel for instantiated Load Blueprint buttons 
-
-    //fleet panel
-    public GameObject fleetPanel;
-    public RectTransform currentFleetButtonsParent;
-    public RectTransform savedBlueprintsButtonsParent;
-
-    //stats panel
-    public ShipStatsPanel statsPanel;
-
-    //Model Panel
-    public ModalPanel modalPanel;
-}
-#endregion AdditionalStructs
 
 public class ShipDesignInterface : Singleton<ShipDesignInterface>
 {
@@ -51,6 +24,10 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     [SerializeField]
     private GameObject separatorPrefab;
     //building panels
+    [SerializeField]
+    private Animator compPanelAnim;
+    [SerializeField]
+    private Animator hullPanelAnim;
     [SerializeField]
     private RectTransform hullButtonParent;
     [SerializeField]
@@ -72,6 +49,8 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     private RectTransform savedBPsParent;
     //stats
     [SerializeField]
+    private Animator statsPanelAnim;
+    [SerializeField]
     private ShipStatsPanel statsPanel;
     //modal box
     [SerializeField]
@@ -91,6 +70,21 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     #region Private
 
     #region UnityCallbacks
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            compPanelAnim.enabled = true;
+            compPanelAnim.Play("CompPanelMoveIn");
+            hullPanelAnim.enabled = true;
+            hullPanelAnim.Play("CompPanelMoveOut");
+        }
+        if(Input.GetKeyDown(KeyCode.Backspace))
+        {
+            compPanelAnim.Play("CompPanelMoveOut");
+            hullPanelAnim.Play("CompPanelMoveIn");
+        }
+    }
     private void Awake()
     {
         blueprintName_button_table = new Dictionary<string, List<GameObject>>();
@@ -453,9 +447,28 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
 
     public void ShowStatsPanel(bool show)
     {
-        statsPanel.gameObject.SetActive(show);
+        if(show)
+        {
+            statsPanelAnim.enabled = true;
+            statsPanelAnim.Play("PanelMoveInRight");
+        }
+        else
+        {
+            statsPanelAnim.Play("PanelMoveOutRight");
+        }
     }
-
+    private void ShowHullPanel()
+    {
+        compPanelAnim.Play("CompPanelMoveOut");
+        hullPanelAnim.Play("CompPanelMoveIn");
+    }
+    private void ShowComponentPanel()
+    {
+        compPanelAnim.enabled = true;
+        compPanelAnim.Play("CompPanelMoveIn");
+        hullPanelAnim.enabled = true;
+        hullPanelAnim.Play("CompPanelMoveOut");
+    }
     /// <summary>
     /// Saves the current fleet
     /// </summary>
@@ -488,6 +501,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     {
         shipDesignSystem.BuildHull(hull_ID);
         ShowStatsPanel(true);
+        ShowComponentPanel();
     }
     /// <summary>
     /// Calls the BuildComponent method of the ShipDesignSystem
@@ -573,6 +587,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
         ClearGUI();
         ShowStatsPanel(false);
         shipDesignSystem.ClearScreen();
+        ShowHullPanel();
     }
     #endregion DesignSystemAccess
     #endregion Public
