@@ -118,7 +118,7 @@ public class Planet_Mission : MonoBehaviour
         }
         MissionController.Instance.AddMissionComplete(ID, completeAction);
 
-        //MissionController.Instance.AddPlanetMission(this);
+        MissionController.Instance.AddPlanetMission(this);
 	}
 
     public void CompleteMission()
@@ -153,8 +153,6 @@ public class Planet_Mission : MonoBehaviour
         else
         {
             Debug.Log("Mission Accepted");
-            Debug.LogError(endPlanet);
-            Debug.LogError(EndPlanet);
             MissionController.Instance.AcceptMission(ID);
             uiManager.disableMissionPanel();
             mothershipUI.enableWaypointUI(endPlanet.transform);

@@ -19,7 +19,6 @@ public class Planet_MissionComplete : MonoBehaviour
     {
         Debug.Log("Mission Completed");
         MissionController.Instance.CompleteMission(MissionController.currentMissionIndex);
-        Debug.LogError(MissionController.Instance.currentMission.EndPlanet.GetComponent<PlanetUIManager>());
         MissionController.Instance.currentMission.EndPlanet.GetComponent<PlanetUIManager>().disableMissionCompleteButton();
         MissionController.Instance.currentMission.EndPlanet.GetComponent<PlanetUIManager>().disableMissionCompletePanel();
         //Debug.LogError(GameObject.Find("Mothership").GetComponent<MothershipUIManager>()); //linkage test
