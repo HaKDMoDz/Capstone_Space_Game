@@ -953,6 +953,7 @@ GameObject:
   - 54: {fileID: 72742976}
   - 114: {fileID: 72742973}
   - 114: {fileID: 72742975}
+  - 114: {fileID: 72742979}
   m_Layer: 20
   m_Name: Planet-007
   m_TagString: Planet
@@ -1047,6 +1048,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cb456d5b9b09c24498e8668f842b719, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &72742979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11404426, guid: 8fde0fb5db4b2714997f7c03082ecf6a,
+    type: 2}
+  m_PrefabInternal: {fileID: 865050636}
+  m_GameObject: {fileID: 72742972}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: feb5df75da6fb5443951623ec9be4b9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  endDialogIndex: 0
 --- !u!1 &75006298
 GameObject:
   m_ObjectHideFlags: 0
@@ -1564,6 +1578,8 @@ GameObject:
   - 54: {fileID: 152510422}
   - 114: {fileID: 152510420}
   - 114: {fileID: 152510421}
+  - 114: {fileID: 152510426}
+  - 114: {fileID: 152510425}
   m_Layer: 20
   m_Name: Planet-004
   m_TagString: Planet
@@ -1659,6 +1675,44 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cb456d5b9b09c24498e8668f842b719, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &152510425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11463356, guid: d0c7aed4c19e9af4a9f6e446f3d6849a,
+    type: 2}
+  m_PrefabInternal: {fileID: 1467747746}
+  m_GameObject: {fileID: 152510418}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: feb5df75da6fb5443951623ec9be4b9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  endDialogIndex: 0
+--- !u!114 &152510426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11463358, guid: d0c7aed4c19e9af4a9f6e446f3d6849a,
+    type: 2}
+  m_PrefabInternal: {fileID: 1467747746}
+  m_GameObject: {fileID: 152510418}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5807f68ff37ec74099b6317c4a86121, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mothershipUI: {fileID: 0}
+  uiManager: {fileID: 152510421}
+  startSystem: {fileID: 0}
+  endSystem: {fileID: 0}
+  startPlanet: {fileID: 152510418}
+  endPlanet: {fileID: 0}
+  startDialog:
+  - Start!
+  endDialog:
+  - Finish!
+  rewardAmount: 0
+  completed: 0
+  id: 1
 --- !u!1 &157729331
 GameObject:
   m_ObjectHideFlags: 0
@@ -1995,6 +2049,7 @@ GameObject:
   - 54: {fileID: 176452068}
   - 114: {fileID: 176452067}
   - 114: {fileID: 176452066}
+  - 114: {fileID: 176452071}
   m_Layer: 20
   m_Name: Planet-005
   m_TagString: Planet
@@ -2091,6 +2146,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cb456d5b9b09c24498e8668f842b719, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &176452071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11477312, guid: 7f67cce9528e2c64ebc4a1e91062b0d6,
+    type: 2}
+  m_PrefabInternal: {fileID: 54527935}
+  m_GameObject: {fileID: 176452064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: feb5df75da6fb5443951623ec9be4b9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  endDialogIndex: 0
 --- !u!1 &207159753
 GameObject:
   m_ObjectHideFlags: 0
@@ -2643,6 +2711,7 @@ GameObject:
   - 54: {fileID: 286261956}
   - 114: {fileID: 286261955}
   - 114: {fileID: 286261954}
+  - 114: {fileID: 286261959}
   m_Layer: 20
   m_Name: Planet-001
   m_TagString: Planet
@@ -2738,6 +2807,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cb456d5b9b09c24498e8668f842b719, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &286261959
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11401266, guid: 629106e26eaa5484dbd3732c3538183e,
+    type: 2}
+  m_PrefabInternal: {fileID: 7670096}
+  m_GameObject: {fileID: 286261952}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: feb5df75da6fb5443951623ec9be4b9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  endDialogIndex: 0
 --- !u!1 &291629532
 GameObject:
   m_ObjectHideFlags: 0
@@ -3066,6 +3148,7 @@ GameObject:
   - 54: {fileID: 329850708}
   - 114: {fileID: 329850707}
   - 114: {fileID: 329850706}
+  - 114: {fileID: 329850711}
   m_Layer: 20
   m_Name: Planet-002
   m_TagString: Planet
@@ -3161,6 +3244,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cb456d5b9b09c24498e8668f842b719, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &329850711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11487024, guid: d011ca6150a83ea4a99d67a6236467ab,
+    type: 2}
+  m_PrefabInternal: {fileID: 892086410}
+  m_GameObject: {fileID: 329850704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: feb5df75da6fb5443951623ec9be4b9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  endDialogIndex: 0
 --- !u!1 &336484388
 GameObject:
   m_ObjectHideFlags: 0
@@ -6026,7 +6122,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1685716342}
         m_MethodName: CompleteMission
         m_Mode: 1
         m_Arguments:
@@ -6145,7 +6241,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 2089558065}
         m_MethodName: CompleteMission
         m_Mode: 1
         m_Arguments:
@@ -6778,8 +6874,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: AcceptMission
+      - m_Target: {fileID: 176452064}
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7368,7 +7464,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 152510425}
         m_MethodName: CompleteMission
         m_Mode: 1
         m_Arguments:
@@ -7487,7 +7583,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 72742979}
         m_MethodName: CompleteMission
         m_Mode: 1
         m_Arguments:
@@ -7888,6 +7984,7 @@ GameObject:
   - 54: {fileID: 692960616}
   - 114: {fileID: 692960614}
   - 114: {fileID: 692960615}
+  - 114: {fileID: 692960619}
   m_Layer: 20
   m_Name: Planet-003
   m_TagString: Planet
@@ -7983,6 +8080,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cb456d5b9b09c24498e8668f842b719, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &692960619
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11410220, guid: 90980d702c296ca41a86cf25570b79e8,
+    type: 2}
+  m_PrefabInternal: {fileID: 550507812}
+  m_GameObject: {fileID: 692960612}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: feb5df75da6fb5443951623ec9be4b9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  endDialogIndex: 0
 --- !u!1 &695195562
 GameObject:
   m_ObjectHideFlags: 0
@@ -8219,7 +8329,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 176452071}
         m_MethodName: CompleteMission
         m_Mode: 1
         m_Arguments:
@@ -12613,7 +12723,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 152510426}
         m_MethodName: AcceptMission
         m_Mode: 1
         m_Arguments:
@@ -14018,7 +14128,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 286261959}
         m_MethodName: CompleteMission
         m_Mode: 1
         m_Arguments:
@@ -15105,6 +15215,7 @@ GameObject:
   - 54: {fileID: 1685716339}
   - 114: {fileID: 1685716338}
   - 114: {fileID: 1685716337}
+  - 114: {fileID: 1685716342}
   m_Layer: 20
   m_Name: Planet-008
   m_TagString: Planet
@@ -15199,6 +15310,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cb456d5b9b09c24498e8668f842b719, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1685716342
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11474208, guid: 021f33aab64f0f747a242f5c1ba5db48,
+    type: 2}
+  m_PrefabInternal: {fileID: 20384867}
+  m_GameObject: {fileID: 1685716335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: feb5df75da6fb5443951623ec9be4b9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  endDialogIndex: 0
 --- !u!1 &1689565468
 GameObject:
   m_ObjectHideFlags: 0
@@ -18609,7 +18733,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 329850711}
         m_MethodName: CompleteMission
         m_Mode: 1
         m_Arguments:
@@ -20606,7 +20730,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 692960619}
         m_MethodName: CompleteMission
         m_Mode: 1
         m_Arguments:
@@ -20662,6 +20786,7 @@ GameObject:
   - 54: {fileID: 2089558062}
   - 114: {fileID: 2089558061}
   - 114: {fileID: 2089558060}
+  - 114: {fileID: 2089558065}
   m_Layer: 20
   m_Name: Planet-006
   m_TagString: Planet
@@ -20758,6 +20883,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cb456d5b9b09c24498e8668f842b719, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2089558065
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11419218, guid: 0641a74151cdab8469eb908b60fc6289,
+    type: 2}
+  m_PrefabInternal: {fileID: 1237031513}
+  m_GameObject: {fileID: 2089558058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: feb5df75da6fb5443951623ec9be4b9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  endDialogIndex: 0
 --- !u!1 &2104612273
 GameObject:
   m_ObjectHideFlags: 0
