@@ -108,6 +108,7 @@ public class PlanetUIManager : MonoBehaviour
     public void enableMissionPanel()
     {
         missionPanel.SetActive(true);
+        GetComponent<Planet_Mission>().advanceStartText();
     }
 
     public void disableMissionCompleteButton()
@@ -123,6 +124,7 @@ public class PlanetUIManager : MonoBehaviour
     public void enableMissionCompletePanel()
     {
         missionCompletePanel.SetActive(true);
+        MissionController.Instance.currentMission.advanceEndText();
     }
 
     public void disableMissionCompletePanel()

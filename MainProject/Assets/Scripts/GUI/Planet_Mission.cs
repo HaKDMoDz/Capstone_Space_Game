@@ -55,7 +55,7 @@ public class Planet_Mission : MonoBehaviour
         get { return endDialog; }
         set { endDialog = value; }
     }
-    private int endDialogIndex;
+
     [SerializeField]
     public int rewardAmount;
     public int RewardAmount
@@ -134,14 +134,14 @@ public class Planet_Mission : MonoBehaviour
         MissionController.Instance.currentMission = null;
     }
 
-    private void advanceStartText()
+    public void advanceStartText()
     {
         transform.FindChild("PlanetUI").FindChild("MissionPanel").FindChild("Text").GetComponent<Text>().text = startDialog[startDialogIndex++];
     }
 
-    private void advanceEndText()
+    public void advanceEndText()
     {
-        transform.FindChild("PlanetUI").FindChild("MissionCompletePanel").FindChild("Text").GetComponent<Text>().text = endDialog[startDialogIndex++];
+        endPlanet.transform.FindChild("PlanetUI").FindChild("MissionCompletePanel").FindChild("Text").GetComponent<Text>().text = endDialog[endPlanet.GetComponent<Planet_MissionComplete>().endDialogIndex++];
     }
 
     public void AcceptMission()
