@@ -109,7 +109,6 @@ public class PlayerAttack : MonoBehaviour
     //Waits for the player to select the target ship and target component to fire the selected weapons at
     private IEnumerator WeaponTargetingSequence()
     {
-
         targetShipIndex = 0;
         targetConfirmed = false;
         targetComponent = null;
