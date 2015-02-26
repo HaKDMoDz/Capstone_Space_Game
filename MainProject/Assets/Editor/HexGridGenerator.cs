@@ -22,6 +22,8 @@ public class HexGridGenerator : EditorWindow
     private int tileGridWidth;
     private int tileGridHeight;
 
+    private float compGridHeight = 9.34f;
+
     [MenuItem("Custom/ShipHexGrid/Hex Grid Generator")]
     private static void ShowWindow()
     {
@@ -103,6 +105,7 @@ public class HexGridGenerator : EditorWindow
             DeleteExtraTiles();
         }
         AssignSlotIndices();
+        RaiseGridToHeight();
     }
     private Vector3 GetWorldCoords(int xGridPos, int yGridPos)
     {
@@ -133,6 +136,11 @@ public class HexGridGenerator : EditorWindow
                 tiles.RemoveAt(i);
             }
         }
+        Debug.Log("Generated Component Grid composed of " + tiles.Count + " tiles.");
+    }
+    private void RaiseGridToHeight()
+    {
+        GameObject.Find("ComponentGrid").transform.localPosition = new Vector3(0.0f, compGridHeight, 0.0f);
     }
     private void AssignSlotIndices()
     {
