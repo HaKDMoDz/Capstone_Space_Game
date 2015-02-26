@@ -38,7 +38,8 @@ public class PlayerShip : TurnBasedUnit
     
     
     private List<ShipComponent> selectedComponents = new List<ShipComponent>();
-
+    private ShipComponent targetComponent = null;
+    private AI_Ship targetShip = null;
 
     #endregion Fields   
 
@@ -53,24 +54,21 @@ public class PlayerShip : TurnBasedUnit
     public void Init(ShipBlueprint shipBP, ShipMove shipMove, PlayerAttack playerAttack)
     {
         base.Init(shipBP, shipMove);
-
-        combatInterface = CombatSystemInterface.Instance;
-
         this.playerAttack = playerAttack;
         this.playerAttack.Init();
-
+        combatInterface = CombatSystemInterface.Instance;
         ConfigurePlayerShip();
         
-        InputManager.Instance.RegisterKeysDown(
-            (key) => { componentSelectionOn = false; },
-            KeyCode.Space);
+        //InputManager.Instance.RegisterKeysDown(
+        //    (key) => { componentSelectionOn = false; },
+        //    KeyCode.Space);
 
-        InputManager.Instance.RegisterKeysDown(
-            (key) => { continueTurn = false; },
-           KeyCode.KeypadEnter, KeyCode.Return
-            );
+        //InputManager.Instance.RegisterKeysDown(
+        //    (key) => { continueTurn = false; },
+        //   KeyCode.KeypadEnter, KeyCode.Return
+        //    );
+
         InputManager.Instance.OnMouseMoveEvent += OnMouseMove;
-        
         spaceGround = SpaceGround.Instance;
         foreach (ShipComponent component in components)
         {
@@ -130,23 +128,23 @@ public class PlayerShip : TurnBasedUnit
             }
 
             //if the player has started selecting components
-            if (componentSelectionOn)
-            {
-                ShowMovementUI(false);
-                //lets the player select whatever components he/she wants
-                yield return StartCoroutine(ComponentSelectionSequence());
-                combatInterface.ShowComponentSelectionPanel(false);
-                Debug.Log("activating components");
-                firing = true;
-                //activates the components with a callback when the activation is complete with the power used by components successfully activated
-                yield return StartCoroutine(playerAttack.ActivateComponents(selectedComponents, 
-                    (float activationCost)=> 
-                        {
-                            CurrentPower -= activationCost;
-                        }));
-                firing = false;
-                UnSelectComponents(false);
-            }
+            //if (componentSelectionOn)
+            //{
+            //    ShowMovementUI(false);
+            //    //lets the player select whatever components he/she wants
+            //    yield return StartCoroutine(ComponentSelectionSequence());
+            //    combatInterface.ShowComponentSelectionPanel(false);
+            //    Debug.Log("activating components");
+            //    firing = true;
+            //    //activates the components with a callback when the activation is complete with the power used by components successfully activated
+            //    yield return StartCoroutine(playerAttack.ActivateComponents(selectedComponents, 
+            //        (float activationCost)=> 
+            //            {
+            //                CurrentPower -= activationCost;
+            //            }));
+            //    firing = false;
+            //    UnSelectComponents(false);
+            //}
             receivedMoveCommand = false;
             if(CurrentPower <=0) //end turn
             {
@@ -228,19 +226,17 @@ public class PlayerShip : TurnBasedUnit
     /// Start the component selection sequence - let's the player click on components in the component selection panel
     /// </summary>
     /// <returns></returns>
-    private IEnumerator ComponentSelectionSequence()
-    {
-        Debug.Log("Selecting Components - [Space] to confirm");
-
-        while (componentSelectionOn)
-        {
-            yield return null;
-        }
-        componentSelectionOn = false;
-    }
+    //private IEnumerator ComponentSelectionSequence()
+    //{
+    //    Debug.Log("Selecting Components - [Space] to confirm");
+    //    while (componentSelectionOn)
+    //    {
+    //        yield return null;
+    //    }
+    //    componentSelectionOn = false;
+    //}
     private IEnumerator ComponentSelectionAndTargeting()
     {
-
         //show comp seleciton panel
         combatInterface.ShowComponentSelectionPanel(true);
         //show hotkeys
@@ -255,24 +251,32 @@ public class PlayerShip : TurnBasedUnit
             Debug.LogError("No ai ships found");
         }
         #endif
-        AI_Ship targetShip = aiShips[targetShipIndex];
+        targetShip = aiShips[targetShipIndex];
         Transform aiTargetTrans = targetShip.transform;
         //camera
         yield return StartCoroutine(CameraDirector.Instance.OverheadAimAt(trans, aiTargetTrans, GlobalVars.CameraAimAtPeriod));
         trans.LookAt(aiTargetTrans);
-        TargetShip(targetShip, true);
-
+        ShowTargetingPanel(true);
         InputManager.Instance.RegisterKeysDown(TargetNext, KeyCode.Tab);
         InputManager.Instance.RegisterKeysDown(StopTargetingSequence, KeyCode.Escape);
+
         while(!attackTargetConfirmed)
         {
             if(targetNext)
             {
-                TargetShip(targetShip, false);
+                ShowTargetingPanel(false);
                 targetShipIndex = ++targetShipIndex % numAIShips;
+                targetShip = aiShips[targetShipIndex];
+                ShowTargetingPanel(true);
+                aiTargetTrans = targetShip.transform;
+                yield return StartCoroutine(CameraDirector.Instance.OverheadAimAt(trans, aiTargetTrans, GlobalVars.CameraAimAtPeriod));
+                trans.LookAt(aiTargetTrans);
+                targetNext = false;
             }
+
+            yield return null;
         }
-        TargetShip(targetShip, false);
+        ShowTargetingPanel(false);
         InputManager.Instance.DeregisterKeysDown(TargetNext, KeyCode.Tab);
         InputManager.Instance.DeregisterKeysDown(StopTargetingSequence, KeyCode.Escape);
         //listen for mouse on enemy comps
@@ -283,27 +287,34 @@ public class PlayerShip : TurnBasedUnit
             //activation sequence
         yield return null;
     }
-    private void TargetShip(TurnBasedUnit targetUnit, bool show)
+    private void ShowTargetingPanel(bool show)
     {
-        if(!targetUnit)
+        if(!targetShip)
         {
             return;
         }
         if(show)
         {
-            targetUnit.ShowTargetingPanel(true, trans);
+            targetShip.ShowTargetingPanel(true, trans);
         }
         else
         {
             DisplayLineRenderer(Vector3.zero, false, validColour);//hide line
-            targetUnit.ShowTargetingPanel(false, null);
+            targetShip.ShowTargetingPanel(false, null);
         }
     }
-    private void SubscribeTargetShipComponentEvents(bool subscribe, TurnBasedUnit targetUnit)
+    private void SubscribeTargetShipComponentEvents(bool subscribe)
     {
-        if(subscribe)
+#if FULL_DEBUG
+        if(targetShip==null)
         {
-            foreach (ShipComponent component in targetUnit.Components)
+            Debug.LogError("Target ship is null");
+            return;
+        }
+#endif
+        if (subscribe)
+        {
+            foreach (ShipComponent component in targetShip.Components)
             {
                 component.OnComponentClicked += OnTargetShipComponentClicked;
                 component.OnComponentMouseOver += OnTargetShipComponentMouseOver;
@@ -312,7 +323,7 @@ public class PlayerShip : TurnBasedUnit
         }
         else
         {
-            foreach (ShipComponent component in targetUnit.Components)
+            foreach (ShipComponent component in targetShip.Components)
             {
                 component.OnComponentClicked -= OnTargetShipComponentClicked;
                 component.OnComponentMouseOver -= OnTargetShipComponentMouseOver;
@@ -322,17 +333,69 @@ public class PlayerShip : TurnBasedUnit
     }
     void OnTargetShipComponentClicked(ShipComponent component)
     {
-        
+        #if FULL_DEBUG
+        if(component==null)
+		{
+            Debug.LogError("point click component null")  ;
+        }
+        #endif
+        if(targetComponent)
+        {
+            targetComponent.Selected = false;
+        }
+        targetComponent = GetFirstComponentInDirection(component);
+        targetComponent.Selected = true;
+        attackTargetConfirmed = true;
     }
     void OnTargetShipComponentMouseOver(ShipComponent component)
     {
-        
+        #if FULL_DEBUG
+        if(component==null)
+		{
+            Debug.LogError("point over component null")  ;
+        }
+        #endif
+        if (targetComponent)
+        {
+            targetComponent.Selected = false;
+        }
+        targetComponent = GetFirstComponentInDirection(component);
+        Debug.Log("TargetComp: " + targetComponent);
+
+        DisplayLineRenderer(targetComponent.transform.position, true, validColour);
+        targetComponent.Selected = true;
     }
     void OnTargetShipComponentPointerExit(ShipComponent component)
     {
-
+        #if FULL_DEBUG
+        if(component==null)
+		{
+            Debug.LogError("point exit component null")  ;
+        }
+	    #endif
+        if (targetComponent)
+        {
+            targetComponent.Selected = false;
+        }
+        if (component.Selected)
+        {
+            component.Selected = false;
+        }
     }
-    
+    private ShipComponent GetFirstComponentInDirection(ShipComponent component)
+    {
+        Ray ray = new Ray(trans.position, component.transform.position - trans.position);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, GlobalVars.RayCastRange, 1 << TagsAndLayers.ComponentsLayer))
+        {
+            return hit.collider.GetComponent<ShipComponent>();
+        }
+        return component;
+    }
+    private void AllowEnemyTargeting(bool allow)
+    {
+        SubscribeTargetShipComponentEvents(allow);
+    }
     private void UnSelectComponents(bool resetPower)
     {
         foreach (ShipComponent component in components)
@@ -360,6 +423,7 @@ public class PlayerShip : TurnBasedUnit
                 }
                 selectedComponents.Add(component);
                 component.Selected = true;
+                AllowEnemyTargeting(true);
                 totalActivationCost += component.ActivationCost;
                 combatInterface.ShowPower(CurrentPower - totalActivationCost);
             }
@@ -370,6 +434,10 @@ public class PlayerShip : TurnBasedUnit
             {
                 selectedComponents.Remove(component);
                 component.Selected = false;
+                if(selectedComponents.Count==0)
+                {
+                    AllowEnemyTargeting(false);
+                }
                 totalActivationCost -= component.ActivationCost;
                 combatInterface.ShowPower(CurrentPower - totalActivationCost);
             }
@@ -399,19 +467,19 @@ public class PlayerShip : TurnBasedUnit
 
     void aiShip_OnShipMouseExit(AI_Ship ship)
     {
-        //Debug.Log("Mouse exit " +name);
         combatInterface.ShowAttackCursor(false);
     }
     void aiShip_OnShipMouseEnter(AI_Ship ship)
     {
-        //Debug.Log("Mouse over " + name);
-        combatInterface.ShowAttackCursor(true);
+        if (!startTargetingSequence)
+        {
+            combatInterface.ShowAttackCursor(true);
+        }
     }
     void aiShip_OnShipClick(AI_Ship ship)
     {
-        //Debug.Log("Mouse click " +name);
         combatInterface.ShowAttackCursor(false);
-        componentSelectionOn = true;
+        startTargetingSequence = true;
     }
 
     #region InternalCallbacks
@@ -435,12 +503,6 @@ public class PlayerShip : TurnBasedUnit
     /// <param name="component"></param>
     void OnComponentClicked(ShipComponent component)
     {
-        if(firing)
-        {
-            return;
-        }
-        //Debug.Log("At PlayerShip: "+ component.componentName + " clicked");
-        componentSelectionOn = true;
         SelectComponent(component, !selectedComponents.Contains(component));
     }
 
