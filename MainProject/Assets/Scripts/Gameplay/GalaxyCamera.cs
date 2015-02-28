@@ -38,8 +38,6 @@ public class GalaxyCamera : Singleton<GalaxyCamera>
     }
     private GalaxyCameState state;
 
-    private float epsilon = 0.01f;
-
     //Events
     public delegate void CameraMoveEvent();
     public event CameraMoveEvent OnCameraMove = new CameraMoveEvent(() => { });
@@ -61,7 +59,7 @@ public class GalaxyCamera : Singleton<GalaxyCamera>
         Vector3 targetPos = target.position;
         targetPos.y += 150;
         targetPos.z -= 150 / Mathf.Tan(initialAngleX);
-        yield return StartCoroutine(MoveAndRotate(targetPos, initialRot, 0.5f));
+        yield return StartCoroutine(MoveAndRotate(targetPos, initialRot, 0.35f));
     }
 
     public IEnumerator FollowMothership(Transform ship, bool inSystem)
