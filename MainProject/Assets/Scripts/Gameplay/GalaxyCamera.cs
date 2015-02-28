@@ -2,13 +2,15 @@
 using System.Collections;
 using System.Collections.Generic;
 
+public enum GalaxyCameState {START_TRANS, IN_SPACE, IN_SYSTEM, IN_ORBIT, COMBAT_TRANS}
+
 public class GalaxyCamera : Singleton<GalaxyCamera>
 {
     #region Fields
     
     //EditorExposed
     [SerializeField]
-    private float zoomedOutFarHeight = 75.0f;
+    private float zoomedOutFarHeight = 100.0f;
     [SerializeField]
     private float zoomedOutHeight = 200.0f;
     [SerializeField]
@@ -21,9 +23,22 @@ public class GalaxyCamera : Singleton<GalaxyCamera>
     private Quaternion initialRot;
     private float initialAngleX;
     private float epsilon = 0.01f;
-    private Vector3 target;
 
+    private Vector3 targetPosition;
+    public Vector3 TargetPosition
+    {
+        get { return targetPosition; }
+        set { targetPosition = value; }
+    }
+    private Quaternion targetRotation;
+    public Quaternion TargetRotation
+    {
+        get { return targetRotation; }
+        set { targetRotation = value; }
+    }
+    private GalaxyCameState state;
 
+    private float epsilon = 0.01f;
 
     //Events
     public delegate void CameraMoveEvent();
@@ -33,15 +48,20 @@ public class GalaxyCamera : Singleton<GalaxyCamera>
 
 
     #region Methods
-    public IEnumerator MoveToFocusOn(Transform target)
+    /// <summary>
+    /// FocusOnPlanet zooms out slowly and stays on a fixed point in space. usually a planet
+    /// </summary>
+    /// <param name="target"> the Transform to focus on</param>
+    /// <returns>MoveandRotate</returns>
+    public IEnumerator FocusOnPlanet(Transform target)
     {
         //Debug.Log("MoveToFocusOn called...");
         StopCoroutine("FollowMothership");
         StopCoroutine("MoveAndRotate");
         Vector3 targetPos = target.position;
-        targetPos.y += zoomedOutFarHeight;
-        targetPos.z -= zoomedOutFarHeight / Mathf.Tan(initialAngleX);
-        yield return StartCoroutine(MoveAndRotate(targetPos, initialRot, camFollowPeriod));
+        targetPos.y += 150;
+        targetPos.z -= 150 / Mathf.Tan(initialAngleX);
+        yield return StartCoroutine(MoveAndRotate(targetPos, initialRot, 0.5f));
     }
 
     public IEnumerator FollowMothership(Transform ship, bool inSystem)
@@ -84,7 +104,17 @@ public class GalaxyCamera : Singleton<GalaxyCamera>
         trans = transform;
         initialRot = trans.rotation;
         initialAngleX = Mathf.Deg2Rad * initialRot.eulerAngles.x;
+
+        state = GalaxyCameState.START_TRANS;
     }
     #endregion Methods
+
+    private void Update()
+    {
+
+    }
+
+
+
 
 }

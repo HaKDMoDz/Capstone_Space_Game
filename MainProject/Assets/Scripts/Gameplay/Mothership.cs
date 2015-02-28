@@ -139,7 +139,7 @@ public class Mothership : MonoBehaviour
             StopAllCoroutines();
             StartCoroutine(Orbit());
 
-            StartCoroutine(GalaxyCamera.Instance.MoveToFocusOn(otherTrans));
+            StartCoroutine(GalaxyCamera.Instance.FocusOnPlanet(otherTrans));
 
         }
     }
