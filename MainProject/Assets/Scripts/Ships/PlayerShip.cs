@@ -31,6 +31,7 @@ public class PlayerShip : TurnBasedUnit
     private bool dragging;
     private bool takingTurn = false;
     private bool firing = false;
+    private bool allowingEnemyTargeting = false;
     private float totalActivationCost = 0.0f;
     private Vector3 mousePosOnGround = Vector3.zero;
     private float moveDistance = 0.0f;
@@ -58,23 +59,31 @@ public class PlayerShip : TurnBasedUnit
         this.playerAttack.Init();
         combatInterface = CombatSystemInterface.Instance;
         ConfigurePlayerShip();
-        
-        //InputManager.Instance.RegisterKeysDown(
-        //    (key) => { componentSelectionOn = false; },
-        //    KeyCode.Space);
-
-        //InputManager.Instance.RegisterKeysDown(
-        //    (key) => { continueTurn = false; },
-        //   KeyCode.KeypadEnter, KeyCode.Return
-        //    );
-
-        InputManager.Instance.OnMouseMoveEvent += OnMouseMove;
         spaceGround = SpaceGround.Instance;
-        foreach (ShipComponent component in components)
+        EnableInputEvents(true);
+    }
+    private void EnableInputEvents(bool enable)
+    {
+        if(enable)
         {
-            component.OnComponentClicked += OnComponentClicked;
+            InputManager.Instance.OnMouseMoveEvent += OnMouseMove;
+            InputManager.Instance.RegisterKeysDown(EndTurn, KeyCode.KeypadEnter, KeyCode.Return);
+            foreach (ShipComponent component in components)
+            {
+                component.OnComponentClicked += OnComponentClicked;
+            }
+            spaceGround.OnGroundClick += SpaceGroundClick;
         }
-        spaceGround.OnGroundClick += SpaceGroundClick;
+        else
+        {
+            InputManager.Instance.OnMouseMoveEvent -= OnMouseMove;
+            InputManager.Instance.DeregisterKeysDown(EndTurn, KeyCode.KeypadEnter, KeyCode.Return);
+            foreach (ShipComponent component in components)
+            {
+                component.OnComponentClicked -= OnComponentClicked;
+            }
+            spaceGround.OnGroundClick -= SpaceGroundClick;
+        }
     }
     protected override void PreTurnActions()
     {
@@ -126,25 +135,11 @@ public class PlayerShip : TurnBasedUnit
                 ShowMovementUI(false);
                 yield return StartCoroutine(ComponentSelectionAndTargeting());
             }
-
-            //if the player has started selecting components
-            //if (componentSelectionOn)
-            //{
-            //    ShowMovementUI(false);
-            //    //lets the player select whatever components he/she wants
-            //    yield return StartCoroutine(ComponentSelectionSequence());
-            //    combatInterface.ShowComponentSelectionPanel(false);
-            //    Debug.Log("activating components");
-            //    firing = true;
-            //    //activates the components with a callback when the activation is complete with the power used by components successfully activated
-            //    yield return StartCoroutine(playerAttack.ActivateComponents(selectedComponents, 
-            //        (float activationCost)=> 
-            //            {
-            //                CurrentPower -= activationCost;
-            //            }));
-            //    firing = false;
-            //    UnSelectComponents(false);
-            //}
+            if(targetComponent)
+            {
+                yield return StartCoroutine(ActivateWeapons());
+                EnableInputEvents(true);
+            }//if(targetComponent)
             receivedMoveCommand = false;
             if(CurrentPower <=0) //end turn
             {
@@ -166,6 +161,69 @@ public class PlayerShip : TurnBasedUnit
         combatInterface.ShowStatsPanel(false);
     }
 
+    private IEnumerator ActivateWeapons()
+    {
+        int numWeaponsActivated = 0;
+        float totalPowerUsed = 0.0f;
+        int originalCamCulling = Camera.main.cullingMask;
+        EnableInputEvents(false);
+        DisplayLineRenderer(Vector3.zero, false, validColour);
+        ShowTargetingPanel(false);
+        AllowEnemyTargeting(false);
+        targetComponent.Selected = false;
+        combatInterface.ShowComponentActivationButtons(null, null);
+        //combatInterface.ShowComponentSelectionPanel(false);
+        targetShip.ShowHPBars(true);
+        yield return StartCoroutine(CameraDirector.Instance.ZoomInFromAbove(targetComponent.ParentShip.transform, GlobalVars.CameraAimAtPeriod));
+        Camera.main.cullingMask = originalCamCulling | 1 << TagsAndLayers.ComponentsLayer | 1 << TagsAndLayers.ComponentSlotLayer;
+        trans.LookAt(targetComponent.transform);
+        if (selectedComponents.Any(c => !(c is Component_Weapon)))
+        {
+            Debug.LogError("Not weapon ");
+        }
+        foreach (Component_Weapon weapon in selectedComponents)
+        {
+            if (targetComponent && targetComponent.CompHP > 0.0f)
+            {
+                yield return StartCoroutine(
+                    weapon.Fire(targetComponent,
+                    () =>
+                    {
+                        numWeaponsActivated--;
+                        totalPowerUsed += weapon.ActivationCost;
+                    }));
+                numWeaponsActivated++;
+            }
+        }
+        //waits until all weapons have completed their animation
+        while (numWeaponsActivated > 0)
+        {
+            yield return null;
+        }
+        Camera.main.cullingMask = originalCamCulling;
+        targetShip.ShowHPBars(false);
+        CurrentPower -= totalActivationCost;
+        UnSelectComponents(false);
+        attackTargetConfirmed = false;
+        startTargetingSequence = false;
+        targetComponent = null;
+        yield return StartCoroutine(CameraDirector.Instance.MoveToFocusOn(trans, GlobalVars.CameraMoveToFocusPeriod));
+    }
+    /// <summary>
+    /// Accessed by the GUI button
+    /// </summary>
+    public void EndTurn()
+    {
+        EndTurn(KeyCode.Return);
+    }
+    /// <summary>
+    /// ends the current turn
+    /// </summary>
+    /// <param name="key"></param>
+    public void EndTurn(KeyCode key)
+    {
+        continueTurn = false;
+    }
     /// <summary>
     /// Called by the gui interface to select all components of a given type
     /// </summary>
@@ -277,6 +335,7 @@ public class PlayerShip : TurnBasedUnit
             yield return null;
         }
         ShowTargetingPanel(false);
+        combatInterface.ShowComponentSelectionPanel(false);
         InputManager.Instance.DeregisterKeysDown(TargetNext, KeyCode.Tab);
         InputManager.Instance.DeregisterKeysDown(StopTargetingSequence, KeyCode.Escape);
         //listen for mouse on enemy comps
@@ -311,7 +370,9 @@ public class PlayerShip : TurnBasedUnit
             Debug.LogError("Target ship is null");
             return;
         }
+        Debug.Log("Subscribe: " + subscribe);
 #endif
+        
         if (subscribe)
         {
             foreach (ShipComponent component in targetShip.Components)
@@ -360,7 +421,7 @@ public class PlayerShip : TurnBasedUnit
             targetComponent.Selected = false;
         }
         targetComponent = GetFirstComponentInDirection(component);
-        Debug.Log("TargetComp: " + targetComponent);
+        Debug.Log("TargetComp: " + targetComponent + " from ship " + name);
 
         DisplayLineRenderer(targetComponent.transform.position, true, validColour);
         targetComponent.Selected = true;
@@ -394,6 +455,8 @@ public class PlayerShip : TurnBasedUnit
     }
     private void AllowEnemyTargeting(bool allow)
     {
+        allowingEnemyTargeting = allow;
+        if (!allow) DisplayLineRenderer(Vector3.zero, false, validColour);
         SubscribeTargetShipComponentEvents(allow);
     }
     private void UnSelectComponents(bool resetPower)
@@ -423,7 +486,7 @@ public class PlayerShip : TurnBasedUnit
                 }
                 selectedComponents.Add(component);
                 component.Selected = true;
-                AllowEnemyTargeting(true);
+                if(!allowingEnemyTargeting) AllowEnemyTargeting(true);
                 totalActivationCost += component.ActivationCost;
                 combatInterface.ShowPower(CurrentPower - totalActivationCost);
             }
