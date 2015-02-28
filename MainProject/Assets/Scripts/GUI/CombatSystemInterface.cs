@@ -14,6 +14,7 @@ public struct CombatGUIFields
 {
     //prefabs
     public ButtonWithContent buttonPrefab;
+    public ImageButton imageButtonPrefab;
     public TextExtended textFieldPrefab;
     //canvas
     public RectTransform mainCanvas;
@@ -48,7 +49,8 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
 
     //internal
     private Dictionary<TurnBasedUnit, TextExtended> unit_buttonRect_table = new Dictionary<TurnBasedUnit, TextExtended>();
-    private List<ButtonWithContent> compButtons = new List<ButtonWithContent>();
+    private Dictionary<Type, SpriteName> compType_spriteName_table;// = new Dictionary<Type, SpriteName>();
+    private List<ImageButton> compButtons = new List<ImageButton>();
     private Vector2 attackCursorOffset, defaultCursorOffset;
     //references
     private RectTransform moveCostUITrans;
@@ -80,7 +82,7 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
     /// </summary>
     /// <param name="activationMethod"></param>
     /// <param name="components"></param>
-    public void ShowComponentActivationButtons(UnityAction<Type> activationMethod, IEnumerable<ShipComponent> components)
+    public void ShowComponentHotkeyButtons(UnityAction<Type> activationMethod, IEnumerable<ShipComponent> components)
     {
         for (int i = compButtons.Count - 1; i >= 0; i--)
         {
@@ -97,8 +99,8 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
         foreach (Type type in components.Select(c => c.GetType()).Distinct())
         {
             Type currentType = type;
-            ButtonWithContent buttonClone = Instantiate(guiFields.buttonPrefab) as ButtonWithContent;
-            buttonClone.SetText(components.First(c => c.GetType() == currentType).componentName);
+            ImageButton buttonClone = Instantiate(guiFields.imageButtonPrefab) as ImageButton;
+            buttonClone.SetImage(ResourceManager.GetSprite(compType_spriteName_table[currentType]));
             buttonClone.AddOnClickListener(() => activationMethod(currentType));
             compButtons.Add(buttonClone);
             buttonClone.transform.SetParent(guiFields.compHotkeysParent, false);
@@ -227,9 +229,17 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
         #endif
         HideMoveUI();
 
+        compType_spriteName_table = new Dictionary<Type, SpriteName>() 
+        { 
+            {typeof(Comp_Wpn_Laser),SpriteName.AllLasers},
+            {typeof(Comp_Wpn_Missile), SpriteName.AllMissiles},
+            {typeof(Comp_Wpn_Railgun), SpriteName.AllRailguns}
+        };
+        
         attackCursorOffset = new Vector2(guiFields.attackCursor.width * 0.5f, guiFields.attackCursor.height * 0.5f);
         defaultCursorOffset = new Vector2(guiFields.defaultCursor.width * 0.1f, guiFields.defaultCursor.height * 0.1f);
         ShowAttackCursor(false);
+
     }
     
 

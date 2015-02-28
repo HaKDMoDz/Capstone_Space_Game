@@ -7,7 +7,7 @@ using System;
 #endregion Usings
 
 #region AdditionalStructs
-public enum ImageName
+public enum SpriteName
 {
     Laser,
     AllLasers,
@@ -19,10 +19,10 @@ public enum ImageName
     AllShields
 }
 [Serializable]
-public struct ImageInfo
+public struct SpriteInfo
 {
-    public ImageName imageName;
-    public Texture2D image;
+    public SpriteName spriteName;
+    public Sprite sprite;
 
 }
 public enum Sound
@@ -48,27 +48,27 @@ public class ResourceManager : ScriptableObject
     //EditorExposed
     //Images
     [SerializeField]
-    private List<ImageInfo> imageInfoList;
+    private List<SpriteInfo> spriteInfoList;
     //Sounds
     [SerializeField]
     private List<SoundInfo> soundInfoList;
 
     //Database References
-    static private Dictionary<ImageName, ImageInfo> image_info_table;
+    static private Dictionary<SpriteName, SpriteInfo> sprite_info_table;
     static private Dictionary<Sound, SoundInfo> sound_info_table;
 
-    public static Texture2D GetImage(ImageName imageName)
+    public static Sprite GetSprite(SpriteName spriteName)
     {
 #if FULL_DEBUG
-        ImageInfo imageInfo;
-        if (!image_info_table.TryGetValue(imageName, out imageInfo))
+        SpriteInfo spriteInfo;
+        if (!sprite_info_table.TryGetValue(spriteName, out spriteInfo))
         {
-            Debug.LogError("No image found for " + imageName);
+            Debug.LogError("No image found for " + spriteName);
             return null;
         }
         else
         {
-            return imageInfo.image;
+            return spriteInfo.sprite;
         }
 #else
         return image_info_table[imageName].image;
@@ -92,28 +92,28 @@ public class ResourceManager : ScriptableObject
     {
 #if FULL_DEBUG
         //Images
-        if (imageInfoList == null || imageInfoList.Count == 0)
+        if (spriteInfoList == null || spriteInfoList.Count == 0)
         {
-            Debug.LogError("No images found");
+            Debug.LogError("No sprites found");
             return;
         }
         else
         {
-            image_info_table = imageInfoList.ToDictionary(imageInfo => imageInfo.imageName, imageInfo => imageInfo);
+            sprite_info_table = spriteInfoList.ToDictionary(spriteInfo => spriteInfo.spriteName, spriteInfo => spriteInfo);
         }
         //Sounds
         if (soundInfoList == null || soundInfoList.Count == 0)
         {
-           // Debug.LogError("No sound info found");
+           Debug.LogError("No sound info found");
+           return;
         }
         else
         {
             sound_info_table = soundInfoList.ToDictionary(s => s.sound, s => s);
         }
 #else
-        image_info_table = imageInfoList.ToDictionary(imageInfo => imageInfo.imageName, imageInfo => imageInfo);
+        sprite_info_table = spriteInfoList.ToDictionary(spriteInfo => spriteInfo.spriteName, spriteInfo => spriteInfo);
         sound_info_table = soundInfoList.ToDictionary(s => s.sound, s => s);
-
 #endif
 
     }

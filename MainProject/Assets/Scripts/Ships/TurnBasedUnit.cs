@@ -178,7 +178,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
     /// <param name="hitPoint"></param>
     public void PlayShieldEffect(Vector3 hitPoint)
     {
-        shipShield.gameObject.SetActive(true);
+        //shipShield.gameObject.SetActive(true);
         shipShield.TakeDamage(hitPoint);
     }
     /// <summary>

@@ -24,11 +24,11 @@ public class PlayerShip : TurnBasedUnit
     private bool continueTurn = true;
     private bool registerInput;
     private bool receivedMoveCommand;
-    private bool componentSelectionOn;
+    //private bool componentSelectionOn;
     private bool attackTargetConfirmed = false;
     private bool targetNext = false;
     private bool startTargetingSequence;
-    private bool dragging;
+    //private bool dragging;
     private bool takingTurn = false;
     private bool firing = false;
     private bool allowingEnemyTargeting = false;
@@ -157,7 +157,7 @@ public class PlayerShip : TurnBasedUnit
         SubscribeToAIShipMouseEvents(false);
         //de-activate GUI
         ShowMovementUI(false);
-        combatInterface.ShowComponentActivationButtons(null, null);
+        combatInterface.ShowComponentHotkeyButtons(null, null);
         combatInterface.ShowStatsPanel(false);
     }
 
@@ -171,7 +171,7 @@ public class PlayerShip : TurnBasedUnit
         ShowTargetingPanel(false);
         AllowEnemyTargeting(false);
         targetComponent.Selected = false;
-        combatInterface.ShowComponentActivationButtons(null, null);
+        combatInterface.ShowComponentHotkeyButtons(null, null);
         //combatInterface.ShowComponentSelectionPanel(false);
         targetShip.ShowHPBars(true);
         yield return StartCoroutine(CameraDirector.Instance.ZoomInFromAbove(targetComponent.ParentShip.transform, GlobalVars.CameraAimAtPeriod));
@@ -236,7 +236,7 @@ public class PlayerShip : TurnBasedUnit
         }
         Debug.Log("Activating all " + compType.ToString());
         UnSelectComponents(true);
-        componentSelectionOn = true;
+        //componentSelectionOn = true;
         foreach (ShipComponent component in components.Where(c=>c.GetType()==compType))
         {
             SelectComponent(component, true);
@@ -298,7 +298,7 @@ public class PlayerShip : TurnBasedUnit
         //show comp seleciton panel
         combatInterface.ShowComponentSelectionPanel(true);
         //show hotkeys
-        combatInterface.ShowComponentActivationButtons(SelectAllComponents, components.Where(c => c.CanActivate));
+        combatInterface.ShowComponentHotkeyButtons(SelectAllComponents, components.Where(c => c.CanActivate));
         //show enemy target
         int targetShipIndex = 0;
         List<AI_Ship> aiShips = TurnBasedCombatSystem.Instance.ai_Ships;
@@ -478,7 +478,7 @@ public class PlayerShip : TurnBasedUnit
             if (!selectedComponents.Contains(component))
             {
                 //Debug.Log("select");
-                componentSelectionOn = true;
+                //componentSelectionOn = true;
                 if(CurrentPower - totalActivationCost - component.ActivationCost < 0)
                 {
                     Debug.LogWarning("Not enough power");
