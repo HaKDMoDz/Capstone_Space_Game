@@ -8,6 +8,8 @@ public class GalaxyCamera : Singleton<GalaxyCamera>
     
     //EditorExposed
     [SerializeField]
+    private float zoomedOutFarHeight = 75.0f;
+    [SerializeField]
     private float zoomedOutHeight = 200.0f;
     [SerializeField]
     private float zoomedInHeight = 100.0f;
@@ -18,6 +20,9 @@ public class GalaxyCamera : Singleton<GalaxyCamera>
     private Transform trans;
     private Quaternion initialRot;
     private float initialAngleX;
+    private float epsilon = 0.01f;
+    private Vector3 target;
+
 
 
     //Events
@@ -32,9 +37,10 @@ public class GalaxyCamera : Singleton<GalaxyCamera>
     {
         //Debug.Log("MoveToFocusOn called...");
         StopCoroutine("FollowMothership");
+        StopCoroutine("MoveAndRotate");
         Vector3 targetPos = target.position;
-        targetPos.y += zoomedOutHeight;
-        targetPos.z -= zoomedOutHeight / Mathf.Tan(initialAngleX);
+        targetPos.y += zoomedOutFarHeight;
+        targetPos.z -= zoomedOutFarHeight / Mathf.Tan(initialAngleX);
         yield return StartCoroutine(MoveAndRotate(targetPos, initialRot, camFollowPeriod));
     }
 
@@ -42,6 +48,7 @@ public class GalaxyCamera : Singleton<GalaxyCamera>
     {
 //        Debug.Log("FollowMothershipCalled...");
         StopCoroutine("MoveToFocusOn");
+        //StopCoroutine("MoveAndRotate");
         Vector3 targetPos = ship.position;
         if (inSystem)
         {
@@ -54,15 +61,6 @@ public class GalaxyCamera : Singleton<GalaxyCamera>
             targetPos.z -= zoomedOutHeight / Mathf.Tan(initialAngleX);
         }
         yield return StartCoroutine(MoveAndRotate(targetPos, initialRot, camFollowPeriod));
-    }
-
-    public IEnumerator ZoomInOnSystem(Transform systemTrans)
-    {
-        Vector3 targetPos = systemTrans.position;
-        targetPos.y += zoomedInHeight;
-        targetPos.z -= zoomedInHeight / Mathf.Tan(initialAngleX);
-        yield return StartCoroutine(MoveAndRotate(systemTrans.position,initialRot,GalaxyConfig.SystemAnimationPeriod));
-
     }
 
     private IEnumerator MoveAndRotate(Vector3 destination, Quaternion desiredRot, float period)

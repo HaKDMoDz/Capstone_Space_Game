@@ -184,11 +184,11 @@ public class Mothership : MonoBehaviour
         if (other.tag == TagsAndLayers.PlanetTag && orbitID == other.gameObject.GetComponent<Planet_Dialogue>().ID)
         {
             orbiting = false;
-            moving = true;
+            //moving = true;
             StopCoroutine(Orbit());
-            StartCoroutine(Move());
+            //StartCoroutine(Move());
             StartCoroutine(other.gameObject.GetComponent<PlanetUIManager>().disableUIRing());
-            StartCoroutine(GalaxyCamera.Instance.FollowMothership(trans, false));
+            StartCoroutine(GalaxyCamera.Instance.FollowMothership(trans, inSystem));
         }
     }
     #endregion UnityCallbacks
