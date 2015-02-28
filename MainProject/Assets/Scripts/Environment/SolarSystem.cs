@@ -29,6 +29,8 @@ public class SolarSystem : MonoBehaviour
     private Text systemLabel;
     private SystemObject[] systemObjects;
     private Dictionary<SystemObject, SystemObjectInfo> systemObject_info_table = new Dictionary<SystemObject, SystemObjectInfo>();
+    
+    public bool OnScreen = false;
 
     #endregion Fields
     #region Methods
@@ -97,8 +99,23 @@ public class SolarSystem : MonoBehaviour
     #endregion PrivateMethods
 
     #region UnityCallbacks
+
+    void OnBecameInvisible()
+    {
+        OnScreen = false;
+    }
+
+    void OnBecameVisible()
+    {
+        OnScreen = true;
+    }
+
     private void Awake()
     {
+        if (transform.FindChild("SystemRingGUI").FindChild("Image").renderer.isVisible)
+        {
+            OnScreen = true;
+        }
         systemObjects = GetComponentsInChildren<SystemObject>();
         #if FULL_DEBUG || LOW_DEBUG
         if (systemObjects == null || systemObjects.Length == 0)
@@ -113,8 +130,8 @@ public class SolarSystem : MonoBehaviour
             Debug.LogError("No system label found");
         }
         #endif
-        systemName = systemRingGUI.GetComponentInChildren<Text>().text;
-        
+        //systemName = systemRingGUI.GetComponentInChildren<Text>().text;
+        systemName = gameObject.name;
     }
     private void Start()
     {
@@ -132,7 +149,7 @@ public class SolarSystem : MonoBehaviour
             systemObject_info_table.Add(sysObj, new SystemObjectInfo { scenePosition = sysObjTrans.localPosition, sceneScale = sysObjTrans.localScale });
             sysObjTrans.localPosition = Vector3.zero;
             sysObjTrans.localScale = Vector3.zero;
-            sysObjTrans.gameObject.SetActive(false);    
+            //sysObjTrans.gameObject.SetActive(false);    
         }
     }
     private void OnTriggerEnter(Collider other)

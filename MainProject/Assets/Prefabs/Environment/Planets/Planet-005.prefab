@@ -48,6 +48,7 @@ GameObject:
   - 111: {fileID: 11142578}
   - 114: {fileID: 11442532}
   - 135: {fileID: 13542576}
+  - 114: {fileID: 11444098}
   m_Layer: 20
   m_Name: PlanetObject
   m_TagString: Untagged
@@ -1291,6 +1292,17 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &11444098
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 142544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38b7d8c3b42f4dc4089fe4ac12bd73e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &11477312
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1302,6 +1314,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: feb5df75da6fb5443951623ec9be4b9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  endDialogIndex: 0
 --- !u!135 &13542576
 SphereCollider:
   m_ObjectHideFlags: 1

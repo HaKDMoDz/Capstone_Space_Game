@@ -295,6 +295,7 @@ GameObject:
   - 111: {fileID: 11150840}
   - 114: {fileID: 11450886}
   - 135: {fileID: 13550842}
+  - 114: {fileID: 11466450}
   m_Layer: 20
   m_Name: PlanetObject
   m_TagString: Untagged
@@ -538,6 +539,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: feb5df75da6fb5443951623ec9be4b9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  endDialogIndex: 0
 --- !u!114 &11450840
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1245,6 +1247,17 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &11466450
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 150874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38b7d8c3b42f4dc4089fe4ac12bd73e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!135 &13550840
 SphereCollider:
   m_ObjectHideFlags: 1
