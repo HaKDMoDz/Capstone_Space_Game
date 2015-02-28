@@ -112,7 +112,7 @@ public class SolarSystem : MonoBehaviour
 
     private void Awake()
     {
-        if (transform.FindChild("SystemRingGUI").FindChild("Image").renderer.isVisible)
+        if (renderer.isVisible)
         {
             OnScreen = true;
         }
