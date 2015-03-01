@@ -191,9 +191,10 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
         ButtonWithContent fleetPanel_savedBP_ButtonClone = Instantiate(buttonPrefab) as ButtonWithContent;
         fleetPanel_savedBP_ButtonClone.transform.SetParent(savedBPsParent, false);
         fleetPanel_savedBP_ButtonClone.SetText(fileName);
+        
         fleetPanel_savedBP_ButtonClone.AddOnClickListener(() =>
             {
-                FleetManager.Instance.AddShipToFleet(fileName);
+                //FleetManager.Instance.AddShipToFleet(fileName);
                 AddCurrentFleetButton(fileName);
             });
 

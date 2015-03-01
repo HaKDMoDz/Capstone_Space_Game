@@ -6,10 +6,15 @@ public class FleetManager : Singleton<FleetManager>
 {
 
     #region Fields
-    #region EditorExposed
+    //EditorExposed
     [SerializeField]
     private int maxFleetStrength;
-    #endregion EditorExposed
+    private int currentFleetStrength;
+    public int CurrentFleetStrength
+    {
+        get { return currentFleetStrength; }
+    }
+
     private List<string> currentFleet;
     public List<string> CurrentFleet
     {
@@ -23,17 +28,29 @@ public class FleetManager : Singleton<FleetManager>
             }
         }
     }
+
     
-    public int currentFleetStrength { get; private set; }
 
     #endregion Fields
 
     #region Methods
     #region Public
     #region GUIAccess
-    public void AddShipToFleet(string blueprintName)
+    private void AddShipToFleet(string blueprintName)
     {
         currentFleet.Add(blueprintName);
+    }
+    public bool TryAddShipToFleet(string blueprintName, int shipCost)
+    {
+        if(currentFleetStrength + shipCost > maxFleetStrength)
+        {
+            return false;
+        }
+        else
+        {
+            AddShipToFleet(blueprintName);
+            return true;
+        }
     }
     public void RemoveShipFromFleet(string blueprintName)
     {
