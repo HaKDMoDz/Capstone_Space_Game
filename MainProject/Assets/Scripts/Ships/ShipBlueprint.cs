@@ -112,7 +112,11 @@ public class ShipBlueprint
         //slot.InstalledComponent = null;
 #endif
     }//RemoveComponent
-
+    public bool IsValid()
+    {
+        GenerateMetaData();
+        return (metaData.ExcessPower > 0.0f && metaData.MoveCost > 0.0f);
+    }
     public void GenerateMetaData()
     {
         metaData.ExcessPower = CalculateExcessPower();

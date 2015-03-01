@@ -47,6 +47,22 @@ public class ShipStatsPanel : MonoBehaviour
         SetBlueprintName(blueprintName);
         ExcessPower = excessPower;
         Thrust = thrust;
+        if(ExcessPower<=0.0f)
+        {
+            excessPowerText.color = Color.red;
+        }
+        else
+        {
+            excessPowerText.color = Color.white;
+        }
+        if(Thrust <= 0.0f)
+        {
+            thrustText.color = Color.red;
+        }
+        else
+        {
+            thrustText.color = Color.white;
+        }
     }
 
 }

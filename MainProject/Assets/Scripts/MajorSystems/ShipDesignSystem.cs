@@ -89,8 +89,10 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
             #endif
             AddComponentToScene(slot, component);
             blueprintBeingBuilt.AddComponent(slot, component);
-            blueprintBeingBuilt.GenerateMetaData();
+            //blueprintBeingBuilt.GenerateMetaData();
+            if (blueprintBeingBuilt.IsValid()) ShipDesignInterface.Instance.AllowSaving(true);
             ShipDesignInterface.Instance.UpdateStatsPanel(blueprintBeingBuilt.MetaData);
+            
         }
         else
         {

@@ -57,7 +57,11 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     //modal box
     [SerializeField]
     private ModalPanel modalPanel;
-
+    //Save button
+    [SerializeField]
+    private Button saveButton;
+    [SerializeField]
+    private Image saveButtonImage;
 
     //Internal
     private Dictionary<string, List<GameObject>> blueprintName_button_table;
@@ -77,6 +81,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     {
         blueprintName_button_table = new Dictionary<string, List<GameObject>>();
         shipDesignSystem = ShipDesignSystem.Instance;
+        AllowSaving(false);
     }
 
     #endregion UnityCallbacks
@@ -467,7 +472,18 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
         }
         statsPanel.UpdateStats(shipBPMetaData.BlueprintName, shipBPMetaData.ExcessPower, shipBPMetaData.MoveCost);
     }
-
+    public void AllowSaving(bool allow)
+    {
+        saveButton.interactable = allow;
+        if(allow)
+        {
+            saveButtonImage.color = saveButtonImage.color.WithAplha(1.0f);
+        }
+        else
+        {
+            saveButtonImage.color = saveButtonImage.color.WithAplha(0.25f);
+        }
+    }
     #endregion GUIAccess
 
     #region DesignSystemAccess
@@ -498,7 +514,6 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     /// <param name="fileName"></param>
     private void SaveBlueprint(string fileName)
     {
-        
         Debug.Log("Saving " + fileName);
         if(shipDesignSystem.FileExists(fileName))
         {
@@ -527,6 +542,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     private void LoadBlueprint(string fileName)
     {
         ClearGUI();
+        AllowSaving(false);
         shipDesignSystem.LoadBlueprint(fileName);
         ShowStatsPanel(true);
         ShowComponentPanel();
@@ -565,6 +581,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     public void ClearScreen()
     {
         ClearGUI();
+        AllowSaving(false);
         ShowStatsPanel(false);
         shipDesignSystem.ClearScreen();
         ShowHullPanel();
