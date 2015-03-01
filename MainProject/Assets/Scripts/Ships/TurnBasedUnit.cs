@@ -61,7 +61,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
         protected set 
         { 
             currentPower = value;
-            CombatSystemInterface.Instance.ShowPower(CurrentPower); 
+            CombatSystemInterface.Instance.UpdateStats(CurrentPower, MoveCost); 
         }
     }
 
@@ -264,7 +264,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
 
     public void ShowHPBars(bool show)
     {
-        Debug.Log("HP bars: " + show);
+        //Debug.Log("HP bars: " + show);
         hpBar.gameObject.SetActive(show);
         shieldBar.gameObject.SetActive(show);
     }
@@ -329,18 +329,20 @@ public abstract class TurnBasedUnit : MonoBehaviour
         maxPower = ShipBPMetaData.ExcessPower;
         currentPower = MaxPower;
 
-        int numThrusters = components.Count(c => c is Comp_Eng_Thruster);
-        #if FULL_DEBUG || LOW_DEBUG
-        if (numThrusters <= 0)
-        {
-            Debug.LogError("No Thrusters on Ship");
-        }
-        #endif
-        
-        float thrust = ((Comp_Eng_Thruster)components.Find(c => c is Comp_Eng_Thruster)).Thrust;
-        float totalThrust = thrust * numThrusters;
-        int mass = shipBP.Hull.EmptyComponentGrid.Count;
-        MoveCost = mass / totalThrust * 1.5f;
+//        int numThrusters = components.Count(c => c is Comp_Eng_Thruster);
+//#if FULL_DEBUG || LOW_DEBUG
+//        if (numThrusters <= 0)
+//        {
+//            Debug.LogError("No Thrusters on Ship");
+//        }
+//#endif
+
+//        float thrust = ((Comp_Eng_Thruster)components.Find(c => c is Comp_Eng_Thruster)).Thrust;
+//        float totalThrust = thrust * numThrusters;
+//        int mass = shipBP.Hull.EmptyComponentGrid.Count;
+//        MoveCost = mass / totalThrust * 1.5f;
+        MoveCost = shipBPMetaData.MoveCost;
+        Debug.Log("Move cost " + MoveCost);
     }
 
     private void InitReferences()

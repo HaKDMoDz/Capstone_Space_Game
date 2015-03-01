@@ -95,7 +95,7 @@ public class PlayerShip : TurnBasedUnit
         combatInterface.EnableComponentSelectionPanel(true);
         combatInterface.ShowStatsPanel(true);
         //combatInterface.ShowComponentActivationButtons(SelectAllComponents, components.Where(c => c.CanActivate));
-        combatInterface.ShowPower(CurrentPower);
+        combatInterface.UpdateStats(CurrentPower, MoveCost);
     }
     /// <summary>
     /// Starts the turn for the player ship. Starts listening for commands to move or to activate components
@@ -158,6 +158,7 @@ public class PlayerShip : TurnBasedUnit
         SubscribeToAIShipMouseEvents(false);
         //de-activate GUI
         ShowMovementUI(false);
+        DisplayLineRenderer(Vector3.zero, false, validColour);
         combatInterface.ShowComponentHotkeyButtons(null, null);
         combatInterface.ShowStatsPanel(false);
     }
@@ -488,7 +489,7 @@ public class PlayerShip : TurnBasedUnit
                 component.Selected = true;
                 if(!allowingEnemyTargeting) AllowEnemyTargeting(true);
                 totalActivationCost += component.ActivationCost;
-                combatInterface.ShowPower(CurrentPower - totalActivationCost);
+                combatInterface.UpdateStats(CurrentPower - totalActivationCost, MoveCost);
             }
         }
         else //de-select
@@ -502,7 +503,7 @@ public class PlayerShip : TurnBasedUnit
                     AllowEnemyTargeting(false);
                 }
                 totalActivationCost -= component.ActivationCost;
-                combatInterface.ShowPower(CurrentPower - totalActivationCost);
+                combatInterface.UpdateStats(CurrentPower - totalActivationCost, MoveCost);
             }
         }
     }//SelectComponent

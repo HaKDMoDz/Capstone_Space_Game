@@ -126,16 +126,16 @@ public class GameSaveSystem
     /// Should call AnySavesExist first, to validate
     /// </summary>
     /// <param name="gameData"></param>
-    public void LoadLatestSave(ref GameData gameData)
+    public bool LoadLatestSave(ref GameData gameData)
     {
         #if FULL_DEBUG || LOW_DEBUG
         if(!AnySavesExist())
         {
-            Debug.LogError("No saves exist");
-            return;
+            Debug.LogWarning("No saves exist");
+            return false;
         }
 	    #endif
-        Load(ref gameData, savesList.latestSaveGame.fileName);
+        return Load(ref gameData, savesList.latestSaveGame.fileName);
     }
 
     /// <summary>

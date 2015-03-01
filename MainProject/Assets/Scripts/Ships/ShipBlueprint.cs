@@ -116,6 +116,7 @@ public class ShipBlueprint
     public void GenerateMetaData()
     {
         metaData.ExcessPower = CalculateExcessPower();
+        metaData.MoveCost = CalculateMoveCost();
     }
 
     public void GenerateMetaData(string blueprintName)
@@ -132,6 +133,20 @@ public class ShipBlueprint
             excessPower -= component.PowerDrain;
         }
         return excessPower;
+    }
+    public float CalculateMoveCost()
+    {
+        int numThrusters = slot_component_table.Values.Count(c => c is Comp_Eng_Thruster);
+        #if FULL_DEBUG || LOW_DEBUG
+        if (numThrusters <= 0)
+        {
+            return 0.0f;
+        }
+        #endif
+        float thrust = ((Comp_Eng_Thruster)(slot_component_table.Values).FirstOrDefault(c => c is Comp_Eng_Thruster)).Thrust;
+        float totalThrust = thrust * numThrusters;
+        int mass = Hull.EmptyComponentGrid.Count;
+        return (mass / totalThrust * 1.5f);
     }
     public void Clear()
     {
@@ -172,25 +187,30 @@ public class ShipBlueprintMetaData
     }
     //public string BlueprintName;
     public float ExcessPower;
+    public float MoveCost;
 
     public ShipBlueprintMetaData()
     {
         Reset();
     }
-    public ShipBlueprintMetaData(string blueprintName, float excessPower)
+    public ShipBlueprintMetaData(string blueprintName, float excessPower, float moveCost)
     {
         this.BlueprintName = blueprintName;
         this.ExcessPower = excessPower;
+        this.MoveCost = moveCost;
     }
     public ShipBlueprintMetaData(ShipBlueprintMetaData metaData)
     {
         this.BlueprintName = metaData.BlueprintName;
         this.ExcessPower = metaData.ExcessPower;
+        this.MoveCost = metaData.MoveCost;
     }
     public void Reset()
     {
+        //Debug.Log("Rest meta data");
         BlueprintName = "";
         ExcessPower = 0.0f;
+        MoveCost = 0.0f;
     }
 }
 #if FULL_DEBUG || LOW_DEBUG

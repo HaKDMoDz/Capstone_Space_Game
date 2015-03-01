@@ -29,6 +29,7 @@ public struct CombatGUIFields
     //stats panel
     public GameObject statsPanel;
     public Text powerText;
+    public Text moveCostText;
     //move UI
     public GameObject moveUI;
     public Text moveDistance;
@@ -120,7 +121,7 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
         //moveCostUITrans.anchorMax = viewPortPos;
         moveCostUITrans.anchoredPosition = viewPortPos - guiFields.mainCanvas.sizeDelta*0.5f;
         //moveCostUITrans.position = position;
-        guiFields.moveDistance.text = distance.ToString("0 m");
+        guiFields.moveDistance.text = distance.ToString("0 u");
         guiFields.movePowerCost.text = powerCost.ToString("0") ;
         guiFields.moveUI.SetActive(true);
     }
@@ -132,20 +133,21 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
         guiFields.moveUI.SetActive(false);
     }
 
-    //public void UpdateStats(TurnBasedUnit unit)
-    //{
-    //    //Debug.Log("Current power = " + unit.CurrentPower);
-    //    guiFields.powerText.text = unit.CurrentPower.ToString();
-    //}
+    public void UpdateStats(float currentPower, float moveCost)
+    {
+        //Debug.Log("Current power = " + unit.CurrentPower);
+        guiFields.powerText.text = currentPower.ToString();
+        guiFields.moveCostText.text = moveCost.ToString("0.00");
+    }
 
     /// <summary>
     /// Shows the power to be displayed on the GUI
     /// </summary>
     /// <param name="currentPower"></param>
-    public void ShowPower(float currentPower)
-    {
-        guiFields.powerText.text = currentPower.ToString();
-    }
+    //public void ShowPower(float currentPower)
+    //{
+    //    guiFields.powerText.text = currentPower.ToString();
+    //}
     #endregion GUISetup
     
     public void ShowAttackCursor(bool show)

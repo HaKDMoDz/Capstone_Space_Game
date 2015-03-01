@@ -9,7 +9,8 @@ public class ShipStatsPanel : MonoBehaviour
     private InputField inputField;
     [SerializeField]
     private Text excessPowerText;
-
+    [SerializeField]
+    private Text thrustText;
     
     private float excessPower=0.0f;
     public float ExcessPower
@@ -21,6 +22,17 @@ public class ShipStatsPanel : MonoBehaviour
             excessPowerText.text = excessPower.ToString();
         }
     }
+    private float thrust = 0.0f;
+    public float Thrust
+    {
+        get { return thrust; }
+        set 
+        { 
+            thrust = value;
+            thrustText.text = thrust.ToString("0.000");
+        }
+    }
+    
 
     public string GetBlueprintName()
     {
@@ -30,10 +42,11 @@ public class ShipStatsPanel : MonoBehaviour
     {
         inputField.text = bpName;
     }
-    public void UpdateStats(string blueprintName, float excessPower)
+    public void UpdateStats(string blueprintName, float excessPower, float thrust)
     {
         SetBlueprintName(blueprintName);
         ExcessPower = excessPower;
+        Thrust = thrust;
     }
 
 }

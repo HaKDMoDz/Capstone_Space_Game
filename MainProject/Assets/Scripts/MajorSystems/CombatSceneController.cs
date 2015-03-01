@@ -46,13 +46,7 @@ public class CombatSceneController : Singleton<CombatSceneController>
         }
 	    #endif
 
-        #if FULL_DEBUG
-        //if (pirateFleetData.currentFleet_BlueprintNames.Count == 0)
-        //{
-        //    Debug.LogError("Empty enemy fleet");
-        //}
-        #endif
-
+        
         /////positioning ships automatically for now
         Vector3 spawnPos = new Vector3(0, 0, -100);
         Vector3 aiSpawnPos = new Vector3(0,0,100);
@@ -70,6 +64,13 @@ public class CombatSceneController : Singleton<CombatSceneController>
             spawnPos.x += spawnSpacing;
         }
 
+        #if FULL_DEBUG
+        if (pirateFleetData.currentFleet_BlueprintNames.Count == 0)
+        {
+            Debug.LogWarning("Empty enemy fleet - spawning default fleet");
+            pirateFleetData.currentFleet_BlueprintNames = new List<string>() { "AI_Corvette", "AI_Frigate" };
+        }
+        #endif
 
         foreach (string bpTemplateName in pirateFleetData.currentFleet_BlueprintNames)
         {

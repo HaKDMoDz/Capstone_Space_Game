@@ -139,6 +139,7 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
         #endif
         playerFleetData.currentFleet_BlueprintNames = FleetManager.Instance.CurrentFleet;
         GameController.Instance.GameData.playerFleetData = playerFleetData;
+        GameController.Instance.QuickSave();
     }
 
     #region SaveSystemInterface 

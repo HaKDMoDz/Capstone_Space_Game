@@ -136,7 +136,6 @@ public class GameController : Singleton<GameController>
         saveSystem.LoadLatestSave(ref gameData);
         ChangeScene(gameData.prevScene);
     }
-    
     #endregion SaveSystemInterface
     #endregion //Public
 
@@ -167,7 +166,7 @@ public class GameController : Singleton<GameController>
         else
         {
             //attempt to load the latest autosave
-            if (saveSystem.LoadAutoSave(ref gameData))
+            if (saveSystem.LoadLatestSave(ref gameData))
             {
                 #if FULL_DEBUG
                 Debug.Log("Game Data loaded successfully");
@@ -252,14 +251,12 @@ public class GameController : Singleton<GameController>
     /// <summary>
     /// Performs a quicksave of the current game state
     /// </summary>
-    private void QuickSave()
+    public void QuickSave()
     {
         #if FULL_DEBUG
         Debug.Log("quick save");
         #endif
-
         saveSystem.QuickSave(gameData);
-
     }
     private void QuickLoad()
     {

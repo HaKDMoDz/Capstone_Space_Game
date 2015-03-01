@@ -395,6 +395,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
             saveDialogueBox.gameObject.SetActive(true);
             EventSystem.current.SetSelectedGameObject(saveDialogueBox.InputFieldEx.gameObject);
             saveDialogueBox.GetInputField().ActivateInputField();
+            saveDialogueBox.GetInputField().text = statsPanel.GetBlueprintName();
         }
 #if FULL_DEBUG
         else
@@ -464,7 +465,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
         {
             ShowStatsPanel(true);
         }
-        statsPanel.UpdateStats(shipBPMetaData.BlueprintName, shipBPMetaData.ExcessPower);
+        statsPanel.UpdateStats(shipBPMetaData.BlueprintName, shipBPMetaData.ExcessPower, shipBPMetaData.MoveCost);
     }
 
     #endregion GUIAccess

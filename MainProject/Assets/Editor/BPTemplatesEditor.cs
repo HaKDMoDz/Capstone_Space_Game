@@ -48,6 +48,7 @@ public class BPTemplatesEditor : Editor
             {
                 EditorGUILayout.Space();
                 EditorGUILayout.TextField("Excess Power: ", bp.MetaData.ExcessPower.ToString());
+                EditorGUILayout.TextField("Move Cost: ", bp.MetaData.MoveCost.ToString());
                 EditorGUILayout.LabelField("Component List:");
                 EditorGUILayout.LabelField("Slot Index          Component");
                 foreach (var slotIndex_comp in bp.SlotIndex_Comp_List.OrderBy(s=>s.slotIndex))
