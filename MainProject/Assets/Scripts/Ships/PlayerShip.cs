@@ -28,6 +28,7 @@ public class PlayerShip : TurnBasedUnit
     private bool attackTargetConfirmed = false;
     private bool targetNext = false;
     private bool startTargetingSequence;
+    private bool stopTargetingSequence=false;
     //private bool dragging;
     private bool takingTurn = false;
     private bool firing = false;
@@ -160,7 +161,67 @@ public class PlayerShip : TurnBasedUnit
         combatInterface.ShowComponentHotkeyButtons(null, null);
         combatInterface.ShowStatsPanel(false);
     }
+    private IEnumerator ComponentSelectionAndTargeting()
+    {
+        //show comp seleciton panel
+        combatInterface.ShowComponentSelectionPanel(true);
+        //show hotkeys
+        combatInterface.ShowComponentHotkeyButtons(SelectAllComponents, components.Where(c => c.CanActivate));
+        //stop listening to mouse events on ai ships
+        SubscribeToAIShipMouseEvents(false);
+        //show enemy target
+        int targetShipIndex = 0;
+        List<AI_Ship> aiShips = TurnBasedCombatSystem.Instance.ai_Ships;
+        int numAIShips = aiShips.Count;
+#if !NO_DEBUG
+        if (numAIShips == 0)
+        {
+            Debug.LogError("No ai ships found");
+        }
+#endif
+        //targetShip = aiShips[targetShipIndex];
+        targetShipIndex = aiShips.IndexOf(targetShip);
+        Transform aiTargetTrans = targetShip.transform;
+        //camera
+        yield return StartCoroutine(CameraDirector.Instance.OverheadAimAt(trans, aiTargetTrans, GlobalVars.CameraAimAtPeriod));
+        trans.LookAt(aiTargetTrans);
+        ShowTargetingPanel(true);
+        InputManager.Instance.RegisterKeysDown(TargetNext, KeyCode.Tab);
+        InputManager.Instance.RegisterKeysDown(StopTargetingSequence, KeyCode.Escape);
 
+        while (!attackTargetConfirmed)
+        {
+            if (stopTargetingSequence)
+            {
+                startTargetingSequence = false;
+                stopTargetingSequence = false;
+                targetComponent = null;
+                ShowTargetingPanel(false);
+                combatInterface.ShowComponentSelectionPanel(false);
+                InputManager.Instance.DeregisterKeysDown(TargetNext, KeyCode.Tab);
+                InputManager.Instance.DeregisterKeysDown(StopTargetingSequence, KeyCode.Escape);
+                yield return StartCoroutine(CameraDirector.Instance.MoveToFocusOn(trans, GlobalVars.CameraMoveToFocusPeriod));
+                break;
+            }
+            if (targetNext)
+            {
+                ShowTargetingPanel(false);
+                targetShipIndex = ++targetShipIndex % numAIShips;
+                targetShip = aiShips[targetShipIndex];
+                ShowTargetingPanel(true);
+                aiTargetTrans = targetShip.transform;
+                yield return StartCoroutine(CameraDirector.Instance.OverheadAimAt(trans, aiTargetTrans, GlobalVars.CameraAimAtPeriod));
+                trans.LookAt(aiTargetTrans);
+                targetNext = false;
+            }
+            yield return null;
+        }
+        ShowTargetingPanel(false);
+        SubscribeToAIShipMouseEvents(true);
+        combatInterface.ShowComponentSelectionPanel(false);
+        InputManager.Instance.DeregisterKeysDown(TargetNext, KeyCode.Tab);
+        InputManager.Instance.DeregisterKeysDown(StopTargetingSequence, KeyCode.Escape);
+    }
     private IEnumerator ActivateWeapons()
     {
         int numWeaponsActivated = 0;
@@ -175,8 +236,8 @@ public class PlayerShip : TurnBasedUnit
         combatInterface.ShowComponentHotkeyButtons(null, null);
         //combatInterface.ShowComponentSelectionPanel(false);
         targetShip.ShowHPBars(true);
-        yield return StartCoroutine(CameraDirector.Instance.ZoomInFromAbove(targetComponent.ParentShip.transform, GlobalVars.CameraAimAtPeriod));
         Camera.main.cullingMask = originalCamCulling | 1 << TagsAndLayers.ComponentsLayer | 1 << TagsAndLayers.ComponentSlotLayer;
+        yield return StartCoroutine(CameraDirector.Instance.ZoomInFromAbove(targetComponent.ParentShip.transform, GlobalVars.CameraAimAtPeriod));
         trans.LookAt(targetComponent.transform);
         if (selectedComponents.Any(c => !(c is Component_Weapon)))
         {
@@ -250,8 +311,10 @@ public class PlayerShip : TurnBasedUnit
     }
     public void StopTargetingSequence(KeyCode key)
     {
-        attackTargetConfirmed = true;
+        stopTargetingSequence = true;
     }
+    
+
     #endregion PublicMethods
 
 
@@ -282,70 +345,7 @@ public class PlayerShip : TurnBasedUnit
         //TODO: check collision
     }
     
-    /// <summary>
-    /// Start the component selection sequence - let's the player click on components in the component selection panel
-    /// </summary>
-    /// <returns></returns>
-    //private IEnumerator ComponentSelectionSequence()
-    //{
-    //    Debug.Log("Selecting Components - [Space] to confirm");
-    //    while (componentSelectionOn)
-    //    {
-    //        yield return null;
-    //    }
-    //    componentSelectionOn = false;
-    //}
-    private IEnumerator ComponentSelectionAndTargeting()
-    {
-        //show comp seleciton panel
-        combatInterface.ShowComponentSelectionPanel(true);
-        //show hotkeys
-        combatInterface.ShowComponentHotkeyButtons(SelectAllComponents, components.Where(c => c.CanActivate));
-        //stop listening to mouse events on ai ships
-        SubscribeToAIShipMouseEvents(false);
-        //show enemy target
-        int targetShipIndex = 0;
-        List<AI_Ship> aiShips = TurnBasedCombatSystem.Instance.ai_Ships;
-        int numAIShips = aiShips.Count;
-        #if !NO_DEBUG
-        if (numAIShips == 0)
-        {
-            Debug.LogError("No ai ships found");
-        }
-        #endif
-        //targetShip = aiShips[targetShipIndex];
-        targetShipIndex = aiShips.IndexOf(targetShip);
-        Transform aiTargetTrans = targetShip.transform;
-        //camera
-        yield return StartCoroutine(CameraDirector.Instance.OverheadAimAt(trans, aiTargetTrans, GlobalVars.CameraAimAtPeriod));
-        trans.LookAt(aiTargetTrans);
-        ShowTargetingPanel(true);
-        InputManager.Instance.RegisterKeysDown(TargetNext, KeyCode.Tab);
-        InputManager.Instance.RegisterKeysDown(StopTargetingSequence, KeyCode.Escape);
-
-        while(!attackTargetConfirmed)
-        {
-            if(targetNext)
-            {
-                ShowTargetingPanel(false);
-                targetShipIndex = ++targetShipIndex % numAIShips;
-                targetShip = aiShips[targetShipIndex];
-                ShowTargetingPanel(true);
-                aiTargetTrans = targetShip.transform;
-                yield return StartCoroutine(CameraDirector.Instance.OverheadAimAt(trans, aiTargetTrans, GlobalVars.CameraAimAtPeriod));
-                trans.LookAt(aiTargetTrans);
-                targetNext = false;
-            }
-
-            yield return null;
-        }
-        ShowTargetingPanel(false);
-        SubscribeToAIShipMouseEvents(true);
-        combatInterface.ShowComponentSelectionPanel(false);
-        InputManager.Instance.DeregisterKeysDown(TargetNext, KeyCode.Tab);
-        InputManager.Instance.DeregisterKeysDown(StopTargetingSequence, KeyCode.Escape);
-        
-    }
+   
     private void ShowTargetingPanel(bool show)
     {
         if(!targetShip)
