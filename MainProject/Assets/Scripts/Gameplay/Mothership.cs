@@ -39,8 +39,11 @@ public class Mothership : MonoBehaviour
     #region PrivateMethods
     private IEnumerator Move()
     {
+        
+        
         if (!orbiting)
         {
+            
             Vector3 moveDir;
             moving = true;
             moveDir = destination - trans.position;
@@ -53,7 +56,8 @@ public class Mothership : MonoBehaviour
                     trans.LookAt(destination);
                     trans.position += moveDirNorm * moveSpeed * Time.deltaTime;
                     moveDir = destination - trans.position;
-                    StartCoroutine(GalaxyCamera.Instance.FollowMothership(trans, inSystem));
+                    //StartCoroutine(GalaxyCamera.Instance.FollowMothership(trans, inSystem));
+                    GalaxyCamera.Instance.targetMothership();
                     yield return null;
 
                 }
@@ -62,7 +66,8 @@ public class Mothership : MonoBehaviour
             {
                 trans.LookAt(destination);
                 trans.position = Vector3.Lerp(trans.position, destination, moveSpeed*.01f * Time.deltaTime);
-                StartCoroutine(GalaxyCamera.Instance.FollowMothership(trans, inSystem));
+                //StartCoroutine(GalaxyCamera.Instance.FollowMothership(trans, inSystem));
+                GalaxyCamera.Instance.targetMothership();
                 moveDir = destination - trans.position;
                 yield return null;
             }
@@ -86,7 +91,6 @@ public class Mothership : MonoBehaviour
                 trans.LookAt(destination);
                 trans.position += moveDirNorm * moveSpeed * Time.deltaTime;
                 moveDir = destination - trans.position;
-                //StartCoroutine(GalaxyCamera.Instance.FollowMothership(trans, inSystem));
                 yield return null;
 
             }
@@ -95,7 +99,6 @@ public class Mothership : MonoBehaviour
         {
             trans.LookAt(destination);
             trans.position = Vector3.Lerp(trans.position, destination, moveSpeed * .01f * Time.deltaTime);
-            //StartCoroutine(GalaxyCamera.Instance.FollowMothership(trans, inSystem));
             moveDir = destination - trans.position;
             yield return null;
         }
@@ -110,7 +113,7 @@ public class Mothership : MonoBehaviour
     {
         spaceGround.OnGroundClick += OnGroundClick;
         spaceGround.OnGroundHold += OnGroundClick;
-        StartCoroutine(GalaxyCamera.Instance.FollowMothership(trans, false));
+        GalaxyCamera.Instance.targetMothership();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -139,7 +142,8 @@ public class Mothership : MonoBehaviour
             StopAllCoroutines();
             StartCoroutine(Orbit());
 
-            StartCoroutine(GalaxyCamera.Instance.FocusOnPlanet(otherTrans));
+            //StartCoroutine(GalaxyCamera.Instance.FocusOnPlanet(otherTrans));
+            GalaxyCamera.Instance.targetPlanet(otherTrans);
 
         }
     }
@@ -177,6 +181,7 @@ public class Mothership : MonoBehaviour
         if (other.tag == TagsAndLayers.SolarSystemTag)
         {
             inSystem = false;
+            GalaxyCamera.Instance.targetMothership();
 #if FULL_DEBUG
             //Debug.Log("In System: " + inSystem);
 #endif
@@ -188,7 +193,8 @@ public class Mothership : MonoBehaviour
             StopCoroutine(Orbit());
             //StartCoroutine(Move());
             StartCoroutine(other.gameObject.GetComponent<PlanetUIManager>().disableUIRing());
-            StartCoroutine(GalaxyCamera.Instance.FollowMothership(trans, inSystem));
+            //StartCoroutine(GalaxyCamera.Instance.FollowMothership(trans, inSystem));
+            GalaxyCamera.Instance.targetMothership();
         }
     }
     #endregion UnityCallbacks

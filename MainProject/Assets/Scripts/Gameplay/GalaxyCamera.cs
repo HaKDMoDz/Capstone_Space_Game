@@ -2,7 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public enum GalaxyCameState {START_TRANS, IN_SPACE, IN_SYSTEM, IN_ORBIT, COMBAT_TRANS}
+public enum CamTarget {MOTHERSHIP, TARGET_PLANET }
+public enum CamZoomLevel { SPACE_ZOOM, SYSTEM_ZOOM, PLANET_ZOOM }
 
 public class GalaxyCamera : Singleton<GalaxyCamera>
 {
@@ -10,11 +11,11 @@ public class GalaxyCamera : Singleton<GalaxyCamera>
     
     //EditorExposed
     [SerializeField]
-    private float zoomedOutFarHeight = 100.0f;
+    private float orbitZoomHeight = 120.0f;
     [SerializeField]
-    private float zoomedOutHeight = 200.0f;
+    private float spaceZoomHeight = 1000.00f;
     [SerializeField]
-    private float zoomedInHeight = 100.0f;
+    private float systemZoomHeight = 100.0f;
     [SerializeField]
     private float camFollowPeriod = 0.1f;
 
@@ -23,6 +24,9 @@ public class GalaxyCamera : Singleton<GalaxyCamera>
     private Quaternion initialRot;
     private float initialAngleX;
     private float epsilon = 0.01f;
+
+    public GameObject mothership;
+    public GameObject currentTarget;
 
     private Vector3 targetPosition;
     public Vector3 TargetPosition
@@ -36,7 +40,20 @@ public class GalaxyCamera : Singleton<GalaxyCamera>
         get { return targetRotation; }
         set { targetRotation = value; }
     }
-    private GalaxyCameState state;
+    private CamTarget targetType;
+    public CamTarget TargetType
+    {
+        get { return targetType; }
+        set { targetType = value; }
+    }
+    private CamZoomLevel zoomLevel;
+    public CamZoomLevel ZoomLevel
+    {
+        get { return zoomLevel; }
+        set { zoomLevel = value; }
+    }
+
+    private float currentZoom;
 
     //Events
     public delegate void CameraMoveEvent();
@@ -44,57 +61,23 @@ public class GalaxyCamera : Singleton<GalaxyCamera>
 
     #endregion Fields
 
-
     #region Methods
-    /// <summary>
-    /// FocusOnPlanet zooms out slowly and stays on a fixed point in space. usually a planet
-    /// </summary>
-    /// <param name="target"> the Transform to focus on</param>
-    /// <returns>MoveandRotate</returns>
-    public IEnumerator FocusOnPlanet(Transform target)
+
+    public void changeZoomLevel(CamZoomLevel _newZoom)
     {
-        //Debug.Log("MoveToFocusOn called...");
-        StopCoroutine("FollowMothership");
-        StopCoroutine("MoveAndRotate");
-        Vector3 targetPos = target.position;
-        targetPos.y += 150;
-        targetPos.z -= 150 / Mathf.Tan(initialAngleX);
-        yield return StartCoroutine(MoveAndRotate(targetPos, initialRot, 0.35f));
+        zoomLevel = _newZoom;
     }
 
-    public IEnumerator FollowMothership(Transform ship, bool inSystem)
+    public void targetPlanet(Transform _planet)
     {
-//        Debug.Log("FollowMothershipCalled...");
-        StopCoroutine("MoveToFocusOn");
-        //StopCoroutine("MoveAndRotate");
-        Vector3 targetPos = ship.position;
-        if (inSystem)
-        {
-            targetPos.y += zoomedInHeight;
-            targetPos.z -= zoomedInHeight / Mathf.Tan(initialAngleX);
-        }
-        else
-        {
-            targetPos.y += zoomedOutHeight;
-            targetPos.z -= zoomedOutHeight / Mathf.Tan(initialAngleX);
-        }
-        yield return StartCoroutine(MoveAndRotate(targetPos, initialRot, camFollowPeriod));
+        targetPosition = _planet.position;
+        targetType = CamTarget.TARGET_PLANET;
     }
 
-    private IEnumerator MoveAndRotate(Vector3 destination, Quaternion desiredRot, float period)
+    public void targetMothership()
     {
-        float time = 0.0f;
-        Vector3 startPos = trans.position;
-        Quaternion startRot = trans.rotation;
-        while (time < 1.0f)
-        {
-            trans.position = Vector3.Lerp(startPos, destination, time);
-            trans.rotation = Quaternion.Slerp(startRot, desiredRot, time);
-            time += Time.deltaTime / period;
-            OnCameraMove();
-            yield return null;
-
-        }
+        targetPosition = mothership.transform.position;
+        targetType = CamTarget.MOTHERSHIP;
     }
 
     private void Awake()
@@ -103,16 +86,63 @@ public class GalaxyCamera : Singleton<GalaxyCamera>
         initialRot = trans.rotation;
         initialAngleX = Mathf.Deg2Rad * initialRot.eulerAngles.x;
 
-        state = GalaxyCameState.START_TRANS;
+        zoomLevel = CamZoomLevel.SPACE_ZOOM;
+        targetMothership();
+
     }
     #endregion Methods
 
     private void Update()
     {
 
+        switch (targetType)
+        {
+            case CamTarget.MOTHERSHIP:
+                currentTarget = mothership;
+                break;
+            case CamTarget.TARGET_PLANET:
+            default:
+                break;
+        }
+
+        //if ((trans.position - targetPosition).magnitude > epsilon)
+        //{
+        //    //lerp pos
+        //    trans.position = Vector3.Lerp(trans.position, targetPosition, 0.1f);
+        //}
+        if ((trans.rotation.eulerAngles - targetRotation.eulerAngles).magnitude > epsilon)
+        {
+            //lerp rotation
+            trans.rotation = Quaternion.Slerp(trans.rotation, targetRotation, 0.1f);
+        }
+
+        float targetZoom;
+        switch (zoomLevel)
+        {
+            case CamZoomLevel.SPACE_ZOOM:
+                targetZoom = spaceZoomHeight;
+                break;
+            case CamZoomLevel.SYSTEM_ZOOM:
+                targetZoom = systemZoomHeight;
+                break;
+            case CamZoomLevel.PLANET_ZOOM:
+                targetZoom = orbitZoomHeight;
+                break;
+            default:
+                targetZoom = -1.0f;
+                break;
+        }
+
+        if (targetZoom - currentZoom > epsilon)
+        {
+            //lerp zoom
+
+            Vector3 targetPos = targetPosition;
+            targetPos.y += targetZoom;
+            targetPos.z -= targetZoom / Mathf.Tan(initialAngleX);
+
+            trans.position = Vector3.Lerp(trans.position, targetPos, 0.1f);
+        }
+        //trans.LookAt(targetPosition);
     }
-
-
-
-
 }
