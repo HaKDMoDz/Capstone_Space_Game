@@ -105,11 +105,6 @@ public class GalaxyCamera : Singleton<GalaxyCamera>
                 break;
         }
 
-        //if ((trans.position - targetPosition).magnitude > epsilon)
-        //{
-        //    //lerp pos
-        //    trans.position = Vector3.Lerp(trans.position, targetPosition, 0.1f);
-        //}
         if ((trans.rotation.eulerAngles - targetRotation.eulerAngles).magnitude > epsilon)
         {
             //lerp rotation
@@ -120,12 +115,15 @@ public class GalaxyCamera : Singleton<GalaxyCamera>
         switch (zoomLevel)
         {
             case CamZoomLevel.SPACE_ZOOM:
+                Debug.Log("Zoom: Space");
                 targetZoom = spaceZoomHeight;
                 break;
             case CamZoomLevel.SYSTEM_ZOOM:
+                Debug.Log("Zoom: System");
                 targetZoom = systemZoomHeight;
                 break;
             case CamZoomLevel.PLANET_ZOOM:
+                Debug.Log("Zoom: Planet");
                 targetZoom = orbitZoomHeight;
                 break;
             default:
@@ -133,15 +131,14 @@ public class GalaxyCamera : Singleton<GalaxyCamera>
                 break;
         }
 
-        if (targetZoom - currentZoom > epsilon)
+        Vector3 targetPosWithZoom = targetPosition;
+        targetPosWithZoom.y += targetZoom;
+        targetPosWithZoom.z -= targetZoom / Mathf.Tan(initialAngleX);
+
+        if ((trans.position - targetPosWithZoom).magnitude > epsilon)
         {
             //lerp zoom
-
-            Vector3 targetPos = targetPosition;
-            targetPos.y += targetZoom;
-            targetPos.z -= targetZoom / Mathf.Tan(initialAngleX);
-
-            trans.position = Vector3.Lerp(trans.position, targetPos, 0.1f);
+            trans.position = Vector3.Lerp(trans.position, targetPosWithZoom, 0.1f);
         }
         //trans.LookAt(targetPosition);
     }
