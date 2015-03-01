@@ -82,6 +82,18 @@ public abstract class ShipComponent : MonoBehaviour , IPointerClickHandler, IPoi
     private GameObject selectionHalo;
     [SerializeField]
     private Slider hpBar;
+    [SerializeField]
+    private Sprite singleSprite;
+    public Sprite SingleSprite
+    {
+        get { return singleSprite; }
+    }
+    [SerializeField]
+    private Sprite multipleSprite;
+    public Sprite MultipleSprite
+    {
+        get { return multipleSprite; }
+    }
     
 
     public TurnBasedUnit ParentShip { get; private set; }

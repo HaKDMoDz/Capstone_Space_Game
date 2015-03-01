@@ -20,6 +20,8 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     [SerializeField]
     private ButtonWithContent buttonPrefab;
     [SerializeField]
+    private Button_TextAndImage button_TextAndImagePrefab;
+    [SerializeField]
     private HeaderText headerPrefab;
     [SerializeField]
     private GameObject separatorPrefab;
@@ -114,18 +116,6 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     }
     private void SetupComponentButtons()
     {
-        //foreach (var id_comp in ComponentTable.id_comp_table)
-        //{
-        //    ButtonWithContent buttonClone = Instantiate(buttonPrefab) as ButtonWithContent;
-        //    buttonClone.transform.SetParent(compButtonParent, false);
-        //    buttonClone.SetText(id_comp.Value.componentName);
-        //    int compID = id_comp.Key;
-        //    buttonClone.AddOnClickListener(() =>
-        //    {
-        //        SelectComponentToBuild(compID);
-        //    });
-        //}
-
         var weapons = ComponentTable.GetShipComponentsOfType(ComponentType.Weapon);
         var defenses = ComponentTable.GetShipComponentsOfType(ComponentType.Defense);
         var engineering = ComponentTable.GetShipComponentsOfType(ComponentType.Engineering);
@@ -168,9 +158,10 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     {
         foreach (var comp in components)
         {
-            ButtonWithContent buttonClone = Instantiate(buttonPrefab) as ButtonWithContent;
+            Button_TextAndImage buttonClone = Instantiate(button_TextAndImagePrefab) as Button_TextAndImage;
             buttonClone.transform.SetParent(compButtonParent, false);
             buttonClone.SetText(comp.componentName);
+            buttonClone.SetSprite(comp.SingleSprite);
             ShipComponent tempCompVar = comp;
             buttonClone.AddOnClickListener(() => SelectComponentToBuild(tempCompVar));
         }
