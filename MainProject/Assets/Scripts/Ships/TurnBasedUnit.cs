@@ -112,7 +112,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
         private set 
         {
             float damage = hullHP - value;
-            hpBar.value -= damage / MaxHullHP;
+            hpBar.ChangeValue(-damage / MaxHullHP);
             hullHP = value; 
         }
     }
@@ -125,14 +125,14 @@ public abstract class TurnBasedUnit : MonoBehaviour
         private set
         {
             float damage = shieldStrength - value;
-            shieldBar.value -= damage / MaxShields;
+            shieldBar.ChangeValue(-damage / MaxShields);
             shieldStrength = value; 
         }
     }
 
     private ShipShield shipShield;
-    private Slider hpBar;
-    private Slider shieldBar;
+    private FillBar hpBar;
+    private FillBar shieldBar;
 
     private Vector3 defaultTargetCamEuler;
     private Transform targetCamTrans;
@@ -264,6 +264,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
 
     public void ShowHPBars(bool show)
     {
+        Debug.Log("HP bars: " + show);
         hpBar.gameObject.SetActive(show);
         shieldBar.gameObject.SetActive(show);
     }
@@ -278,16 +279,23 @@ public abstract class TurnBasedUnit : MonoBehaviour
     {
         timeLeftToTurn = turnDelay;
 
-        foreach (Slider slider in GetComponentsInChildren<Slider>())
+        foreach (FillBar fillBar in GetComponentsInChildren<FillBar>())
         {
-            if (slider.name == "HPbar")
+            if (fillBar.name == "HPbar")
             {
-                hpBar = slider;
+                hpBar = fillBar;
             }
-            else if (slider.name == "ShieldBar")
+            else if (fillBar.name == "ShieldBar")
             {
-                shieldBar = slider;
+                shieldBar = fillBar;
             }
+#if FULL_DEBUG
+            else
+            {
+                Debug.LogError("fillbar is not hp bar nor shield bar, but " + fillBar.name);
+            }
+#endif
+
         }
 
         #if FULL_DEBUG

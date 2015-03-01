@@ -170,6 +170,7 @@ public class PlayerShip : TurnBasedUnit
         DisplayLineRenderer(Vector3.zero, false, validColour);
         ShowTargetingPanel(false);
         AllowEnemyTargeting(false);
+        SubscribeToAIShipMouseEvents(false);
         targetComponent.Selected = false;
         combatInterface.ShowComponentHotkeyButtons(null, null);
         //combatInterface.ShowComponentSelectionPanel(false);
@@ -207,6 +208,7 @@ public class PlayerShip : TurnBasedUnit
         attackTargetConfirmed = false;
         startTargetingSequence = false;
         targetComponent = null;
+        SubscribeToAIShipMouseEvents(true);
         yield return StartCoroutine(CameraDirector.Instance.MoveToFocusOn(trans, GlobalVars.CameraMoveToFocusPeriod));
     }
     /// <summary>
@@ -299,6 +301,8 @@ public class PlayerShip : TurnBasedUnit
         combatInterface.ShowComponentSelectionPanel(true);
         //show hotkeys
         combatInterface.ShowComponentHotkeyButtons(SelectAllComponents, components.Where(c => c.CanActivate));
+        //stop listening to mouse events on ai ships
+        SubscribeToAIShipMouseEvents(false);
         //show enemy target
         int targetShipIndex = 0;
         List<AI_Ship> aiShips = TurnBasedCombatSystem.Instance.ai_Ships;
@@ -309,7 +313,8 @@ public class PlayerShip : TurnBasedUnit
             Debug.LogError("No ai ships found");
         }
         #endif
-        targetShip = aiShips[targetShipIndex];
+        //targetShip = aiShips[targetShipIndex];
+        targetShipIndex = aiShips.IndexOf(targetShip);
         Transform aiTargetTrans = targetShip.transform;
         //camera
         yield return StartCoroutine(CameraDirector.Instance.OverheadAimAt(trans, aiTargetTrans, GlobalVars.CameraAimAtPeriod));
@@ -335,16 +340,11 @@ public class PlayerShip : TurnBasedUnit
             yield return null;
         }
         ShowTargetingPanel(false);
+        SubscribeToAIShipMouseEvents(true);
         combatInterface.ShowComponentSelectionPanel(false);
         InputManager.Instance.DeregisterKeysDown(TargetNext, KeyCode.Tab);
         InputManager.Instance.DeregisterKeysDown(StopTargetingSequence, KeyCode.Escape);
-        //listen for mouse on enemy comps
-        //listen for mouse on self comps
-        //if not any selected comps, invalidate enemy targeting
-        //once selected, allow enemy comp targeting
-        //once clicked on ememy comp
-            //activation sequence
-        yield return null;
+        
     }
     private void ShowTargetingPanel(bool show)
     {
@@ -370,7 +370,7 @@ public class PlayerShip : TurnBasedUnit
             Debug.LogError("Target ship is null");
             return;
         }
-        Debug.Log("Subscribe: " + subscribe);
+        //Debug.Log("Subscribe: " + subscribe);
 #endif
         
         if (subscribe)
@@ -421,7 +421,7 @@ public class PlayerShip : TurnBasedUnit
             targetComponent.Selected = false;
         }
         targetComponent = GetFirstComponentInDirection(component);
-        Debug.Log("TargetComp: " + targetComponent + " from ship " + name);
+        //Debug.Log("TargetComp: " + targetComponent + " from ship " + name);
 
         DisplayLineRenderer(targetComponent.transform.position, true, validColour);
         targetComponent.Selected = true;
@@ -531,18 +531,22 @@ public class PlayerShip : TurnBasedUnit
     void aiShip_OnShipMouseExit(AI_Ship ship)
     {
         combatInterface.ShowAttackCursor(false);
+        ship.ShowHPBars(false);
     }
     void aiShip_OnShipMouseEnter(AI_Ship ship)
     {
         if (!startTargetingSequence)
         {
             combatInterface.ShowAttackCursor(true);
+            ship.ShowHPBars(true);
         }
     }
     void aiShip_OnShipClick(AI_Ship ship)
     {
         combatInterface.ShowAttackCursor(false);
         startTargetingSequence = true;
+        targetShip = ship;
+        ship.ShowHPBars(false);
     }
 
     #region InternalCallbacks
