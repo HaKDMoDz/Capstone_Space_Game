@@ -287,6 +287,7 @@ public class PlayerShip : TurnBasedUnit
     public void EndTurn(KeyCode key)
     {
         continueTurn = false;
+        if(startTargetingSequence) StopTargetingSequence(KeyCode.Return);
     }
     /// <summary>
     /// Called by the gui interface to select all components of a given type

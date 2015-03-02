@@ -13,10 +13,11 @@ public class FillBar : MonoBehaviour
 #if FULL_DEBUG
         if(value < 0.0f || value > 1.0f)
         {
-            Debug.LogError("Value should be between 0 and 1 but is " + value);
+            Debug.LogWarning("Value should be between 0 and 1 but is " + value);
             return;
         }
 #endif
+        //Debug.Log("Value " + value);
         fillImage.fillAmount = value;
     }
 
@@ -24,14 +25,18 @@ public class FillBar : MonoBehaviour
     {
 #if FULL_DEBUG
         float currentVal = fillImage.fillAmount;
-        float newVal = currentVal - delta;
-        //if(newVal < 0.0f || newVal > 1.0f)
-        //{
-        //    Debug.LogError("Value would be outside the 0 - 1 range if incremented by " + delta);
-        //    return;
-        //}
+        float newVal = currentVal + delta;
+        if (newVal < 0.0f || newVal > 1.0f)
+        {
+            Debug.LogWarning("Value would be outside the 0 - 1 range if incremented by " + delta + "current value: " + currentVal);
+        }
 #endif
         fillImage.fillAmount += delta;
+    }
+
+    public void SetFillColour(Color fillColour)
+    {
+        fillImage.color = fillColour;
     }
 
 }

@@ -9,6 +9,10 @@ public class FleetManager : Singleton<FleetManager>
     //EditorExposed
     [SerializeField]
     private int maxFleetStrength;
+    public int MaxFleetStrength
+    {
+        get { return maxFleetStrength; }
+    }
     private int currentFleetStrength;
     public int CurrentFleetStrength
     {
@@ -37,9 +41,9 @@ public class FleetManager : Singleton<FleetManager>
     {
         currentFleet.Add(metaData);
         currentFleetStrength += metaData.FleetCost;
-#if FULL_DEBUG
+        #if FULL_DEBUG
         Debug.Log("Fleet cost: " + metaData.FleetCost + "Current str " + currentFleetStrength);
-#endif
+        #endif
     }
     public bool TryAddToFleet(ShipBlueprintMetaData metaData)
     {
@@ -52,6 +56,10 @@ public class FleetManager : Singleton<FleetManager>
             AddToFleet(metaData);
             return true;
         }
+    }
+    public bool WouldExceedMaxStr(ShipBlueprintMetaData metaData)
+    {
+        return (currentFleetStrength + metaData.FleetCost > maxFleetStrength);
     }
     public void RemoveFromFleet(ShipBlueprintMetaData metaData)
     {

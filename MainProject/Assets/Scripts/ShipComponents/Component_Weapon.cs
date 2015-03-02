@@ -47,11 +47,13 @@ public abstract class Component_Weapon : ShipComponent
         TurnBasedUnit targetShip = targetComp.ParentShip;
         if(targetShip.ShieldStrength>=damage)
         {
-            DamageShields(targetComp.ParentShip);
+            ApplyShieldDamageEffect(targetComp.ParentShip);
             yield return StartCoroutine(targetShip.TakeDamage(damage));
         }
         else
         {
+            Debug.Log("Killing shields "+targetShip.ShieldStrength);
+            targetShip.TakeDamage(targetShip.ShieldStrength);
             float remainingDamage = damage-targetShip.ShieldStrength;
             float componentDamage = remainingDamage * (1.0f - hullDamagePercent / 100.0f);
             float hullDamage = remainingDamage * hullDamagePercent / 100.0f;
@@ -66,7 +68,7 @@ public abstract class Component_Weapon : ShipComponent
         //}
     }
 
-    protected void DamageShields(TurnBasedUnit ship)
+    protected void ApplyShieldDamageEffect(TurnBasedUnit ship)
     {
         Vector3 hitPoint=-Vector3.zero;
         Ray ray = new Ray(shootPoint.position, ship.transform.position - shootPoint.position);

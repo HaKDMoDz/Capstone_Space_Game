@@ -151,10 +151,10 @@ public abstract class TurnBasedUnit : MonoBehaviour
     /// <returns>null or the Destroy() Coroutine</returns>
     public IEnumerator TakeDamage(float _amountOfDamage)
     {
+        Debug.Log("Shield: " + ShieldStrength + " Damage " + _amountOfDamage);
         if (ShieldStrength >= _amountOfDamage)
         {
             ShieldStrength -= _amountOfDamage;
-            
             //display shield damage effect
             StartCoroutine(trans.FindChild("ShieldEffect").GetComponent<DisableEffectAfterTime>().StartEffect());
         }
@@ -164,12 +164,12 @@ public abstract class TurnBasedUnit : MonoBehaviour
             ShieldStrength = 0.0f;
             HullHP -= _amountOfDamage;
             #if FULL_DEBUG
-            Debug.Log(name + " taking " + _amountOfDamage + " damage. Remaining HP: " + hullHP);
+            Debug.Log(name + " taking " + _amountOfDamage + " damage. Remaining HP: " + HullHP);
             #endif
-        }
-        if (hullHP <= 0)
-        {
-            yield return StartCoroutine(Destroy());
+            if (HullHP <= 0)
+            {
+                yield return StartCoroutine(Destroy());
+            }
         }
     }
     /// <summary>
@@ -311,7 +311,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
         ShowHPBars(false);
 
         maxHullHP = shipBP.Hull.HullHP;
-        hullHP = maxHullHP;
+        HullHP = maxHullHP;
 
 
         MaxShields = 0.0f;
