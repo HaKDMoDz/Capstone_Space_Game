@@ -164,10 +164,7 @@ public class PlayerShip : TurnBasedUnit
     }
     private IEnumerator ComponentSelectionAndTargeting()
     {
-        //show comp seleciton panel
-        combatInterface.ShowComponentSelectionPanel(true);
-        //show hotkeys
-        combatInterface.ShowComponentHotkeyButtons(SelectAllComponents, components.Where(c => c.CanActivate));
+        
         //stop listening to mouse events on ai ships
         SubscribeToAIShipMouseEvents(false);
         //show enemy target
@@ -185,8 +182,12 @@ public class PlayerShip : TurnBasedUnit
         Transform aiTargetTrans = targetShip.transform;
         //camera
         yield return StartCoroutine(CameraDirector.Instance.OverheadAimAt(trans, aiTargetTrans, GlobalVars.CameraAimAtPeriod));
-        trans.LookAt(aiTargetTrans);
+        //show comp seleciton panel
+        combatInterface.ShowComponentSelectionPanel(true);
+        //show hotkeys
+        combatInterface.ShowComponentHotkeyButtons(SelectAllComponents, components.Where(c => c.CanActivate));
         ShowTargetingPanel(true);
+        trans.LookAt(aiTargetTrans);
         InputManager.Instance.RegisterKeysDown(TargetNext, KeyCode.Tab);
         InputManager.Instance.RegisterKeysDown(StopTargetingSequence, KeyCode.Escape);
 
@@ -268,10 +269,10 @@ public class PlayerShip : TurnBasedUnit
         CurrentPower -= totalActivationCost;
         UnSelectComponents(false);
         attackTargetConfirmed = false;
-        startTargetingSequence = false;
+        //startTargetingSequence = false;
         targetComponent = null;
         SubscribeToAIShipMouseEvents(true);
-        yield return StartCoroutine(CameraDirector.Instance.MoveToFocusOn(trans, GlobalVars.CameraMoveToFocusPeriod));
+        //yield return StartCoroutine(CameraDirector.Instance.MoveToFocusOn(trans, GlobalVars.CameraMoveToFocusPeriod));
     }
     /// <summary>
     /// Accessed by the GUI button

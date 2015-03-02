@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
-public class FillBar : MonoBehaviour 
+public class FillBar : MonoBehaviour
 {
     [SerializeField]
     private Image fillImage;
@@ -11,7 +11,7 @@ public class FillBar : MonoBehaviour
     public void SetValue(float value)
     {
 #if FULL_DEBUG
-        if(value < 0.0f || value > 1.0f)
+        if (value < 0.0f || value > 1.0f)
         {
             Debug.LogWarning("Value should be between 0 and 1 but is " + value);
             return;
@@ -26,9 +26,9 @@ public class FillBar : MonoBehaviour
 #if FULL_DEBUG
         float currentVal = fillImage.fillAmount;
         float newVal = currentVal + delta;
-        if (newVal < 0.0f || newVal > 1.0f)
+        if (newVal < -float.Epsilon || newVal > 1.0f + float.Epsilon)
         {
-            Debug.LogWarning("Value would be outside the 0 - 1 range if incremented by " + delta + "current value: " + currentVal);
+            Debug.LogWarning("Value would be outside the 0 - 1 range if incremented by " + delta + "current value: " + currentVal + " result: "+newVal);
         }
 #endif
         fillImage.fillAmount += delta;
