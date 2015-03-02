@@ -92,7 +92,7 @@ public class PlayerShip : TurnBasedUnit
         totalActivationCost = 0.0f;
         SubscribeToAIShipMouseEvents(true);
         //setups up the GUI for the player ship
-        combatInterface.EnableComponentSelectionPanel(true);
+        //combatInterface.EnableComponentSelectionPanel(true);
         combatInterface.ShowStatsPanel(true);
         //combatInterface.ShowComponentActivationButtons(SelectAllComponents, components.Where(c => c.CanActivate));
         combatInterface.UpdateStats(CurrentPower, MoveCost);
@@ -183,6 +183,7 @@ public class PlayerShip : TurnBasedUnit
         //camera
         yield return StartCoroutine(CameraDirector.Instance.OverheadAimAt(trans, aiTargetTrans, GlobalVars.CameraAimAtPeriod));
         //show comp seleciton panel
+        combatInterface.EnableComponentSelectionPanel(true);
         combatInterface.ShowComponentSelectionPanel(true);
         //show hotkeys
         combatInterface.ShowComponentHotkeyButtons(SelectAllComponents, components.Where(c => c.CanActivate));
@@ -233,6 +234,7 @@ public class PlayerShip : TurnBasedUnit
         DisplayLineRenderer(Vector3.zero, false, validColour);
         ShowTargetingPanel(false);
         AllowEnemyTargeting(false);
+        combatInterface.ShowStatsPanel(false);
         SubscribeToAIShipMouseEvents(false);
         targetComponent.Selected = false;
         combatInterface.ShowComponentHotkeyButtons(null, null);
@@ -268,6 +270,7 @@ public class PlayerShip : TurnBasedUnit
         targetShip.ShowHPBars(false);
         CurrentPower -= totalActivationCost;
         UnSelectComponents(false);
+        combatInterface.ShowStatsPanel(true);
         attackTargetConfirmed = false;
         //startTargetingSequence = false;
         targetComponent = null;

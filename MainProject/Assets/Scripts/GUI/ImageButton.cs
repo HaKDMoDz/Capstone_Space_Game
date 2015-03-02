@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
 
-public class ImageButton : MonoBehaviour 
+public class ImageButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField]
     private Button button;
@@ -15,6 +16,11 @@ public class ImageButton : MonoBehaviour
 
     [SerializeField]
     private Image image;
+
+    private delegate void ButtonPointerEnterEvent();
+    private event ButtonPointerEnterEvent OnButtonPointerEnter = new ButtonPointerEnterEvent(() => { });
+    private delegate void ButtonPointerExitEvent();
+    private event ButtonPointerExitEvent OnButtonPointerExit = new ButtonPointerExitEvent(() => { });
 
     public void SetImage(Sprite image)
     {
@@ -36,5 +42,22 @@ public class ImageButton : MonoBehaviour
         button.onClick.RemoveAllListeners();
     }
 
+    public void AddOnPointerEnterListener(UnityAction action)
+    {
+        OnButtonPointerEnter += () => action();
+    }
+    public void AddOnPointerExitListener(UnityAction action)
+    {
+        OnButtonPointerExit += () => action();
+    }
 
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        OnButtonPointerEnter();
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        OnButtonPointerExit();
+    }
 }

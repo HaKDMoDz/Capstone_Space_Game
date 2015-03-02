@@ -50,7 +50,6 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
 
     //internal
     private Dictionary<TurnBasedUnit, TextExtended> unit_buttonRect_table = new Dictionary<TurnBasedUnit, TextExtended>();
-    private Dictionary<Type, SpriteName> compType_spriteName_table;// = new Dictionary<Type, SpriteName>();
     private List<ImageButton> compButtons = new List<ImageButton>();
     private Vector2 attackCursorOffset, defaultCursorOffset;
     //references
@@ -90,7 +89,6 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
             Destroy(compButtons[i].gameObject);
             compButtons.RemoveAt(i);
         }
-
         if (components == null || activationMethod==null)
         {
             guiFields.compHotkeysPanel.SetActive(false);
@@ -100,9 +98,12 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
         foreach (Type type in components.Select(c => c.GetType()).Distinct())
         {
             Type currentType = type;
+            ShipComponent component = components.First(c => c.GetType() == currentType);
             ImageButton buttonClone = Instantiate(guiFields.imageButtonPrefab) as ImageButton;
-            buttonClone.SetImage(ResourceManager.GetSprite(compType_spriteName_table[currentType]));
+            buttonClone.SetImage(component.MultipleSprite);
             buttonClone.AddOnClickListener(() => activationMethod(currentType));
+            buttonClone.AddOnPointerEnterListener(()=>{Debug.Log("Mouse over "+component.componentName);});
+            buttonClone.AddOnPointerExitListener(() => { Debug.Log("Mouse exit " + component.componentName); });
             compButtons.Add(buttonClone);
             buttonClone.transform.SetParent(guiFields.compHotkeysParent, false);
         }
@@ -183,7 +184,6 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
     {
         guiFields.openCompSelectionPanel.SetActive(show);
         guiFields.closedCompSelectPanel.SetActive(!show);
-
         TurnBasedCombatSystem.Instance.ShowingSelectionPanel(show);
     }
     /// <summary>
@@ -230,18 +230,9 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
         }
         #endif
         HideMoveUI();
-
-        compType_spriteName_table = new Dictionary<Type, SpriteName>() 
-        { 
-            {typeof(Comp_Wpn_Laser),SpriteName.AllLasers},
-            {typeof(Comp_Wpn_Missile), SpriteName.AllMissiles},
-            {typeof(Comp_Wpn_Railgun), SpriteName.AllRailguns}
-        };
-        
         attackCursorOffset = new Vector2(guiFields.attackCursor.width * 0.5f, guiFields.attackCursor.height * 0.5f);
         defaultCursorOffset = new Vector2(guiFields.defaultCursor.width * 0.1f, guiFields.defaultCursor.height * 0.1f);
         ShowAttackCursor(false);
-
     }
     
 
