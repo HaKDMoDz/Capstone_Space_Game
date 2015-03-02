@@ -10,13 +10,9 @@ public class GalaxyCamera : Singleton<GalaxyCamera>
     #region Fields
     
     //EditorExposed
-    [SerializeField]
     private float orbitZoomHeight = 120.0f;
-    [SerializeField]
-    private float spaceZoomHeight = 1000.00f;
-    [SerializeField]
+    private float spaceZoomHeight = 200.00f;
     private float systemZoomHeight = 100.0f;
-    [SerializeField]
     private float camFollowPeriod = 0.1f;
 
     //Cached references
@@ -85,7 +81,7 @@ public class GalaxyCamera : Singleton<GalaxyCamera>
         trans = transform;
         initialRot = trans.rotation;
         initialAngleX = Mathf.Deg2Rad * initialRot.eulerAngles.x;
-
+        targetRotation = initialRot;
         zoomLevel = CamZoomLevel.SPACE_ZOOM;
         targetMothership();
 
@@ -101,6 +97,7 @@ public class GalaxyCamera : Singleton<GalaxyCamera>
                 currentTarget = mothership;
                 break;
             case CamTarget.TARGET_PLANET:
+                
             default:
                 break;
         }

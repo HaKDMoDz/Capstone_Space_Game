@@ -138,12 +138,13 @@ public class Mothership : MonoBehaviour
             //Debug.Log("OrbitID: " + orbitID);
             StartCoroutine(otherTrans.gameObject.GetComponent<PlanetUIManager>().enableUIRing());
             //StopCoroutine(Move());
+            GalaxyCamera.Instance.targetPlanet(otherTrans);
+            GalaxyCamera.Instance.changeZoomLevel(CamZoomLevel.PLANET_ZOOM);
             StopAllCoroutines();
             StartCoroutine(Orbit());
 
             //StartCoroutine(GalaxyCamera.Instance.FocusOnPlanet(otherTrans));
-            GalaxyCamera.Instance.targetPlanet(otherTrans);
-            GalaxyCamera.Instance.changeZoomLevel(CamZoomLevel.PLANET_ZOOM);
+
 
         }
     }
