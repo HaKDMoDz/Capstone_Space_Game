@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class CombatSceneController : Singleton<CombatSceneController>
 {
@@ -40,7 +41,7 @@ public class CombatSceneController : Singleton<CombatSceneController>
         
 
         #if FULL_DEBUG
-        if(playerFleetData.currentFleet_BlueprintNames.Count==0)
+        if(playerFleetData.currentFleet_meta_list.Count==0)
         {
             Debug.LogError("Empty player fleet");
         }
@@ -50,7 +51,7 @@ public class CombatSceneController : Singleton<CombatSceneController>
         /////positioning ships automatically for now
         Vector3 spawnPos = new Vector3(0, 0, -100);
         Vector3 aiSpawnPos = new Vector3(0,0,100);
-        int numShips = playerFleetData.currentFleet_BlueprintNames.Count;
+        int numShips = playerFleetData.currentFleet_meta_list.Count;
         int spawnSpacing = 50;
         spawnPos.x -= spawnSpacing * numShips / 2;
         /////////////////////////////////////////////////
@@ -58,7 +59,7 @@ public class CombatSceneController : Singleton<CombatSceneController>
         TurnBasedCombatSystem.Instance.Init();
 
         //tells the shipbuilder to build each ship in the fleet data
-        foreach (string blueprintName in playerFleetData.currentFleet_BlueprintNames)
+        foreach (string blueprintName in playerFleetData.currentFleet_meta_list.Select(meta=>meta.BlueprintName))
         {
             TurnBasedCombatSystem.Instance.AddShip(shipBuilder.BuildShip(ShipType.PlayerShip, blueprintName, spawnPos, Quaternion.identity));
             spawnPos.x += spawnSpacing;

@@ -318,6 +318,22 @@ public class SavedShipBPList //keeps track of all the saves ship blueprints
     {
         return blueprintMetaDataList.Exists(b => b.BlueprintName == fileName);
     }
+    public ShipBlueprintMetaData GetMetaData(string blueprintName)
+    {
+#if FULL_DEBUG
+        if(!Contains(blueprintName))
+        {
+            Debug.LogError("No blueprint named " + blueprintName);
+            return null;
+        }
+        else
+        {
+            return blueprintMetaDataList.First(bp => bp.BlueprintName == blueprintName);
+        }
+#else
+        return blueprintMetaDataList.FirstOrDefault(bp => bp.BlueprintName == blueprintName);
+#endif
+    }
 }
 
 #endregion AdditionalStructs

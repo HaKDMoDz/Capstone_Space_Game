@@ -6,7 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class ButtonWithContent : MonoBehaviour
+public class ButtonWithContent : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField]
     private Button button;
@@ -16,7 +16,12 @@ public class ButtonWithContent : MonoBehaviour
     }
     [SerializeField]
     private Text buttonText;
-    	
+
+    private delegate void ButtonPointerEnterEvent();
+    private event ButtonPointerEnterEvent OnButtonPointerEnter = new ButtonPointerEnterEvent(() => { });
+    private delegate void ButtonPointerExitEvent();
+    private event ButtonPointerExitEvent OnButtonPointerExit = new ButtonPointerExitEvent(() => { });
+
     public void SetText(string text)
     {
         #if FULL_DEBUG
@@ -37,5 +42,23 @@ public class ButtonWithContent : MonoBehaviour
     public void RemoveOnClickListeners()
     {
         button.onClick.RemoveAllListeners();
+    }
+    public void AddOnPointerEnterListener(UnityAction action)
+    {
+        OnButtonPointerEnter += ()=>action();
+    }
+    public void AddOnPointerExitListener(UnityAction action)
+    {
+        OnButtonPointerExit += () => action();
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        OnButtonPointerEnter();
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        OnButtonPointerExit();
     }
 }

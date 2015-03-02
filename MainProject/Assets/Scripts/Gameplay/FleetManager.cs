@@ -15,49 +15,54 @@ public class FleetManager : Singleton<FleetManager>
         get { return currentFleetStrength; }
     }
 
-    private List<string> currentFleet;
-    public List<string> CurrentFleet
+    private List<ShipBlueprintMetaData> currentFleet = new List<ShipBlueprintMetaData>();
+    public List<ShipBlueprintMetaData> CurrentFleet
     {
         get { return currentFleet; }
         set
         {
             currentFleet = value;
-            foreach (string blueprintName in currentFleet)
-            {
-                ShipDesignInterface.Instance.AddCurrentFleetButton(blueprintName);
-            }
+            //foreach (string blueprintName in currentFleet)
+            //{
+            //    ShipDesignInterface.Instance.AddCurrentFleetButton(blueprintName);
+            //}
         }
     }
-
-    
 
     #endregion Fields
 
     #region Methods
     #region Public
-    #region GUIAccess
-    private void AddShipToFleet(string blueprintName)
+    private void AddToFleet(ShipBlueprintMetaData metaData)
     {
-        currentFleet.Add(blueprintName);
+        currentFleet.Add(metaData);
+        currentFleetStrength += metaData.FleetCost;
+#if FULL_DEBUG
+        Debug.Log("Fleet cost: " + metaData.FleetCost + "Current str " + currentFleetStrength);
+#endif
     }
-    public bool TryAddShipToFleet(string blueprintName, int shipCost)
+    public bool TryAddToFleet(ShipBlueprintMetaData metaData)
     {
-        if(currentFleetStrength + shipCost > maxFleetStrength)
+        if(currentFleetStrength + metaData.FleetCost > maxFleetStrength)
         {
             return false;
         }
         else
         {
-            AddShipToFleet(blueprintName);
+            AddToFleet(metaData);
             return true;
         }
     }
-    public void RemoveShipFromFleet(string blueprintName)
+    public void RemoveFromFleet(ShipBlueprintMetaData metaData)
     {
 #if !NO_DEBUG
-        if (currentFleet.Contains(blueprintName))
+        if (currentFleet.Contains(metaData))
         {
-            currentFleet.Remove(blueprintName);
+            currentFleet.Remove(metaData);
+            currentFleetStrength -= metaData.FleetCost;
+            #if FULL_DEBUG
+            Debug.Log("Current fleet strength " + currentFleetStrength);
+            #endif
         }
         else
         {
@@ -67,21 +72,11 @@ public class FleetManager : Singleton<FleetManager>
         currentFleet.Remove(shipBP);
 #endif
     }
-    public bool CurrentFleetContains(string blueprintName)
+    public bool CurrentFleetContains(ShipBlueprintMetaData metaData)
     {
-        return currentFleet.Contains(blueprintName);
+        return currentFleet.Contains(metaData);
     }
-    #endregion GUIAccess
     #endregion Public
 
-    #region Private
-    #region UnityCallbacks
-    private void Awake()
-    {
-        currentFleet = new List<string>();
-    }
-    
-    #endregion UnityCallbacks
-    #endregion Private
     #endregion Methods
 }

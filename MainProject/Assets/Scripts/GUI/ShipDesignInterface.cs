@@ -191,14 +191,28 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
         ButtonWithContent fleetPanel_savedBP_ButtonClone = Instantiate(buttonPrefab) as ButtonWithContent;
         fleetPanel_savedBP_ButtonClone.transform.SetParent(savedBPsParent, false);
         fleetPanel_savedBP_ButtonClone.SetText(fileName);
-        
         fleetPanel_savedBP_ButtonClone.AddOnClickListener(() =>
             {
                 //FleetManager.Instance.AddShipToFleet(fileName);
-                AddCurrentFleetButton(fileName);
+                //if(FleetManager.Instance.TryAddShipToFleet(fileName, ))
+                AddBlueprintToFleet(fileName);
             });
-
         blueprintName_button_table.Add(fileName, new List<GameObject> { loadButtonClone.gameObject, fleetPanel_savedBP_ButtonClone.gameObject });
+    }
+    private void AddBlueprintToFleet(string blueprintName)
+    {
+        ShipBlueprintMetaData metaData = shipDesignSystem.GetMetaData(blueprintName);
+        if(FleetManager.Instance.TryAddToFleet(metaData))
+        {
+            AddCurrentFleetButton(blueprintName);
+        }
+#if FULL_DEBUG
+        else
+        {
+            Debug.LogWarning("Would exceed max fleet strength");
+        }
+#endif
+
     }
     /// <summary>
     /// Removes a blueprint button
@@ -238,7 +252,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
         buttonClone.SetText( fileName);
         buttonClone.AddOnClickListener(() =>
             {
-                FleetManager.Instance.RemoveShipFromFleet(fileName);
+                FleetManager.Instance.RemoveFromFleet(shipDesignSystem.GetMetaData(fileName));
                 Destroy(buttonClone.gameObject);
             });
     }
@@ -556,7 +570,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     {
         shipDesignSystem.DeleteBlueprint(fileName);
         RemoveBlueprintButton(fileName);
-        if (FleetManager.Instance.CurrentFleetContains(fileName))
+        if (FleetManager.Instance.CurrentFleetContains(shipDesignSystem.GetMetaData(fileName)))
         {
             Debug.Log("Clearing Fleet as it includes " + fileName);
             ClearCurrentFleet();
