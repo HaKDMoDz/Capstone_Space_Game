@@ -342,7 +342,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
 //        int mass = shipBP.Hull.EmptyComponentGrid.Count;
 //        MoveCost = mass / totalThrust * 1.5f;
         MoveCost = shipBPMetaData.MoveCost;
-        Debug.Log("Move cost " + MoveCost);
+        //Debug.Log("Move cost " + MoveCost);
     }
 
     private void InitReferences()

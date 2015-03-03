@@ -38,16 +38,6 @@ public class CombatSceneController : Singleton<CombatSceneController>
         playerFleetData = GameController.Instance.GameData.playerFleetData;
         pirateFleetData = GameController.Instance.GameData.pirates_AI_Data;
 
-        
-
-        #if FULL_DEBUG
-        if(playerFleetData.currentFleet_meta_list.Count==0)
-        {
-            Debug.LogError("Empty player fleet");
-        }
-	    #endif
-
-        
         /////positioning ships automatically for now
         Vector3 spawnPos = new Vector3(0, 0, -100);
         Vector3 aiSpawnPos = new Vector3(0,0,100);
@@ -58,20 +48,35 @@ public class CombatSceneController : Singleton<CombatSceneController>
 
         TurnBasedCombatSystem.Instance.Init();
 
-        //tells the shipbuilder to build each ship in the fleet data
-        foreach (string blueprintName in playerFleetData.currentFleet_meta_list.Select(meta=>meta.BlueprintName))
+        if (playerFleetData.currentFleet_meta_list.Count == 0)
         {
-            TurnBasedCombatSystem.Instance.AddShip(shipBuilder.BuildShip(ShipType.PlayerShip, blueprintName, spawnPos, Quaternion.identity));
-            spawnPos.x += spawnSpacing;
+            Debug.LogWarning("Empty player fleet - spawning default fleet");
+            foreach (string bpTemplateName in new List<string>() { "AI_Corvette", "AI_Frigate" })
+            {
+                TurnBasedUnit unit = shipBuilder.BuildShip(ShipType.PlayerShip, BlueprintTemplates.GetBPTemplate(bpTemplateName), spawnPos, Quaternion.identity);
+                #if FULL_DEBUG
+                if (unit == null)
+                {
+                    Debug.Log("shipbuilder returned null");
+                }
+                #endif
+                TurnBasedCombatSystem.Instance.AddShip(unit);
+                spawnPos.x += spawnSpacing;
+            }
         }
-
-        #if FULL_DEBUG
+        else
+        {//tells the shipbuilder to build each ship in the fleet data
+            foreach (string blueprintName in playerFleetData.currentFleet_meta_list.Select(meta => meta.BlueprintName))
+            {
+                TurnBasedCombatSystem.Instance.AddShip(shipBuilder.BuildShip(ShipType.PlayerShip, blueprintName, spawnPos, Quaternion.identity));
+                spawnPos.x += spawnSpacing;
+            }
+        }
         if (pirateFleetData.currentFleet_BlueprintNames.Count == 0)
         {
             Debug.LogWarning("Empty enemy fleet - spawning default fleet");
             pirateFleetData.currentFleet_BlueprintNames = new List<string>() { "AI_Corvette", "AI_Frigate" };
         }
-        #endif
 
         foreach (string bpTemplateName in pirateFleetData.currentFleet_BlueprintNames)
         {
