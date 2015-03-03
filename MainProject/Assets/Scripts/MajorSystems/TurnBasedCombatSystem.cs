@@ -51,6 +51,7 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
     {
         #if FULL_DEBUG
         Debug.LogWarning("Starting Combat");
+        //Debug.Log("Mission ID: " + GameController.Instance.GameData.galaxyMapData.currentMissionID);
         #endif
         combatOn = true;
         PrepareForCombat();
@@ -274,11 +275,12 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
         CombatSystemInterface.Instance.EnableComponentSelectionPanel(false);
         firstUnit.transform.FindChild("SelectionHalo").gameObject.SetActive(false);
     }
-    private void EndCombat()
+    public void EndCombat()
     {
         #if FULL_DEBUG
         Debug.LogWarning("Combat Complete!");
         #endif  
+        GameController.Instance.GameData.galaxyMapData.completeStatus[GameController.Instance.GameData.galaxyMapData.currentMissionID - 1] = true;
         GameController.Instance.ChangeScene(GameScene.GalaxyMap);
     }
     

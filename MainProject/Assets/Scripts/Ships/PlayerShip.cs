@@ -175,6 +175,7 @@ public class PlayerShip : TurnBasedUnit
         if (numAIShips == 0)
         {
             Debug.LogError("No ai ships found");
+            TurnBasedCombatSystem.Instance.EndCombat();
         }
 #endif
         //targetShip = aiShips[targetShipIndex];

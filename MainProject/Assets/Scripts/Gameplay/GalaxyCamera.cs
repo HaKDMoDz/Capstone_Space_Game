@@ -112,15 +112,15 @@ public class GalaxyCamera : Singleton<GalaxyCamera>
         switch (zoomLevel)
         {
             case CamZoomLevel.SPACE_ZOOM:
-                Debug.Log("Zoom: Space");
+                //Debug.Log("Zoom: Space");
                 targetZoom = spaceZoomHeight;
                 break;
             case CamZoomLevel.SYSTEM_ZOOM:
-                Debug.Log("Zoom: System");
+                //Debug.Log("Zoom: System");
                 targetZoom = systemZoomHeight;
                 break;
             case CamZoomLevel.PLANET_ZOOM:
-                Debug.Log("Zoom: Planet");
+                //Debug.Log("Zoom: Planet");
                 targetZoom = orbitZoomHeight;
                 break;
             default:

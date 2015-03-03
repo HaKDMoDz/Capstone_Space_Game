@@ -59,7 +59,8 @@ public class PlanetUIManager : MonoBehaviour
 
     public IEnumerator enableUIRing()
     {
-        uiRing.SetActive(true);
+        //uiRing.SetActive(true);
+        gameObject.GetComponent<Planet_Mission>().Completed = GameController.Instance.GameData.galaxyMapData.completeStatus[gameObject.GetComponent<Planet_Mission>().ID - 1];
         //check for missions
         if (gameObject.GetComponent<Planet_Mission>() != null)
         {

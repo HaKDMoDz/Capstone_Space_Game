@@ -30,6 +30,7 @@ public class GameData
     {
         playerFleetData = new PlayerFleetData();
         pirates_AI_Data = new AI_Data();
+        galaxyMapData = new GalaxyMapData();
     }
 
     /// <summary>
@@ -45,8 +46,8 @@ public class GameData
 
         playerFleetData.Serialize(ref sz_gameData.sz_playerFleetData);
 
-
         pirates_AI_Data.Serialize(ref sz_gameData.sz_pirates_AI_Data);
+        galaxyMapData.Serialize(ref sz_gameData.sz_galaxyMapData);
     }
 
 }

@@ -32,6 +32,7 @@ public class SerializedGameData
     {
         sz_playerFleetData = new SerializedPlayerFleetData();
         sz_pirates_AI_Data = new SerializedAI_Data();
+        sz_galaxyMapData = new SerializedGalaxyMapData();
     }
     /// <summary>
     /// Generates a deSerialized version of the serializedGameData
@@ -46,5 +47,6 @@ public class SerializedGameData
 
         sz_playerFleetData.DeSerialize(ref gameData.playerFleetData);
         sz_pirates_AI_Data.DeSerialize(ref gameData.pirates_AI_Data);
+        sz_galaxyMapData.DeSerialize(ref gameData.galaxyMapData);
     }
 }
