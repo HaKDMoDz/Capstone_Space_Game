@@ -179,6 +179,7 @@ public class Planet_Mission : MonoBehaviour
         else
         {
             GameController.Instance.GameData.galaxyMapData.currentMissionID = ID;
+            GameController.Instance.GameData.galaxyMapData.position = mothershipUI.transform.position;
             MissionController.Instance.currentMission = this;
             uiManager.disableMissionButton();
             MissionController.Instance.AcceptMission(ID);

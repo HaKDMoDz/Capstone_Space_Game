@@ -112,6 +112,12 @@ public class Mothership : MonoBehaviour
         spaceGround.OnGroundHold += OnGroundClick;
         GalaxyCamera.Instance.targetMothership();
         GalaxyCamera.Instance.changeZoomLevel(CamZoomLevel.SPACE_ZOOM);
+
+        if (GameController.Instance.GameData.galaxyMapData.position != Vector3.zero)
+        {
+            transform.position = GameController.Instance.GameData.galaxyMapData.position;
+        }
+
     }
 
     private void OnTriggerEnter(Collider other)
