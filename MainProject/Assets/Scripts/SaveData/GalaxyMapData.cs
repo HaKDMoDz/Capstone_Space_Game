@@ -6,19 +6,30 @@ using System;
 
 public class GalaxyMapData 
 {
-    
-    SerializedGalaxyMapData Serialized()
+    public bool[] completeStatus;
+
+    public GalaxyMapData()
     {
-        return new SerializedGalaxyMapData();
+        completeStatus = new bool[10];
+        for (int i = 0; i < 10; i++)
+        {
+            completeStatus[i] = false;
+        }
+    }
+
+    public void Serialize(ref SerializedGalaxyMapData sz_galaxyMapData)
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            sz_galaxyMapData.completeStatus[i] = completeStatus[i];
+        }
     }
 }
 
 [Serializable]
 public class SerializedGalaxyMapData
 {
-    GalaxyMapData DeSerialized()
-    {
-        return new GalaxyMapData();
-    }
+    public bool[] completeStatus;
+
 }
 

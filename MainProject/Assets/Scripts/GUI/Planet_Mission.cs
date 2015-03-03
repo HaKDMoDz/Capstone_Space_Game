@@ -89,11 +89,35 @@ public class Planet_Mission : MonoBehaviour
         Action acceptAction;
         switch (ID)
         {
-            case 5:
-                acceptAction = (() => mission1());
-                break;
             case 1:
-                acceptAction = (() => mission2());
+                acceptAction = (() => invasionPlanet01());
+                break;
+            case 2:
+                acceptAction = (() => invasionPlanet02());
+                break;
+            case 3:
+                acceptAction = (() => invasionPlanet03());
+                break;
+            case 4:
+                acceptAction = (() => invasionPlanet04());
+                break;
+            case 5:
+                acceptAction = (() => invasionPlanet05());
+                break;
+            case 6:
+                acceptAction = (() => invasionPlanet06());
+                break;
+            case 7:
+                acceptAction = (() => invasionPlanet07());
+                break;
+            case 8:
+                acceptAction = (() => invasionPlanet08());
+                break;
+            case 9:
+                acceptAction = (() => invasionPlanet09());
+                break;
+            case 10:
+                acceptAction = (() => invasionPlanet10());
                 break;
             case 0: default:
                 acceptAction = (() => invalidMission());
@@ -105,10 +129,10 @@ public class Planet_Mission : MonoBehaviour
 
         switch (ID)
         {
-            case 5:
+            case 1:
                 completeAction = (() => mission1());
                 break;
-            case 1:
+            case 5:
                 completeAction = (() => missioncomplete2());
                 break;
             case 0:
@@ -136,7 +160,10 @@ public class Planet_Mission : MonoBehaviour
 
     public void advanceStartText()
     {
-        transform.FindChild("PlanetUI").FindChild("MissionPanel").FindChild("Text").GetComponent<Text>().text = startDialog[startDialogIndex++];
+        if (startDialog.Count != 0)
+        {
+            transform.FindChild("PlanetUI").FindChild("MissionPanel").FindChild("Text").GetComponent<Text>().text = startDialog[startDialogIndex++];
+        }
     }
 
     public void advanceEndText()
@@ -154,8 +181,8 @@ public class Planet_Mission : MonoBehaviour
         {
             Debug.Log("Mission Accepted");
             MissionController.Instance.AcceptMission(ID);
-            uiManager.disableMissionPanel();
-            mothershipUI.enableWaypointUI(endPlanet.transform);
+            //uiManager.disableMissionPanel();
+            //mothershipUI.enableWaypointUI(endPlanet.transform);
             MissionController.Instance.currentMission = this;
             uiManager.disableMissionButton();
         }
@@ -194,5 +221,95 @@ public class Planet_Mission : MonoBehaviour
     {
         Debug.LogError("CompleteMission: Invalid Mission ID: " + ID);
     }
-	
+
+    private void invasionPlanet01()
+    {
+        Debug.Log("Click");
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames = new List<string>();
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("AI_Corvette");
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("AI_Corvette");
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("AI_Corvette");
+        GameController.Instance.ChangeScene(GameScene.CombatScene);
+    }
+
+    private void invasionPlanet02()
+    {
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames = new List<string>();
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("AI_Corvette");
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("AI_Corvette");
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("AI_Corvette");
+        GameController.Instance.ChangeScene(GameScene.CombatScene);
+    }
+
+    private void invasionPlanet03()
+    {
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames = new List<string>();
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("AI_Corvette");
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("AI_Corvette");
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("AI_Corvette");
+        GameController.Instance.ChangeScene(GameScene.CombatScene);
+    }
+
+    private void invasionPlanet04()
+    {
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames = new List<string>();
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("AI_Corvette");
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("AI_Corvette");
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("AI_Corvette");
+        GameController.Instance.ChangeScene(GameScene.CombatScene);
+    }
+
+    private void invasionPlanet05()
+    {
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames = new List<string>();
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("AI_Corvette");
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("AI_Corvette");
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("AI_Corvette");
+        GameController.Instance.ChangeScene(GameScene.CombatScene);
+    }
+
+    private void invasionPlanet06()
+    {
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames = new List<string>();
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("AI_Corvette");
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("AI_Corvette");
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("AI_Corvette");
+        GameController.Instance.ChangeScene(GameScene.CombatScene);
+    }
+
+    private void invasionPlanet07()
+    {
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames = new List<string>();
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("AI_Corvette");
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("AI_Corvette");
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("AI_Corvette");
+        GameController.Instance.ChangeScene(GameScene.CombatScene);
+    }
+
+    private void invasionPlanet08()
+    {
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames = new List<string>();
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("AI_Corvette");
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("AI_Corvette");
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("AI_Corvette");
+        GameController.Instance.ChangeScene(GameScene.CombatScene);
+    }
+
+    private void invasionPlanet09()
+    {
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames = new List<string>();
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("AI_Corvette");
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("AI_Corvette");
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("AI_Corvette");
+        GameController.Instance.ChangeScene(GameScene.CombatScene);
+    }
+
+    private void invasionPlanet10()
+    {
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames = new List<string>();
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("AI_Corvette");
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("AI_Corvette");
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("AI_Corvette");
+        GameController.Instance.ChangeScene(GameScene.CombatScene);
+    }
 }
