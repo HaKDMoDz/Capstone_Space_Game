@@ -232,6 +232,10 @@ public class PlayerShip : TurnBasedUnit
     }
     private IEnumerator ActivateWeapons()
     {
+        if(TutorialSystem.Instance)
+        {
+            TutorialSystem.Instance.ShowTutorial(TutorialSystem.TutorialType.ClickEnemyToEngage, false);
+        }
         int numWeaponsActivated = 0;
         float totalPowerUsed = 0.0f;
         int originalCamCulling = Camera.main.cullingMask;
@@ -248,6 +252,10 @@ public class PlayerShip : TurnBasedUnit
         Camera.main.cullingMask = originalCamCulling | 1 << TagsAndLayers.ComponentsLayer | 1 << TagsAndLayers.ComponentSlotLayer;
         yield return StartCoroutine(CameraDirector.Instance.ZoomInFromAbove(targetComponent.ParentShip.transform, GlobalVars.CameraAimAtPeriod));
         trans.LookAt(targetComponent.transform);
+        if(TutorialSystem.Instance)
+        {
+            TutorialSystem.Instance.ShowTutorial(TutorialSystem.TutorialType.EnemyShieldHP, true);
+        }
         if (selectedComponents.Any(c => !(c is Component_Weapon)))
         {
             Debug.LogError("Not weapon ");
@@ -295,6 +303,10 @@ public class PlayerShip : TurnBasedUnit
     /// <param name="key"></param>
     public void EndTurn(KeyCode key)
     {
+        if(TutorialSystem.Instance)
+        {
+            TutorialSystem.Instance.ShowTutorial(TutorialSystem.TutorialType.EndTurn, false);
+        }
         continueTurn = false;
         if(startTargetingSequence) StopTargetingSequence(KeyCode.Return);
     }

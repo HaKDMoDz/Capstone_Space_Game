@@ -16,7 +16,7 @@ public class TutorialSystem : Singleton<TutorialSystem>
         //component panel
         ComponentPanel, ComponentSelection, Hotkeys, ActivationCost,  
         //enemy target panel
-        TargetedEnemyShip, ClickOnCompToFire,ShieldHP,
+        TargetedEnemyShip, ClickOnCompToFire,EnemyShieldHP,
         //End turn
         EndTurn
     }
