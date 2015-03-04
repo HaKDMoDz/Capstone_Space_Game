@@ -15,6 +15,7 @@ public class SerializedGameData
     public SerializedAI_Data sz_kTaeran_AI_Data;
     public SerializedAI_Data sz_pirates_AI_Data;
     public SerializedPlayerFleetData sz_playerFleetData;
+    public SerializedTutorialData sz_tutorialData;
 
     public SerializedGameData() 
     {
@@ -33,6 +34,7 @@ public class SerializedGameData
         sz_playerFleetData = new SerializedPlayerFleetData();
         sz_pirates_AI_Data = new SerializedAI_Data();
         sz_galaxyMapData = new SerializedGalaxyMapData();
+        sz_tutorialData = new SerializedTutorialData();
     }
     /// <summary>
     /// Generates a deSerialized version of the serializedGameData
@@ -48,5 +50,6 @@ public class SerializedGameData
         sz_playerFleetData.DeSerialize(ref gameData.playerFleetData);
         sz_pirates_AI_Data.DeSerialize(ref gameData.pirates_AI_Data);
         sz_galaxyMapData.DeSerialize(ref gameData.galaxyMapData);
+        sz_tutorialData.DeSerialize(ref gameData.tutorialData);
     }
 }

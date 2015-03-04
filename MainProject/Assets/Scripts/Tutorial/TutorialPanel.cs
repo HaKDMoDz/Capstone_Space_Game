@@ -11,6 +11,12 @@ public class TutorialPanel : MonoBehaviour
     [SerializeField]
     private Button okButton;
 
+    //private bool toggleIsOn;
+    public bool ToggleIsOn
+    {
+        get { return toggle.isOn; }
+    }
+
     public void AddOnClickListener(UnityAction action)
     {
         okButton.onClick.AddListener(action);

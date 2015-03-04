@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 
-public class Tutorial : Singleton<Tutorial> 
+public class TutorialSystem : Singleton<TutorialSystem> 
 {
     public enum TutorialType 
     { 
@@ -31,7 +31,11 @@ public class Tutorial : Singleton<Tutorial>
 
     public void ShowAllTutorials(bool show)
     {
-        
+        GameController.Instance.GameData.tutorialData.ShowTutorials = show;
+        foreach (GameObject panel in tutorialType_entry_table.Values.Select(tut=>tut.panel.gameObject))
+        {
+            panel.SetActive(show);
+        }
     }
     public void ShowNextTutorial(TutorialType currentType)
     {
@@ -65,9 +69,23 @@ public class Tutorial : Singleton<Tutorial>
         {
             //Debug.Log("Type " + type_entry.Key + " toggle " + type_entry.Value.show);
             TutorialType currentType = type_entry.Key;
-            type_entry.Value.panel.AddOnClickListener(() => ShowNextTutorial(currentType));
+            TutorialPanel panel = type_entry.Value.panel;
+            panel.AddOnClickListener(() => 
+                {
+                    if (!panel.ToggleIsOn)
+                    {
+                        ShowAllTutorials(false);
+                    }
+                    else
+                    {
+                        ShowNextTutorial(currentType);
+                    }
+                });
         }
-        StartTutorial();
+        if (GameController.Instance.GameData.tutorialData.ShowTutorials)
+        {
+            StartTutorial();
+        }
     }
 
     [Serializable]

@@ -13,6 +13,7 @@ public class GameData
     public AI_Data kTaeran_AI_Data;
     public AI_Data pirates_AI_Data;
     public PlayerFleetData playerFleetData;
+    public TutorialData tutorialData;
 
     public GameData()
     {
@@ -31,6 +32,7 @@ public class GameData
         playerFleetData = new PlayerFleetData();
         pirates_AI_Data = new AI_Data();
         galaxyMapData = new GalaxyMapData();
+        tutorialData = new TutorialData();
     }
 
     /// <summary>
@@ -45,9 +47,9 @@ public class GameData
         sz_gameData.nextScene = nextScene;
 
         playerFleetData.Serialize(ref sz_gameData.sz_playerFleetData);
-
         pirates_AI_Data.Serialize(ref sz_gameData.sz_pirates_AI_Data);
         galaxyMapData.Serialize(ref sz_gameData.sz_galaxyMapData);
+        tutorialData.Serialize(ref sz_gameData.sz_tutorialData);
     }
 
 }

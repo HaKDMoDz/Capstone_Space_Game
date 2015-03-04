@@ -221,7 +221,7 @@ public class GameController : Singleton<GameController>
         #if !NO_DEBUG
         Debug.Log("Application Quit");
         #endif
-        if (gameData.prevScene != GameScene.MainMenu)
+        //if (gameData.prevScene != GameScene.MainMenu)
         { 
             saveSystem.AutoSave(gameData); 
         }
