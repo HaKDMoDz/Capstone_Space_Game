@@ -64,10 +64,7 @@ public class PlanetUIManager : MonoBehaviour
         //check for missions
         if (gameObject.GetComponent<Planet_Mission>() != null)
         {
-            if (!gameObject.GetComponent<Planet_Mission>().Completed)
-            {
-                missionButton.SetActive(true);
-            }
+            missionButton.SetActive(!gameObject.GetComponent<Planet_Mission>().Completed);
         }
         
         //check for mission complete
