@@ -126,6 +126,7 @@ public class PlayerShip : TurnBasedUnit
                 UnSelectComponents(false);
                 ShowMovementUI(false);
                 CurrentPower -= movePowerCost;
+                TutorialSystem.Instance.ShowNextTutorial(TutorialSystem.TutorialType.MovementHowTo);
                 yield return StartCoroutine(shipMove.Move());
                 #if FULL_DEBUG
                 Debug.Log(ShipBPMetaData.BlueprintName + "- Movement end");
@@ -134,7 +135,9 @@ public class PlayerShip : TurnBasedUnit
             if(startTargetingSequence)
             {
                 ShowMovementUI(false);
+                TutorialSystem.Instance.ShowTutorial(TutorialSystem.TutorialType.ClickEnemyToEngage, false);
                 yield return StartCoroutine(ComponentSelectionAndTargeting());
+                
             }
             if(targetComponent)
             {
@@ -192,6 +195,7 @@ public class PlayerShip : TurnBasedUnit
         trans.LookAt(aiTargetTrans);
         InputManager.Instance.RegisterKeysDown(TargetNext, KeyCode.Tab);
         InputManager.Instance.RegisterKeysDown(StopTargetingSequence, KeyCode.Escape);
+        TutorialSystem.Instance.ShowNextTutorial(TutorialSystem.TutorialType.ClickEnemyToEngage);
 
         while (!attackTargetConfirmed)
         {
@@ -307,6 +311,7 @@ public class PlayerShip : TurnBasedUnit
         Debug.Log("Activating all " + compType.ToString());
         UnSelectComponents(true);
         //componentSelectionOn = true;
+        TutorialSystem.Instance.ShowNextTutorial(TutorialSystem.TutorialType.Hotkeys);
         foreach (ShipComponent component in components.Where(c=>c.GetType()==compType))
         {
             SelectComponent(component, true);
@@ -493,6 +498,7 @@ public class PlayerShip : TurnBasedUnit
                 }
                 selectedComponents.Add(component);
                 component.Selected = true;
+                TutorialSystem.Instance.ShowNextTutorial(TutorialSystem.TutorialType.ComponentSelection);
                 if(!allowingEnemyTargeting) AllowEnemyTargeting(true);
                 totalActivationCost += component.ActivationCost;
                 combatInterface.UpdateStats(CurrentPower - totalActivationCost, MoveCost);

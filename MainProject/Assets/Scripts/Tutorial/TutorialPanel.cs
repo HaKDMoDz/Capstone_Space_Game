@@ -10,8 +10,12 @@ public class TutorialPanel : MonoBehaviour
     private Toggle toggle;
     [SerializeField]
     private Button okButton;
-
-    //private bool toggleIsOn;
+    [SerializeField]
+    private bool autoAdvance;
+    public bool AutoAdvance
+    {
+        get { return autoAdvance; }
+    }
     public bool ToggleIsOn
     {
         get { return toggle.isOn; }

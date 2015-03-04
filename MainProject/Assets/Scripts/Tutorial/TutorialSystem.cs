@@ -14,7 +14,7 @@ public class TutorialSystem : Singleton<TutorialSystem>
         //targeting an enemy
         ClickEnemyToEngage, 
         //component panel
-        ShowsComponents, Hotkeys, PowerDrainOnSelect,
+        ComponentPanel, ComponentSelection, Hotkeys, ActivationCost,  
         //enemy target panel
         TargetedEnemyShip, ClickOnCompToFire,ShieldHP,
         //End turn
@@ -56,7 +56,16 @@ public class TutorialSystem : Singleton<TutorialSystem>
 
     public void ShowTutorial(TutorialType type, bool show)
     {
-        tutorialType_entry_table[type].panel.gameObject.SetActive(show);
+        if(!show)
+        {
+            tutorialType_entry_table[type].panel.gameObject.SetActive(false);
+            return;
+        }
+        if (!tutorialType_entry_table[type].shown)
+        {
+            tutorialType_entry_table[type].panel.gameObject.SetActive(show);
+            tutorialType_entry_table[type].shown = true;    
+        }
     }
 
     private void Awake()
@@ -76,9 +85,16 @@ public class TutorialSystem : Singleton<TutorialSystem>
                     {
                         ShowAllTutorials(false);
                     }
-                    else
+                    else 
                     {
-                        ShowNextTutorial(currentType);
+                        if (panel.AutoAdvance)
+                        {
+                            ShowNextTutorial(currentType);
+                        }
+                        else
+                        {
+                            ShowTutorial(currentType, false);
+                        }
                     }
                 });
         }
@@ -93,7 +109,7 @@ public class TutorialSystem : Singleton<TutorialSystem>
     {
         public TutorialType type;
         public TutorialPanel panel;
-        public bool show;
+        public bool shown;
 
     }
 }
