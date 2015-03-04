@@ -69,7 +69,7 @@ public class PlayerShip : TurnBasedUnit
         {
             InputManager.Instance.OnMouseMoveEvent += OnMouseMove;
             InputManager.Instance.RegisterKeysDown(EndTurn, KeyCode.KeypadEnter, KeyCode.Return);
-            foreach (ShipComponent component in components)
+            foreach (ShipComponent component in components.Where(comp=>comp.CanActivate))
             {
                 component.OnComponentClicked += OnComponentClicked;
             }
@@ -79,7 +79,7 @@ public class PlayerShip : TurnBasedUnit
         {
             InputManager.Instance.OnMouseMoveEvent -= OnMouseMove;
             InputManager.Instance.DeregisterKeysDown(EndTurn, KeyCode.KeypadEnter, KeyCode.Return);
-            foreach (ShipComponent component in components)
+            foreach (ShipComponent component in components.Where(comp => comp.CanActivate))
             {
                 component.OnComponentClicked -= OnComponentClicked;
             }
@@ -506,8 +506,15 @@ public class PlayerShip : TurnBasedUnit
             if (!selectedComponents.Contains(component))
             {
                 //Debug.Log("select");
-                //componentSelectionOn = true;
-                if(CurrentPower - totalActivationCost - component.ActivationCost < 0)
+                if(selectedComponents.Count>0)
+                {
+                    //not the same component type as selected - restart selection
+                    if(component.GetType() != selectedComponents[0].GetType())
+                    {
+                        UnSelectComponents(true);
+                    }
+                }
+                if (CurrentPower - totalActivationCost - component.ActivationCost < 0)
                 {
                     #if FULL_DEBUG
                     Debug.LogWarning("Not enough power");
@@ -518,10 +525,11 @@ public class PlayerShip : TurnBasedUnit
                 selectedComponents.Add(component);
                 component.Selected = true;
                 TutorialSystem.Instance.ShowNextTutorial(TutorialSystem.TutorialType.ComponentSelection);
-                if(!allowingEnemyTargeting) AllowEnemyTargeting(true);
+                if (!allowingEnemyTargeting) AllowEnemyTargeting(true);
                 totalActivationCost += component.ActivationCost;
                 combatInterface.UpdateStats(CurrentPower - totalActivationCost, MoveCost);
-            }
+
+            }//selected component contains
         }
         else //de-select
         {
