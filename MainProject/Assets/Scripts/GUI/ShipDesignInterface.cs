@@ -15,7 +15,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
 {
     #region Fields
     //Editor Exposed
-    
+
     //Prefabs
     [SerializeField]
     private ButtonWithContent buttonPrefab;
@@ -68,17 +68,17 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     //Internal
     private Dictionary<string, List<GameObject>> blueprintName_button_table;
     private string selectedBP;
-
+    private ShipComponent selectedComp;
     //References
     ShipDesignSystem shipDesignSystem;
-    
+
     #endregion Fields
 
     #region Methods
     #region Private
 
     #region UnityCallbacks
-    
+
     private void Awake()
     {
         blueprintName_button_table = new Dictionary<string, List<GameObject>>();
@@ -102,7 +102,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
             buttonClone.transform.SetParent(hullButtonParent, false);
             buttonClone.SetText(id_hull.Value.hullName);
             int hull_ID = id_hull.Key;
-            buttonClone.AddOnClickListener(()=>
+            buttonClone.AddOnClickListener(() =>
             {
                 //the method to call when the button is clicked
                 BuildHull(hull_ID);
@@ -110,14 +110,14 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
         }
 
         SetupComponentButtons();
-        
+
         //Add blueprint buttons to Load Panel and Fleet Panel
         foreach (string blueprintName in shipDesignSystem.GetSaveFileList())
         {
             AddBlueprintButton(blueprintName);
         }
         //Add current fleet buttons
-        foreach (string blueprintName in FleetManager.Instance.CurrentFleet.Select(meta=>meta.BlueprintName))
+        foreach (string blueprintName in FleetManager.Instance.CurrentFleet.Select(meta => meta.BlueprintName))
         {
             AddCurrentFleetButton(blueprintName);
         }
@@ -133,28 +133,28 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
         var engineering = ComponentTable.GetShipComponentsOfType(ComponentType.Engineering);
         var supports = ComponentTable.GetShipComponentsOfType(ComponentType.Support);
 
-        if(weapons.Count() > 0)
+        if (weapons.Count() > 0)
         {
             AddHeader(ComponentType.Weapon);
             AddComponentButtons(weapons);
             GameObject sep = Instantiate(separatorPrefab) as GameObject;
             sep.transform.SetParent(compButtonParent, false);
         }
-        if(defenses.Count()>0)
+        if (defenses.Count() > 0)
         {
             AddHeader(ComponentType.Defense);
             AddComponentButtons(defenses);
             GameObject sep = Instantiate(separatorPrefab) as GameObject;
             sep.transform.SetParent(compButtonParent, false);
         }
-        if(engineering.Count()>0)
+        if (engineering.Count() > 0)
         {
             AddHeader(ComponentType.Engineering);
             AddComponentButtons(engineering);
             GameObject sep = Instantiate(separatorPrefab) as GameObject;
             sep.transform.SetParent(compButtonParent, false);
         }
-        if(supports.Count()>0)
+        if (supports.Count() > 0)
         {
             AddHeader(ComponentType.Support);
             AddComponentButtons(supports);
@@ -188,7 +188,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     {
         ButtonWithContent loadButtonClone = Instantiate(buttonPrefab) as ButtonWithContent;
         loadButtonClone.transform.SetParent(loadButtonParent, false);
-        loadButtonClone.SetText( fileName);
+        loadButtonClone.SetText(fileName);
         loadButtonClone.AddOnClickListener(() =>
             {
                 loadButtonClone.Button.Select();
@@ -198,14 +198,14 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
         ButtonWithContent fleetPanel_savedBP_ButtonClone = Instantiate(buttonPrefab) as ButtonWithContent;
         fleetPanel_savedBP_ButtonClone.transform.SetParent(savedBPsParent, false);
         fleetPanel_savedBP_ButtonClone.SetText(fileName);
-        fleetPanel_savedBP_ButtonClone.AddOnClickListener(() =>AddBlueprintToFleet(fileName));
-        fleetPanel_savedBP_ButtonClone.AddOnPointerEnterListener(()=>BPButtonMouseEnter(fileName));
-        fleetPanel_savedBP_ButtonClone.AddOnPointerExitListener(()=>BPButtonMouseExit(fileName));
+        fleetPanel_savedBP_ButtonClone.AddOnClickListener(() => AddBlueprintToFleet(fileName));
+        fleetPanel_savedBP_ButtonClone.AddOnPointerEnterListener(() => BPButtonMouseEnter(fileName));
+        fleetPanel_savedBP_ButtonClone.AddOnPointerExitListener(() => BPButtonMouseExit(fileName));
         blueprintName_button_table.Add(fileName, new List<GameObject> { loadButtonClone.gameObject, fleetPanel_savedBP_ButtonClone.gameObject });
     }
     private void BPButtonMouseEnter(string blueprintName)
     {
-        if(FleetManager.Instance.WouldExceedMaxStr(shipDesignSystem.GetMetaData(blueprintName)))
+        if (FleetManager.Instance.WouldExceedMaxStr(shipDesignSystem.GetMetaData(blueprintName)))
         {
             fleetStrBar.SetFillColour(Color.red);
         }
@@ -217,7 +217,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     private void AddBlueprintToFleet(string blueprintName)
     {
         ShipBlueprintMetaData metaData = shipDesignSystem.GetMetaData(blueprintName);
-        if(FleetManager.Instance.TryAddToFleet(metaData))
+        if (FleetManager.Instance.TryAddToFleet(metaData))
         {
             AddCurrentFleetButton(blueprintName);
             fleetStrBar.SetValue((float)(FleetManager.Instance.CurrentFleetStrength) / (float)(FleetManager.Instance.MaxFleetStrength));
@@ -265,7 +265,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     {
         ButtonWithContent buttonClone = Instantiate(buttonPrefab) as ButtonWithContent;
         buttonClone.transform.SetParent(currentFleetParent, false);
-        buttonClone.SetText( fileName);
+        buttonClone.SetText(fileName);
         buttonClone.AddOnClickListener(() =>
             {
                 FleetManager.Instance.RemoveFromFleet(shipDesignSystem.GetMetaData(fileName));
@@ -283,31 +283,24 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     /// <param name="selectedComponent">
     /// The component to build
     /// </param>
-    private IEnumerator StartPlacementSequence(ShipComponent selectedComponent)
+    private IEnumerator StartPlacementSequence()
     {
-        bool runSequence = true;
-        bool dragging = false;
-        RaycastHit hit;
-
-        yield return null;
-
-        while (runSequence) //keeps running until the user let's go of the mouse button or hits Esc
+        if (selectedComp)
         {
-            if (Input.GetMouseButtonDown(0) || dragging)
+            while (true)
             {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(ray, out hit, GlobalVars.RayCastRange, 1 << TagsAndLayers.ComponentSlotLayer))
+                if (Input.GetMouseButton((int)MouseButton.Left))
                 {
-                    dragging = true;
-                    ComponentSlot slot = hit.transform.GetComponent<ComponentSlot>();
-                    shipDesignSystem.BuildComponent(slot, selectedComponent);
+                    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                    RaycastHit hit;
+                    if (Physics.Raycast(ray, out hit, GlobalVars.RayCastRange, 1 << TagsAndLayers.ComponentSlotLayer))
+                    {
+                        ComponentSlot slot = hit.transform.GetComponent<ComponentSlot>();
+                        shipDesignSystem.BuildComponent(slot, selectedComp);
+                    }
                 }
+                yield return null;
             }
-            if (Input.GetMouseButtonUp(0) || Input.GetKeyDown(KeyCode.Escape))
-            {
-                runSequence = false;
-            }
-            yield return null;
         }
     }
     /// <summary>
@@ -326,7 +319,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     }
 
     #region Helper
-    
+
     private void ClearCurrentFleet()
     {
         foreach (Transform child in currentFleetParent)
@@ -347,9 +340,9 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
 
     public void SelectBlueprintToLoad(string bpName)
     {
-        #if FULL_DEBUG
+#if FULL_DEBUG
         Debug.Log("Selected " + bpName);
-        #endif
+#endif
         selectedBP = bpName;
     }
     public void DeleteSelectedBP()
@@ -359,12 +352,12 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
             return;
         }
         ShowModalPanel(true);
-        modalPanel.ShowMessageWithYesCancel("Delete blueprint: "+selectedBP+" ?",
-            ()=>
+        modalPanel.ShowMessageWithYesCancel("Delete blueprint: " + selectedBP + " ?",
+            () =>
             {
-                #if FULL_DEBUG
+#if FULL_DEBUG
                 Debug.Log("Delete selected BP: " + selectedBP);
-                #endif
+#endif
                 DeleteBlueprint(selectedBP);
                 selectedBP = "";
             },
@@ -376,9 +369,9 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
         {
             return;
         }
-        #if FULL_DEBUG
+#if FULL_DEBUG
         Debug.Log("Load selected BP: " + selectedBP);
-        #endif
+#endif
         LoadBlueprint(selectedBP);
         selectedBP = "";
     }
@@ -391,31 +384,33 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     {
         if (!shipDesignSystem.buildingShip)
         {
-            #if FULL_DEBUG
+#if FULL_DEBUG
             Debug.Log("Not building a ship");
-            #endif
+#endif
             return;
         }
-        #if FULL_DEBUG
+#if FULL_DEBUG
         Debug.Log("Selected component: " + ComponentTable.GetComp(componentID).componentName);
-        #endif
-        StartCoroutine(StartPlacementSequence(ComponentTable.GetComp(componentID)));
+#endif
+        SelectComponentToBuild(ComponentTable.GetComp(componentID));
     }
     public void SelectComponentToBuild(ShipComponent component)
     {
         if (!shipDesignSystem.buildingShip)
         {
-            #if FULL_DEBUG
+#if FULL_DEBUG
             Debug.Log("Not building a ship");
-            #endif
+#endif
             return;
         }
-        #if FULL_DEBUG
+#if FULL_DEBUG
         Debug.Log("Selected component: " + component.componentName);
-        #endif
-        StartCoroutine(StartPlacementSequence(component));
+#endif
+        selectedComp = component;
+        StopCoroutine("StartPlacementSequence");
+        StartCoroutine("StartPlacementSequence");
     }
-    
+
     /// <summary>
     /// Shows the Save Dialogue Box for the user to enter the name of the blueprint to save as
     /// </summary>
@@ -462,7 +457,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
 
     public void ShowStatsPanel(bool show)
     {
-        if(show)
+        if (show)
         {
             statsPanelAnim.enabled = true;
             statsPanelAnim.Play("PanelMoveInRight");
@@ -508,7 +503,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     public void AllowSaving(bool allow)
     {
         saveButton.interactable = allow;
-        if(allow)
+        if (allow)
         {
             saveButtonImage.color = saveButtonImage.color.WithAplha(1.0f);
         }
@@ -548,11 +543,11 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     private void SaveBlueprint(string fileName)
     {
         Debug.Log("Saving " + fileName);
-        if(shipDesignSystem.FileExists(fileName))
+        if (shipDesignSystem.FileExists(fileName))
         {
             ShowModalPanel(true);
             modalPanel.ShowMessageWithYesCancel("A Blueprint named \"" + fileName + "\" already exists. Overwrite?",
-                ()=>
+                () =>
                 {
                     shipDesignSystem.DeleteBlueprint(fileName);
                     shipDesignSystem.SaveBlueprint(fileName);
@@ -593,7 +588,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
         }
         shipDesignSystem.DeleteBlueprint(fileName);
         RemoveBlueprintButton(fileName);
-        
+
     }
     /// <summary>
     /// Removes all Load Buttons from the Load Panel and calls DeleteAllBlueprints on the ShipDesignSystem
