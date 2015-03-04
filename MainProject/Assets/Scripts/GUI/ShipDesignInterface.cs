@@ -117,6 +117,11 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
             AddBlueprintButton(blueprintName);
         }
         //Add current fleet buttons
+        foreach (string blueprintName in FleetManager.Instance.CurrentFleet.Select(meta=>meta.BlueprintName))
+        {
+            AddCurrentFleetButton(blueprintName);
+        }
+        fleetStrBar.SetValue((float)(FleetManager.Instance.CurrentFleetStrength) / (float)(FleetManager.Instance.MaxFleetStrength));
 
         saveDialogueBox.Setup((fileName) => SaveBlueprint(fileName), () => ShowSaveDialogueBox(false));
 

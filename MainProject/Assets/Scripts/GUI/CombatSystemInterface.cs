@@ -140,7 +140,17 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
         guiFields.powerText.text = currentPower.ToString();
         guiFields.moveCostText.text = moveCost.ToString("0.00");
     }
-
+    public void SetPowerValid(bool valid=true)
+    {
+        if(valid)
+        {
+            guiFields.powerText.color = Color.white;
+        }
+        else
+        {
+            guiFields.powerText.color = Color.red;
+        }
+    }
     /// <summary>
     /// Shows the power to be displayed on the GUI
     /// </summary>

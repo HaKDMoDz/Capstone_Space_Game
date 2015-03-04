@@ -96,6 +96,7 @@ public class PlayerShip : TurnBasedUnit
         combatInterface.ShowStatsPanel(true);
         //combatInterface.ShowComponentActivationButtons(SelectAllComponents, components.Where(c => c.CanActivate));
         combatInterface.UpdateStats(CurrentPower, MoveCost);
+        combatInterface.SetPowerValid();
     }
     /// <summary>
     /// Starts the turn for the player ship. Starts listening for commands to move or to activate components
@@ -145,7 +146,7 @@ public class PlayerShip : TurnBasedUnit
                 EnableInputEvents(true);
             }//if(targetComponent)
             receivedMoveCommand = false;
-            if(CurrentPower <=0) //end turn
+            if(CurrentPower <=0 || TurnBasedCombatSystem.Instance.ai_Ships.Count ==0) //end turn
             {
                 continueTurn = false;
             }
@@ -174,13 +175,13 @@ public class PlayerShip : TurnBasedUnit
         int targetShipIndex = 0;
         List<AI_Ship> aiShips = TurnBasedCombatSystem.Instance.ai_Ships;
         int numAIShips = aiShips.Count;
-#if !NO_DEBUG
+        #if FULL_DEBUG
         if (numAIShips == 0)
         {
             Debug.LogError("No ai ships found");
-            TurnBasedCombatSystem.Instance.EndCombat();
         }
-#endif
+        #endif
+
         //targetShip = aiShips[targetShipIndex];
         targetShipIndex = aiShips.IndexOf(targetShip);
         Transform aiTargetTrans = targetShip.transform;
@@ -280,7 +281,10 @@ public class PlayerShip : TurnBasedUnit
             yield return null;
         }
         Camera.main.cullingMask = originalCamCulling;
-        targetShip.ShowHPBars(false);
+        if (targetShip)
+        {
+            targetShip.ShowHPBars(false);
+        }
         CurrentPower -= totalActivationCost;
         UnSelectComponents(false);
         combatInterface.ShowStatsPanel(true);
@@ -505,7 +509,10 @@ public class PlayerShip : TurnBasedUnit
                 //componentSelectionOn = true;
                 if(CurrentPower - totalActivationCost - component.ActivationCost < 0)
                 {
+                    #if FULL_DEBUG
                     Debug.LogWarning("Not enough power");
+                    #endif
+                    combatInterface.SetPowerValid(false);
                     return;
                 }
                 selectedComponents.Add(component);

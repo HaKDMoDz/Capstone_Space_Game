@@ -13,20 +13,17 @@ public class GameController : Singleton<GameController>
 {
     #region Fields
     
-    #region EditorExposed
+    //EditorExposed
     private GameScene defaultStartScene = GameScene.MainMenu;
     //[SerializeField]
     //private List<SceneNameEntry> sceneEntryList;
     //[SerializeField]
     //private SaveFields saveFields;
-    #endregion //EditorExposed
 
-    #region References
+    //References
     private GameSaveSystem saveSystem;
 
-    #endregion References
-
-    #region InternalFields
+    // InternalFields
     //private GameScene currentScene;
     //private Dictionary<GameScene, string> sceneEnumToNameTable;
     ////need this for now - until Button's onClick event can pass in enums
@@ -38,18 +35,16 @@ public class GameController : Singleton<GameController>
     }
     
     //private GameScene currentScene;
-    #endregion //Internal
 
-    #region Events
-    public delegate void PreSceneChange(SceneChangeArgs args);
+    //Events
     //raised before a Unity scene change is triggered - a hint for all systems to prepare to save whatever they are doing and prepare to be shut down
+    public delegate void PreSceneChange(SceneChangeArgs args);
     public event PreSceneChange OnPreSceneChange = new PreSceneChange((SceneChangeArgs) => { });
-
-    public delegate void PostSceneChange(SceneChangeArgs args);
     //raised after Unity has completed loading a new scene - systems should load up the latest save file and prepare to resume activity
+    public delegate void PostSceneChange(SceneChangeArgs args);
     public event PostSceneChange OnPostSceneChange = new PostSceneChange((SceneChangeArgs) => { });
-    #endregion //Events
-
+    public delegate void QuitEvent();
+    public event QuitEvent OnQuit = new QuitEvent(() => { });
     #endregion //Fields
 
     #region Methods
@@ -175,9 +170,9 @@ public class GameController : Singleton<GameController>
             else
             {
                 #if !NO_DEBUG
-                Debug.LogWarning("No AutoSave found, default GameData created");
+                Debug.LogWarning("No AutoSave found, new GameData created");
                 #endif
-                gameData = new GameData(defaultStartScene, defaultStartScene);
+                gameData = new GameData(gameData.prevScene, gameData.prevScene);
             }
         }
     }//Awake
@@ -222,7 +217,8 @@ public class GameController : Singleton<GameController>
         Debug.Log("Application Quit");
         #endif
         //if (gameData.prevScene != GameScene.MainMenu)
-        { 
+        {
+            OnQuit();
             saveSystem.AutoSave(gameData); 
         }
     }

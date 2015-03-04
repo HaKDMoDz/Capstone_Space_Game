@@ -328,7 +328,6 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
     private void PreSceneChange(SceneChangeArgs args)
     {
         SaveFleet();
-
     }
     #endregion InternalCallbacks
 

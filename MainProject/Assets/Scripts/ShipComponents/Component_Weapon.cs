@@ -45,20 +45,29 @@ public abstract class Component_Weapon : ShipComponent
     protected IEnumerator DoDamage(ShipComponent targetComp)
     {
         TurnBasedUnit targetShip = targetComp.ParentShip;
-        if(targetShip.ShieldStrength>=damage)
+        if (!targetShip)
         {
-            ApplyShieldDamageEffect(targetComp.ParentShip);
-            yield return StartCoroutine(targetShip.TakeDamage(damage));
+            #if FULL_DEBUG
+            Debug.LogWarning("Target ship is dead");
+            #endif
         }
         else
         {
-            Debug.Log("Killing shields "+targetShip.ShieldStrength);
-            targetShip.TakeDamage(targetShip.ShieldStrength);
-            float remainingDamage = damage-targetShip.ShieldStrength;
-            float componentDamage = remainingDamage * (1.0f - hullDamagePercent / 100.0f);
-            float hullDamage = remainingDamage * hullDamagePercent / 100.0f;
-            yield return StartCoroutine(targetComp.TakeDamage(componentDamage));
-            yield return StartCoroutine(targetComp.ParentShip.TakeDamage(hullDamage));
+            if (targetShip.ShieldStrength >= damage)
+            {
+                ApplyShieldDamageEffect(targetComp.ParentShip);
+                yield return StartCoroutine(targetShip.TakeDamage(damage));
+            }
+            else
+            {
+                Debug.Log("Killing shields " + targetShip.ShieldStrength);
+                targetShip.TakeDamage(targetShip.ShieldStrength);
+                float remainingDamage = damage - targetShip.ShieldStrength;
+                float componentDamage = remainingDamage * (1.0f - hullDamagePercent / 100.0f);
+                float hullDamage = remainingDamage * hullDamagePercent / 100.0f;
+                yield return StartCoroutine(targetComp.TakeDamage(componentDamage));
+                yield return StartCoroutine(targetComp.ParentShip.TakeDamage(hullDamage));
+            }
         }
         //if comp is armour
         //  compDmg+=compDmg*armourMod%/100

@@ -61,9 +61,10 @@ public class TutorialSystem : Singleton<TutorialSystem>
             tutorialType_entry_table[type].panel.gameObject.SetActive(false);
             return;
         }
-        if (!tutorialType_entry_table[type].shown)
+        if (!tutorialType_entry_table[type].shown &&
+            GameController.Instance.GameData.tutorialData.ShowTutorials)
         {
-            tutorialType_entry_table[type].panel.gameObject.SetActive(show);
+            tutorialType_entry_table[type].panel.gameObject.SetActive(true);
             tutorialType_entry_table[type].shown = true;    
         }
     }

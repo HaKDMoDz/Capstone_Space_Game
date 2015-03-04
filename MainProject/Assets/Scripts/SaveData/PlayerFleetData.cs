@@ -14,7 +14,7 @@ public class PlayerFleetData
 
     public void Serialize(ref SerializedPlayerFleetData sz_playerFleetData)
     {
-        sz_playerFleetData.currentFleet_meta_list = currentFleet_meta_list;    
+        sz_playerFleetData.currentFleet_meta_list =  currentFleet_meta_list;    
     }
 }
 

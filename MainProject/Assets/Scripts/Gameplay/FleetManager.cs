@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class FleetManager : Singleton<FleetManager>
 {
@@ -26,10 +27,10 @@ public class FleetManager : Singleton<FleetManager>
         set
         {
             currentFleet = value;
-            //foreach (string blueprintName in currentFleet)
-            //{
-            //    ShipDesignInterface.Instance.AddCurrentFleetButton(blueprintName);
-            //}
+            foreach (ShipBlueprintMetaData meta in currentFleet)
+            {
+                currentFleetStrength += meta.FleetCost;
+            }
         }
     }
 
@@ -61,20 +62,22 @@ public class FleetManager : Singleton<FleetManager>
     {
         return (currentFleetStrength + metaData.FleetCost > maxFleetStrength);
     }
-    public void RemoveFromFleet(ShipBlueprintMetaData metaData)
+    public void RemoveFromFleet(ShipBlueprintMetaData _metaData)
     {
 #if !NO_DEBUG
-        if (currentFleet.Contains(metaData))
+        //if (currentFleet.Any(meta=>meta.Equals(metaData)))
+        if (currentFleet.Any(meta => meta.BlueprintName ==_metaData.BlueprintName))
         {
-            currentFleet.Remove(metaData);
-            currentFleetStrength -= metaData.FleetCost;
+            ShipBlueprintMetaData meta = CurrentFleet.First(metaData => metaData.BlueprintName == _metaData.BlueprintName);
+            currentFleet.Remove(meta);
+            currentFleetStrength -= meta.FleetCost;
             #if FULL_DEBUG
-            Debug.Log("Current fleet strength " + currentFleetStrength);
+            Debug.Log("Removing " + meta.BlueprintName + " Current fleet strength " + currentFleetStrength);
             #endif
         }
         else
         {
-            Debug.LogError("Ship does not exist in fleet");
+            Debug.LogError("Ship " + _metaData.BlueprintName +" does not exist in fleet");
         }
 #else //NO_DEBUG
         currentFleet.Remove(shipBP);

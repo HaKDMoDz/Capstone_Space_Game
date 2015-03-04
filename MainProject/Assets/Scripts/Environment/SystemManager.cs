@@ -38,7 +38,7 @@ public class SystemManager : MonoBehaviour
 
         if (!closestSystem.GetComponent<SolarSystem>().OnScreen)
         {
-            Debug.LogWarning("Closest System is: " + closestSystem.name + " at: " + closestSystemDistance);
+            //Debug.LogWarning("Closest System is: " + closestSystem.name + " at: " + closestSystemDistance);
         }
 
         yield return new WaitForSeconds(0.016f);

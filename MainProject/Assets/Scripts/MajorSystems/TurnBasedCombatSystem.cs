@@ -235,6 +235,10 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
     /// </summary>
     private void PostTurnActions()
     {
+        if(ai_Ships.Count==0 || playerShips.Count == 0)
+        {
+            EndCombat();
+        }
         //multiple ships with the same time
         if(unitsWithSameTime.Count > 0)
         {
@@ -273,7 +277,10 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
         yield return StartCoroutine(CameraDirector.Instance.MoveToFocusOn(firstUnit.transform, GlobalVars.CameraMoveToFocusPeriod));
         yield return StartCoroutine(firstUnit.ExecuteTurn());
         CombatSystemInterface.Instance.EnableComponentSelectionPanel(false);
-        firstUnit.transform.FindChild("SelectionHalo").gameObject.SetActive(false);
+        if (firstUnit)
+        {
+            firstUnit.transform.FindChild("SelectionHalo").gameObject.SetActive(false);
+        }
     }
     public void EndCombat()
     {

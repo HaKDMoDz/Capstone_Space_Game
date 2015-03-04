@@ -108,6 +108,8 @@ public class Mothership : MonoBehaviour
     }
     private void Start()
     {
+        GameController.Instance.OnQuit += SaveData;
+        GameController.Instance.OnPreSceneChange += (SceneChangeArgs)=>SaveData();
         spaceGround.OnGroundClick += OnGroundClick;
         spaceGround.OnGroundHold += OnGroundClick;
         GalaxyCamera.Instance.targetMothership();
@@ -119,7 +121,11 @@ public class Mothership : MonoBehaviour
         }
 
     }
-
+    private void SaveData()
+    {
+        GameController.Instance.GameData.galaxyMapData.position = trans.position;
+    }
+    
     private void OnTriggerEnter(Collider other)
     {
         if(other.tag == TagsAndLayers.SolarSystemTag)
