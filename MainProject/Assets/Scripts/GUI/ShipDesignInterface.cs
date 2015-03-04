@@ -490,6 +490,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     public void SaveFleet()
     {
         shipDesignSystem.SaveFleet();
+        TutorialSystem.Instance.ShowNextTutorial(TutorialSystem.TutorialType.BuildFleet);
     }
 
     /// <summary>

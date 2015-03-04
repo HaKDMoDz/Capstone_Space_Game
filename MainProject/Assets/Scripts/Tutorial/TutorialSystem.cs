@@ -8,7 +8,7 @@ public class TutorialSystem : Singleton<TutorialSystem>
 {
     public enum TutorialType 
     { 
-        TurnOrder,
+        //Combat
         //movement tutorials
         MovementHowTo, MovementUI, MovementPowerCost, MoveCostThruster,
         //targeting an enemy
@@ -18,7 +18,16 @@ public class TutorialSystem : Singleton<TutorialSystem>
         //enemy target panel
         TargetedEnemyShip, ClickOnCompToFire,EnemyShieldHP,
         //End turn
-        EndTurn
+        EndTurn,
+
+        //Ship Design
+        //Build
+        BuildHull, BuildComponent, DragPaint,
+        //stats
+        ShipStats,
+        //save
+        SaveShip, BuildFleet,
+        ReturnToGalaxy  
     }
 
     [SerializeField]

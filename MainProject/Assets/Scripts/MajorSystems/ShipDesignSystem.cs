@@ -44,6 +44,7 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
             #if FULL_DEBUG
             Debug.Log("Building hull: " + blueprintBeingBuilt.Hull.hullName);
             #endif
+            TutorialSystem.Instance.ShowNextTutorial(TutorialSystem.TutorialType.BuildHull);
             AddHullToScene(blueprintBeingBuilt.Hull);
             buildingShip = true;
         }
@@ -87,10 +88,15 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
             #if FULL_DEBUG
             Debug.Log("Building component " + component.componentName + " on slot " + slot.index);
             #endif
+            TutorialSystem.Instance.ShowNextTutorial(TutorialSystem.TutorialType.BuildComponent);
             AddComponentToScene(slot, component);
             blueprintBeingBuilt.AddComponent(slot, component);
             //blueprintBeingBuilt.GenerateMetaData();
-            if (blueprintBeingBuilt.IsValid()) ShipDesignInterface.Instance.AllowSaving(true);
+            if (blueprintBeingBuilt.IsValid())
+            {
+                ShipDesignInterface.Instance.AllowSaving(true);
+                TutorialSystem.Instance.ShowTutorial(TutorialSystem.TutorialType.SaveShip, true);
+            }
             ShipDesignInterface.Instance.UpdateStatsPanel(blueprintBeingBuilt.MetaData);
             
         }
@@ -158,6 +164,7 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
         blueprintBeingBuilt.GenerateMetaData(fileName);
         ShipDesignInterface.Instance.UpdateStatsPanel(blueprintBeingBuilt.MetaData);
         saveSystem.SaveBlueprint(blueprintBeingBuilt, fileName);
+        TutorialSystem.Instance.ShowNextTutorial(TutorialSystem.TutorialType.SaveShip);
     }
     /// <summary>
     /// Loads a saved blueprint and adds it to the scene; clearing any unsaved changes to the current ship being built
