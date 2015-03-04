@@ -81,6 +81,10 @@ public class TutorialSystem : Singleton<TutorialSystem>
     private void Awake()
     {
         tutorialType_entry_table = tutorialEntryList.ToDictionary(entry=>entry.type, entry=>entry);
+        //foreach (var item in tutorialType_entry_table)
+        //{
+        //    Debug.Log("Type " + item.Key + " panel " + item.Value.panel.name);
+        //}
     }
     private void Start()
     {

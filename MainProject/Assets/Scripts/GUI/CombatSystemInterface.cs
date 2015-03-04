@@ -102,8 +102,8 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
             ImageButton buttonClone = Instantiate(guiFields.imageButtonPrefab) as ImageButton;
             buttonClone.SetImage(component.MultipleSprite);
             buttonClone.AddOnClickListener(() => activationMethod(currentType));
-            buttonClone.AddOnPointerEnterListener(()=>{Debug.Log("Mouse over "+component.componentName);});
-            buttonClone.AddOnPointerExitListener(() => { Debug.Log("Mouse exit " + component.componentName); });
+            //buttonClone.AddOnPointerEnterListener(()=>{Debug.Log("Mouse over "+component.componentName);});
+            //buttonClone.AddOnPointerExitListener(() => { Debug.Log("Mouse exit " + component.componentName); });
             compButtons.Add(buttonClone);
             buttonClone.transform.SetParent(guiFields.compHotkeysParent, false);
         }
