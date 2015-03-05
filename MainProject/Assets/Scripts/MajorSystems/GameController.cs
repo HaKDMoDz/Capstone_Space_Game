@@ -99,7 +99,7 @@ public class GameController : Singleton<GameController>
         }
         saveSystem.AutoSave(gameData);
         loadingScreen.gameObject.SetActive(true);
-        StartCoroutine(loadingScreen.LoadLevel(GameConfig.GetSceneName(nextScene)));
+        loadingScreen.LoadLevel(GameConfig.GetSceneName(nextScene));
         //Application.LoadLevel(GameConfig.GetSceneName(nextScene));
 
     }//ChangeScene

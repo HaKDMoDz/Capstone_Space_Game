@@ -8,28 +8,33 @@ public class LoadingScreen : MonoBehaviour
     private FillBar loadingbar;
 
     private AsyncOperation async;
-
-    public IEnumerator LoadLevel(string level)
+    private string levelToLoad;
+    private bool toLoadLevel = false;
+    public void LoadLevel(string level)
     {
-        Debug.LogWarning("Loading sync level " + level);
+        levelToLoad = level;
+        toLoadLevel = true;
+    }
+
+    private IEnumerator LoadLevelAsync()
+    {
+        Debug.LogWarning("Loading sync level " + levelToLoad);
         loadingbar.SetValue(0.0f);
-
-        async = Application.LoadLevelAsync(level);
-        yield return async;
-
-        //while(!async.isDone)
-        //{
-        //    loadingbar.SetValue(async.progress);
-        //    Debug.Log("Loading Progress: " + async.progress);
-        //    yield return null;  
-        //}
+        async = Application.LoadLevelAsync(levelToLoad);
+        while (!async.isDone)
+        {
+            loadingbar.SetValue(async.progress);
+            Debug.Log("Loading Progress: " + async.progress);
+            yield return null;
+        }
     }
     
     void Update()
     {
-        if(async!=null)
+        if (toLoadLevel)
         {
-            loadingbar.SetValue(async.progress);
+            toLoadLevel = false;
+            StartCoroutine(LoadLevelAsync());
         }
     }
 
