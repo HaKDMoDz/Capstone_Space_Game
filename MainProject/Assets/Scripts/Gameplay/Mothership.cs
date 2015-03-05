@@ -39,16 +39,20 @@ public class Mothership : MonoBehaviour
     #region PrivateMethods
     private IEnumerator Move()
     {
+        Debug.Log("movement: called");
         if (!orbiting)
         {
+            Debug.Log("movement: not orbiting");
             Vector3 moveDir;
             moving = true;
             moveDir = destination - trans.position;
 
             if (movementMode == MovementMode.Translate)
             {
+                Debug.Log("movement: translate phase");
                 while (moveDir.magnitude > moveSpeed * Time.deltaTime)
                 {
+                    Debug.Log("movement: translate phase: moving");
                     Vector3 moveDirNorm = moveDir.normalized;
                     trans.LookAt(destination);
                     trans.position += moveDirNorm * moveSpeed * Time.deltaTime;
@@ -61,6 +65,7 @@ public class Mothership : MonoBehaviour
             }
             while (moveDir.magnitude > GlobalVars.LerpDistanceEpsilon)
             {
+                Debug.Log("movement: lerp phase");
                 trans.LookAt(destination);
                 trans.position = Vector3.Lerp(trans.position, destination, moveSpeed*.01f * Time.deltaTime);
                 //StartCoroutine(GalaxyCamera.Instance.FollowMothership(trans, inSystem));
@@ -76,14 +81,17 @@ public class Mothership : MonoBehaviour
 
     private IEnumerator Orbit()
     {
+        Debug.Log("orbit: called");
         Vector3 moveDir;
         moving = true;
         moveDir = destination - trans.position;
 
         if (movementMode == MovementMode.Translate)
         {
+            Debug.Log("orbit: translate mode");
             while (moveDir.magnitude > moveSpeed * Time.deltaTime)
             {
+                Debug.Log("orbit: speed under max");
                 Vector3 moveDirNorm = moveDir.normalized;
                 trans.LookAt(destination);
                 trans.position += moveDirNorm * moveSpeed * Time.deltaTime;
@@ -94,6 +102,7 @@ public class Mothership : MonoBehaviour
         }
         while (moveDir.magnitude > GlobalVars.LerpDistanceEpsilon)
         {
+            Debug.Log("orbit: not at destination yet");
             trans.LookAt(destination);
             trans.position = Vector3.Lerp(trans.position, destination, moveSpeed * .01f * Time.deltaTime);
             moveDir = destination - trans.position;
@@ -152,7 +161,8 @@ public class Mothership : MonoBehaviour
             //StopCoroutine(Move());
             GalaxyCamera.Instance.targetPlanet(otherTrans);
             GalaxyCamera.Instance.changeZoomLevel(CamZoomLevel.PLANET_ZOOM);
-            StopAllCoroutines();
+            //StopAllCoroutines();
+            StopCoroutine(Move());
             StartCoroutine(Orbit());
 
             //StartCoroutine(GalaxyCamera.Instance.FocusOnPlanet(otherTrans));
@@ -162,6 +172,7 @@ public class Mothership : MonoBehaviour
     }
     private void OnTriggerStay(Collider other)
     {
+        StopCoroutine(Move());
         if (other.tag == TagsAndLayers.PlanetTag && orbiting)
         {
             //Debug.Log("<<<" + other.name + ">>>");
@@ -172,9 +183,11 @@ public class Mothership : MonoBehaviour
             Transform otherTrans = other.transform;
             trans.position = PointOnCircle(((SphereCollider)other).radius - 10.0f, angle, otherTrans.position);
             destination = PointOnCircle(((SphereCollider)other).radius - 10.0f, (angle + 2.0f) % 360.0f, otherTrans.position);
-
             trans.LookAt(destination);
             moving = false;
+            //GalaxyCamera.Instance.targetPlanet(otherTrans);
+            //GalaxyCamera.Instance.changeZoomLevel(CamZoomLevel.PLANET_ZOOM);
+
            
         }
     }
