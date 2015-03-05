@@ -14,16 +14,14 @@ public class GameController : Singleton<GameController>
     #region Fields
     
     //EditorExposed
-    private GameScene defaultStartScene = GameScene.MainMenu;
-    //[SerializeField]
-    //private List<SceneNameEntry> sceneEntryList;
-    //[SerializeField]
-    //private SaveFields saveFields;
+    [SerializeField]
+    private LoadingScreen loadingScreen;
 
     //References
     private GameSaveSystem saveSystem;
 
     // InternalFields
+    private GameScene defaultStartScene = GameScene.MainMenu;
     //private GameScene currentScene;
     //private Dictionary<GameScene, string> sceneEnumToNameTable;
     ////need this for now - until Button's onClick event can pass in enums
@@ -100,7 +98,9 @@ public class GameController : Singleton<GameController>
             OnPreSceneChange(new SceneChangeArgs(gameData.prevScene, nextScene));
         }
         saveSystem.AutoSave(gameData);
-        Application.LoadLevel(GameConfig.GetSceneName(nextScene));
+        loadingScreen.gameObject.SetActive(true);
+        StartCoroutine(loadingScreen.LoadLevel(GameConfig.GetSceneName(nextScene)));
+        //Application.LoadLevel(GameConfig.GetSceneName(nextScene));
 
     }//ChangeScene
 
