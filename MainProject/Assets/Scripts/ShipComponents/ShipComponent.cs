@@ -94,6 +94,12 @@ public abstract class ShipComponent : MonoBehaviour , IPointerClickHandler, IPoi
     {
         get { return multipleSprite; }
     }
+    [SerializeField]
+    private string tooltipText;
+    public string TooltipText
+    {
+        get { return tooltipText; }
+    }
     
 
     public TurnBasedUnit ParentShip { get; private set; }

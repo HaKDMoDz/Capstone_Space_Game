@@ -6738,6 +6738,10 @@ Prefab:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 11470700, guid: 3236935c0dcbef44db105ed6d0649a86, type: 2}
+      propertyPath: turnOffOnOk
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3236935c0dcbef44db105ed6d0649a86, type: 2}
   m_RootGameObject: {fileID: 1399953329}
@@ -17023,7 +17027,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: .490196079, g: .596078455, b: .627451003, a: 1}
   m_FontData:
-    m_Font: {fileID: 12800000, guid: a2171ff38458ef643b14b762855a38b4, type: 3}
+    m_Font: {fileID: 12800000, guid: 44dce14e79123f245a9ea606110c4d1c, type: 3}
     m_FontSize: 20
     m_FontStyle: 0
     m_BestFit: 0
@@ -17031,8 +17035,8 @@ MonoBehaviour:
     m_MaxSize: 40
     m_Alignment: 0
     m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_HorizontalOverflow: 1
+    m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: Blueprint Name
 --- !u!222 &374057751
@@ -27966,6 +27970,7 @@ MonoBehaviour:
   toggle: {fileID: 424472641}
   okButton: {fileID: 1916606942}
   autoAdvance: 0
+  turnOffOnOk: 0
 --- !u!114 &595931254
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35075,6 +35080,7 @@ MonoBehaviour:
   toggle: {fileID: 1805848309}
   okButton: {fileID: 609932523}
   autoAdvance: 0
+  turnOffOnOk: 0
 --- !u!114 &694987481
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -46728,6 +46734,7 @@ MonoBehaviour:
   toggle: {fileID: 997823771}
   okButton: {fileID: 1042860060}
   autoAdvance: 0
+  turnOffOnOk: 0
 --- !u!114 &995458090
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -53564,7 +53571,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   toggle: {fileID: 1555525473}
   okButton: {fileID: 38010967}
-  autoAdvance: 1
+  autoAdvance: 0
+  turnOffOnOk: 0
 --- !u!114 &1152344639
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62809,6 +62817,7 @@ MonoBehaviour:
   toggle: {fileID: 1430136386}
   okButton: {fileID: 1531523433}
   autoAdvance: 0
+  turnOffOnOk: 1
 --- !u!114 &1399953332
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69188,6 +69197,7 @@ MonoBehaviour:
   toggle: {fileID: 1497651742}
   okButton: {fileID: 1539821360}
   autoAdvance: 0
+  turnOffOnOk: 0
 --- !u!114 &1546151710
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -70776,6 +70786,7 @@ MonoBehaviour:
   hpBar: {fileID: 2059492407}
   singleSprite: {fileID: 21300000, guid: 58db9fef00181444199d5f0a8d9ea1d1, type: 3}
   multipleSprite: {fileID: 21300000, guid: 0195ac356d6ef484dbc9c9af2c63a3bb, type: 3}
+  tooltipText: Railgun
   damage: 50
   range: 0
   hullDamagePercent: 20
@@ -72069,7 +72080,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: .490196079, g: .596078455, b: .627451003, a: 1}
   m_FontData:
-    m_Font: {fileID: 12800000, guid: a2171ff38458ef643b14b762855a38b4, type: 3}
+    m_Font: {fileID: 12800000, guid: 44dce14e79123f245a9ea606110c4d1c, type: 3}
     m_FontSize: 20
     m_FontStyle: 0
     m_BestFit: 0
@@ -72077,8 +72088,8 @@ MonoBehaviour:
     m_MaxSize: 40
     m_Alignment: 0
     m_RichText: 0
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_HorizontalOverflow: 1
+    m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: 
 --- !u!114 &1605124256
@@ -75542,7 +75553,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11470700, guid: 3236935c0dcbef44db105ed6d0649a86, type: 2}
       propertyPath: autoAdvance
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 170714, guid: 3236935c0dcbef44db105ed6d0649a86, type: 2}
       propertyPath: m_IsActive
@@ -90760,6 +90771,7 @@ MonoBehaviour:
   toggle: {fileID: 330293691}
   okButton: {fileID: 471662200}
   autoAdvance: 1
+  turnOffOnOk: 0
 --- !u!114 &2022423420
 MonoBehaviour:
   m_ObjectHideFlags: 0

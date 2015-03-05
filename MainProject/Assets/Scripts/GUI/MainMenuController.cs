@@ -44,6 +44,7 @@ public class MainMenuController : MonoBehaviour
     public void Quit()
     {
         Debug.Log("Quit");
+        Application.Quit();
     }
     #endregion GUI_Callbacks
     #endregion Public

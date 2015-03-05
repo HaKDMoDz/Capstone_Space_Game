@@ -85,7 +85,6 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
         shipDesignSystem = ShipDesignSystem.Instance;
         AllowSaving(false);
     }
-
     #endregion UnityCallbacks
 
     #region GUIBuilders

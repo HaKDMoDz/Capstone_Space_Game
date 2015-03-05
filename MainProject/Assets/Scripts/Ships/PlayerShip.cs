@@ -235,7 +235,7 @@ public class PlayerShip : TurnBasedUnit
     {
         if(TutorialSystem.Instance)
         {
-            TutorialSystem.Instance.ShowTutorial(TutorialSystem.TutorialType.ClickEnemyToEngage, false);
+            TutorialSystem.Instance.ShowTutorial(TutorialSystem.TutorialType.ClickOnCompToFire, false);
         }
         int numWeaponsActivated = 0;
         float totalPowerUsed = 0.0f;

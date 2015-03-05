@@ -67,6 +67,7 @@ public class TutorialSystem : Singleton<TutorialSystem>
     {
         if(!show)
         {
+            Debug.Log("Hide Tutorial " + type + " panel: " + tutorialType_entry_table[type].panel.gameObject.name);
             tutorialType_entry_table[type].panel.gameObject.SetActive(false);
             return;
         }
@@ -93,6 +94,11 @@ public class TutorialSystem : Singleton<TutorialSystem>
             //Debug.Log("Type " + type_entry.Key + " toggle " + type_entry.Value.show);
             TutorialType currentType = type_entry.Key;
             TutorialPanel panel = type_entry.Value.panel;
+            if(!panel.AutoAdvance && !panel.TurnOffOnOk)
+            {
+                panel.OkButton.gameObject.SetActive(false);
+                panel.Toggle.gameObject.SetActive(false);
+            }
             panel.AddOnClickListener(() => 
                 {
                     if (!panel.ToggleIsOn)
@@ -104,6 +110,10 @@ public class TutorialSystem : Singleton<TutorialSystem>
                         if (panel.AutoAdvance)
                         {
                             ShowNextTutorial(currentType);
+                        }
+                        else if(panel.TurnOffOnOk)
+                        {
+                            panel.gameObject.SetActive(false);
                         }
                         else
                         {
