@@ -6,7 +6,7 @@ class Program
 {
     static void Main(string[] args)
     {
-        Debug.Log("something");
+        InferenceEngine ruleInterpreter = new InferenceEngine();
 
         Console.Read();
     }
