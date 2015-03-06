@@ -51,7 +51,7 @@ public class CombatSceneController : Singleton<CombatSceneController>
         if (playerFleetData.currentFleet_meta_list.Count == 0)
         {
             Debug.LogWarning("Empty player fleet - spawning default fleet");
-            foreach (string bpTemplateName in new List<string>() { "AI_Corvette", "AI_Frigate" })
+            foreach (string bpTemplateName in new List<string>() { "DefaultCorvette", "DefaultCorvette" })
             {
                 TurnBasedUnit unit = shipBuilder.BuildShip(ShipType.PlayerShip, BlueprintTemplates.GetBPTemplate(bpTemplateName), spawnPos, Quaternion.identity);
                 #if FULL_DEBUG
