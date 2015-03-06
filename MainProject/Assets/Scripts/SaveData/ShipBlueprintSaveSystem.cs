@@ -1,4 +1,11 @@
-﻿#region Usings
+﻿/*
+  ShipBlueprintSaveSystem.cs
+  Mission: Invasion
+  Created by Rohun Banerji on Dec 25/2014
+  Copyright (c) 2014 Rohun Banerji. All rights reserved.
+*/
+
+#region Usings
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;

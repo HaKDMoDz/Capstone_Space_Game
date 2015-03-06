@@ -1,4 +1,11 @@
-﻿using UnityEngine;
+﻿/*
+  ScriptableObjectCreator.cs
+  Mission: Invasion
+  Created by Rohun Banerji on Jan 7/2015
+  Copyright (c) 2015 Rohun Banerji. All rights reserved.
+*/
+
+using UnityEngine;
 using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;

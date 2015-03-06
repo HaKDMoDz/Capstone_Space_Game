@@ -1,4 +1,11 @@
-﻿#region Usings
+﻿/*
+  TurnBasedCombatSystem.cs
+  Mission: Invasion
+  Created by Rohun Banerji on Jan 8/2015
+  Copyright (c) 2015 Rohun Banerji. All rights reserved.
+*/
+
+#region Usings
 using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Collections;

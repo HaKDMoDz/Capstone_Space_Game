@@ -1,4 +1,11 @@
-﻿using UnityEngine;
+﻿/*
+  ShipStatsPanel.cs
+  Mission: Invasion
+  Created by Rohun Banerji on Jan 14/2015
+  Copyright (c) 2015 Rohun Banerji. All rights reserved.
+*/
+
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;

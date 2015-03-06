@@ -1,4 +1,11 @@
-﻿using UnityEngine;
+﻿/*
+  Projectile_Missile.cs
+  Mission: Invasion
+  Created by Rohun Banerji on Feb 18/2015
+  Copyright (c) 2015 Rohun Banerji. All rights reserved.
+*/
+
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 

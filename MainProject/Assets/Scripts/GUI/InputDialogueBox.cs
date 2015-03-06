@@ -1,4 +1,11 @@
-﻿using UnityEngine;
+﻿/*
+  InputDialogueBox.cs
+  Mission: Invasion
+  Created by Rohun Banerji on Jan 2/2015
+  Copyright (c) 2015 Rohun Banerji. All rights reserved.
+*/
+
+using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using System.Collections;

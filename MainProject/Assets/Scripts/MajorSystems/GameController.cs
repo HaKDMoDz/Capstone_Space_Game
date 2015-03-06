@@ -1,13 +1,19 @@
-﻿using UnityEngine;
+﻿/*
+  GameController.cs
+  Mission: Invasion
+  Created by Rohun Banerji on Jan 8/2015
+  Copyright (c) 2015 Rohun Banerji. All rights reserved.
+*/
+#region Usings
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
 using System.Linq;
-
+#endregion Usings
 
 //The scenes that will be in the release build and are managed by the game controller
 public enum GameScene {MainMenu, GalaxyMap, CombatScene, ShipDesignScene }
-
 
 public class GameController : Singleton<GameController>
 {

@@ -1,4 +1,11 @@
-﻿#region Usings
+﻿/*
+  ResourceManager.cs
+  Mission: Invasion
+  Created by Rohun Banerji on Feb 25/2015
+  Copyright (c) 2015 Rohun Banerji. All rights reserved.
+*/
+
+#region Usings
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;

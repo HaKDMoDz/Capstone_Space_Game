@@ -1,8 +1,17 @@
-﻿using UnityEngine;
+﻿/*
+  ShipBlueprint.cs
+  Mission: Invasion
+  Created by Rohun Banerji on Dec 22/2014
+  Copyright (c) 2014 Rohun Banerji. All rights reserved.
+*/
+
+#region Usings
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
 using System.Linq;
+#endregion Usings
 
 [Serializable]
 public class ShipBlueprint
@@ -31,8 +40,6 @@ public class ShipBlueprint
     }
     
     #endregion Fields
-
-
 
     #region Methods
 

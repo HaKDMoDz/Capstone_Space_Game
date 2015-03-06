@@ -1,4 +1,11 @@
-﻿#region Usings
+﻿/*
+  ShipDesignInterface.cs
+  Mission: Invasion
+  Created by Rohun Banerji on Dec 22/2014
+  Copyright (c) 2014 Rohun Banerji. All rights reserved.
+*/
+
+#region Usings
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
@@ -8,8 +15,6 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 #endregion Usings
-
-
 
 public class ShipDesignInterface : Singleton<ShipDesignInterface>
 {

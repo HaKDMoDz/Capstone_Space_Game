@@ -1,9 +1,16 @@
-﻿using UnityEngine;
+﻿/*
+  TurnBasedUnit.cs
+  Mission: Invasion
+  Created by Rohun Banerji on Jan 14/2015
+  Copyright (c) 2015 Rohun Banerji. All rights reserved.
+*/
+#region Usings
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-
+#endregion Usings
 public abstract class TurnBasedUnit : MonoBehaviour
 {
     #region Fields

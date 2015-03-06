@@ -1,4 +1,11 @@
-﻿#region Usings
+﻿/*
+  ShipComponent.cs
+  Mission: Invasion
+  Created by Rohun Banerji on Nov 12/2015
+  Copyright (c) 2015 Rohun Banerji. All rights reserved.
+*/
+
+#region Usings
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;

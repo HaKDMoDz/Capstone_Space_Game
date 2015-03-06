@@ -1,11 +1,17 @@
-﻿#region Usings
+﻿/*
+  AudioManager.cs
+  Mission: Invasion
+  Created by Rohun Banerji on Feb 2/2015
+  Copyright (c) 2015 Rohun Banerji. All rights reserved.
+*/
+
+#region Usings
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System;
 #endregion Usings
-
 public class AudioManager : Singleton<AudioManager>
 {
 

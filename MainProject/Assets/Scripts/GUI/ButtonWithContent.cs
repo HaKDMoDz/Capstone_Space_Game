@@ -1,4 +1,11 @@
-﻿using UnityEngine;
+﻿/*
+  ButtonWithContent.cs
+  Mission: Invasion
+  Created by Rohun Banerji on Dec 22/2014
+  Copyright (c) 2014 Rohun Banerji. All rights reserved.
+*/
+
+using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;

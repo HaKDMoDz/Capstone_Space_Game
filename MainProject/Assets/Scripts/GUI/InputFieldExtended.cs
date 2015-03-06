@@ -1,4 +1,11 @@
-﻿using UnityEngine;
+﻿/*
+  InputFieldExtended.cs
+  Mission: Invasion
+  Created by Rohun Banerji on Feb 21/2015
+  Copyright (c) 2015 Rohun Banerji. All rights reserved.
+*/
+
+using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using System.Collections;

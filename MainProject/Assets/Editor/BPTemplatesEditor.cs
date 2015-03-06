@@ -1,4 +1,11 @@
-﻿using UnityEngine;
+﻿/*
+  BPTemplatesEditor.cs
+  Mission: Invasion
+  Created by Rohun Banerji on Feb 11/2015
+  Copyright (c) 2015 Rohun Banerji. All rights reserved.
+*/
+
+using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
 using System.Linq;

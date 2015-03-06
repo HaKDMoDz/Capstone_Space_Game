@@ -1,4 +1,11 @@
-﻿#region Usings
+﻿/*
+  MainMenuController.cs
+  Mission: Invasion
+  Created by Rohun Banerji on Dec 10/2014
+  Copyright (c) 2014 Rohun Banerji. All rights reserved.
+*/
+
+#region Usings
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;

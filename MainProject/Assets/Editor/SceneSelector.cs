@@ -1,4 +1,11 @@
-﻿using UnityEngine;
+﻿/*
+  SceneSelector.cs
+  Mission: Invasion
+  Created by Rohun Banerji on Nov 12/2014
+  Copyright (c) 2014 Rohun Banerji. All rights reserved.
+*/
+
+using UnityEngine;
 using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
