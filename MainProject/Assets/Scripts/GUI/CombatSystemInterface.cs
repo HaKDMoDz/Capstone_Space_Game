@@ -25,6 +25,7 @@ public struct CombatGUIFields
     public TextExtended textFieldPrefab;
     //canvas
     public RectTransform mainCanvas;
+    public RectTransform overlayCanvas;
     //turn order list
     public RectTransform turnOrderButtonParent;
     //comp hotkeys
@@ -44,6 +45,8 @@ public struct CombatGUIFields
     //Cursors
     public Texture2D defaultCursor;
     public Texture2D attackCursor;
+    //tooltip
+    public TextExtended tooltip;
 }
 
 #endregion AdditionalStructs
@@ -115,6 +118,20 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
             buttonClone.transform.SetParent(guiFields.compHotkeysParent, false);
         }
     }//ShowComponentActivationButtons
+
+    public void ShowToolTip(string toolTipText, Camera viewCamera, Vector3 worldPos)
+    {
+        guiFields.tooltip.gameObject.SetActive(true);
+        guiFields.tooltip.SetText(toolTipText);
+        //Vector2 viewPortPos = RectTransformUtility.WorldToScreenPoint(Camera.main, worldPos);
+        //Vector2 viewPortPos = viewCamera.WorldToScreenPoint(worldPos);
+        //guiFields.tooltip.Trans.position = viewPortPos;
+        ((RectTransform)(guiFields.tooltip.Trans)).anchoredPosition = worldPos.GetVector2() - guiFields.mainCanvas.sizeDelta * 0.5f;
+    }
+    public void HideTooltip()
+    {
+        guiFields.tooltip.gameObject.SetActive(false);
+    }
 
     /// <summary>
     /// Shows a UI element including the distance and power cost passed in

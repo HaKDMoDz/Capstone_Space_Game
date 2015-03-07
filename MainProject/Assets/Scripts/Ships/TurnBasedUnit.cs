@@ -89,7 +89,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
     }
     [SerializeField]
     private GameObject targetingCamera;
-    protected GameObject TargetingCamera
+    public GameObject TargetingCamera
     {
         get { return targetingCamera; }
     }
@@ -135,6 +135,11 @@ public abstract class TurnBasedUnit : MonoBehaviour
             shieldBar.ChangeValue(-damage / MaxShields);
             shieldStrength = value; 
         }
+    }
+    private Transform componentGridTrans;
+    protected Transform ComponentGridTrans
+    {
+        get { return componentGridTrans; }
     }
 
     private ShipShield shipShield;
@@ -355,8 +360,14 @@ public abstract class TurnBasedUnit : MonoBehaviour
     private void InitReferences()
     {
         trans = transform;
+        componentGridTrans = shipBP.Hull.ComponnentGridTrans;
 
         #if FULL_DEBUG
+        if(!componentGridTrans)
+        {
+            Debug.LogError("No Component Grid trans found");
+        }
+
         if (trans.FindChild("ComponentCamera") == null)
         {
             Debug.LogError("No Component camera found");

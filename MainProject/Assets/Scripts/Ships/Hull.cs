@@ -15,7 +15,7 @@ public class Hull : MonoBehaviour
 
     #region Fields
     
-    #region EditorExposed
+    //EditorExposed
     public string hullName;
     [SerializeField]
     private float hullHP;
@@ -24,19 +24,21 @@ public class Hull : MonoBehaviour
         get { return hullHP; }
     }
     [SerializeField]
+    private Transform componnentGridTrans;
+    public Transform ComponnentGridTrans
+    {
+        get { return componnentGridTrans; }
+    }
+    [SerializeField]
     private List<ComponentSlot> emptyComponentGrid;
     public List<ComponentSlot> EmptyComponentGrid
     {
         get { return emptyComponentGrid; }
     }
-    #endregion EditorExposed
 
-    #region Internal
-    
+    //Internal
     public Dictionary<int, ComponentSlot> index_slot_table { get; private set; }
     public bool unlocked { get; private set; }
-
-    #endregion Internal
 
     #endregion Fields
 

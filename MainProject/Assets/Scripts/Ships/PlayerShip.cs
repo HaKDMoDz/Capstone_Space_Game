@@ -456,8 +456,13 @@ public class PlayerShip : TurnBasedUnit
             targetComponent.Selected = false;
         }
         targetComponent = GetFirstComponentInDirection(component);
+        if(!targetComponent)
+        {
+            Debug.LogWarning("No target comp ");
+            return;
+        }
         //Debug.Log("TargetComp: " + targetComponent + " from ship " + name);
-
+        combatInterface.ShowToolTip(component.componentName, component.ParentShip.TargetingCamera.camera, Input.mousePosition);
         DisplayLineRenderer(targetComponent.transform.position, true, validColour);
         targetComponent.Selected = true;
     }
@@ -477,10 +482,11 @@ public class PlayerShip : TurnBasedUnit
         {
             component.Selected = false;
         }
+        combatInterface.HideTooltip();
     }
     private ShipComponent GetFirstComponentInDirection(ShipComponent component)
     {
-        Ray ray = new Ray(trans.position, component.transform.position - trans.position);
+        Ray ray = new Ray(trans.position + ComponentGridTrans.position, component.transform.position - (trans.position + ComponentGridTrans.position));
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, GlobalVars.RayCastRange, 1 << TagsAndLayers.ComponentsLayer))
         {
@@ -663,7 +669,7 @@ public class PlayerShip : TurnBasedUnit
             return;
         }
         line.SetVertexCount(2);
-        line.SetPosition(0, trans.position);
+        line.SetPosition(0, trans.position + ComponentGridTrans.position);
         line.SetPosition(1, targetPos);
     }
     /// <summary>

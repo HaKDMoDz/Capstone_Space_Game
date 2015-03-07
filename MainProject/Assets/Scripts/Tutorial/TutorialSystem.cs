@@ -74,7 +74,7 @@ public class TutorialSystem : Singleton<TutorialSystem>
     {
         if(!show)
         {
-            Debug.Log("Hide Tutorial " + type + " panel: " + tutorialType_entry_table[type].panel.gameObject.name);
+            //Debug.Log("Hide Tutorial " + type + " panel: " + tutorialType_entry_table[type].panel.gameObject.name);
             tutorialType_entry_table[type].panel.gameObject.SetActive(false);
             return;
         }
