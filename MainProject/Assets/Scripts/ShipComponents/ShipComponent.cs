@@ -184,9 +184,11 @@ public abstract class ShipComponent : MonoBehaviour , IPointerClickHandler, IPoi
     protected virtual IEnumerator Destroy()
     {
         Debug.Log(componentName + " Destroyed");
-
         gameObject.SetActive(false);
-
+        //OnComponentClicked = null;
+        //OnComponentMouseOver = null;
+        //OnComponentPointerExit = null;
+        ParentShip.DestroyComponent(this);
         yield return null;
     }
     #endregion Methods

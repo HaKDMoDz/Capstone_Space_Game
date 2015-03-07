@@ -175,7 +175,6 @@ public class PlayerShip : TurnBasedUnit
     }
     private IEnumerator ComponentSelectionAndTargeting()
     {
-        
         //stop listening to mouse events on ai ships
         SubscribeToAIShipMouseEvents(false);
         //show enemy target
@@ -270,6 +269,8 @@ public class PlayerShip : TurnBasedUnit
         }
         foreach (Component_Weapon weapon in selectedComponents)
         {
+            if (!targetShip)
+                break;
             if (targetComponent && targetComponent.CompHP > 0.0f)
             {
                 yield return StartCoroutine(
@@ -283,7 +284,7 @@ public class PlayerShip : TurnBasedUnit
             }
         }
         //waits until all weapons have completed their animation
-        while (numWeaponsActivated > 0)
+        while (numWeaponsActivated > 0 && targetShip)
         {
             yield return null;
         }
@@ -395,14 +396,15 @@ public class PlayerShip : TurnBasedUnit
         {
             DisplayLineRenderer(Vector3.zero, false, validColour);//hide line
             targetShip.ShowTargetingPanel(false, null);
+            combatInterface.HideTooltip();
         }
     }
     private void SubscribeTargetShipComponentEvents(bool subscribe)
     {
 #if FULL_DEBUG
-        if(targetShip==null)
+        if(!targetShip)
         {
-            Debug.LogError("Target ship is null");
+            Debug.LogWarning("Target ship is null");
             return;
         }
         //Debug.Log("Subscribe: " + subscribe);
@@ -599,6 +601,7 @@ public class PlayerShip : TurnBasedUnit
         combatInterface.ShowAttackCursor(false);
         startTargetingSequence = true;
         targetShip = ship;
+        Debug.Log("on Ship click " + ship);
         ship.ShowHPBars(false);
     }
 

@@ -184,6 +184,11 @@ public abstract class TurnBasedUnit : MonoBehaviour
             }
         }
     }
+    public void DestroyComponent(ShipComponent component)
+    {
+        components.Remove(component);
+        Destroy(component);
+    }
     /// <summary>
     /// This method only plays the directional shield effect, does not do any actual damage
     /// </summary>
