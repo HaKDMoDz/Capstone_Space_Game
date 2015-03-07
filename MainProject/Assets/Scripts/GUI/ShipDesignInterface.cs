@@ -27,6 +27,10 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     [SerializeField]
     private Button_TextAndImage button_TextAndImagePrefab;
     [SerializeField]
+    private TextExtended iconCorvette;
+    [SerializeField]
+    private TextExtended iconFrigate;
+    [SerializeField]
     private HeaderText headerPrefab;
     [SerializeField]
     private GameObject separatorPrefab;
@@ -56,6 +60,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     private RectTransform savedBPsParent;
     [SerializeField]
     private FillBar fleetStrBar;
+    
     //stats
     [SerializeField]
     private Animator statsPanelAnim;

@@ -126,7 +126,7 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
         //Vector2 viewPortPos = RectTransformUtility.WorldToScreenPoint(Camera.main, worldPos);
         //Vector2 viewPortPos = viewCamera.WorldToScreenPoint(worldPos);
         //guiFields.tooltip.Trans.position = viewPortPos;
-        ((RectTransform)(guiFields.tooltip.Trans)).anchoredPosition = worldPos.GetVector2() - guiFields.mainCanvas.sizeDelta * 0.5f;
+        guiFields.tooltip.RectTrans.anchoredPosition = worldPos.GetVector2() - guiFields.mainCanvas.sizeDelta * 0.5f;
     }
     public void HideTooltip()
     {
@@ -207,7 +207,7 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
         {
             TextExtended button = unit_buttonRect_table[units[i]];
             //button.SetText( units[i].ShipBPMetaData.BlueprintName);
-            button.Trans.SetSiblingIndex(i);
+            button.RectTrans.SetSiblingIndex(i);
         }
     }
     /// <summary>

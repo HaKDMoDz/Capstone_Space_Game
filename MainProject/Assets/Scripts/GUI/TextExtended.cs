@@ -15,10 +15,10 @@ public class TextExtended : MonoBehaviour
     [SerializeField]
     private Text text;
     [SerializeField]
-    private Transform trans;
-    public Transform Trans
+    private RectTransform rectTrans;
+    public RectTransform RectTrans
     {
-        get { return trans; }
+        get { return rectTrans; }
     }
 
     public void SetText(string text)
