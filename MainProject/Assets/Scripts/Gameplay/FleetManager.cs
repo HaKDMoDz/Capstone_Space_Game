@@ -40,6 +40,11 @@ public class FleetManager : Singleton<FleetManager>
             }
         }
     }
+    private Dictionary<ShipBlueprintMetaData, int> metaData_gridIndex_table = new Dictionary<ShipBlueprintMetaData, int>();
+    public Dictionary<ShipBlueprintMetaData, int> MetaData_gridIndex_table
+    {
+        get { return metaData_gridIndex_table; }
+    }
 
     #endregion Fields
 

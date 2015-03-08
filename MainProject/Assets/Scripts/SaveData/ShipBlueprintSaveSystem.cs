@@ -167,6 +167,13 @@ public class ShipBlueprintSaveSystem
             DeleteBlueprint(savedBPList.blueprintMetaDataList[i].BlueprintName);
         }
     }
+
+    public Hull GetHull(string blueprintName)
+    {
+        ShipBlueprint shipBP=null;
+        LoadBlueprint(out shipBP, blueprintName);
+        return shipBP.Hull;
+    }
     #endregion Public
 
     #region Private

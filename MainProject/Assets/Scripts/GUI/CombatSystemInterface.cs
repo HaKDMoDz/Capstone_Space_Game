@@ -53,10 +53,9 @@ public struct CombatGUIFields
 public class CombatSystemInterface : Singleton<CombatSystemInterface>
 {
     #region Fields
-    #region EditorExposed
+    //EditorExposed
     [SerializeField]
     private CombatGUIFields guiFields;
-    #endregion EditorExposed
 
     //internal
     private Dictionary<TurnBasedUnit, TextExtended> unit_buttonRect_table = new Dictionary<TurnBasedUnit, TextExtended>();

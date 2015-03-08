@@ -256,6 +256,10 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
     {
         return saveSystem.savedBPList.GetMetaData(blueprintName);
     }
+    public Hull GetHull(string blueprintName)
+    {
+        return saveSystem.GetHull(blueprintName);
+    }
     #endregion SaveSystemInterface
 
     #endregion Public

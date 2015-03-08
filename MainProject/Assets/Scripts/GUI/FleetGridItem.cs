@@ -11,9 +11,17 @@ using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
 
-public class FleetGridItem : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler
+public class FleetGridItem : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
+    public int Index;
 
+    //Events
+    public delegate void PointerClickEvent(FleetGridItem gridItem);
+    public event PointerClickEvent OnGridPointerClick = new PointerClickEvent((FleetGridItem) => { });
+    public delegate void PointerEnterEvent(FleetGridItem gridItem);
+    public event PointerEnterEvent OnGridPointerEnter = new PointerEnterEvent((FleetGridItem) => { });
+    public delegate void PointerExitEvent(FleetGridItem gridItem);
+    public event PointerExitEvent OnGridPointerExit = new PointerExitEvent((FleetGridItem) => { });
 
     public void OnDrop(PointerEventData eventData)
     {
@@ -22,12 +30,20 @@ public class FleetGridItem : MonoBehaviour, IDropHandler, IPointerEnterHandler, 
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        throw new System.NotImplementedException();
+        //Debug.Log("Pointer Enter: Grid Item " + Index);
+        OnGridPointerEnter(this);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        throw new System.NotImplementedException();
+        //Debug.Log("Pointer Exit: Grid Item " + Index);
+        OnGridPointerExit(this);
     }
 
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        //Debug.Log("Pointer Click: Grid Item " + Index);
+        OnGridPointerClick(this);
+    }
 }

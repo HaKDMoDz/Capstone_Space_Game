@@ -21,6 +21,11 @@ public class TextExtended : MonoBehaviour
         get { return rectTrans; }
     }
 
+    public void ShowText(bool show)
+    {
+        text.gameObject.SetActive(show);
+    }
+
     public void SetText(string text)
     {
         #if FULL_DEBUG
@@ -28,6 +33,10 @@ public class TextExtended : MonoBehaviour
         {
             Debug.LogError("null or empty text");
             this.text.text = "";
+        }
+        if(!this.text.IsActive())
+        {
+            Debug.LogError("Text component is not active");
         }
         #endif
         this.text.text = text;

@@ -6,6 +6,7 @@
 */
 
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -20,7 +21,7 @@ public class FleetInterface : Singleton<FleetInterface>
     [SerializeField]
     private TextExtended iconFrigatePrefab;
     [SerializeField]
-    private GameObject emptyPrefab;
+    private FleetGridItem emptyPrefab;
     [SerializeField]
     private RectTransform gridParent;
     [SerializeField]
@@ -31,12 +32,19 @@ public class FleetInterface : Singleton<FleetInterface>
     private RectTransform savedBPsParent;
     [SerializeField]
     private FillBar fleetStrBar;
-
+    //Cursors
+    [SerializeField]
+    private Texture2D defaultCursor;
+    [SerializeField]
+    private Texture2D shipCursor;
     //References
     private FleetManager fleetManager;
 
     //helper
     private Dictionary<string, GameObject> blueprintName_button_table = new Dictionary<string, GameObject>();
+    private List<FleetGridItem> gridItemList = new List<FleetGridItem>();
+    private bool fleetPositioning = false;
+    private string selectedBlueprintName;
     #endregion Fields
 
     #region Methods
@@ -51,7 +59,7 @@ public class FleetInterface : Singleton<FleetInterface>
         ButtonWithContent buttonClone = (ButtonWithContent)Instantiate(buttonPrefab);
         buttonClone.transform.SetParent(savedBPsParent, false);
         buttonClone.SetText(blueprintName);
-        buttonClone.AddOnClickListener(() => AddBlueprintToFleet(blueprintName));
+        buttonClone.AddOnClickListener(() => BPButtonClick(blueprintName));
         buttonClone.AddOnPointerEnterListener(()=>BPButtonMouseEnter(blueprintName));
         buttonClone.AddOnPointerExitListener(()=>BPButtonMouseExit(blueprintName));
         blueprintName_button_table.Add(blueprintName, buttonClone.gameObject);
@@ -87,6 +95,7 @@ public class FleetInterface : Singleton<FleetInterface>
     }
     public void ShowFleetPanel(bool show)
     {
+        fleetPositioning = false;
         fleetPanel.SetActive(show);
     }
     public void OnDeleteBlueprint(string blueprintName)
@@ -104,6 +113,79 @@ public class FleetInterface : Singleton<FleetInterface>
     }
 
     //Private
+    private void BPButtonClick(string blueprintName)
+    {
+        //AddBlueprintToFleet(blueprintName);
+//        Canvas canvas = fleetPanel.GetComponentInParent<Canvas>();
+//#if FULL_DEBUG
+//        if(!canvas)
+//        {
+//            Debug.LogError("No canvas found");
+//        }
+//#endif
+        //GameObject iconObj = new GameObject("shipIcon");
+        //iconObj.transform.SetParent(canvas.transform, false);
+        //iconObj.transform.SetAsLastSibling();
+        //Image image = iconObj.AddComponent<Image>();
+        //image.sprite = shipIcon.GetComponentInChildren<Image>().sprite;
+        //TextExtended shipIconPrefab = ShipDesignSystem.Instance.GetHull(blueprintName).HullIcon;
+        //TextExtended shipIcon = Instantiate(shipIconPrefab) as TextExtended;
+        //RectTransform shipIconTrans = (RectTransform)shipIcon.transform;
+        //shipIconTrans.SetParent(canvas.transform, false);
+        //shipIconTrans.SetAsLastSibling();
+        //shipIcon.ShowText(false);
+        //shipIconTrans.sizeDelta *= 0.5f;
+        //shipIcon.gameObject.AddComponent<CanvasGroup>().blocksRaycasts = false;
+        selectedBlueprintName = blueprintName;
+        StopCoroutine("FleetPositioning");
+        SubscribeToGridEvents(false);
+        StartCoroutine("FleetPositioning");
+    }
+    private IEnumerator FleetPositioning()
+    {
+        Cursor.SetCursor(shipCursor, Vector2.zero, CursorMode.Auto);
+        fleetPositioning = true;
+        SubscribeToGridEvents(true);
+        while (fleetPositioning)
+        {
+            //waiting for OnGridPointerClick 
+            yield return null;
+        }
+        SubscribeToGridEvents(false);
+        Cursor.SetCursor(defaultCursor, Vector2.zero, CursorMode.Auto);
+    }
+    private void OnGridPointerClick(FleetGridItem gridItem)
+    {
+        Debug.Log("Pointer Click: Grid Item " + gridItem.Index);
+        if (AddBlueprintToFleet(selectedBlueprintName))
+        {
+            TextExtended shipIconPrefab = ShipDesignSystem.Instance.GetHull(selectedBlueprintName).HullIcon;
+            TextExtended shipIcon = Instantiate(shipIconPrefab) as TextExtended;
+            shipIcon.SetText(selectedBlueprintName);
+            shipIcon.transform.SetParent(gridParent, false);
+            shipIcon.transform.SetSiblingIndex(gridItem.Index + 1);
+            FleetGridItem shipGridItem = shipIcon.GetComponent<FleetGridItem>();
+            shipGridItem.Index = gridItem.Index;
+            gridItemList.Add(shipGridItem);
+            gridItemList.Remove(gridItem);
+            Destroy(gridItem.gameObject);
+            fleetPositioning = false;
+        }
+    }
+    private void SubscribeToGridEvents(bool subscribe)
+    {
+        foreach (FleetGridItem gridItem in gridItemList)
+        {
+            if(subscribe)
+            {
+                gridItem.OnGridPointerClick += OnGridPointerClick;
+            }
+            else
+            {
+                gridItem.OnGridPointerClick -= OnGridPointerClick;
+            }
+        }
+    }
     private void BPButtonMouseEnter(string blueprintName)
     {
         if (FleetManager.Instance.WouldExceedMaxStr(ShipDesignSystem.Instance.GetMetaData(blueprintName)))
@@ -115,17 +197,19 @@ public class FleetInterface : Singleton<FleetInterface>
     {
         fleetStrBar.SetFillColour(Color.green);
     }
-    private void AddBlueprintToFleet(string blueprintName)
+    private bool AddBlueprintToFleet(string blueprintName)
     {
         ShipBlueprintMetaData metaData = ShipDesignSystem.Instance.GetMetaData(blueprintName);
         if(fleetManager.TryAddToFleet(metaData))
         {
             AddToCurrentFleet(metaData);
             SetFleetStrBarValue();
+            return true;
         }
         else
         {
             fleetStrBar.SetFillColour(Color.red);
+            return false;
         }
     }
     private void AddToCurrentFleet(ShipBlueprintMetaData metaData)
@@ -145,8 +229,10 @@ public class FleetInterface : Singleton<FleetInterface>
         //setup empty grid
         for (int i = 0; i < gridSize; i++)
         {
-            GameObject emptyClone = (GameObject)Instantiate(emptyPrefab);
+            FleetGridItem emptyClone = (FleetGridItem)Instantiate(emptyPrefab);
             emptyClone.transform.SetParent(gridParent, false);
+            emptyClone.Index = i;
+            gridItemList.Add(emptyClone);
         }
         //fleet str bar
         SetFleetStrBarValue();

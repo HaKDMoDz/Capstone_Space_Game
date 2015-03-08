@@ -179,6 +179,19 @@ public static class ExtensionMethods
         }
         return component;
     }
+    public static T GetComponentInParent<T> (this GameObject go) where T: Component
+    {
+        if (go == null) return null;
+        var comp = go.GetComponent<T>();
+        if (comp != null) return comp;
+        Transform trans = go.transform.parent;
+        while(trans!=null && comp == null)
+        {
+            comp = trans.gameObject.GetComponent<T>();
+            trans = trans.parent;
+        }
+        return comp;
+    }
     #endregion
 
     #region Rigidbody Extensions
