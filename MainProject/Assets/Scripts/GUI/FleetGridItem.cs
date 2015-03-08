@@ -14,6 +14,7 @@ using System.Collections.Generic;
 public class FleetGridItem : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     public int Index;
+    public bool IsEmpty;
 
     //Events
     public delegate void PointerClickEvent(FleetGridItem gridItem);
