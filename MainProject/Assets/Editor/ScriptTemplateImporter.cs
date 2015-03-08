@@ -1,4 +1,11 @@
-﻿using UnityEngine;
+﻿/*
+  ScriptTemplateImporter.cs
+  Mission: Invasion
+  Created by Rohun Banerji on March 7/2015.
+  Copyright (c) 2015 Rohun Banerji. All rights reserved.
+*/
+
+using UnityEngine;
 using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,7 +24,7 @@ public class ScriptTemplateImporter : UnityEditor.AssetModificationProcessor
         path = Application.dataPath.Substring(0, index) + path;
         Debug.Log("path: " + path);
         string file = File.ReadAllText(path);
-        file = file.Replace("#CREATIONDATE#", DateTime.Now.ToShortDateString());
+        file = file.Replace("#CREATIONDATE#", DateTime.Now.ToString("MMMM dd, yyyy"));
         file = file.Replace("#PROJECTNAME#", PlayerSettings.productName);
         file = file.Replace("#YEAR#", DateTime.Now.Year.ToString());
         File.WriteAllText(path, file);

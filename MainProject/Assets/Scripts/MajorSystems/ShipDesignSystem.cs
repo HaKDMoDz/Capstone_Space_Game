@@ -335,6 +335,7 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
             FleetManager.Instance.CurrentFleet.Clear();
         }
         ShipDesignInterface.Instance.Init();
+        FleetInterface.Instance.Init();
     }
     #endregion UnityCallBacks
 

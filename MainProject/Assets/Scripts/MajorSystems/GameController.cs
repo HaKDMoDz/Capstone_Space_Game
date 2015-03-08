@@ -27,7 +27,7 @@ public class GameController : Singleton<GameController>
     private GameSaveSystem saveSystem;
 
     // InternalFields
-    private GameScene defaultStartScene = GameScene.MainMenu;
+    //private GameScene defaultStartScene = GameScene.MainMenu;
     //private GameScene currentScene;
     //private Dictionary<GameScene, string> sceneEnumToNameTable;
     ////need this for now - until Button's onClick event can pass in enums
