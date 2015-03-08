@@ -6,6 +6,7 @@
 */
 
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using System.Collections;
@@ -15,6 +16,19 @@ public class FleetGridItem : MonoBehaviour, IDropHandler, IPointerEnterHandler, 
 {
     public int Index;
     public bool IsEmpty;
+    [SerializeField]
+    private Image image;
+    public Image Image
+    {
+        get 
+        { 
+            if(!image)
+            {
+                image = GetComponent<Image>();
+            }
+            return image; 
+        }
+    }
 
     //Events
     public delegate void PointerClickEvent(FleetGridItem gridItem);
@@ -23,6 +37,7 @@ public class FleetGridItem : MonoBehaviour, IDropHandler, IPointerEnterHandler, 
     public event PointerEnterEvent OnGridPointerEnter = new PointerEnterEvent((FleetGridItem) => { });
     public delegate void PointerExitEvent(FleetGridItem gridItem);
     public event PointerExitEvent OnGridPointerExit = new PointerExitEvent((FleetGridItem) => { });
+
 
     public void OnDrop(PointerEventData eventData)
     {

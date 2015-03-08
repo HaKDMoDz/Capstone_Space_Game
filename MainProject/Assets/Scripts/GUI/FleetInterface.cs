@@ -148,6 +148,7 @@ public class FleetInterface : Singleton<FleetInterface>
         AddToGridAtIndex(emptyClone, gridItem.Index);
         fleetDeletion = false;
     }
+    
     private void BPButtonClick(string blueprintName)
     {
         selectedBlueprintName = blueprintName;
@@ -188,6 +189,14 @@ public class FleetInterface : Singleton<FleetInterface>
             fleetPositioning = false;
         }
     }
+    private void OnGridPointerEnter(FleetGridItem gridItem)
+    {
+        gridItem.Image.color = Color.green.WithAplha(1.0f);
+    }
+    private void OnGridPointerExit(FleetGridItem gridItem)
+    {
+        gridItem.Image.color = Color.white.WithAplha(90.0f / 255.0f);
+    }
     private void AddToGridAtIndex(FleetGridItem gridItem, int index)
     {
         FleetGridItem oldItem = gridItemList.Find(item => item.Index == index);
@@ -206,10 +215,14 @@ public class FleetInterface : Singleton<FleetInterface>
             if(subscribe)
             {
                 gridItem.OnGridPointerClick += OnGridPointerClick;
+                gridItem.OnGridPointerEnter += OnGridPointerEnter;
+                gridItem.OnGridPointerExit += OnGridPointerExit;
             }
             else
             {
                 gridItem.OnGridPointerClick -= OnGridPointerClick;
+                gridItem.OnGridPointerEnter -= OnGridPointerEnter;
+                gridItem.OnGridPointerExit -= OnGridPointerExit;
             }
         }
     }
@@ -220,10 +233,14 @@ public class FleetInterface : Singleton<FleetInterface>
             if(subscribe)
             {
                 gridItem.OnGridPointerClick += DeleteShipItem;
+                gridItem.OnGridPointerEnter += OnGridPointerEnter;
+                gridItem.OnGridPointerExit += OnGridPointerExit;
             }
             else
             {
                 gridItem.OnGridPointerClick -= DeleteShipItem;
+                gridItem.OnGridPointerEnter -= OnGridPointerEnter;
+                gridItem.OnGridPointerExit -= OnGridPointerExit;
             }
         }
     }
