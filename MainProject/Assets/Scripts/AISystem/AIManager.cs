@@ -4,6 +4,26 @@ using System.Collections.Generic;
 
 public class AIManager : Singleton<AIManager>
 {
+    //Area for static vars used by AI systems
+    public static float tgtClosest = 0.35f;
+    public static float tgtFarthest = 0.15f;
+    public static float tgtStrongest = 0.1f;
+    public static float tgtWeakest = 0.4f;
+
+    public static float cmpWeapon = 0.25f;
+    public static float cmpShield = 0.25f;
+    public static float cmpThruster = 0.25f;
+    public static float cmpPower = 0.25f;
+
+    public static float angAtk_0 = 0.125f;
+    public static float angAtk_45 = 0.125f;
+    public static float angAtk_90 = 0.125f;
+    public static float angAtk_135 = 0.125f;
+    public static float angAtk_180 = 0.125f;
+    public static float angAtk_225 = 0.125f;
+    public static float angAtk_270 = 0.125f;
+    public static float angAtk_315 = 0.125f;
+
     private AI_Fleet.Population pop1;
 
     public Comp_Wpn_Laser laser;

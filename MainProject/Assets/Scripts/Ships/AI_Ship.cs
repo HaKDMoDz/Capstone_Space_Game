@@ -16,6 +16,8 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
     //TEMP
     private float damagePerAttack = 35.0f;
 
+    private PlayerShip targetShip;
+
     //references
     public AI_Attack ai_Attack { get; private set; }
 
@@ -61,6 +63,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         PreTurnActions();
 
         PlayerShip targetPlayer = TargetEnemy(TurnBasedCombatSystem.Instance.playerShips);
+        ShipComponent targetComponent = TargetComponent(targetPlayer);
         //move phase
         Move(targetPlayer);
         if (receivedMoveCommand)
@@ -75,7 +78,9 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         Attack();
         if (receivedAttackCommand)
         {
-            yield return StartCoroutine(ai_Attack.Attack(targetPlayer, damagePerAttack, activeComponents));
+            activeComponents = components;
+
+            yield return StartCoroutine(ai_Attack.Attack(targetComponent, damagePerAttack, activeComponents));
             receivedAttackCommand = false;
             #if FULL_DEBUG
             Debug.Log(name + "- Attack end");
@@ -121,14 +126,50 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         }
         else
         {
-            //insert logic here to determine closest enemy
-            Vector3 selfPos = trans.position;
-            return playerShips
-                .Aggregate((current, next) =>
-                    Vector3.Distance(current.transform.position, selfPos)
-                        < Vector3.Distance(next.transform.position, selfPos)
-                        ? current : next);
-        }
+            if (targetShip == null)
+            {
+                Vector3 selfPos = trans.position;
+                
+                //determine which enemy to target: strongest, weakest, closest, furthest
+                float confidence = Random.Range(0.0f, 1.0f);
+
+                //case 1 ... closeset
+                if (confidence < AIManager.tgtClosest)
+                {
+                    //closest enemy
+                    return playerShips.Aggregate((current, next) => Vector3.Distance(current.transform.position, selfPos) < Vector3.Distance(next.transform.position, selfPos) ? current : next);
+                }
+
+                //case 2 ... farthest
+                if (confidence < AIManager.tgtClosest + AIManager.tgtFarthest)
+                {
+                    //farthest enemy
+                    return playerShips.Aggregate((current, next) =>Vector3.Distance(current.transform.position, selfPos) > Vector3.Distance(next.transform.position, selfPos) ? current : next);
+                }
+
+                //case 3 ... strongest
+                if (confidence < AIManager.tgtClosest + AIManager.tgtFarthest + AIManager.tgtStrongest)
+                {
+                    //strongest enemy
+                    return playerShips.Aggregate((current, next) => current.HullHP > next.HullHP ? current : next);
+                }
+
+                //assume case 4... weakest enemy
+
+                //weakest enemy
+                return playerShips.Aggregate((current, next) => current.HullHP < next.HullHP ? current : next);
+            }
+
+            //target ship wasn't null so return your current target
+            return targetShip;
+        }     
+    }
+
+    private ShipComponent TargetComponent(PlayerShip _ship)
+    {
+        
+        //for now... return the one with the lowest HP
+        return _ship.Components.Aggregate((current, next) => current.CompHP < next.CompHP ? current : next);
     }
 
     #endregion PublicMethods
