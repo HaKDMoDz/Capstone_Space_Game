@@ -27,19 +27,19 @@ public class FleetManager : Singleton<FleetManager>
         get { return currentFleetStrength; }
     }
 
-    private List<ShipBlueprintMetaData> currentFleet = new List<ShipBlueprintMetaData>();
-    public List<ShipBlueprintMetaData> CurrentFleet
-    {
-        get { return currentFleet; }
-        set
-        {
-            currentFleet = value;
-            foreach (ShipBlueprintMetaData meta in currentFleet)
-            {
-                currentFleetStrength += meta.FleetCost;
-            }
-        }
-    }
+    //private List<ShipBlueprintMetaData> currentFleet = new List<ShipBlueprintMetaData>();
+    //public List<ShipBlueprintMetaData> CurrentFleet
+    //{
+    //    get { return currentFleet; }
+    //    set
+    //    {
+    //        currentFleet = value;
+    //        foreach (ShipBlueprintMetaData meta in currentFleet)
+    //        {
+    //            currentFleetStrength += meta.FleetCost;
+    //        }
+    //    }
+    //}
     private Dictionary<int, ShipBlueprintMetaData> gridIndex_metaData_table = new Dictionary<int, ShipBlueprintMetaData>();
 
     public Dictionary<int, ShipBlueprintMetaData> GridIndex_metaData_table
@@ -161,7 +161,7 @@ public class FleetManager : Singleton<FleetManager>
 //    }
     public bool CurrentFleetContains(ShipBlueprintMetaData metaData)
     {
-        return currentFleet.Contains(metaData);
+        return gridIndex_metaData_table.Any(gridItem => gridItem.Value == metaData);
     }
     #endregion Public
 

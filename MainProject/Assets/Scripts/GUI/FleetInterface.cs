@@ -105,6 +105,7 @@ public class FleetInterface : Singleton<FleetInterface>
     {
         fleetPositioning = false;
         fleetPanel.SetActive(show);
+        Cursor.SetCursor(defaultCursor, Vector2.zero, CursorMode.Auto);
     }
     
     public void OnDeleteBlueprint(string blueprintName)

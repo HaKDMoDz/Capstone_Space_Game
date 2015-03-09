@@ -152,7 +152,7 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
         #if FULL_DEBUG
         Debug.Log("Saving fleet");
         #endif
-        playerFleetData.currentFleet_meta_list = FleetManager.Instance.CurrentFleet;
+        playerFleetData.gridIndex_metaData_table = FleetManager.Instance.GridIndex_metaData_table;
         GameController.Instance.GameData.playerFleetData = playerFleetData;
         GameController.Instance.QuickSave();
     }
@@ -332,11 +332,11 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
         playerFleetData = GameController.Instance.GameData.playerFleetData;
         if (ValidateFleet())
         {
-            FleetManager.Instance.CurrentFleet = playerFleetData.currentFleet_meta_list;
+            FleetManager.Instance.GridIndex_metaData_table = playerFleetData.gridIndex_metaData_table;
         }
         else
         {
-            FleetManager.Instance.CurrentFleet.Clear();
+            FleetManager.Instance.GridIndex_metaData_table.Clear();
         }
         ShipDesignInterface.Instance.Init();
         FleetInterface.Instance.Init();
@@ -353,7 +353,8 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
     #region Helper
     private bool ValidateFleet()
     {
-        foreach (string blueprintName in playerFleetData.currentFleet_meta_list.Select(meta=>meta.BlueprintName))
+        foreach (string blueprintName in playerFleetData.gridIndex_metaData_table.Values.Select(meta => meta.BlueprintName))
+        //foreach (string blueprintName in playerFleetData.currentFleet_meta_list.Select(meta=>meta.BlueprintName))
         {
             if(!saveSystem.savedBPList.Contains(blueprintName))
             {

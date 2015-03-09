@@ -48,14 +48,14 @@ public class CombatSceneController : Singleton<CombatSceneController>
         /////positioning ships automatically for now
         Vector3 spawnPos = new Vector3(0, 0, -100);
         Vector3 aiSpawnPos = new Vector3(0,0,100);
-        int numShips = playerFleetData.currentFleet_meta_list.Count;
+        int numShips = playerFleetData.gridIndex_metaData_table.Count;
         int spawnSpacing = 50;
         spawnPos.x -= spawnSpacing * numShips / 2;
         /////////////////////////////////////////////////
 
         TurnBasedCombatSystem.Instance.Init();
 
-        if (playerFleetData.currentFleet_meta_list.Count == 0)
+        if (numShips == 0)
         {
             Debug.LogWarning("Empty player fleet - spawning default fleet");
             foreach (string bpTemplateName in new List<string>() { "DefaultCorvette", "DefaultCorvette" })
@@ -73,7 +73,7 @@ public class CombatSceneController : Singleton<CombatSceneController>
         }
         else
         {//tells the shipbuilder to build each ship in the fleet data
-            foreach (string blueprintName in playerFleetData.currentFleet_meta_list.Select(meta => meta.BlueprintName))
+            foreach (string blueprintName in playerFleetData.gridIndex_metaData_table.Values.Select(meta=>meta.BlueprintName))
             {
                 TurnBasedCombatSystem.Instance.AddShip(shipBuilder.BuildShip(ShipType.PlayerShip, blueprintName, spawnPos, Quaternion.identity));
                 spawnPos.x += spawnSpacing;
