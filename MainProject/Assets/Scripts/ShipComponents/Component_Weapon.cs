@@ -68,7 +68,7 @@ public abstract class Component_Weapon : ShipComponent
             else
             {
                 Debug.Log("Killing shields " + targetShip.ShieldStrength);
-                targetShip.TakeDamage(targetShip.ShieldStrength);
+                yield return StartCoroutine(targetShip.TakeDamage(targetShip.ShieldStrength));
                 float remainingDamage = damage - targetShip.ShieldStrength;
                 float componentDamage = remainingDamage * (1.0f - hullDamagePercent / 100.0f);
                 float hullDamage = remainingDamage * hullDamagePercent / 100.0f;
