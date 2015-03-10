@@ -10,6 +10,9 @@ public class Comp_Wpn_Laser : Component_Weapon
     private ParticleSystem laserImpactEffect;
     [SerializeField]
     private float lineNoise;
+    [SerializeField]
+    private LaserEffectController laserEffectPrefab;
+
 
     private LineRenderer line;
     int length;
@@ -54,17 +57,22 @@ public class Comp_Wpn_Laser : Component_Weapon
     /// <returns></returns>
     private IEnumerator CreateBeamEffectForDuration()
     {
-        float currentTime = 0.0f;
-        line.enabled = true;
-        line.SetVertexCount(length);
+        //float currentTime = 0.0f;
+        //line.enabled = true;
+        //line.SetVertexCount(length);
+        //Vector3 targetDir = (targetTrans.position - shootPoint.position).normalized;
+        //while (currentTime <= effectDuration)
+        //{
+        //    CreateBeamEffect(targetDir);
+        //    currentTime += Time.deltaTime;
+        //    yield return null;
+        //}
+        //line.enabled = false;
+
         Vector3 targetDir = (targetTrans.position - shootPoint.position).normalized;
-        while (currentTime <= effectDuration)
-        {
-            CreateBeamEffect(targetDir);
-            currentTime += Time.deltaTime;
-            yield return null;
-        }
-        line.enabled = false;
+        LaserEffectController laserClone = (LaserEffectController)Instantiate(laserEffectPrefab, shootPoint.position, shootPoint.rotation);
+        yield return StartCoroutine(laserClone.PlayLaserEffect(effectDuration, targetTrans.position));
+        Destroy(laserClone);
     }
 
     private void CreateBeamEffect(Vector3 targetDir)
