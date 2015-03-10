@@ -22,15 +22,15 @@ public class Comp_Wpn_Laser : Component_Weapon
     {
         base.Init(parentShip);
 
-        line = GetComponentInChildren<LineRenderer>();
-        #if FULL_DEBUG
-        if (!line)
-        {
-            Debug.LogError("No line renderer found");
-        }
-        #endif
+        //line = GetComponentInChildren<LineRenderer>();
+        //#if FULL_DEBUG
+        //if (!line)
+        //{
+        //    Debug.LogError("No line renderer found");
+        //}
+        //#endif
 
-        line.enabled = false;
+        //line.enabled = false;
         //laserImpactEffect.Stop();
     }
 
@@ -69,7 +69,7 @@ public class Comp_Wpn_Laser : Component_Weapon
         //}
         //line.enabled = false;
 
-        Vector3 targetDir = (targetTrans.position - shootPoint.position).normalized;
+        //Vector3 targetDir = (targetTrans.position - shootPoint.position).normalized;
         LaserEffectController laserClone = (LaserEffectController)Instantiate(laserEffectPrefab, shootPoint.position, shootPoint.rotation);
         yield return StartCoroutine(laserClone.PlayLaserEffect(effectDuration, targetTrans.position));
         Destroy(laserClone.gameObject);

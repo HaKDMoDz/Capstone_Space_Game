@@ -21,6 +21,8 @@ public class LaserEffect : MonoBehaviour
     private Color startColour = Color.red.WithAplha(0.3f);
     [SerializeField]
     private Color endColour = Color.red.WithAplha(0.0f);
+    [SerializeField]
+    private float uvLength = 4.0f;
 
     private Material mat;
 
@@ -34,7 +36,10 @@ public class LaserEffect : MonoBehaviour
         #endif
         laser.SetPosition(0, transform.position);
         laser.SetPosition(1, impactPos);
+        float distance = Vector3.Distance(transform.position, impactPos);
+        renderer.materials[0].mainTextureScale.Set(distance / uvLength, renderer.materials[0].mainTextureScale.y) ;
         mat = laser.renderer.material;
+
         float currentTime = 0.0f;
         while(currentTime<=1.0f)
         {

@@ -22,9 +22,12 @@ public class LaserEffectController : MonoBehaviour
     {
         StartCoroutine(laser1.PlayLaserEffect(duration, impactPos));
         StartCoroutine(laser2.PlayLaserEffect(duration, impactPos));
-        GameObject particles = (GameObject)Instantiate(beamParticleEffect, transform.position, transform.rotation);
+        if (beamParticleEffect)
+        {
+            GameObject particles = (GameObject)Instantiate(beamParticleEffect, transform.position, transform.rotation);
+            Destroy(particles, duration);
+        }
         yield return new WaitForSeconds(duration);
-        Destroy(particles);
     }
 
 }
