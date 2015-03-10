@@ -13,16 +13,19 @@ using System.Linq;
 public class CombatSceneController : Singleton<CombatSceneController>
 {
     #region Fields
-
-
-    #region Internal
-
+    //Editor Exposed
+    [SerializeField]
+    private Vector2 gridDimensions = new Vector2(50.0f, 62.5f);
+    [SerializeField]
+    private int gridWidth = 7;
+    [SerializeField]
+    private Vector3 playerStartSpawnPos = new Vector3(-150.0f, 0.0f,-250.0f);
+    [SerializeField]
+    private Vector3 aiStartSpawnPos = new Vector3(-150.0f,0.0f, 250.0f);
     //references
     private PlayerFleetData playerFleetData;
     private AI_Data pirateFleetData;
     private ShipBuilder shipBuilder;
-    #endregion Internal
-
     #endregion Fields
 
     #region Methods
@@ -46,11 +49,11 @@ public class CombatSceneController : Singleton<CombatSceneController>
         pirateFleetData = GameController.Instance.GameData.pirates_AI_Data;
 
         /////positioning ships automatically for now
-        Vector3 spawnPos = new Vector3(0, 0, -100);
-        Vector3 aiSpawnPos = new Vector3(0,0,100);
+        //Vector3 spawnStartPos = new Vector3(0, 0, -100);
+        //Vector3 aiSpawnPos = new Vector3(0,0,100);
         int numShips = playerFleetData.gridIndex_metaData_table.Count;
-        int spawnSpacing = 50;
-        spawnPos.x -= spawnSpacing * numShips / 2;
+
+        
         /////////////////////////////////////////////////
 
         TurnBasedCombatSystem.Instance.Init();
@@ -58,9 +61,10 @@ public class CombatSceneController : Singleton<CombatSceneController>
         if (numShips == 0)
         {
             Debug.LogWarning("Empty player fleet - spawning default fleet");
+            playerStartSpawnPos.x -= gridDimensions.x * numShips / 2;
             foreach (string bpTemplateName in new List<string>() { "DefaultCorvette", "DefaultCorvette" })
             {
-                TurnBasedUnit unit = shipBuilder.BuildShip(ShipType.PlayerShip, BlueprintTemplates.GetBPTemplate(bpTemplateName), spawnPos, Quaternion.identity);
+                TurnBasedUnit unit = shipBuilder.BuildShip(ShipType.PlayerShip, BlueprintTemplates.GetBPTemplate(bpTemplateName), playerStartSpawnPos, Quaternion.identity);
                 #if FULL_DEBUG
                 if (unit == null)
                 {
@@ -68,16 +72,26 @@ public class CombatSceneController : Singleton<CombatSceneController>
                 }
                 #endif
                 TurnBasedCombatSystem.Instance.AddShip(unit);
-                spawnPos.x += spawnSpacing;
+                playerStartSpawnPos.x += gridDimensions.x;
             }
         }
         else
-        {//tells the shipbuilder to build each ship in the fleet data
-            foreach (string blueprintName in playerFleetData.gridIndex_metaData_table.Values.Select(meta=>meta.BlueprintName))
+        {
+            //tells the shipbuilder to build each ship in the fleet data
+            foreach (var gridIndex_metaData in playerFleetData.gridIndex_metaData_table)
             {
-                TurnBasedCombatSystem.Instance.AddShip(shipBuilder.BuildShip(ShipType.PlayerShip, blueprintName, spawnPos, Quaternion.identity));
-                spawnPos.x += spawnSpacing;
+                int index = gridIndex_metaData.Key;
+                Vector2 gridPos = new Vector2(index % gridWidth, index / gridWidth);
+                Vector3 spawnPos = new Vector3(gridPos.x * gridDimensions.x, 0.0f, gridPos.y * gridDimensions.y);
+                Debug.Log("Index: " + index + " grid pos " + gridPos + "SpawnPos: " + playerStartSpawnPos + spawnPos);
+                TurnBasedCombatSystem.Instance.AddShip(shipBuilder.BuildShip(ShipType.PlayerShip, gridIndex_metaData.Value.BlueprintName, playerStartSpawnPos + spawnPos, Quaternion.identity));
+                //spawnStartPos.x += spawnSpacing;
             }
+            //foreach (string blueprintName in playerFleetData.gridIndex_metaData_table.Values.Select(meta=>meta.BlueprintName))
+            //{
+            //    TurnBasedCombatSystem.Instance.AddShip(shipBuilder.BuildShip(ShipType.PlayerShip, blueprintName, spawnPos, Quaternion.identity));
+            //    spawnPos.x += spawnSpacing;
+            //}
         }
         if (pirateFleetData.currentFleet_BlueprintNames.Count == 0)
         {
@@ -87,7 +101,7 @@ public class CombatSceneController : Singleton<CombatSceneController>
 
         foreach (string bpTemplateName in pirateFleetData.currentFleet_BlueprintNames)
         {
-            TurnBasedUnit unit = shipBuilder.BuildShip(ShipType.AI_Ship, BlueprintTemplates.GetBPTemplate(bpTemplateName), aiSpawnPos, Quaternion.identity);
+            TurnBasedUnit unit = shipBuilder.BuildShip(ShipType.AI_Ship, BlueprintTemplates.GetBPTemplate(bpTemplateName), aiStartSpawnPos, Quaternion.identity);
             #if FULL_DEBUG
             if (unit == null)
             {
@@ -96,10 +110,9 @@ public class CombatSceneController : Singleton<CombatSceneController>
             #endif
 
             TurnBasedCombatSystem.Instance.AddShip(unit);
-            aiSpawnPos.x -= spawnSpacing;
+            aiStartSpawnPos.x -= gridDimensions.x;
             unit.transform.RotateAroundYAxis(180.0f);
         }
-        
         //combat start 
         #if UNITY_EDITOR
         if (!GameObject.Find("CombatSystemTester"))

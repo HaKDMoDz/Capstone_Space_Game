@@ -306,10 +306,25 @@ public class FleetInterface : Singleton<FleetInterface>
         //setup empty grid
         for (int i = 0; i < gridSize; i++)
         {
-            FleetGridItem emptyClone = (FleetGridItem)Instantiate(emptyPrefab);
-            emptyClone.transform.SetParent(gridParent, false);
-            emptyClone.Index = i;
-            gridItemList.Add(emptyClone);
+            ShipBlueprintMetaData metaData;
+            if (fleetManager.GridIndex_metaData_table.TryGetValue(i, out metaData))
+            {
+                TextExtended shipIconPrefab = ShipDesignSystem.Instance.GetHull(metaData.BlueprintName).HullIcon;
+                TextExtended shipIcon = Instantiate(shipIconPrefab) as TextExtended;
+                shipIcon.SetText(metaData.BlueprintName);
+                FleetGridItem shipGridItem = shipIcon.GetComponent<FleetGridItem>();
+                shipGridItem.IsEmpty = false;
+                shipGridItem.transform.SetParent(gridParent, false);
+                shipGridItem.Index = i;
+                gridItemList.Add(shipGridItem);
+            }
+            else
+            {
+                FleetGridItem emptyClone = (FleetGridItem)Instantiate(emptyPrefab);
+                emptyClone.transform.SetParent(gridParent, false);
+                emptyClone.Index = i;
+                gridItemList.Add(emptyClone);
+            }
         }
         //fleet str bar
         RefreshFleetStrBarValue();
