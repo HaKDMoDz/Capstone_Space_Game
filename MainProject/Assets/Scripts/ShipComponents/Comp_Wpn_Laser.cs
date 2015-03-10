@@ -72,7 +72,7 @@ public class Comp_Wpn_Laser : Component_Weapon
         Vector3 targetDir = (targetTrans.position - shootPoint.position).normalized;
         LaserEffectController laserClone = (LaserEffectController)Instantiate(laserEffectPrefab, shootPoint.position, shootPoint.rotation);
         yield return StartCoroutine(laserClone.PlayLaserEffect(effectDuration, targetTrans.position));
-        Destroy(laserClone);
+        Destroy(laserClone.gameObject);
     }
 
     private void CreateBeamEffect(Vector3 targetDir)
