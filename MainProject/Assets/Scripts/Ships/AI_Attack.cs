@@ -16,22 +16,31 @@ public class AI_Attack : MonoBehaviour
     {
         Debug.Log("Unit: " + _target + "takes: " + _damageAmount);
         //StartCoroutine(_target.TakeDamage(_damageAmount));
-        Debug.Log(components.Count);
         //AI_Ship has the power stat
-       // while (GetComponent<AI_Ship>().CurrentPower > _target.ParentShip.Components.Where(c => c is Component_Weapon).Aggregate((curr, next) => curr.PowerDrain < next.PowerDrain ? curr : next).PowerDrain)
+        //while (GetComponent<AI_Ship>().CurrentPower > GetComponent<AI_Ship>().Components.Where(c => c is Component_Weapon).Aggregate((curr, next) => curr.PowerDrain < next.PowerDrain ? curr : next).PowerDrain)
+       //while (GetComponent<AI_Ship>().CurrentPower > 50)
+        bool keepFiring = true;
+        while (keepFiring)
         {
             foreach (Component_Weapon weapon in components.Where(c => c is Component_Weapon))
             {
                 Debug.Log("activate AI weapon");
-
                 //yield return StartCoroutine(weapon.Fire(_target.transform, () => { }));
-                if (_target.CompHP > 0 && weapon.PowerDrain <= GetComponent<AI_Ship>().CurrentPower)
+                Debug.Log("comp hp: " + _target.CompHP + " power vs drain: " + GetComponent<AI_Ship>().CurrentPower + "/" + weapon.PowerDrain + "hullHP: " + _target.ParentShip.HullHP);
+                if (_target.CompHP > 0 && weapon.PowerDrain <= GetComponent<AI_Ship>().CurrentPower && _target.ParentShip.HullHP > 0)
                 {
                     GetComponent<AI_Ship>().CurrentPower -= weapon.PowerDrain;
-                    Debug.Log("CurrentPower: " + GetComponent<AI_Ship>().CurrentPower);
+                    Debug.Log("RemainingPower: " + GetComponent<AI_Ship>().CurrentPower);
                     yield return StartCoroutine(weapon.Fire(_target, () => { }));
                 }
+                else
+                {
+                    Debug.Log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                    keepFiring = false;
+                    break;
+                }
             }
+            yield return null;
         }
 
         yield return null;
