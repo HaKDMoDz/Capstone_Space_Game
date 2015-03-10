@@ -8,7 +8,11 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400000}
-  m_Layer: 14
+  - 114: {fileID: 11400000}
+  - 114: {fileID: 11400002}
+  - 65: {fileID: 6500000}
+  - 114: {fileID: 11400004}
+  m_Layer: 8
   m_Name: RedLaser
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25,7 +29,7 @@ GameObject:
   - 4: {fileID: 400002}
   - 120: {fileID: 12000000}
   - 114: {fileID: 11400006}
-  m_Layer: 14
+  m_Layer: 8
   m_Name: laserBeamLarger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +46,7 @@ GameObject:
   - 4: {fileID: 400004}
   - 120: {fileID: 12000002}
   - 114: {fileID: 11400008}
-  m_Layer: 14
+  m_Layer: 8
   m_Name: laserBeamThin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -87,6 +91,56 @@ Transform:
   m_Children: []
   m_Father: {fileID: 400000}
   m_RootOrder: 0
+--- !u!65 &6500000
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: .100000001, y: .100000001, z: .100000001}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb969ae704c720746abc8466684e471e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boxCollider: {fileID: 6500000}
+  damage: 4
+  impactEffect: {fileID: 100004, guid: 21146e30595e1224ea2e83cae54eb1e4, type: 2}
+  muzzleEffect: {fileID: 100004, guid: 10ff8a9e46930094c80b58bd973e4d00, type: 2}
+--- !u!114 &11400002
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17d044668e638f043a3b7cf115ba909f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  destroyTime: 2
+--- !u!114 &11400004
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17f9edfed1e13824bae7fbf3d5404c55, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &11400006
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -149,7 +203,7 @@ LineRenderer:
   m_SortingOrder: 0
   m_Positions:
   - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 10.2399998}
+  - {x: 0, y: 10.2399998, z: 0}
   m_Parameters:
     startWidth: .100000001
     endWidth: .100000001
@@ -182,7 +236,7 @@ LineRenderer:
   m_SortingOrder: 0
   m_Positions:
   - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 10.2399998}
+  - {x: 0, y: 10.2399998, z: 0}
   m_Parameters:
     startWidth: .100000001
     endWidth: .100000001
