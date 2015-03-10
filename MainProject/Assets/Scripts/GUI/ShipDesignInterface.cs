@@ -283,7 +283,10 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     //}
     //private void RemoveCurrentFleetButton(string fileName)
     #endregion GUIBuilders
-
+    public void StopBuilding()
+    {
+        StopCoroutine("StartPlacementSequence");
+    }
     /// <summary>
     /// Lets the user place components on the ship being built.
     /// The user can drag with the mouse to place multiple components of the same type
@@ -323,6 +326,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     }
     private void ShowModalPanel(bool show)
     {
+        StopCoroutine("StartPlacementSequence");
         modalPanel.gameObject.SetActive(show);
     }
 
@@ -425,6 +429,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     /// <param name="show"></param>
     public void ShowSaveDialogueBox(bool show)
     {
+        StopCoroutine("StartPlacementSequence");
         if (!show)
         {
             saveDialogueBox.gameObject.SetActive(false);
@@ -451,6 +456,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     /// <param name="show"></param>
     public void ShowLoadPanel(bool show)
     {
+        StopCoroutine("StartPlacementSequence");
         loadPanel.SetActive(show);
     }
 

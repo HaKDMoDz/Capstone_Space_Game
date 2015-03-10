@@ -103,6 +103,7 @@ public class FleetInterface : Singleton<FleetInterface>
     }
     public void ShowFleetPanel(bool show)
     {
+        ShipDesignInterface.Instance.StopBuilding();
         fleetPositioning = false;
         fleetPanel.SetActive(show);
         Cursor.SetCursor(defaultCursor, Vector2.zero, CursorMode.Auto);
