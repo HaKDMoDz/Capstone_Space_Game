@@ -31,6 +31,9 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
     public delegate void ShipMouseExitEvent(AI_Ship ship);
     public event ShipMouseExitEvent OnShipMouseExit = new ShipMouseExitEvent((AI_Ship) => { });
 
+
+    PlayerShip targetPlayer;
+
     #endregion Fields
 
     #region Methods
@@ -62,7 +65,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
 
         PreTurnActions();
 
-        PlayerShip targetPlayer = TargetEnemy(TurnBasedCombatSystem.Instance.playerShips);
+        targetPlayer = TargetEnemy(TurnBasedCombatSystem.Instance.playerShips);
         ShipComponent targetComponent = TargetComponent(targetPlayer);
         //move phase
         Move(targetPlayer);
@@ -80,13 +83,22 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         {
             activeComponents = components;
 
+
             yield return StartCoroutine(ai_Attack.Attack(targetComponent, damagePerAttack, activeComponents));
+            
             receivedAttackCommand = false;
             #if FULL_DEBUG
             Debug.Log(name + "- Attack end");
             #endif
         }
         PostTurnActions();
+    }
+
+    public void RetargetNewComponent()
+    {
+        activeComponents = components;
+        ShipComponent targetComponent = TargetComponent(targetPlayer);
+        StartCoroutine(ai_Attack.Attack(targetComponent, damagePerAttack, activeComponents));
     }
 
     protected override void PostTurnActions()
