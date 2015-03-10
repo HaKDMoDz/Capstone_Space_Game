@@ -17,12 +17,21 @@ public class AI_Attack : MonoBehaviour
         Debug.Log("Unit: " + _target + "takes: " + _damageAmount);
         //StartCoroutine(_target.TakeDamage(_damageAmount));
         Debug.Log(components.Count);
-        foreach (Component_Weapon weapon in components.Where(c => c is Component_Weapon))
+        //AI_Ship has the power stat
+       // while (GetComponent<AI_Ship>().CurrentPower > _target.ParentShip.Components.Where(c => c is Component_Weapon).Aggregate((curr, next) => curr.PowerDrain < next.PowerDrain ? curr : next).PowerDrain)
         {
-            Debug.Log("activate AI weapon");
+            foreach (Component_Weapon weapon in components.Where(c => c is Component_Weapon))
+            {
+                Debug.Log("activate AI weapon");
 
-            //yield return StartCoroutine(weapon.Fire(_target.transform, () => { }));
-            yield return StartCoroutine(weapon.Fire(_target, () => { }));
+                //yield return StartCoroutine(weapon.Fire(_target.transform, () => { }));
+                if (_target.CompHP > 0 && weapon.PowerDrain <= GetComponent<AI_Ship>().CurrentPower)
+                {
+                    GetComponent<AI_Ship>().CurrentPower -= weapon.PowerDrain;
+                    Debug.Log("CurrentPower: " + GetComponent<AI_Ship>().CurrentPower);
+                    yield return StartCoroutine(weapon.Fire(_target, () => { }));
+                }
+            }
         }
 
         yield return null;

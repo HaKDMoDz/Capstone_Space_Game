@@ -65,7 +65,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
     public float CurrentPower
     {
         get { return currentPower; }
-        protected set 
+        set 
         { 
             currentPower = value;
             CombatSystemInterface.Instance.UpdateStats(CurrentPower, MoveCost); 
