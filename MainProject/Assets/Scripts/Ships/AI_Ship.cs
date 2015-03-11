@@ -96,6 +96,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
 
     public void RetargetNewComponent()
     {
+        Debug.Log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         activeComponents = components;
         ShipComponent targetComponent = TargetComponent(targetPlayer);
         StartCoroutine(ai_Attack.Attack(targetComponent, damagePerAttack, activeComponents));
@@ -181,7 +182,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
     {
         
         //for now... return the one with the lowest HP
-        return _ship.Components.Aggregate((current, next) => current.CompHP < next.CompHP ? current : next);
+        return _ship.Components.Where(c => c.active).Aggregate((current, next) => current.CompHP < next.CompHP ? current : next);
     }
 
     #endregion PublicMethods

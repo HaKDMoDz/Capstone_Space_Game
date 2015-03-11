@@ -88,10 +88,10 @@ public class Mothership : MonoBehaviour
 
         if (movementMode == MovementMode.Translate)
         {
-            Debug.Log("orbit: translate mode");
+            //Debug.Log("orbit: translate mode");
             while (moveDir.magnitude > moveSpeed * Time.deltaTime)
             {
-                Debug.Log("orbit: speed under max");
+                //Debug.Log("orbit: speed under max");
                 Vector3 moveDirNorm = moveDir.normalized;
                 trans.LookAt(destination);
                 trans.position += moveDirNorm * moveSpeed * Time.deltaTime;
@@ -102,7 +102,7 @@ public class Mothership : MonoBehaviour
         }
         while (moveDir.magnitude > GlobalVars.LerpDistanceEpsilon)
         {
-            Debug.Log("orbit: not at destination yet");
+            //Debug.Log("orbit: not at destination yet");
             trans.LookAt(destination);
             trans.position = Vector3.Lerp(trans.position, destination, moveSpeed * .01f * Time.deltaTime);
             moveDir = destination - trans.position;
