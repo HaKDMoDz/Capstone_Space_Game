@@ -156,8 +156,9 @@ public class Mothership : MonoBehaviour
         if (GameController.Instance.GameData.galaxyMapData.position != Vector3.zero)
         {
             transform.position = GameController.Instance.GameData.galaxyMapData.position;
-            destination = trans.position;
+            
         }
+        destination = trans.position;
 
     }
     private void SaveData()
