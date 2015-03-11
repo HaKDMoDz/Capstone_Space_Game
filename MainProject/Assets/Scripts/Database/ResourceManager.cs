@@ -36,6 +36,8 @@ public enum Sound
 {
     //tracks
     TestTrack,
+    GalaxyMapTheme,
+    SciFiTheme,
     //effects
     Laser
 }

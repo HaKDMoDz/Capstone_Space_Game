@@ -340,6 +340,7 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
         }
         ShipDesignInterface.Instance.Init();
         FleetInterface.Instance.Init();
+        AudioManager.Instance.SetMainTrack(Sound.SciFiTheme);
     }
     #endregion UnityCallBacks
 

@@ -59,6 +59,7 @@ public class MainMenuController : MonoBehaviour
     private void Start()
     {
         SetupMainMenuButtons();
+        AudioManager.Instance.SetMainTrack(Sound.SciFiTheme);
     }
     #region GUI
     private void SetupMainMenuButtons()

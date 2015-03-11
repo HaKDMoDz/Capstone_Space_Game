@@ -4,12 +4,14 @@
   Created by Rohun Banerji on Feb 11/2015
   Copyright (c) 2015 Rohun Banerji. All rights reserved.
 */
+#region Usings
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System;
+#endregion Usings
 
 public class BlueprintTemplates : ScriptableObject
 {

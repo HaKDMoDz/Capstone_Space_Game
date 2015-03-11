@@ -138,7 +138,7 @@ public class CombatSceneController : Singleton<CombatSceneController>
     private IEnumerator Start()
     {
         Init();
-
+        AudioManager.Instance.SetMainTrack(Sound.SciFiTheme);
         yield return StartCoroutine(SetupScene());
     }
     
