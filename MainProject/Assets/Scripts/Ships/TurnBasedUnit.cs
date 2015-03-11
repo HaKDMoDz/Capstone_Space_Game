@@ -178,7 +178,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
             #if FULL_DEBUG
             Debug.Log(name + " taking " + _amountOfDamage + " damage. Remaining HP: " + HullHP);
             #endif
-            if (HullHP <= 0)
+            if (HullHP <= 0.0f)
             {
                 yield return StartCoroutine(Destroy());
             }

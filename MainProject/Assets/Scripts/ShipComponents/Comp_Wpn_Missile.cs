@@ -18,32 +18,34 @@ public class Comp_Wpn_Missile : Component_Weapon
 
     public override IEnumerator Fire(ShipComponent targetComp, Action OnActivationComplete)
     {
-        targetTrans = targetComp.transform;
-        shootPoint.LookAt(targetTrans);
-        Projectile_Missile missileClone = Instantiate(missilePrefab, shootPoint.position, shootPoint.rotation) as Projectile_Missile;
-        bool missileCollided = false;
-        missileClone.OnCollision +=
-            (GameObject other) =>
-            {
-                if ((targetComp.ParentShip.ShieldStrength>0.0f 
-                    && other.layer == TagsAndLayers.ShipShieldLayer 
-                    && other.GetComponentInParent<TurnBasedUnit>() == targetComp.ParentShip) 
-                    || (other.layer == TagsAndLayers.ComponentsLayer 
-                    && other.GetComponent<ShipComponent>() == targetComp))
-                {
-                    missileCollided = true;
-                    Instantiate(explosionPrefab, missileClone.transform.position, Quaternion.identity);
-                    Destroy(missileClone.gameObject);
-                }
-            };
-        while (!missileCollided)
+        //if (targetComp)
         {
-            yield return null;
+            targetTrans = targetComp.transform;
+            shootPoint.LookAt(targetTrans);
+            Projectile_Missile missileClone = Instantiate(missilePrefab, shootPoint.position, shootPoint.rotation) as Projectile_Missile;
+            bool missileCollided = false;
+            missileClone.OnCollision +=
+                (GameObject other) =>
+                {
+                    if ((targetComp.ParentShip.ShieldStrength > 0.0f
+                        && other.layer == TagsAndLayers.ShipShieldLayer
+                        && other.GetComponentInParent<TurnBasedUnit>() == targetComp.ParentShip)
+                        || (other.layer == TagsAndLayers.ComponentsLayer
+                        && other.GetComponent<ShipComponent>() == targetComp))
+                    {
+                        missileCollided = true;
+                        Instantiate(explosionPrefab, missileClone.transform.position, Quaternion.identity);
+                        Destroy(missileClone.gameObject);
+                    }
+                };
+            while (!missileCollided && targetComp.ParentShip.HullHP>0.0f )
+            {
+                yield return null;
+            }
+            yield return StartCoroutine(DoDamage(targetComp));
+
+            OnActivationComplete();
         }
-        yield return StartCoroutine(DoDamage(targetComp));
-
-        OnActivationComplete();
-
     }
 
 

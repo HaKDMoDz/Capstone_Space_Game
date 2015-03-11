@@ -55,7 +55,7 @@ public abstract class Component_Weapon : ShipComponent
         if (!targetShip)
         {
             #if FULL_DEBUG
-            Debug.LogWarning("Target ship is dead");
+            Debug.LogError("Target ship is dead");
             #endif
         }
         else

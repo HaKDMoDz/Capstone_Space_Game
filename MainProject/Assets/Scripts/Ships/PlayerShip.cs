@@ -284,24 +284,31 @@ public class PlayerShip : TurnBasedUnit
             }
         }
         //waits until all weapons have completed their animation
-        while (numWeaponsActivated > 0 && targetShip)
+        while (numWeaponsActivated > 0 && targetShip && targetShip.HullHP>0.0f)
         {
             yield return null;
         }
         Camera.main.cullingMask = originalCamCulling;
-        if (targetShip)
-        {
-            targetShip.ShowHPBars(false);
-        }
+        
         CurrentPower -= totalActivationCost;
         UnSelectComponents(false);
         combatInterface.ShowStatsPanel(true);
         attackTargetConfirmed = false;
-        //startTargetingSequence = false;
+        
         targetComponent = null;
-        SubscribeToAIShipMouseEvents(true);
+        if (targetShip && targetShip.HullHP > 0.0f)
+        {
+            targetShip.ShowHPBars(false);
+            SubscribeToAIShipMouseEvents(true);
+        }
+        else
+        {
+            Debug.Log("Acitvation - target dead");
+            startTargetingSequence = false;
+            yield return StartCoroutine(CameraDirector.Instance.MoveToFocusOn(trans, GlobalVars.CameraMoveToFocusPeriod));
+        }
         //yield return StartCoroutine(CameraDirector.Instance.MoveToFocusOn(trans, GlobalVars.CameraMoveToFocusPeriod));
-    }
+    }//ActivateWeapons()
     /// <summary>
     /// Accessed by the GUI button
     /// </summary>
@@ -687,7 +694,6 @@ public class PlayerShip : TurnBasedUnit
             mousePosOnGround = hit.point;
             moveDistance = Vector3.Distance(mousePosOnGround, trans.position);
             movePowerCost = Mathf.Round(moveDistance * MoveCost);
-            
         }
     }
     #endregion PrivateMethods

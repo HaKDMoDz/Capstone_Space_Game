@@ -128,6 +128,7 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
         {
             playerShips.Remove((PlayerShip)unit);
         }
+        CombatSystemInterface.Instance.UpdateTurnOrderPanel(units, true);
         StartCoroutine(Explode(unit));
 
         if (ai_Ships.Count <= 0 || playerShips.Count <= 0)
@@ -206,7 +207,7 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
         //if there are multiple ships with the same time, it just updates the GUI and sets the first unit
         if(unitsWithSameTime.Count > 0 )
         {
-            CombatSystemInterface.Instance.UpdateTurnOrderPanel(units);
+            CombatSystemInterface.Instance.UpdateTurnOrderPanel(units, false);
             firstUnit = units[0];
         }
         else //if there are no other ships with the same turn delay
@@ -232,7 +233,7 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
             else
             {
                 //if there are no units with the same turn, just update the GUI - the sorting has already been taken care of
-                CombatSystemInterface.Instance.UpdateTurnOrderPanel(units);
+                CombatSystemInterface.Instance.UpdateTurnOrderPanel(units, false);
             }
         }
     }//PreTurnActions

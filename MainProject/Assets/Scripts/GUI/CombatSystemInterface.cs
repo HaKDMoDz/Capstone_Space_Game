@@ -200,13 +200,28 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
     /// Shows the units in the turn order list, in the order that it was passed in (top to bottom)
     /// </summary>
     /// <param name="units"></param>
-    public void UpdateTurnOrderPanel(List<TurnBasedUnit> units)
+    public void UpdateTurnOrderPanel(List<TurnBasedUnit> units, bool reset)
     {
-        for (int i = 0; i < units.Count; i++)
+        if (reset)
         {
-            TextExtended button = unit_buttonRect_table[units[i]];
-            //button.SetText( units[i].ShipBPMetaData.BlueprintName);
-            button.RectTrans.SetSiblingIndex(i);
+            foreach (var unit_buttonRect in unit_buttonRect_table)
+            {
+                Destroy(unit_buttonRect.Value.gameObject);
+            }
+            unit_buttonRect_table.Clear();
+            foreach (var unit in units)
+            {
+                AddShipButton(unit);
+            }
+        }
+        else
+        {
+            for (int i = 0; i < units.Count; i++)
+            {
+                TextExtended button = unit_buttonRect_table[units[i]];
+                //button.SetText( units[i].ShipBPMetaData.BlueprintName);
+                button.RectTrans.SetSiblingIndex(i);
+            }
         }
     }
     /// <summary>
