@@ -42,32 +42,32 @@ public class Comp_Wpn_Railgun : Component_Weapon
 
             targetTrans = targetComp.transform;
             shootPoint.LookAt(targetTrans);
-
             
-            //yield return StartCoroutine(CreateRailEffect());
+            yield return StartCoroutine(CreateRailEffect());
             
-            Projectile_Missile bulletClone = (Projectile_Missile)Instantiate(projectilePrefab, shootPoint.position, shootPoint.rotation);
-            bulletClone.rigidbody.velocity = shootPoint.forward * projectileSpeed;
-            ////muzzle flash
-            bool bulletCollided = false;
-            bulletClone.OnCollision +=
-                (GameObject other) =>
-                {
-                    if ((targetComp.ParentShip.ShieldStrength > 0.0f
-                    && other.layer == TagsAndLayers.ShipShieldLayer
-                    && other.GetComponentInParent<TurnBasedUnit>() == targetComp.ParentShip)
-                    || (other.layer == TagsAndLayers.ComponentsLayer
-                    && other.GetComponent<ShipComponent>() == targetComp))
-                    {
-                        bulletCollided = true;
-                        //explosion
-                        Destroy(bulletClone.gameObject);
-                    }
-                };
-            while (!bulletCollided)
-            {
-                yield return null;
-            }
+            //Projectile_Missile bulletClone = (Projectile_Missile)Instantiate(projectilePrefab, shootPoint.position, shootPoint.rotation);
+            //bulletClone.rigidbody.velocity = shootPoint.forward * projectileSpeed;
+            //////muzzle flash
+            //bool bulletCollided = false;
+            //bulletClone.OnCollision +=
+            //    (GameObject other) =>
+            //    {
+            //        if ((targetComp.ParentShip.ShieldStrength > 0.0f
+            //        && other.layer == TagsAndLayers.ShipShieldLayer
+            //        && other.GetComponentInParent<TurnBasedUnit>() == targetComp.ParentShip)
+            //        || (other.layer == TagsAndLayers.ComponentsLayer
+            //        && other.GetComponent<ShipComponent>() == targetComp))
+            //        {
+            //            bulletCollided = true;
+            //            //explosion
+            //            Destroy(bulletClone.gameObject);
+            //        }
+            //    };
+            //while (!bulletCollided)
+            //{
+            //    yield return null;
+            //}
+            
             yield return StartCoroutine(DoDamage(targetComp));
         }
 
