@@ -67,8 +67,9 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
 
         targetPlayer = TargetEnemy(TurnBasedCombatSystem.Instance.playerShips);
         ShipComponent targetComponent = TargetComponent(targetPlayer);
+
         //move phase
-        Move(targetPlayer);
+        Move(targetPlayer, targetComponent.Placement);
         if (receivedMoveCommand)
         {
             yield return StartCoroutine(shipMove.Move());
@@ -107,7 +108,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         
     }
 
-    public void Move(PlayerShip targetPlayer)
+    public void Move(PlayerShip targetPlayer, AI_Fleet.PlacementType _placement)
     {
         if (!receivedMoveCommand)
         {
@@ -115,8 +116,25 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
             Debug.Log("Move command received " + ShipBPMetaData.BlueprintName);
             #endif
             Vector3 enemyPosition = targetPlayer.transform.position;
-            Vector3 directionBetween = (transform.position - enemyPosition).normalized;
-            shipMove.destination = enemyPosition + (directionBetween * range);
+            switch (_placement)
+            {
+                case AI_Fleet.PlacementType.FORWARD:
+                    
+                    shipMove.destination = enemyPosition + (Vector3.forward * range);
+                    break;
+                case AI_Fleet.PlacementType.AFT:
+                    shipMove.destination = enemyPosition + (-Vector3.back * range);
+                    break;
+                case AI_Fleet.PlacementType.PORT:
+                    shipMove.destination = enemyPosition + (Vector3.left * range);
+                    break;
+                case AI_Fleet.PlacementType.STARBOARD:
+                    shipMove.destination = enemyPosition + (Vector3.right * range);
+                    break;
+                case AI_Fleet.PlacementType.COUNT:
+                default:
+                    break;
+            }
             receivedMoveCommand = true;
         }
     }
@@ -147,21 +165,21 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
                 float confidence = Random.Range(0.0f, 1.0f);
 
                 //case 1 ... closeset
-                if (confidence < AIManager.tgtClosest)
+                if (confidence > 1 - AIManager.tgtClosest)
                 {
                     //closest enemy
                     return playerShips.Aggregate((current, next) => Vector3.Distance(current.transform.position, selfPos) < Vector3.Distance(next.transform.position, selfPos) ? current : next);
                 }
 
                 //case 2 ... farthest
-                if (confidence < AIManager.tgtClosest + AIManager.tgtFarthest)
+                if (confidence > 1 - AIManager.tgtClosest + AIManager.tgtFarthest)
                 {
                     //farthest enemy
                     return playerShips.Aggregate((current, next) =>Vector3.Distance(current.transform.position, selfPos) > Vector3.Distance(next.transform.position, selfPos) ? current : next);
                 }
 
                 //case 3 ... strongest
-                if (confidence < AIManager.tgtClosest + AIManager.tgtFarthest + AIManager.tgtStrongest)
+                if (confidence > 1 - AIManager.tgtClosest + AIManager.tgtFarthest + AIManager.tgtStrongest)
                 {
                     //strongest enemy
                     return playerShips.Aggregate((current, next) => current.HullHP > next.HullHP ? current : next);
@@ -180,9 +198,68 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
 
     private ShipComponent TargetComponent(PlayerShip _ship)
     {
-        
-        //for now... return the one with the lowest HP
-        return _ship.Components.Where(c => c.active).Aggregate((current, next) => current.CompHP < next.CompHP ? current : next);
+        ShipComponent _targetComponent = null ;
+
+        float confidence = Random.Range(0.0f, 1.0f);
+
+        //for now I'm calling the line of confidence at 0.5 this will change as the AI gets more complex -A
+        Debug.LogWarning(confidence);
+        if (confidence >= 0.5f)
+        {
+            //go in order of: weapons, defensive, support, engineering
+            if (_ship.Components.Where(c => c.active && c.CompType == ComponentType.Weapon).ToList().Count > 0)
+            {
+                _targetComponent = _ship.Components.Where(c => c.active && c.CompType == ComponentType.Weapon).Aggregate((curr, next) => curr.CompHP <= next.CompHP ? curr : next);
+            }
+            else if (_ship.Components.Where(c => c.active && c.CompType == ComponentType.Defense).ToList().Count > 0)
+            {
+               _targetComponent = _ship.Components.Where(c => c.active && c.CompType == ComponentType.Defense).Aggregate((curr, next) => curr.CompHP <= next.CompHP ? curr : next);
+            }
+            else if (_ship.Components.Where(c => c.active && c.CompType == ComponentType.Support).ToList().Count > 0)
+            {
+                _targetComponent = _ship.Components.Where(c => c.active && c.CompType == ComponentType.Support).Aggregate((curr, next) => curr.CompHP <= next.CompHP ? curr : next);
+            }
+            else if (_ship.Components.Where(c => c.active && c.CompType == ComponentType.Engineering).ToList().Count > 0)
+            {
+                _targetComponent = _ship.Components.Where(c => c.active && c.CompType == ComponentType.Engineering).Aggregate((curr, next) => curr.CompHP <= next.CompHP ? curr : next);
+            }
+
+            Debug.LogError(_targetComponent);
+
+            if (_targetComponent == null)
+            {
+                Debug.LogError("Something is very wrong. all component lists empty. AI cannot target components on an empty ship");
+            }
+        }
+        else
+        {
+            // go in order of: engineering, support, weapons, defensive
+            if (_ship.Components.Where(c => c.active && c.CompType == ComponentType.Engineering).ToList().Count > 0)
+            {
+                _targetComponent = _ship.Components.Where(c => c.active && c.CompType == ComponentType.Engineering).Aggregate((curr, next) => curr.CompHP <= next.CompHP ? curr : next);
+            }
+            else if (_ship.Components.Where(c => c.active && c.CompType == ComponentType.Support).ToList().Count > 0)
+            {
+               _targetComponent = _ship.Components.Where(c => c.active && c.CompType == ComponentType.Support).Aggregate((curr, next) => curr.CompHP <= next.CompHP ? curr : next);
+            }
+            else if (_ship.Components.Where(c => c.active && c.CompType == ComponentType.Weapon).ToList().Count > 0)
+            {
+                _targetComponent = _ship.Components.Where(c => c.active && c.CompType == ComponentType.Weapon).Aggregate((curr, next) => curr.CompHP <= next.CompHP ? curr : next);
+            }
+            else if (_ship.Components.Where(c => c.active && c.CompType == ComponentType.Defense).ToList().Count > 0)
+            {
+                _targetComponent = _ship.Components.Where(c => c.active && c.CompType == ComponentType.Defense).Aggregate((curr, next) => curr.CompHP <= next.CompHP ? curr : next);
+            }
+
+            Debug.LogError(_targetComponent);
+
+            if (_targetComponent == null)
+            {
+                Debug.LogError("Something is very wrong. all component lists empty. AI cannot target components on an empty ship");
+            }
+        }
+
+        return _targetComponent;
     }
 
     #endregion PublicMethods

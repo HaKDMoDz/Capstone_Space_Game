@@ -11,18 +11,9 @@ public class AIManager : Singleton<AIManager>
     public static float tgtWeakest = 0.4f;
 
     public static float cmpWeapon = 0.25f;
-    public static float cmpShield = 0.25f;
-    public static float cmpThruster = 0.25f;
-    public static float cmpPower = 0.25f;
-
-    public static float angAtk_0 = 0.125f;
-    public static float angAtk_45 = 0.125f;
-    public static float angAtk_90 = 0.125f;
-    public static float angAtk_135 = 0.125f;
-    public static float angAtk_180 = 0.125f;
-    public static float angAtk_225 = 0.125f;
-    public static float angAtk_270 = 0.125f;
-    public static float angAtk_315 = 0.125f;
+    public static float cmpDefence = 0.25f;
+    public static float cmpEngineering = 0.25f;
+    public static float cmpSupport = 0.25f;
 
     private AI_Fleet.Population pop1;
 
