@@ -29,6 +29,8 @@ public class DatabaseActivator : MonoBehaviour
     private BlueprintTemplates bpTemplates;
     [SerializeField]
     private ResourceManager resourceManager;
+    [SerializeField]
+    private PlayerShipConfig playerShipConfig;
 
 	
 }

@@ -131,6 +131,16 @@ public static class ExtensionMethods
         Vector3 newRot = new Vector3(trans.eulerAngles.x, trans.eulerAngles.y, z);
         trans.eulerAngles = newRot;
     }
+    /// <summary>
+    /// Looks at a target while maintaining the same y position
+    /// </summary>
+    /// <param name="trans"></param>
+    /// <param name="target"></param>
+    public static void LookAtWithSameY(this Transform trans, Vector3 target)
+    {
+        Vector3 lookAtPos = new Vector3(target.x, trans.position.y, target.z);
+        trans.LookAt(lookAtPos);
+    }
     #endregion
 
     #region RectTransform Extensions

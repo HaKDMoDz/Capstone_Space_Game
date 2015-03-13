@@ -20,6 +20,12 @@ public abstract class Component_Weapon : ShipComponent
 
     [SerializeField]
     protected Transform shootPoint;
+    [SerializeField]
+    private Color weaponColour;
+    public Color WeaponColour
+    {
+        get { return weaponColour; }
+    }
 
     protected Transform targetTrans;
 

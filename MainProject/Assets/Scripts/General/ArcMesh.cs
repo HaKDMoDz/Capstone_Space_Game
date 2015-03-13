@@ -14,11 +14,6 @@ using System.Collections.Generic;
 [RequireComponent(typeof(MeshRenderer))]
 public class ArcMesh : MonoBehaviour 
 {
-    //private float radius = 1.0f;
-    //private int segments = 20;
-    //private float arcAngle = 45.0f;
-
-
     public void BuildArc(float radius, float arcAngle, int segments, Material mat)
     {
         MeshFilter meshFilter = GetComponent<MeshFilter>();
@@ -46,7 +41,7 @@ public class ArcMesh : MonoBehaviour
         meshColMesh.Clear();
 
         float stepAngle = arcAngle * Mathf.Deg2Rad / segments;
-        float currAngle = 0.0f;
+        float currAngle = -arcAngle * Mathf.Deg2Rad * 0.5f;
         segments++;
 
         Vector3[] vertices = new Vector3[segments + 1];

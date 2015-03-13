@@ -49,6 +49,7 @@ public class PlayerShip : TurnBasedUnit
     private List<ShipComponent> selectedComponents = new List<ShipComponent>();
     private ShipComponent targetComponent = null;
     private AI_Ship targetShip = null;
+    private Transform targetingArcTrans;
 
     #endregion Fields   
 
@@ -66,8 +67,8 @@ public class PlayerShip : TurnBasedUnit
         this.playerAttack = playerAttack;
         this.playerAttack.Init();
         combatInterface = CombatSystemInterface.Instance;
-        ConfigurePlayerShip();
         spaceGround = SpaceGround.Instance;
+        ConfigurePlayerShip();
         
     }
     private void EnableInputEvents(bool enable)
@@ -648,6 +649,7 @@ public class PlayerShip : TurnBasedUnit
     void OnMouseMove(Vector2 direction)
     {
         GetMouseOverPosOnSpaceGround();
+        targetingArcTrans.LookAtWithSameY(mousePosOnGround);
     }
     #endregion InternalCallbacks
 
@@ -660,13 +662,31 @@ public class PlayerShip : TurnBasedUnit
     {
         //add line renderer for movement and targeting
         GameObject linePrefab = Resources.Load<GameObject>("Prefabs/LineRenderer");
-
         GameObject lineObj = Instantiate(linePrefab) as GameObject;
         lineObj.transform.SetParent(transform, false);
         line = lineObj.GetComponent<LineRenderer>();
         lineMat = line.renderer.material;
         playerAttack.line = line;
         line.enabled = false;
+        
+        //setup targeting arcs
+        GameObject targetingArcs = new GameObject("TargetingArcs");
+        targetingArcTrans = targetingArcs.transform;
+        targetingArcTrans.Translate(Vector3.up*10.0f);
+        //targetingArcTrans.RotateAroundXAxis(90.0f);
+        targetingArcTrans.SetParent(trans, false);
+        foreach (Type type in components.Where(c=>c is Component_Weapon).Select(c=>c.GetType()).Distinct())
+        {
+            Component_Weapon weapon = (Component_Weapon)components.First(c => c.GetType() == type);
+            GameObject arcObj = new GameObject(weapon.componentName + " Arc");
+            arcObj.transform.SetParent(targetingArcTrans, false);
+            arcObj.transform.RotateAroundXAxis(90.0f);
+            ArcMesh arc = arcObj.AddComponent<ArcMesh>();
+            Material arcMat = new Material(PlayerShipConfig.ArcMat);
+            arcMat.color = weapon.WeaponColour.WithAplha(PlayerShipConfig.ArcAlpha);
+            arc.BuildArc(weapon.range, PlayerShipConfig.ArcAngle, PlayerShipConfig.ArcSegments, arcMat);
+        }
+
     }
 
     /// <summary>
