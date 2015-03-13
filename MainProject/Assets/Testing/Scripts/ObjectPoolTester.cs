@@ -7,6 +7,8 @@ public class ObjectPoolTester : MonoBehaviour
     [SerializeField]
     private GameObject bulletPrefab;
 
+    [SerializeField]
+    Material mat;
 
     //internal fields
     private Transform trans;
@@ -16,7 +18,11 @@ public class ObjectPoolTester : MonoBehaviour
         InputManager.Instance.RegisterMouseButtonsDown(Shoot, MouseButton.Left);
         FindObjectOfType<SpaceGround>().OnGroundClick += GroundClick;
         trans = transform;
-        AudioManager.Instance.SetMainTrack(Sound.TestTrack);
+        //AudioManager.Instance.SetMainTrack(Sound.TestTrack);
+        GameObject obj = new GameObject("Arc");
+        ArcMesh arc = obj.AddComponent<ArcMesh>();
+        arc.BuildArc(1.0f, 45.0f, 20, mat);
+        
     }
 
     void GroundClick(Vector3 worldPosition)

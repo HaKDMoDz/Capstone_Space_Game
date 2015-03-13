@@ -38,8 +38,9 @@ public class Comp_Wpn_Missile : Component_Weapon
                         Destroy(missileClone.gameObject);
                     }
                 };
-            while (!missileCollided && targetComp.ParentShip.HullHP>0.0f )
+            while (!missileCollided && targetComp.ParentShip && targetComp.ParentShip.HullHP > 0.0f)
             {
+                //Debug.Log("targetship hp " + targetComp.ParentShip.HullHP);
                 yield return null;
             }
             yield return StartCoroutine(DoDamage(targetComp));

@@ -153,6 +153,7 @@ public class PlayerShip : TurnBasedUnit
                 EnableInputEvents(true);
             }//if(targetComponent)
             receivedMoveCommand = false;
+            spaceGround.Display(true);
             if(CurrentPower <=0 || TurnBasedCombatSystem.Instance.ai_Ships.Count ==0) //end turn
             {
                 continueTurn = false;
@@ -191,6 +192,7 @@ public class PlayerShip : TurnBasedUnit
         //targetShip = aiShips[targetShipIndex];
         targetShipIndex = aiShips.IndexOf(targetShip);
         Transform aiTargetTrans = targetShip.transform;
+        spaceGround.Display(false);
         //camera
         yield return StartCoroutine(CameraDirector.Instance.OverheadAimAt(trans, aiTargetTrans, GlobalVars.CameraAimAtPeriod));
         //show comp seleciton panel
@@ -269,7 +271,7 @@ public class PlayerShip : TurnBasedUnit
         }
         foreach (Component_Weapon weapon in selectedComponents)
         {
-            if (!targetShip)
+            if (!targetShip || targetShip.HullHP<=0.0f)
                 break;
             if (targetComponent && targetComponent.CompHP > 0.0f)
             {
@@ -286,6 +288,7 @@ public class PlayerShip : TurnBasedUnit
         //waits until all weapons have completed their animation
         while (numWeaponsActivated > 0 && targetShip && targetShip.HullHP>0.0f)
         {
+            Debug.LogWarning("targetship hp " + targetShip.HullHP);
             yield return null;
         }
         Camera.main.cullingMask = originalCamCulling;

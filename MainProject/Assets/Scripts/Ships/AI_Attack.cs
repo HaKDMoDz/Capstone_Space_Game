@@ -26,7 +26,7 @@ public class AI_Attack : MonoBehaviour
                 }
                 else
                 {
-                    if (GetComponent<AI_Ship>().CurrentPower <= 50)
+                    //if (GetComponent<AI_Ship>().CurrentPower <= 50)
                     {
                         keepFiring = false;
                     }

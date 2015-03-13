@@ -12,6 +12,9 @@ using System.Collections.Generic;
 
 public class SpaceGround : Singleton<SpaceGround>, IPointerDownHandler, IDragHandler
 {
+    [SerializeField]
+    private Renderer renderer;
+
     public delegate void GroundClick(Vector3 worldPosition);
     public event GroundClick OnGroundClick = new GroundClick((Vector3) => { });
 
@@ -29,7 +32,6 @@ public class SpaceGround : Singleton<SpaceGround>, IPointerDownHandler, IDragHan
             OnGroundClick(eventData.worldPosition);
         }
     }
-    
     /// <summary>
     /// Called when the pointer is dragged on the space ground. Raises the OnGroundClick event with the worldPosition of where on the ground the drag happened
     /// </summary>
@@ -41,8 +43,11 @@ public class SpaceGround : Singleton<SpaceGround>, IPointerDownHandler, IDragHan
             OnGroundClick(eventData.worldPosition);
         }
     }
-
-
+    public void Display(bool display)
+    {
+        renderer.enabled = display;
+    }
+    
     //private void Start()
     //{
     //    //InputManager.Instance.RegisterMouseButtonsHold(MouseDown, MouseButton.Left);
