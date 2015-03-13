@@ -14,25 +14,48 @@ public class AI_Attack : MonoBehaviour
     /// <returns>null</returns>
     public IEnumerator Attack(ShipComponent _target, float _damageAmount, List<ShipComponent> components)
     {
+        GetComponent<AI_Ship>().CurrentPower = GetComponent<AI_Ship>().MaxPower;
         bool keepFiring = true;
+        
         while (keepFiring)
         {
-            foreach (Component_Weapon weapon in components.Where(c => c is Component_Weapon))
+            if (_target.ParentShip.ShieldStrength > 0)
             {
-                if (_target.CompHP > 0 && weapon.PowerDrain <= GetComponent<AI_Ship>().CurrentPower && _target.ParentShip.HullHP > 0)
+                foreach (Comp_Wpn_Laser weapon in components.Where(c => c is Comp_Wpn_Laser))
                 {
-                    GetComponent<AI_Ship>().CurrentPower -= weapon.PowerDrain;
-                    yield return StartCoroutine(weapon.Fire(_target, () => { }));
-                }
-                else
-                {
-                    //if (GetComponent<AI_Ship>().CurrentPower <= 50)
+                    if (_target.CompHP > 0 && weapon.PowerDrain <= GetComponent<AI_Ship>().CurrentPower && _target.ParentShip.HullHP > 0)
                     {
-                        keepFiring = false;
+                        GetComponent<AI_Ship>().CurrentPower -= weapon.PowerDrain;
+                        yield return StartCoroutine(weapon.Fire(_target, () => { }));
                     }
-                    break;
+                    else
+                    {
+                        {
+                            keepFiring = false;
+                        }
+                        break;
+                    }
                 }
             }
+            else
+            {
+                foreach (Component_Weapon weapon in components.Where(c => c is Comp_Wpn_Missile || c is Comp_Wpn_Railgun))
+                {
+                    if (_target.CompHP > 0 && weapon.PowerDrain <= GetComponent<AI_Ship>().CurrentPower && _target.ParentShip.HullHP > 0)
+                    {
+                        GetComponent<AI_Ship>().CurrentPower -= weapon.PowerDrain;
+                        yield return StartCoroutine(weapon.Fire(_target, () => { }));
+                    }
+                    else
+                    {
+                        {
+                            keepFiring = false;
+                        }
+                        break;
+                    }
+                }
+            }
+            
             yield return null;
         }
         yield return null;
