@@ -84,6 +84,7 @@ public class ArcMesh : MonoBehaviour
         meshColMesh.vertices = vertices;
         meshColMesh.triangles = tris;
         renderer.sharedMaterial = mat;
+        meshFilterMesh.RecalculateNormals();
         meshFilterMesh.RecalculateBounds();
         meshFilterMesh.Optimize();
     }

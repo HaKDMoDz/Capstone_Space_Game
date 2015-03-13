@@ -129,10 +129,12 @@ public class PlayerShip : TurnBasedUnit
             //Show movement UI
             ShowMovementUI(true);
             GetMouseOverPosOnSpaceGround();
+            ShowTargetingArc(true);
 
             //move the ship - does not use power right now
             if (receivedMoveCommand)
             {
+                ShowTargetingArc(false);
                 UnSelectComponents(false);
                 ShowMovementUI(false);
                 CurrentPower -= movePowerCost;
@@ -145,12 +147,14 @@ public class PlayerShip : TurnBasedUnit
             if(startTargetingSequence)
             {
                 ShowMovementUI(false);
+                ShowTargetingArc(false);
                 TutorialSystem.Instance.ShowTutorial(TutorialSystem.TutorialType.ClickEnemyToEngage, false);
                 yield return StartCoroutine(ComponentSelectionAndTargeting());
                 
             }
             if(targetComponent)
             {
+                ShowTargetingArc(false);
                 yield return StartCoroutine(ActivateWeapons());
                 EnableInputEvents(true);
             }//if(targetComponent)
@@ -595,7 +599,10 @@ public class PlayerShip : TurnBasedUnit
             }
         }
     }
-
+    private void ShowTargetingArc(bool show)
+    {
+        targetingArcTrans.gameObject.SetActive(show);
+    }
     void aiShip_OnShipMouseExit(AI_Ship ship)
     {
         combatInterface.ShowAttackCursor(false);
@@ -672,7 +679,7 @@ public class PlayerShip : TurnBasedUnit
         //setup targeting arcs
         GameObject targetingArcs = new GameObject("TargetingArcs");
         targetingArcTrans = targetingArcs.transform;
-        targetingArcTrans.Translate(Vector3.up*10.0f);
+        targetingArcTrans.Translate(Vector3.up);
         //targetingArcTrans.RotateAroundXAxis(90.0f);
         targetingArcTrans.SetParent(trans, false);
         foreach (Type type in components.Where(c=>c is Component_Weapon).Select(c=>c.GetType()).Distinct())
@@ -686,7 +693,7 @@ public class PlayerShip : TurnBasedUnit
             arcMat.color = weapon.WeaponColour.WithAplha(PlayerShipConfig.ArcAlpha);
             arc.BuildArc(weapon.range, PlayerShipConfig.ArcAngle, PlayerShipConfig.ArcSegments, arcMat);
         }
-
+        ShowTargetingArc(false);
     }
 
     /// <summary>

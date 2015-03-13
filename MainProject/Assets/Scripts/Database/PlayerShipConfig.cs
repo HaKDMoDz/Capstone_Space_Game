@@ -30,6 +30,6 @@ public class PlayerShipConfig : ScriptableObject
         ArcAngle = arcAngle;
         ArcSegments = arcSegments;
         ArcMat = arcMat;
-        ArcAlpha= arcAlpha;
+        ArcAlpha = arcAlpha;
     }
 }
