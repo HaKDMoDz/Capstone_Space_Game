@@ -68,7 +68,7 @@ public class PlayerShip : TurnBasedUnit
         combatInterface = CombatSystemInterface.Instance;
         ConfigurePlayerShip();
         spaceGround = SpaceGround.Instance;
-        EnableInputEvents(true);
+        
     }
     private void EnableInputEvents(bool enable)
     {
@@ -104,6 +104,7 @@ public class PlayerShip : TurnBasedUnit
         //combatInterface.ShowComponentActivationButtons(SelectAllComponents, components.Where(c => c.CanActivate));
         combatInterface.UpdateStats(CurrentPower, MoveCost);
         combatInterface.SetPowerValid();
+        EnableInputEvents(true);
     }
     /// <summary>
     /// Starts the turn for the player ship. Starts listening for commands to move or to activate components
@@ -173,6 +174,7 @@ public class PlayerShip : TurnBasedUnit
         DisplayLineRenderer(Vector3.zero, false, validColour);
         combatInterface.ShowComponentHotkeyButtons(null, null);
         combatInterface.ShowStatsPanel(false);
+        EnableInputEvents(false);
     }
     private IEnumerator ComponentSelectionAndTargeting()
     {

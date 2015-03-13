@@ -190,12 +190,13 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
         #endif
 
         float minPower = units.Min(s => s.ShipBPMetaData.ExcessPower);
+        Debug.Log("Min power: " + minPower + " Factor: " + GlobalVars.TurnDelayFactor);
         foreach (TurnBasedUnit unit in units)
         {
-            float shipPower = unit.MaxPower;
+            float shipPower = unit.ShipBPMetaData.ExcessPower;
             float turnFrequency = shipPower / minPower - (shipPower - minPower) /GlobalVars.TurnDelayFactor;
             unit.TurnDelay = 1 / turnFrequency;
-            //Debug.Log("Turn delay for " + unit.ShipBPMetaData.BlueprintName + ": " + unit.TurnDelay);
+            Debug.LogWarning(unit.ShipBPMetaData.BlueprintName+" Ship Power:"+shipPower + " Turn Freq:" +turnFrequency + " Turn delay"+ ": " + unit.TurnDelay);
         }
     }//CalculateTurnDelay
 

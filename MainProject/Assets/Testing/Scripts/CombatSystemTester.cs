@@ -67,7 +67,7 @@ public class CombatSystemTester : MonoBehaviour
         Debug.Log("Num turns for unit: ");
         foreach (var unit_turnCount in unit_turnCount_table)
         {
-            Debug.Log(unit_turnCount.Key.ShipBPMetaData.BlueprintName + " : " + unit_turnCount.Value + " turns");
+            Debug.Log(unit_turnCount.Key.ShipBPMetaData.BlueprintName+" - Power: "+unit_turnCount.Key.ShipBPMetaData.ExcessPower +" Turn Delay: " + unit_turnCount.Key.TurnDelay + " : " + unit_turnCount.Value + " turns");
         }
         TurnBasedUnit unitWithLeastTurns = unit_turnCount_table.Aggregate((current, next) =>
                                                 current.Value < next.Value ?
