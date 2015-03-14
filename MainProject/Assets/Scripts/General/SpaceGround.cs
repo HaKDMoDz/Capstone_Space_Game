@@ -13,7 +13,7 @@ using System.Collections.Generic;
 public class SpaceGround : Singleton<SpaceGround>, IPointerDownHandler, IDragHandler
 {
     [SerializeField]
-    private Renderer renderer;
+    private Renderer rend;
 
     public delegate void GroundClick(Vector3 worldPosition);
     public event GroundClick OnGroundClick = new GroundClick((Vector3) => { });
@@ -45,7 +45,7 @@ public class SpaceGround : Singleton<SpaceGround>, IPointerDownHandler, IDragHan
     }
     public void Display(bool display)
     {
-        renderer.enabled = display;
+        rend.enabled = display;
     }
     
     //private void Start()

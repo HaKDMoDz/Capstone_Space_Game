@@ -14,8 +14,8 @@ public class Comp_Wpn_Laser : Component_Weapon
     private LaserEffectController laserEffectPrefab;
 
 
-    private LineRenderer line;
-    int length;
+    //private LineRenderer line;
+    //int length;
     
 
     public override void Init(TurnBasedUnit parentShip)
@@ -43,7 +43,7 @@ public class Comp_Wpn_Laser : Component_Weapon
             #endif
 
             targetTrans = targetComp.transform;
-            length = Mathf.RoundToInt(Vector3.Distance(targetTrans.position, shootPoint.position));
+            //length = Mathf.RoundToInt(Vector3.Distance(targetTrans.position, shootPoint.position));
 
             yield return StartCoroutine(CreateBeamEffectForDuration());
             yield return StartCoroutine(DoDamage(targetComp));
@@ -75,17 +75,17 @@ public class Comp_Wpn_Laser : Component_Weapon
         Destroy(laserClone.gameObject);
     }
 
-    private void CreateBeamEffect(Vector3 targetDir)
-    {
-        for (int i = 0; i < length; i++)
-        {
-            Vector3 newPos = shootPoint.position;
-            Vector3 offset = Vector3.zero;
-            offset.x = newPos.x + i * targetDir.x + Random.Range(-lineNoise, lineNoise);
-            offset.y = newPos.y + i * targetDir.y + Random.Range(-lineNoise, lineNoise);
-            offset.z = newPos.z + i * targetDir.z + Random.Range(-lineNoise, lineNoise);
-            newPos = offset;
-            line.SetPosition(i, newPos);
-        }
-    }
+    //private void CreateBeamEffect(Vector3 targetDir)
+    //{
+    //    for (int i = 0; i < length; i++)
+    //    {
+    //        Vector3 newPos = shootPoint.position;
+    //        Vector3 offset = Vector3.zero;
+    //        offset.x = newPos.x + i * targetDir.x + Random.Range(-lineNoise, lineNoise);
+    //        offset.y = newPos.y + i * targetDir.y + Random.Range(-lineNoise, lineNoise);
+    //        offset.z = newPos.z + i * targetDir.z + Random.Range(-lineNoise, lineNoise);
+    //        newPos = offset;
+    //        line.SetPosition(i, newPos);
+    //    }
+    //}
 }

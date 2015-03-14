@@ -156,7 +156,7 @@ public class ShipBuilder
         switch (shipType)
         {
             case ShipType.PlayerShip:
-                PlayerShip playerShip =  hullBeingBuilt.gameObject.AddComponent<PlayerShip>();
+                PlayerShip_Old playerShip = hullBeingBuilt.gameObject.AddComponent<PlayerShip_Old>();
                 ShipMove shipMove = hullBeingBuilt.gameObject.AddComponent<ShipMove>();
                 PlayerAttack playerAttack = hullBeingBuilt.gameObject.AddComponent<PlayerAttack>();
                 playerShip.Init(blueprintBeingBuilt, shipMove, playerAttack);

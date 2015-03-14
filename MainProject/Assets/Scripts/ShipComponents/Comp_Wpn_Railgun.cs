@@ -25,8 +25,8 @@ public class Comp_Wpn_Railgun : Component_Weapon
     private GameObject muzzleFlash;
     [SerializeField]
     private GameObject impactEffect;
-    [SerializeField]
-    private float projectileSpeed = 10.0f;
+    //[SerializeField]
+    //private float projectileSpeed = 10.0f;
 
     public override void Init(TurnBasedUnit _parentShip)
     {

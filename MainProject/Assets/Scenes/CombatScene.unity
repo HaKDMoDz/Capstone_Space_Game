@@ -321,7 +321,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 10
-  installedComponent: {fileID: 0}
+  placement: 3
+  installedComponent: {fileID: 11407202, guid: 875e5025256c66e4f80a3c62f54699c3, type: 2}
 --- !u!64 &8950172
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -830,76 +831,6 @@ CanvasRenderer:
     type: 2}
   m_PrefabInternal: {fileID: 1132603169}
   m_GameObject: {fileID: 24933265}
---- !u!1 &27045517
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 27045521}
-  - 33: {fileID: 27045520}
-  - 64: {fileID: 27045519}
-  - 23: {fileID: 27045518}
-  m_Layer: 0
-  m_Name: Plane
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!23 &27045518
-Renderer:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 27045517}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_LightmapIndex: 255
-  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
-  m_Materials:
-  - {fileID: 10302, guid: 0000000000000000f000000000000000, type: 0}
-  m_SubsetIndices: 
-  m_StaticBatchRoot: {fileID: 0}
-  m_UseLightProbes: 0
-  m_LightProbeAnchor: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
---- !u!64 &27045519
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 27045517}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_SmoothSphereCollisions: 0
-  m_Convex: 0
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!33 &27045520
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 27045517}
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!4 &27045521
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 27045517}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -200}
-  m_LocalScale: {x: 35.0926552, y: 1, z: 17.0042858}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 19
 --- !u!1 &27273180
 GameObject:
   m_ObjectHideFlags: 0
@@ -1493,6 +1424,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 24
+  placement: 0
   installedComponent: {fileID: 11407202, guid: 875e5025256c66e4f80a3c62f54699c3, type: 2}
 --- !u!64 &65441590
 MeshCollider:
@@ -1891,7 +1823,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 27
-  installedComponent: {fileID: 0}
+  placement: 3
+  installedComponent: {fileID: 11477078, guid: 99d4e8603f3c64a438b0c56b34f43213, type: 2}
 --- !u!64 &91938583
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -3491,7 +3424,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 18
-  installedComponent: {fileID: 0}
+  placement: 0
+  installedComponent: {fileID: 11441394, guid: 3dfb89ba35a4a1a47aec7608aaf474c0, type: 2}
 --- !u!64 &136089863
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -3639,7 +3573,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 21
-  installedComponent: {fileID: 0}
+  placement: 0
+  installedComponent: {fileID: 11453040, guid: fefcdb3dd83588244adbb23ad13c2354, type: 2}
 --- !u!64 &148964176
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -4156,6 +4091,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 25
+  placement: 0
   installedComponent: {fileID: 11477078, guid: 99d4e8603f3c64a438b0c56b34f43213, type: 2}
 --- !u!64 &177652704
 MeshCollider:
@@ -4469,7 +4405,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 19
-  installedComponent: {fileID: 0}
+  placement: 0
+  installedComponent: {fileID: 11453040, guid: fefcdb3dd83588244adbb23ad13c2354, type: 2}
 --- !u!64 &200223542
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -7014,6 +6951,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 6
+  placement: 0
   installedComponent: {fileID: 11441394, guid: 3dfb89ba35a4a1a47aec7608aaf474c0, type: 2}
 --- !u!64 &250893702
 MeshCollider:
@@ -8314,6 +8252,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 41
+  placement: 0
   installedComponent: {fileID: 11477078, guid: 99d4e8603f3c64a438b0c56b34f43213, type: 2}
 --- !u!64 &265075640
 MeshCollider:
@@ -9471,6 +9410,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 47
+  placement: 0
   installedComponent: {fileID: 11477078, guid: 99d4e8603f3c64a438b0c56b34f43213, type: 2}
 --- !u!64 &315224537
 MeshCollider:
@@ -9776,7 +9716,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 7
-  installedComponent: {fileID: 11400000, guid: 8374be886da01b34e976aeb47017201a, type: 2}
+  placement: 3
+  installedComponent: {fileID: 11441394, guid: 3dfb89ba35a4a1a47aec7608aaf474c0, type: 2}
 --- !u!64 &337046826
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -11836,6 +11777,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 39
+  placement: 0
   installedComponent: {fileID: 11401294, guid: 20a23412d72e3544eac63af6bc3ab9ba, type: 2}
 --- !u!64 &389173521
 MeshCollider:
@@ -12787,7 +12729,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 16
-  installedComponent: {fileID: 0}
+  placement: 1
+  installedComponent: {fileID: 11400000, guid: 8374be886da01b34e976aeb47017201a, type: 2}
 --- !u!64 &463534343
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -12892,7 +12835,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 2
-  installedComponent: {fileID: 0}
+  placement: 0
+  installedComponent: {fileID: 11401362, guid: 6f5f7af595eae194cadf7d55a6308216, type: 2}
 --- !u!64 &477202772
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -15555,6 +15499,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 31
+  placement: 0
   installedComponent: {fileID: 11400000, guid: 8374be886da01b34e976aeb47017201a, type: 2}
 --- !u!64 &502174146
 MeshCollider:
@@ -17119,6 +17064,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 17
+  placement: 0
   installedComponent: {fileID: 11407202, guid: 875e5025256c66e4f80a3c62f54699c3, type: 2}
 --- !u!64 &563340437
 MeshCollider:
@@ -17224,7 +17170,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 17
-  installedComponent: {fileID: 0}
+  placement: 1
+  installedComponent: {fileID: 11401294, guid: 20a23412d72e3544eac63af6bc3ab9ba, type: 2}
 --- !u!64 &566158718
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -17329,6 +17276,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 37
+  placement: 0
   installedComponent: {fileID: 11401294, guid: 20a23412d72e3544eac63af6bc3ab9ba, type: 2}
 --- !u!64 &568035680
 MeshCollider:
@@ -17434,7 +17382,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 29
-  installedComponent: {fileID: 0}
+  placement: 2
+  installedComponent: {fileID: 11477078, guid: 99d4e8603f3c64a438b0c56b34f43213, type: 2}
 --- !u!64 &572641203
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -17900,6 +17849,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 32
+  placement: 0
   installedComponent: {fileID: 11477078, guid: 99d4e8603f3c64a438b0c56b34f43213, type: 2}
 --- !u!64 &585965208
 MeshCollider:
@@ -18166,6 +18116,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 14
+  placement: 0
   installedComponent: {fileID: 11477078, guid: 99d4e8603f3c64a438b0c56b34f43213, type: 2}
 --- !u!64 &601101810
 MeshCollider:
@@ -18348,7 +18299,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 12
-  installedComponent: {fileID: 11441394, guid: 3dfb89ba35a4a1a47aec7608aaf474c0, type: 2}
+  placement: 1
+  installedComponent: {fileID: 11407202, guid: 875e5025256c66e4f80a3c62f54699c3, type: 2}
 --- !u!64 &613483555
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -18453,6 +18405,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 10
+  placement: 0
   installedComponent: {fileID: 11477078, guid: 99d4e8603f3c64a438b0c56b34f43213, type: 2}
 --- !u!64 &615283499
 MeshCollider:
@@ -18822,6 +18775,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 18
+  placement: 0
   installedComponent: {fileID: 11407202, guid: 875e5025256c66e4f80a3c62f54699c3, type: 2}
 --- !u!64 &624936774
 MeshCollider:
@@ -20399,7 +20353,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 4
-  installedComponent: {fileID: 0}
+  placement: 2
+  installedComponent: {fileID: 11453040, guid: fefcdb3dd83588244adbb23ad13c2354, type: 2}
 --- !u!64 &686579291
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -22359,6 +22314,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 43
+  placement: 0
   installedComponent: {fileID: 11477078, guid: 99d4e8603f3c64a438b0c56b34f43213, type: 2}
 --- !u!64 &708146262
 MeshCollider:
@@ -22671,7 +22627,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 24
-  installedComponent: {fileID: 0}
+  placement: 3
+  installedComponent: {fileID: 11400000, guid: 8374be886da01b34e976aeb47017201a, type: 2}
 --- !u!64 &723718791
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -22877,6 +22834,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 8
+  placement: 0
   installedComponent: {fileID: 11477078, guid: 99d4e8603f3c64a438b0c56b34f43213, type: 2}
 --- !u!64 &742143145
 MeshCollider:
@@ -23451,7 +23409,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 15
-  installedComponent: {fileID: 11401294, guid: 20a23412d72e3544eac63af6bc3ab9ba, type: 2}
+  placement: 1
+  installedComponent: {fileID: 11400000, guid: 8374be886da01b34e976aeb47017201a, type: 2}
 --- !u!64 &764002333
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -23556,6 +23515,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 4
+  placement: 0
   installedComponent: {fileID: 11477078, guid: 99d4e8603f3c64a438b0c56b34f43213, type: 2}
 --- !u!64 &778127117
 MeshCollider:
@@ -24691,7 +24651,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 86627369}
   m_GameObject: {fileID: 841635956}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: .0299999993}
   m_LocalScale: {x: .100000001, y: .100000001, z: .100000001}
   m_Children:
   - {fileID: 2018280675}
@@ -24816,6 +24776,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 11
+  placement: 0
   installedComponent: {fileID: 11477078, guid: 99d4e8603f3c64a438b0c56b34f43213, type: 2}
 --- !u!64 &844454976
 MeshCollider:
@@ -25095,6 +25056,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 28
+  placement: 0
   installedComponent: {fileID: 11477078, guid: 99d4e8603f3c64a438b0c56b34f43213, type: 2}
 --- !u!64 &860589180
 MeshCollider:
@@ -25200,6 +25162,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 38
+  placement: 0
   installedComponent: {fileID: 11401294, guid: 20a23412d72e3544eac63af6bc3ab9ba, type: 2}
 --- !u!64 &862918431
 MeshCollider:
@@ -30598,6 +30561,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 35
+  placement: 0
   installedComponent: {fileID: 11400000, guid: 8374be886da01b34e976aeb47017201a, type: 2}
 --- !u!64 &1053440223
 MeshCollider:
@@ -33020,6 +32984,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 1
+  placement: 0
   installedComponent: {fileID: 11477078, guid: 99d4e8603f3c64a438b0c56b34f43213, type: 2}
 --- !u!64 &1148607854
 MeshCollider:
@@ -34335,6 +34300,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 957283162e30d3b409cd338599f19360, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  placement: 0
   compType: 1
   componentName: Armour
   unlocked: 0
@@ -34695,7 +34661,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 28
-  installedComponent: {fileID: 0}
+  placement: 2
+  installedComponent: {fileID: 11477078, guid: 99d4e8603f3c64a438b0c56b34f43213, type: 2}
 --- !u!64 &1193687429
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -34879,7 +34846,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 30
-  installedComponent: {fileID: 0}
+  placement: 0
+  installedComponent: {fileID: 11477078, guid: 99d4e8603f3c64a438b0c56b34f43213, type: 2}
 --- !u!64 &1201765952
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -36867,6 +36835,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 9
+  placement: 0
   installedComponent: {fileID: 11441394, guid: 3dfb89ba35a4a1a47aec7608aaf474c0, type: 2}
 --- !u!64 &1235856025
 MeshCollider:
@@ -38067,6 +38036,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 19
+  placement: 0
   installedComponent: {fileID: 11477078, guid: 99d4e8603f3c64a438b0c56b34f43213, type: 2}
 --- !u!64 &1239581412
 MeshCollider:
@@ -38251,6 +38221,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 3
+  placement: 0
   installedComponent: {fileID: 11441394, guid: 3dfb89ba35a4a1a47aec7608aaf474c0, type: 2}
 --- !u!64 &1245957873
 MeshCollider:
@@ -38822,6 +38793,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 13
+  placement: 0
   installedComponent: {fileID: 11441394, guid: 3dfb89ba35a4a1a47aec7608aaf474c0, type: 2}
 --- !u!64 &1281082592
 MeshCollider:
@@ -40056,7 +40028,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 13
-  installedComponent: {fileID: 0}
+  placement: 1
+  installedComponent: {fileID: 11400000, guid: 8374be886da01b34e976aeb47017201a, type: 2}
 --- !u!64 &1291900985
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -41019,7 +40992,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 5
-  installedComponent: {fileID: 11441394, guid: 3dfb89ba35a4a1a47aec7608aaf474c0, type: 2}
+  placement: 2
+  installedComponent: {fileID: 11400000, guid: 8374be886da01b34e976aeb47017201a, type: 2}
 --- !u!64 &1334927944
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -42638,6 +42612,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 6
+  placement: 3
   installedComponent: {fileID: 11400000, guid: 8374be886da01b34e976aeb47017201a, type: 2}
 --- !u!64 &1377756222
 MeshCollider:
@@ -42755,6 +42730,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 45
+  placement: 0
   installedComponent: {fileID: 11401294, guid: 20a23412d72e3544eac63af6bc3ab9ba, type: 2}
 --- !u!64 &1386715114
 MeshCollider:
@@ -43046,7 +43022,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 20
-  installedComponent: {fileID: 0}
+  placement: 0
+  installedComponent: {fileID: 11441394, guid: 3dfb89ba35a4a1a47aec7608aaf474c0, type: 2}
 --- !u!64 &1399183863
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -43595,6 +43572,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 21
+  placement: 0
   installedComponent: {fileID: 11407202, guid: 875e5025256c66e4f80a3c62f54699c3, type: 2}
 --- !u!64 &1427304568
 MeshCollider:
@@ -45488,7 +45466,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 22
-  installedComponent: {fileID: 0}
+  placement: 1
+  installedComponent: {fileID: 11401294, guid: 20a23412d72e3544eac63af6bc3ab9ba, type: 2}
 --- !u!64 &1502229032
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -45593,6 +45572,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 25
+  placement: 1
   installedComponent: {fileID: 11400000, guid: 8374be886da01b34e976aeb47017201a, type: 2}
 --- !u!64 &1510440043
 MeshCollider:
@@ -46006,6 +45986,46 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 0
   m_VerticalFit: 0
+--- !u!1 &1540780449
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1540780451}
+  - 114: {fileID: 1540780450}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1540780450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1540780449}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09e38a06e8302c64290dfc57484eb6c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  numSources: 32
+--- !u!4 &1540780451
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1540780449}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 46.8877106, y: 21.2081127, z: -181.039566}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 19
 --- !u!1 &1548941571
 GameObject:
   m_ObjectHideFlags: 0
@@ -46506,7 +46526,7 @@ Transform:
   m_PrefabInternal: {fileID: 86627369}
   m_GameObject: {fileID: 1592821998}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.2371912, y: -2.21855688, z: -2.70896459}
+  m_LocalPosition: {x: -1.24000001, y: -2.22000003, z: -2.71000004}
   m_LocalScale: {x: 3, y: 1, z: 3}
   m_Children: []
   m_Father: {fileID: 717045381}
@@ -46524,7 +46544,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 11
-  installedComponent: {fileID: 11441394, guid: 3dfb89ba35a4a1a47aec7608aaf474c0, type: 2}
+  placement: 1
+  installedComponent: {fileID: 11407202, guid: 875e5025256c66e4f80a3c62f54699c3, type: 2}
 --- !u!64 &1592822001
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -46755,6 +46776,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 5
+  placement: 0
   installedComponent: {fileID: 11441394, guid: 3dfb89ba35a4a1a47aec7608aaf474c0, type: 2}
 --- !u!64 &1604589154
 MeshCollider:
@@ -46860,6 +46882,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 40
+  placement: 0
   installedComponent: {fileID: 11401294, guid: 20a23412d72e3544eac63af6bc3ab9ba, type: 2}
 --- !u!64 &1617809452
 MeshCollider:
@@ -47050,6 +47073,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 15
+  placement: 0
   installedComponent: {fileID: 11477078, guid: 99d4e8603f3c64a438b0c56b34f43213, type: 2}
 --- !u!64 &1621170079
 MeshCollider:
@@ -49441,7 +49465,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 23
-  installedComponent: {fileID: 0}
+  placement: 1
+  installedComponent: {fileID: 11401294, guid: 20a23412d72e3544eac63af6bc3ab9ba, type: 2}
 --- !u!64 &1722380892
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -49546,7 +49571,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 26
-  installedComponent: {fileID: 0}
+  placement: 3
+  installedComponent: {fileID: 11477078, guid: 99d4e8603f3c64a438b0c56b34f43213, type: 2}
 --- !u!64 &1740475310
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -49752,6 +49778,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 23
+  placement: 0
   installedComponent: {fileID: 11400000, guid: 8374be886da01b34e976aeb47017201a, type: 2}
 --- !u!64 &1747466695
 MeshCollider:
@@ -50199,7 +50226,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 1
-  installedComponent: {fileID: 0}
+  placement: 0
+  installedComponent: {fileID: 11401362, guid: 6f5f7af595eae194cadf7d55a6308216, type: 2}
 --- !u!64 &1760907883
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -50659,6 +50687,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 26
+  placement: 0
   installedComponent: {fileID: 11477078, guid: 99d4e8603f3c64a438b0c56b34f43213, type: 2}
 --- !u!64 &1786079401
 MeshCollider:
@@ -50765,6 +50794,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 0
+  placement: 0
   installedComponent: {fileID: 11477078, guid: 99d4e8603f3c64a438b0c56b34f43213, type: 2}
 --- !u!64 &1793887671
 MeshCollider:
@@ -52304,6 +52334,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 34
+  placement: 0
   installedComponent: {fileID: 11477078, guid: 99d4e8603f3c64a438b0c56b34f43213, type: 2}
 --- !u!64 &1808561257
 MeshCollider:
@@ -52732,6 +52763,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 12
+  placement: 0
   installedComponent: {fileID: 11441394, guid: 3dfb89ba35a4a1a47aec7608aaf474c0, type: 2}
 --- !u!64 &1833824614
 MeshCollider:
@@ -54440,7 +54472,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 8
-  installedComponent: {fileID: 11441394, guid: 3dfb89ba35a4a1a47aec7608aaf474c0, type: 2}
+  placement: 2
+  installedComponent: {fileID: 11407202, guid: 875e5025256c66e4f80a3c62f54699c3, type: 2}
 --- !u!64 &1869291247
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -56110,6 +56143,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 46
+  placement: 0
   installedComponent: {fileID: 11477078, guid: 99d4e8603f3c64a438b0c56b34f43213, type: 2}
 --- !u!64 &1914817154
 MeshCollider:
@@ -56215,6 +56249,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 2
+  placement: 0
   installedComponent: {fileID: 11477078, guid: 99d4e8603f3c64a438b0c56b34f43213, type: 2}
 --- !u!64 &1916297370
 MeshCollider:
@@ -56354,7 +56389,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 9
-  installedComponent: {fileID: 11441394, guid: 3dfb89ba35a4a1a47aec7608aaf474c0, type: 2}
+  placement: 2
+  installedComponent: {fileID: 11400000, guid: 8374be886da01b34e976aeb47017201a, type: 2}
 --- !u!64 &1924700237
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -56523,6 +56559,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 33
+  placement: 0
   installedComponent: {fileID: 11477078, guid: 99d4e8603f3c64a438b0c56b34f43213, type: 2}
 --- !u!64 &1949358001
 MeshCollider:
@@ -56789,6 +56826,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 16
+  placement: 0
   installedComponent: {fileID: 11407202, guid: 875e5025256c66e4f80a3c62f54699c3, type: 2}
 --- !u!64 &1961978974
 MeshCollider:
@@ -56894,6 +56932,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 30
+  placement: 0
   installedComponent: {fileID: 11400000, guid: 8374be886da01b34e976aeb47017201a, type: 2}
 --- !u!64 &1963788068
 MeshCollider:
@@ -56999,7 +57038,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 14
-  installedComponent: {fileID: 0}
+  placement: 1
+  installedComponent: {fileID: 11400000, guid: 8374be886da01b34e976aeb47017201a, type: 2}
 --- !u!64 &1964412211
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -57170,6 +57210,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 7
+  placement: 0
   installedComponent: {fileID: 11477078, guid: 99d4e8603f3c64a438b0c56b34f43213, type: 2}
 --- !u!64 &1973007545
 MeshCollider:
@@ -57546,6 +57587,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 29
+  placement: 0
   installedComponent: {fileID: 11400000, guid: 8374be886da01b34e976aeb47017201a, type: 2}
 --- !u!64 &1996583756
 MeshCollider:
@@ -57881,6 +57923,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 22
+  placement: 0
   installedComponent: {fileID: 11400000, guid: 8374be886da01b34e976aeb47017201a, type: 2}
 --- !u!64 &2012888353
 MeshCollider:
@@ -59520,6 +59563,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 44
+  placement: 0
   installedComponent: {fileID: 11477078, guid: 99d4e8603f3c64a438b0c56b34f43213, type: 2}
 --- !u!64 &2034022171
 MeshCollider:
@@ -59727,7 +59771,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfa5cb39208ecf545aa8e9e4b16eb9f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  renderer: {fileID: 2051935066}
+  rend: {fileID: 2051935066}
 --- !u!1001 &2054825264
 Prefab:
   m_ObjectHideFlags: 0
@@ -59935,6 +59979,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 3
+  placement: 0
   installedComponent: {fileID: 11400000, guid: 8374be886da01b34e976aeb47017201a, type: 2}
 --- !u!64 &2057564768
 MeshCollider:
@@ -60235,6 +60280,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 42
+  placement: 0
   installedComponent: {fileID: 11477078, guid: 99d4e8603f3c64a438b0c56b34f43213, type: 2}
 --- !u!64 &2071711595
 MeshCollider:
@@ -60340,6 +60386,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 20
+  placement: 0
   installedComponent: {fileID: 11477078, guid: 99d4e8603f3c64a438b0c56b34f43213, type: 2}
 --- !u!64 &2072576120
 MeshCollider:
@@ -60519,7 +60566,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 0
-  installedComponent: {fileID: 0}
+  placement: 0
+  installedComponent: {fileID: 11401362, guid: 6f5f7af595eae194cadf7d55a6308216, type: 2}
 --- !u!64 &2082670701
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -61512,6 +61560,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 36
+  placement: 0
   installedComponent: {fileID: 11400000, guid: 8374be886da01b34e976aeb47017201a, type: 2}
 --- !u!64 &2116318936
 MeshCollider:
@@ -61882,6 +61931,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 27
+  placement: 0
   installedComponent: {fileID: 11477078, guid: 99d4e8603f3c64a438b0c56b34f43213, type: 2}
 --- !u!64 &2138507247
 MeshCollider:

@@ -23,7 +23,7 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
 
     #region Internal
     public List<TurnBasedUnit> units { get; private set; }
-    public List<PlayerShip> playerShips { get; private set; }
+    public List<PlayerShip_Old> playerShips { get; private set; }
     public List<AI_Ship> ai_Ships { get; private set; }
 
     public bool combatOn { get; private set; }
@@ -46,7 +46,7 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
     {
         units = new List<TurnBasedUnit>();
         unitsWithSameTime = new List<TurnBasedUnit>();
-        playerShips = new List<PlayerShip>();
+        playerShips = new List<PlayerShip_Old>();
         ai_Ships = new List<AI_Ship>();
         //raised whenever user clicks on the "ground"
     }
@@ -97,9 +97,9 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
         
         CombatSystemInterface.Instance.AddShipButton(unit);
 
-        if (unit is PlayerShip)
+        if (unit is PlayerShip_Old)
         {
-            playerShips.Add((PlayerShip)unit);
+            playerShips.Add((PlayerShip_Old)unit);
         }
         else if (unit is AI_Ship)
         {
@@ -124,9 +124,9 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
         {
             ai_Ships.Remove((AI_Ship)unit);
         }
-        else if(unit is PlayerShip)
+        else if(unit is PlayerShip_Old)
         {
-            playerShips.Remove((PlayerShip)unit);
+            playerShips.Remove((PlayerShip_Old)unit);
         }
         CombatSystemInterface.Instance.UpdateTurnOrderPanel(units, true);
         StartCoroutine(Explode(unit));
