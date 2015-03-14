@@ -84,7 +84,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         {
             activeComponents = components;
 
-
+            trans.LookAt(targetPlayer.transform);
             yield return StartCoroutine(ai_Attack.Attack(targetComponent, damagePerAttack, activeComponents));
             
             receivedAttackCommand = false;
@@ -120,16 +120,16 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
             {
                 case AI_Fleet.PlacementType.FORWARD:
                     
-                    shipMove.destination = enemyPosition + (Vector3.forward * range);
+                    shipMove.destination = enemyPosition + (targetPlayer.transform.forward * range);
                     break;
                 case AI_Fleet.PlacementType.AFT:
-                    shipMove.destination = enemyPosition + (-Vector3.back * range);
+                    shipMove.destination = enemyPosition + (-targetPlayer.transform.forward * range);
                     break;
                 case AI_Fleet.PlacementType.PORT:
-                    shipMove.destination = enemyPosition + (Vector3.left * range);
+                    shipMove.destination = enemyPosition + (-targetPlayer.transform.right * range);
                     break;
                 case AI_Fleet.PlacementType.STARBOARD:
-                    shipMove.destination = enemyPosition + (Vector3.right * range);
+                    shipMove.destination = enemyPosition + (targetPlayer.transform.right * range);
                     break;
                 case AI_Fleet.PlacementType.COUNT:
                 default:
