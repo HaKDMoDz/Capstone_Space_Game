@@ -213,28 +213,28 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
 
         //setup a 10 step system ranging from dullard with a club to military commander with laser guided intel
         //set confidence to choose from those 10 options
-        Debug.LogWarning(confidence);
+        //Debug.LogWarning(confidence);
         if (confidence >= 0.5f)
         {
             //go in order of: weapons, defensive, support, engineering
-            if (_ship.Components.Where(c => c.active && c.CompType == ComponentType.Weapon).ToList().Count > 0)
+            if (_ship.Components.Where(c => c.CanActivate && c.CompType == ComponentType.Weapon).ToList().Count > 0)
             {
-                _targetComponent = _ship.Components.Where(c => c.active && c.CompType == ComponentType.Weapon).Aggregate((curr, next) => curr.CompHP <= next.CompHP ? curr : next);
+                _targetComponent = _ship.Components.Where(c => c.CanActivate && c.CompType == ComponentType.Weapon).Aggregate((curr, next) => curr.CompHP <= next.CompHP ? curr : next);
             }
-            else if (_ship.Components.Where(c => c.active && c.CompType == ComponentType.Defense).ToList().Count > 0)
+            else if (_ship.Components.Where(c => c.CanActivate && c.CompType == ComponentType.Defense).ToList().Count > 0)
             {
-               _targetComponent = _ship.Components.Where(c => c.active && c.CompType == ComponentType.Defense).Aggregate((curr, next) => curr.CompHP <= next.CompHP ? curr : next);
+               _targetComponent = _ship.Components.Where(c => c.CanActivate && c.CompType == ComponentType.Defense).Aggregate((curr, next) => curr.CompHP <= next.CompHP ? curr : next);
             }
-            else if (_ship.Components.Where(c => c.active && c.CompType == ComponentType.Support).ToList().Count > 0)
+            else if (_ship.Components.Where(c => c.CanActivate && c.CompType == ComponentType.Support).ToList().Count > 0)
             {
-                _targetComponent = _ship.Components.Where(c => c.active && c.CompType == ComponentType.Support).Aggregate((curr, next) => curr.CompHP <= next.CompHP ? curr : next);
+                _targetComponent = _ship.Components.Where(c => c.CanActivate && c.CompType == ComponentType.Support).Aggregate((curr, next) => curr.CompHP <= next.CompHP ? curr : next);
             }
-            else if (_ship.Components.Where(c => c.active && c.CompType == ComponentType.Engineering).ToList().Count > 0)
+            else if (_ship.Components.Where(c => c.CanActivate && c.CompType == ComponentType.Engineering).ToList().Count > 0)
             {
-                _targetComponent = _ship.Components.Where(c => c.active && c.CompType == ComponentType.Engineering).Aggregate((curr, next) => curr.CompHP <= next.CompHP ? curr : next);
+                _targetComponent = _ship.Components.Where(c => c.CanActivate && c.CompType == ComponentType.Engineering).Aggregate((curr, next) => curr.CompHP <= next.CompHP ? curr : next);
             }
 
-            Debug.LogError(_targetComponent);
+            //Debug.LogError(_targetComponent);
 
             if (_targetComponent == null)
             {
@@ -244,24 +244,24 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         else
         {
             // go in order of: engineering, support, weapons, defensive
-            if (_ship.Components.Where(c => c.active && c.CompType == ComponentType.Engineering).ToList().Count > 0)
+            if (_ship.Components.Where(c => c.CanActivate && c.CompType == ComponentType.Engineering).ToList().Count > 0)
             {
-                _targetComponent = _ship.Components.Where(c => c.active && c.CompType == ComponentType.Engineering).Aggregate((curr, next) => curr.CompHP <= next.CompHP ? curr : next);
+                _targetComponent = _ship.Components.Where(c => c.CanActivate && c.CompType == ComponentType.Engineering).Aggregate((curr, next) => curr.CompHP <= next.CompHP ? curr : next);
             }
-            else if (_ship.Components.Where(c => c.active && c.CompType == ComponentType.Support).ToList().Count > 0)
+            else if (_ship.Components.Where(c => c.CanActivate && c.CompType == ComponentType.Support).ToList().Count > 0)
             {
-               _targetComponent = _ship.Components.Where(c => c.active && c.CompType == ComponentType.Support).Aggregate((curr, next) => curr.CompHP <= next.CompHP ? curr : next);
+               _targetComponent = _ship.Components.Where(c => c.CanActivate && c.CompType == ComponentType.Support).Aggregate((curr, next) => curr.CompHP <= next.CompHP ? curr : next);
             }
-            else if (_ship.Components.Where(c => c.active && c.CompType == ComponentType.Weapon).ToList().Count > 0)
+            else if (_ship.Components.Where(c => c.CanActivate && c.CompType == ComponentType.Weapon).ToList().Count > 0)
             {
-                _targetComponent = _ship.Components.Where(c => c.active && c.CompType == ComponentType.Weapon).Aggregate((curr, next) => curr.CompHP <= next.CompHP ? curr : next);
+                _targetComponent = _ship.Components.Where(c => c.CanActivate && c.CompType == ComponentType.Weapon).Aggregate((curr, next) => curr.CompHP <= next.CompHP ? curr : next);
             }
-            else if (_ship.Components.Where(c => c.active && c.CompType == ComponentType.Defense).ToList().Count > 0)
+            else if (_ship.Components.Where(c => c.CanActivate && c.CompType == ComponentType.Defense).ToList().Count > 0)
             {
-                _targetComponent = _ship.Components.Where(c => c.active && c.CompType == ComponentType.Defense).Aggregate((curr, next) => curr.CompHP <= next.CompHP ? curr : next);
+                _targetComponent = _ship.Components.Where(c => c.CanActivate && c.CompType == ComponentType.Defense).Aggregate((curr, next) => curr.CompHP <= next.CompHP ? curr : next);
             }
 
-            Debug.LogError(_targetComponent);
+           // Debug.LogError(_targetComponent);
 
             if (_targetComponent == null)
             {

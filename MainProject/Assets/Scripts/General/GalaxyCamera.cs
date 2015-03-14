@@ -13,7 +13,6 @@ public class GalaxyCamera : Singleton<GalaxyCamera>
     private float orbitZoomHeight = 120.0f;
     private float spaceZoomHeight = 200.00f;
     private float systemZoomHeight = 100.0f;
-    private float camFollowPeriod = 0.1f;
 
     //Cached references
     private Transform trans;

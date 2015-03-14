@@ -30,8 +30,6 @@ public class Mothership : MonoBehaviour
 
     private Vector3 destination;
     private Vector3 orbitDestination;
-    private bool moving = false;
-    private bool inSystem = false;
     #endregion Fields
 
     #region Methods
@@ -81,64 +79,21 @@ public class Mothership : MonoBehaviour
 
     void Update()
     {
-        Debug.Log("update: called");
-        //if (!orbiting)
+        Vector3 moveDir;
+        moveDir = destination - trans.position;
         {
-            Debug.Log("update: not orbiting");
-            Vector3 moveDir;
-            //moving = true;
-            moveDir = destination - trans.position;
-
-           // if (movementMode == MovementMode.Translate)
+            if (moveDir.magnitude > moveSpeed * Time.deltaTime && moveDir.magnitude > GlobalVars.LerpDistanceEpsilon && !orbiting)
             {
-                Debug.Log("update: translate phase");
-                if (moveDir.magnitude > moveSpeed * Time.deltaTime && moveDir.magnitude > GlobalVars.LerpDistanceEpsilon && !orbiting)
-                {
-                    Debug.Log("update: translate phase: moving");
-                    Vector3 moveDirNorm = moveDir.normalized;
-                    trans.LookAt(destination);
-                    trans.position += moveDirNorm * moveSpeed * Time.deltaTime;
-                    moveDir = destination - trans.position;
-                    //StartCoroutine(GalaxyCamera.Instance.FollowMothership(trans, inSystem));
-                    GalaxyCamera.Instance.targetMothership();  
-                }
+                Vector3 moveDirNorm = moveDir.normalized;
                 trans.LookAt(destination);
+                trans.position += moveDirNorm * moveSpeed * Time.deltaTime;
+                moveDir = destination - trans.position;
+                //StartCoroutine(GalaxyCamera.Instance.FollowMothership(trans, inSystem));
+                GalaxyCamera.Instance.targetMothership();  
             }
+            trans.LookAt(destination);
         }
-       
     }
-
-    //private IEnumerator Orbit()
-    //{
-    //    Debug.Log("orbit: called");
-    //    Vector3 moveDir;
-    //    moving = true;
-    //    moveDir = destination - trans.position;
-
-    //    if (movementMode == MovementMode.Translate)
-    //    {
-    //        //Debug.Log("orbit: translate mode");
-    //        while (moveDir.magnitude > moveSpeed * Time.deltaTime)
-    //        {
-    //            //Debug.Log("orbit: speed under max");
-    //            Vector3 moveDirNorm = moveDir.normalized;
-    //            trans.LookAt(destination);
-    //            trans.position += moveDirNorm * moveSpeed * Time.deltaTime;
-    //            moveDir = destination - trans.position;
-    //            yield return null;
-
-    //        }
-    //    }
-    //    while (moveDir.magnitude > GlobalVars.LerpDistanceEpsilon)
-    //    {
-    //        //Debug.Log("orbit: not at destination yet");
-    //        trans.LookAt(destination);
-    //        //trans.position = Vector3.Lerp(trans.position, destination, moveSpeed * .01f * Time.deltaTime);
-    //        moveDir = destination - trans.position;
-    //        yield return null;
-    //    }
-    //}
-
     #region UnityCallbacks
     private void Awake()
     {
@@ -170,7 +125,6 @@ public class Mothership : MonoBehaviour
     {
         if(other.tag == TagsAndLayers.SolarSystemTag)
         {
-            inSystem = true;
             GalaxyCamera.Instance.changeZoomLevel(CamZoomLevel.SYSTEM_ZOOM);
             #if FULL_DEBUG
             //Debug.Log("In System: " + inSystem);
@@ -184,42 +138,21 @@ public class Mothership : MonoBehaviour
             float deltaZ = otherTrans.position.z - trans.position.z;
             float deltaX = otherTrans.position.x - trans.position.x;
             angle = (180.0f + ((Mathf.Atan2(deltaZ,deltaX) * 180.0f) / Mathf.PI))%360.0f;
-            //orbitalRotation = otherTrans.rotation;
             orbiting = true;
             orbitID = otherTrans.gameObject.GetComponent<Planet_Dialogue>().ID;
-            //Debug.Log("OrbitID: " + orbitID);
             StartCoroutine(otherTrans.gameObject.GetComponent<PlanetUIManager>().enableUIRing());
-            //StopCoroutine(Move());
             GalaxyCamera.Instance.targetPlanet(otherTrans);
             GalaxyCamera.Instance.changeZoomLevel(CamZoomLevel.PLANET_ZOOM);
-            //StopAllCoroutines();
-            //StopCoroutine(Move());
-           // StartCoroutine(Orbit());
-
-            //StartCoroutine(GalaxyCamera.Instance.FocusOnPlanet(otherTrans));
-
-
         }
     }
     private void OnTriggerStay(Collider other)
     {
-        //StopCoroutine(Move());
         if (other.tag == TagsAndLayers.PlanetTag && orbiting)
         {
-            //Debug.Log("<<<" + other.name + ">>>");
-           // Debug.Log("still in Planetary Orbit...");
-            
             angle = (angle + orbitSpeed) % 360.0f;
-            //Debug.Log(angle);
             Transform otherTrans = other.transform;
             trans.position = PointOnCircle(((SphereCollider)other).radius - 10.0f, angle, otherTrans.position);
             destination = PointOnCircle(((SphereCollider)other).radius - 10.0f, (angle + 2.0f) % 360.0f, otherTrans.position);
-            //trans.LookAt(orbitDestination);
-            //moving = false;
-            //GalaxyCamera.Instance.targetPlanet(otherTrans);
-            //GalaxyCamera.Instance.changeZoomLevel(CamZoomLevel.PLANET_ZOOM);
-
-           
         }
     }
 
@@ -237,7 +170,6 @@ public class Mothership : MonoBehaviour
     {
         if (other.tag == TagsAndLayers.SolarSystemTag)
         {
-            inSystem = false;
             GalaxyCamera.Instance.targetMothership();
             GalaxyCamera.Instance.changeZoomLevel(CamZoomLevel.SPACE_ZOOM);
 #if FULL_DEBUG
@@ -247,11 +179,7 @@ public class Mothership : MonoBehaviour
         if (other.tag == TagsAndLayers.PlanetTag && orbitID == other.gameObject.GetComponent<Planet_Dialogue>().ID)
         {
             orbiting = false;
-            //moving = true;
-            //StopCoroutine(Orbit());
-            //StartCoroutine(Move());
             StartCoroutine(other.gameObject.GetComponent<PlanetUIManager>().disableUIRing());
-            //StartCoroutine(GalaxyCamera.Instance.FollowMothership(trans, inSystem));
             GalaxyCamera.Instance.targetMothership();
             GalaxyCamera.Instance.changeZoomLevel(CamZoomLevel.SYSTEM_ZOOM);
         }
@@ -262,14 +190,8 @@ public class Mothership : MonoBehaviour
     
     void OnGroundClick(Vector3 worldPosition)
     {
-        //Debug.Log("mothership click");
         orbiting = false;
         destination = worldPosition;
-        //orbiting = false;
-        //if (!moving)
-        {
-            //StartCoroutine(Move());
-        }
     }
 
     #endregion InternalCallbacks
