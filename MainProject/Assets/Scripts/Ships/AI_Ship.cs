@@ -202,7 +202,17 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
 
         float confidence = Random.Range(0.0f, 1.0f);
 
+        //get count for player fleet
+        // get count for enemy fleet
+
+        //calculate basis for confidence
+
+        //adjust based on archetypes
+
         //for now I'm calling the line of confidence at 0.5 this will change as the AI gets more complex -A
+
+        //setup a 10 step system ranging from dullard with a club to military commander with laser guided intel
+        //set confidence to choose from those 10 options
         Debug.LogWarning(confidence);
         if (confidence >= 0.5f)
         {

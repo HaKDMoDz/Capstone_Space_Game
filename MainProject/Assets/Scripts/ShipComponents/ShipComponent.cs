@@ -22,7 +22,7 @@ public abstract class ShipComponent : MonoBehaviour , IPointerClickHandler, IPoi
 
     #region Fields
     //Component info and stats
-
+    [SerializeField]
     private AI_Fleet.PlacementType placement;
     public AI_Fleet.PlacementType Placement
     {
