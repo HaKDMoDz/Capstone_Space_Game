@@ -6,7 +6,6 @@ using System.Collections.Generic;
 
 public class Planet_MissionComplete : MonoBehaviour
 {
-    bool panelOpen = false;
     public int endDialogIndex;
 
     private Transform missionUIPanel;

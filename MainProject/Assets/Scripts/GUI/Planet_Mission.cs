@@ -71,8 +71,6 @@ public class Planet_Mission : MonoBehaviour
         set { completed = value; }
     }
 
-    bool panelOpen = false;
-
     [SerializeField]
     private int id;
     public int ID

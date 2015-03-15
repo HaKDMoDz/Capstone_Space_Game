@@ -329,8 +329,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.60000002, y: 1.60000002, z: 1.60000002}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 2.20000005, y: 1.60000002, z: 2.5999999}
+  m_Center: {x: 0, y: 0, z: .0399999991}
 --- !u!95 &9575188
 Animator:
   serializedVersion: 3
@@ -505,6 +505,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e10e8a12f694a44fae44af0f384f5b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  placement: 0
   compType: 0
   componentName: Railgun
   unlocked: 0
@@ -529,7 +530,6 @@ MonoBehaviour:
   effectDuration: 1
   muzzleFlash: {fileID: 0}
   impactEffect: {fileID: 0}
-  projectileSpeed: 200
 --- !u!120 &12051552
 LineRenderer:
   m_ObjectHideFlags: 1
