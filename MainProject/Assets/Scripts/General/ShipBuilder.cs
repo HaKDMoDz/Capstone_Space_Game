@@ -156,10 +156,15 @@ public class ShipBuilder
         switch (shipType)
         {
             case ShipType.PlayerShip:
-                PlayerShip_Old playerShip = hullBeingBuilt.gameObject.AddComponent<PlayerShip_Old>();
+                //PlayerShip_Old playerShip = hullBeingBuilt.gameObject.AddComponent<PlayerShip_Old>();
+                //ShipMove shipMove = hullBeingBuilt.gameObject.AddComponent<ShipMove>();
+                //PlayerAttack playerAttack = hullBeingBuilt.gameObject.AddComponent<PlayerAttack>();
+                //playerShip.Init(blueprintBeingBuilt, shipMove, playerAttack);
+
+                PlayerShip playerShip = hullBeingBuilt.gameObject.AddComponent<PlayerShip>();
                 ShipMove shipMove = hullBeingBuilt.gameObject.AddComponent<ShipMove>();
-                PlayerAttack playerAttack = hullBeingBuilt.gameObject.AddComponent<PlayerAttack>();
-                playerShip.Init(blueprintBeingBuilt, shipMove, playerAttack);
+                playerShip.Init(blueprintBeingBuilt, shipMove);
+
                 playerShip.gameObject.name = "Player " + blueprintBeingBuilt.MetaData.BlueprintName;
                 
                 return playerShip;

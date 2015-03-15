@@ -16,7 +16,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
     //TEMP
     private float damagePerAttack = 35.0f;
 
-    private PlayerShip_Old targetShip;
+    private PlayerShip targetShip;
 
     //references
     public AI_Attack ai_Attack { get; private set; }
@@ -32,7 +32,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
     public event ShipMouseExitEvent OnShipMouseExit = new ShipMouseExitEvent((AI_Ship) => { });
 
 
-    PlayerShip_Old targetPlayer;
+    PlayerShip targetPlayer;
 
     #endregion Fields
 
@@ -108,7 +108,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         
     }
 
-    public void Move(PlayerShip_Old targetPlayer, AI_Fleet.PlacementType _placement)
+    public void Move(PlayerShip targetPlayer, AI_Fleet.PlacementType _placement)
     {
         if (!receivedMoveCommand)
         {
@@ -149,7 +149,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         }
     }
 
-    private PlayerShip_Old TargetEnemy(List<PlayerShip_Old> playerShips)
+    private PlayerShip TargetEnemy(List<PlayerShip> playerShips)
     {
         if (playerShips == null || playerShips.Count == 0)
         {
@@ -196,7 +196,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         }     
     }
 
-    private ShipComponent TargetComponent(PlayerShip_Old _ship)
+    private ShipComponent TargetComponent(PlayerShip _ship)
     {
         ShipComponent _targetComponent = null ;
 
@@ -261,7 +261,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
                 _targetComponent = _ship.Components.Where(c => c.active && c.CompType == ComponentType.Defense).Aggregate((curr, next) => curr.CompHP <= next.CompHP ? curr : next);
             }
 
-            Debug.LogError(_targetComponent);
+            Debug.LogWarning(_targetComponent);
 
             if (_targetComponent == null)
             {

@@ -157,7 +157,6 @@ public abstract class ShipComponent : MonoBehaviour , IPointerClickHandler, IPoi
     {
         ParentShip = parentShip;
         compHP = maxHP;
-
     }
     /// <summary>
     /// The component takes the specified amount of damage. Starts the destroy routine if HP reaches 0

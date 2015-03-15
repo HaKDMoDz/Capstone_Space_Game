@@ -26,6 +26,14 @@ public class CameraDirector : Singleton<CameraDirector>
     private float minOverheadHeight = 100.0f;
     [SerializeField]
     private float zoomAboveHeight = 60.0f;
+    [SerializeField]
+    private float panSpeedToHeightFactor = 0.8f;
+    [SerializeField]
+    private float zoomSpeed = 10.0f;
+    [SerializeField]
+    private float minHeight = 120.0f;
+    [SerializeField]
+    private float maxHeight = 500.0f;
     //[SerializeField]
     //private float orbitSpeed = 30.0f;
 
@@ -93,7 +101,6 @@ public class CameraDirector : Singleton<CameraDirector>
     /// <returns></returns>
     public IEnumerator OverheadAimAt(Transform currentFocus, Transform target, float period)
     {
-        
         Vector3 desiredCamPos = (currentFocus.position + target.position) * 0.5f;
         Vector3 directionToTarget = target.position - currentFocus.position;
         float camHeight = directionToTarget.magnitude * 0.5f / Mathf.Tan(cam.fieldOfView * 0.5f * Mathf.Deg2Rad);
@@ -103,7 +110,6 @@ public class CameraDirector : Singleton<CameraDirector>
         float dot = Vector3.Dot(perp, currentFocus.up);
         angle = dot > 0.0f ? angle : -angle;
         Quaternion desiredRotation = Quaternion.Euler(overheadRotation.eulerAngles.x, overheadRotation.eulerAngles.y + angle, overheadRotation.eulerAngles.z);
-
         yield return StartCoroutine(MoveAndRotate(desiredCamPos, desiredRotation, period));
     }
 
@@ -122,6 +128,63 @@ public class CameraDirector : Singleton<CameraDirector>
         trans.position = position;
         trans.rotation = rotation;
         OnCameraMove();
+    }
+    public void SetFreeCamera(bool set)
+    {
+        if (set)
+        {
+            InputManager.Instance.RegisterKeysHold(KeyboardAction, KeyCode.W, KeyCode.A, KeyCode.S, KeyCode.D);
+            InputManager.Instance.OnMouseScrollEvent += Zoom;
+            StartCoroutine("FreeCamera");
+        }
+        else
+        {
+            InputManager.Instance.DeregisterKeysHold(KeyboardAction, KeyCode.W, KeyCode.A, KeyCode.S, KeyCode.D);
+            InputManager.Instance.OnMouseScrollEvent -= Zoom;
+            StopCoroutine("FreeCamera");
+        }
+    }
+
+
+    private IEnumerator FreeCamera()
+    {
+        while (true)
+        {
+            yield return null;
+        }
+    }
+    public void Pan(Vector2 panVector)
+    {
+        trans.Translate(panVector * Time.deltaTime);
+    }
+    public void Zoom(float zoomAmount)
+    {
+        float newCamHeight = trans.position.y - (zoomAmount * zoomSpeed * Time.deltaTime);
+        newCamHeight = Mathf.Clamp(newCamHeight, minHeight, maxHeight);
+        trans.SetPositionY(newCamHeight);
+
+    }
+    private void KeyboardAction(KeyCode key)
+    {
+        Vector2 panVector = Vector2.zero;
+        float moveSpeed = panSpeedToHeightFactor * trans.position.y;
+        if (key == KeyCode.W)
+        {
+            panVector.y += moveSpeed;
+        }
+        else if (key == KeyCode.S)
+        {
+            panVector.y -= moveSpeed;
+        }
+        if (key == KeyCode.A)
+        {
+            panVector.x -= moveSpeed;
+        }
+        else if (key == KeyCode.D)
+        {
+            panVector.x += moveSpeed;
+        }
+        Pan(panVector);
     }
 
     public void DoShake()
@@ -160,7 +223,6 @@ public class CameraDirector : Singleton<CameraDirector>
         initialAngleX = Mathf.Deg2Rad * initialRot.eulerAngles.x;
         Shaking = false;
         cam = camera;
-
     }
 
     //TODO refactor camera shake with coroutines if performance becomes an issue

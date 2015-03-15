@@ -81,17 +81,17 @@ public class Mothership : MonoBehaviour
 
     void Update()
     {
-        Debug.Log("update: called");
+        //Debug.Log("update: called");
         //if (!orbiting)
         {
-            Debug.Log("update: not orbiting");
+            //Debug.Log("update: not orbiting");
             Vector3 moveDir;
             //moving = true;
             moveDir = destination - trans.position;
 
            // if (movementMode == MovementMode.Translate)
             {
-                Debug.Log("update: translate phase");
+                //Debug.Log("update: translate phase");
                 if (moveDir.magnitude > moveSpeed * Time.deltaTime && moveDir.magnitude > GlobalVars.LerpDistanceEpsilon && !orbiting)
                 {
                     Debug.Log("update: translate phase: moving");

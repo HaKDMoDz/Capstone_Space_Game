@@ -47,6 +47,11 @@ public struct CombatGUIFields
     public Texture2D attackCursor;
     //tooltip
     public TextExtended tooltip;
+    //Player ship mode buttons
+    public GameObject modeButtons;
+    public Button moveButton;
+    public Button tacticalButton;
+    public Button endTurnButton;
 }
 
 #endregion AdditionalStructs
@@ -118,14 +123,14 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
         }
     }//ShowComponentActivationButtons
 
-    public void ShowToolTip(string toolTipText, Camera viewCamera, Vector3 worldPos)
+    public void ShowToolTip(string toolTipText, Vector3 screenPos)
     {
         guiFields.tooltip.gameObject.SetActive(true);
         guiFields.tooltip.SetText(toolTipText);
         //Vector2 viewPortPos = RectTransformUtility.WorldToScreenPoint(Camera.main, worldPos);
         //Vector2 viewPortPos = viewCamera.WorldToScreenPoint(worldPos);
         //guiFields.tooltip.Trans.position = viewPortPos;
-        guiFields.tooltip.RectTrans.anchoredPosition = worldPos.GetVector2() - guiFields.mainCanvas.sizeDelta * 0.5f;
+        guiFields.tooltip.RectTrans.anchoredPosition = screenPos.GetVector2() - guiFields.mainCanvas.sizeDelta * 0.5f;
     }
     public void HideTooltip()
     {
@@ -184,6 +189,47 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
     //}
     #endregion GUISetup
     
+    public void ShowModeButtons(bool show)
+    {
+        guiFields.modeButtons.SetActive(show);
+        EnableMoveButton(false);
+        EnableTacticalButton(false);
+    }
+    public void EnableMoveButton(bool enable, UnityAction action = null)
+    {
+        guiFields.moveButton.onClick.RemoveAllListeners();
+        if (enable)
+        {
+            #if FULL_DEBUG
+            if(action == null)
+            {
+                Debug.LogError("Action is null");
+            }
+            #endif
+            guiFields.moveButton.onClick.AddListener(action);
+        }
+        guiFields.moveButton.gameObject.SetActive(enable);
+    }
+    public void EnableTacticalButton(bool enable, UnityAction action=null)
+    {
+        guiFields.tacticalButton.onClick.RemoveAllListeners();
+        if(enable)
+        {
+            #if FULL_DEBUG
+            if(action == null)
+            {
+                Debug.LogError("Action is null");
+            }
+            #endif
+            guiFields.tacticalButton.onClick.AddListener(action);
+        }
+        guiFields.tacticalButton.gameObject.SetActive(enable);
+    }
+    public void SetEndTurnEvent(UnityAction action)
+    {
+        guiFields.endTurnButton.onClick.RemoveAllListeners();
+        guiFields.endTurnButton.onClick.AddListener(action);
+    }
     public void ShowAttackCursor(bool show)
     {
         if(show)

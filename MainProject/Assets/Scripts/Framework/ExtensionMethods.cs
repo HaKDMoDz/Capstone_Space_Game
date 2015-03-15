@@ -43,7 +43,33 @@ public static class ExtensionMethods
         trans.localRotation = Quaternion.identity;
         trans.localScale = new Vector3(1f, 1f, 1f);
     }
-
+    /// <summary>
+    /// Translate along the x axis
+    /// </summary>
+    /// <param name="trans"></param>
+    /// <param name="distance"></param>
+    public static void TranslateX(this Transform trans, float distance)
+    {
+        trans.Translate(new Vector3(distance, 0.0f, 0.0f));
+    }
+    /// <summary>
+    /// Translate along the y axis
+    /// </summary>
+    /// <param name="trans"></param>
+    /// <param name="distance"></param>
+    public static void TranslateY(this Transform trans, float distance)
+    {
+        trans.Translate(new Vector3(0.0f, distance, 0.0f));
+    }
+    /// <summary>
+    /// Translate along the z axis
+    /// </summary>
+    /// <param name="trans"></param>
+    /// <param name="distance"></param>
+    public static void TranslateZ(this Transform trans, float distance)
+    {
+        trans.Translate(new Vector3(0.0f, 0.0f, distance));
+    }
     /// <summary>
     /// Sets just the x coordinate of a transform's position
     /// </summary>

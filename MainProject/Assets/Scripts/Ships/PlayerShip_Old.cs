@@ -481,7 +481,7 @@ public class PlayerShip_Old : TurnBasedUnit
             return;
         }
         //Debug.Log("TargetComp: " + targetComponent + " from ship " + name);
-        combatInterface.ShowToolTip(component.componentName, component.ParentShip.TargetingCamera.camera, Input.mousePosition);
+        combatInterface.ShowToolTip(component.componentName, Input.mousePosition);
         DisplayLineRenderer(targetComponent.transform.position, true, validColour);
         targetComponent.Selected = true;
     }

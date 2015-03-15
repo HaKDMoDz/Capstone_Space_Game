@@ -18,6 +18,10 @@ public abstract class Component_Weapon : ShipComponent
     public float armourDmgModifier;
     public float shieldDmgModifier;
 
+    public float ShieldDamage { get; private set; }
+    public float ComponentDamage { get; private set; }
+    public float HullDamage { get; private set; }
+
     [SerializeField]
     protected Transform shootPoint;
     [SerializeField]
@@ -29,6 +33,13 @@ public abstract class Component_Weapon : ShipComponent
 
     protected Transform targetTrans;
 
+    public override void Init(TurnBasedUnit parentShip)
+    {
+        base.Init(parentShip);
+        ShieldDamage = damage;
+        ComponentDamage = damage * (1.0f - hullDamagePercent *.01f);
+        HullDamage = damage* hullDamagePercent* .01f;
+    }
     /// <summary>
     /// Fires the weapon at the specified component and raises the OnActivationComplete callback once the animation is complete.
     /// </summary>

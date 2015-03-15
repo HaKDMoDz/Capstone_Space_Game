@@ -21,6 +21,7 @@ public class LoadingScreen : MonoBehaviour
     {
         levelToLoad = level;
         toLoadLevel = true;
+        transform.SetAsLastSibling();
     }
 
     private IEnumerator LoadLevelAsync()

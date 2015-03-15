@@ -16,14 +16,9 @@ using System.Linq;
 public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
 {
     #region Fields
-    #region EditorExposed
-    //[SerializeField]
-    //private SpaceGround spaceGround;
-    #endregion EditorExposed
-
-    #region Internal
+    //Internal
     public List<TurnBasedUnit> units { get; private set; }
-    public List<PlayerShip_Old> playerShips { get; private set; }
+    public List<PlayerShip> playerShips { get; private set; }
     public List<AI_Ship> ai_Ships { get; private set; }
 
     public bool combatOn { get; private set; }
@@ -32,7 +27,6 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
     private List<TurnBasedUnit> unitsWithSameTime;
     public TurnBasedUnit firstUnit { get; private set; }
     
-    #endregion Internal
     #endregion Fields
 
     #region Methods
@@ -46,7 +40,7 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
     {
         units = new List<TurnBasedUnit>();
         unitsWithSameTime = new List<TurnBasedUnit>();
-        playerShips = new List<PlayerShip_Old>();
+        playerShips = new List<PlayerShip>();
         ai_Ships = new List<AI_Ship>();
         //raised whenever user clicks on the "ground"
     }
@@ -97,9 +91,9 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
         
         CombatSystemInterface.Instance.AddShipButton(unit);
 
-        if (unit is PlayerShip_Old)
+        if (unit is PlayerShip)
         {
-            playerShips.Add((PlayerShip_Old)unit);
+            playerShips.Add((PlayerShip)unit);
         }
         else if (unit is AI_Ship)
         {
@@ -124,9 +118,9 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
         {
             ai_Ships.Remove((AI_Ship)unit);
         }
-        else if(unit is PlayerShip_Old)
+        else if(unit is PlayerShip)
         {
-            playerShips.Remove((PlayerShip_Old)unit);
+            playerShips.Remove((PlayerShip)unit);
         }
         CombatSystemInterface.Instance.UpdateTurnOrderPanel(units, true);
         StartCoroutine(Explode(unit));
