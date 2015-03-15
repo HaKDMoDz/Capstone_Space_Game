@@ -137,7 +137,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
         }
     }
     private Transform componentGridTrans;
-    protected Transform ComponentGridTrans
+    public Transform ComponentGridTrans
     {
         get { return componentGridTrans; }
     }
@@ -163,7 +163,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
     /// <returns>null or the Destroy() Coroutine</returns>
     public IEnumerator TakeDamage(float _amountOfDamage)
     {
-        Debug.Log("Shield: " + ShieldStrength + " Damage " + _amountOfDamage);
+        //Debug.Log("Shield: " + ShieldStrength + " Damage " + _amountOfDamage);
         if (ShieldStrength >= _amountOfDamage)
         {
             ShieldStrength -= _amountOfDamage;

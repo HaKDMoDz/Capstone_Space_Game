@@ -39,7 +39,7 @@ public class Comp_Wpn_Laser : Component_Weapon
         if (targetComp && targetComp.CompHP > 0.0f)
         {
             #if FULL_DEBUG
-            Debug.Log("Firing lasers");
+            //Debug.Log("Firing lasers");
             #endif
 
             targetTrans = targetComp.transform;
