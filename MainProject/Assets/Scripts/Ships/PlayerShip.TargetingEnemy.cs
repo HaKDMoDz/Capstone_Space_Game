@@ -14,7 +14,7 @@ using System.Linq;
 /// <summary>
 /// Targeting Enemy
 /// </summary>
-public partial class PlayerShip : TurnBasedUnit 
+public partial class PlayerShip : TurnBasedUnit
 {
     private AI_Ship targetShip = null;
     private ShipComponent targetComponent = null;
@@ -24,10 +24,10 @@ public partial class PlayerShip : TurnBasedUnit
 
     private IEnumerator PreTargetingEnemy()
     {
-        #if FULL_DEBUG
-        if(!targetShip) Debug.LogError("No target ship");
+#if FULL_DEBUG
+        if (!targetShip) Debug.LogError("No target ship");
         Debug.Log("PreTargetingMode");
-        #endif
+#endif
         Transform aiTrans = targetShip.transform;
         yield return StartCoroutine(CameraDirector.Instance.OverheadAimAt(trans, aiTrans, GlobalVars.CameraAimAtPeriod));
         combatInterface.EnableComponentSelectionPanel(true);
@@ -61,7 +61,7 @@ public partial class PlayerShip : TurnBasedUnit
         combatInterface.ShowModeButtons(false);
         HideLineRenderer();
         if (targetComponent) targetComponent.Selected = false;
-        if(currentState!=PlayerState.ActivateWeapons)
+        if (currentState != PlayerState.ActivateWeapons)
         {
             UnSelectComponents();
             targetComponent = null;
@@ -70,9 +70,9 @@ public partial class PlayerShip : TurnBasedUnit
     }
     private void SelectAllComponents(Type compType)
     {
-        #if FULL_DEBUG
+#if FULL_DEBUG
         Debug.Log("Activating all " + compType.ToString());
-        #endif
+#endif
         UnSelectComponents();
         //next tutorial hotkeys
         foreach (ShipComponent component in components.Where(c => c.GetType() == compType))
@@ -82,19 +82,19 @@ public partial class PlayerShip : TurnBasedUnit
     }
     private void SelectComponent(ShipComponent component, bool select)
     {
-        if(select)
+        if (select)
         {
             //selected comp is not the same component type as selected - restart selection
-            if(selectedComponents.Count>0 && component.GetType()!=selectedComponents[0].GetType())
+            if (selectedComponents.Count > 0 && component.GetType() != selectedComponents[0].GetType())
             {
                 UnSelectComponents();
             }
             //not enough power - return without selecting
-            if((CurrentPower - totalActivationCost - component.ActivationCost) < 0)
+            if ((CurrentPower - totalActivationCost - component.ActivationCost) < 0)
             {
-                #if FULL_DEBUG
+#if FULL_DEBUG
                 Debug.LogWarning("Not enough power");
-                #endif
+#endif
                 combatInterface.SetPowerValid(false);
                 return;
             }
@@ -106,12 +106,12 @@ public partial class PlayerShip : TurnBasedUnit
         }//Select true
         else
         {
-            #if FULL_DEBUG
-            if(!selectedComponents.Contains(component))
+#if FULL_DEBUG
+            if (!selectedComponents.Contains(component))
             {
                 Debug.LogError("Selected components doesn't contain " + component.componentName);
             }
-            #endif
+#endif
             selectedComponents.Remove(component);
             if (selectedComponents.Count == 0) AllowEnemyTargeting(false);
             totalActivationCost -= component.ActivationCost;
@@ -121,7 +121,7 @@ public partial class PlayerShip : TurnBasedUnit
     }//SelectComponent
     private void UnSelectComponents()
     {
-        for (int i = selectedComponents.Count-1; i >= 0; i--)
+        for (int i = selectedComponents.Count - 1; i >= 0; i--)
         {
             SelectComponent(selectedComponents[i], false);
         }
@@ -138,13 +138,13 @@ public partial class PlayerShip : TurnBasedUnit
     }
     private void SubscribeTargetShipComponentEvents(bool subscribe)
     {
-        #if FULL_DEBUG
+#if FULL_DEBUG
         if (!targetShip)
         {
             Debug.LogWarning("Target ship is null");
             return;
         }
-        #endif
+#endif
         if (subscribe)
         {
             foreach (ShipComponent component in targetShip.Components)
@@ -185,28 +185,54 @@ public partial class PlayerShip : TurnBasedUnit
         if (targetComponent) targetComponent.Selected = false;
         if (component.Selected) component.Selected = false;
         combatInterface.HideTooltip();
+        HideLineRenderer();
     }
     private ShipComponent GetFirstComponentInDirection(ShipComponent component)
     {
         Vector3 componentGridPos = trans.position + ComponentGridTrans.position;
-        Ray ray = new Ray(componentGridPos, component.transform.position - componentGridPos);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, GlobalVars.RayCastRange, 1 << TagsAndLayers.ComponentsLayer))
+        Vector3 targetCompPos = component.transform.position;
+        Vector3 directionToTargetComp = targetCompPos - componentGridPos;
+        Ray ray = new Ray(componentGridPos, targetCompPos - componentGridPos);
+        RaycastHit[] hits = Physics.RaycastAll(componentGridPos, directionToTargetComp, GlobalVars.RayCastRange);
+#if FULL_DEBUG
+        if (hits == null || hits.Length == 0) Debug.LogError("No raycast hits");
+#endif
+        List<ShipComponent> hitComponents = new List<ShipComponent>();
+        foreach (RaycastHit hit in hits)
         {
-            return hit.collider.GetComponent<ShipComponent>();
+            ShipComponent comp = hit.collider.GetComponent<ShipComponent>();
+            if (comp && comp.ParentShip != this)
+            {
+                hitComponents.Add(comp);
+            }
         }
-        //no component blocking
-        return component;
+#if FULL_DEBUG
+        if (hitComponents == null || hitComponents.Count() == 0) Debug.LogError("No hit components");
+#endif
+        ShipComponent closestComp = hitComponents
+            .Select(c => c.transform)
+            .Aggregate((curr, next) =>
+                Vector3.Distance(curr.position, componentGridPos)
+                < Vector3.Distance(next.position, componentGridPos)
+                ? curr : next)
+            .GetComponent<ShipComponent>();
+#if FULL_DEBUG
+        if (!closestComp)
+        {
+            Debug.LogError("No component found");
+        }
+#endif
+        return closestComp;
     }
     private void ShowTargetingPanel(bool show)
     {
-        #if FULL_DEBUG
+#if FULL_DEBUG
         if (!targetShip)
         {
             Debug.LogError("no target ship");
             return;
         }
-        #endif
+#endif
         if (!show)
         {
             HideLineRenderer();

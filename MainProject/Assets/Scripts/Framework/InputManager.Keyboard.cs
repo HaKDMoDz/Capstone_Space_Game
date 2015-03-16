@@ -205,13 +205,13 @@ public partial class InputManager
         }
         else
         {
-            Debug.Log(key + " Key is not registered");
+            Debug.LogError(key + " Key is not registered");
         }
     }
 
     private void DeregisterKeyUp(KeyCode key, KeyPressEvent keyEvent)
     {
-        print("Deregister key up" + key);
+        //print("Deregister key up" + key);
         if (keyUpEvents.ContainsKey(key))
         {
             keyUpEvents[key] -= keyEvent;
@@ -223,13 +223,13 @@ public partial class InputManager
         }
         else
         {
-            Debug.Log(key + " Key is not registered");
+            Debug.LogError(key + " Key is not registered");
         }
     }
 
     private void DeregisterKeyHold(KeyCode key, KeyPressEvent keyEvent)
     {
-        print("Deregister key hold" + key);
+        //print("Deregister key hold" + key);
         if (keyHoldEvents.ContainsKey(key))
         {
             keyHoldEvents[key] -= keyEvent;
@@ -241,7 +241,7 @@ public partial class InputManager
         }
         else
         {
-            Debug.Log(key + " Key is not registered");
+            Debug.LogError(key + " Key is not registered");
         }
     }
 

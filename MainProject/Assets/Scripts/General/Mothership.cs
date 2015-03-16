@@ -30,8 +30,8 @@ public class Mothership : MonoBehaviour
 
     private Vector3 destination;
     private Vector3 orbitDestination;
-    private bool moving = false;
-    private bool inSystem = false;
+    //private bool moving = false;
+    //private bool inSystem = false;
     #endregion Fields
 
     #region Methods
@@ -170,7 +170,7 @@ public class Mothership : MonoBehaviour
     {
         if(other.tag == TagsAndLayers.SolarSystemTag)
         {
-            inSystem = true;
+            //inSystem = true;
             GalaxyCamera.Instance.changeZoomLevel(CamZoomLevel.SYSTEM_ZOOM);
             #if FULL_DEBUG
             //Debug.Log("In System: " + inSystem);
@@ -237,7 +237,7 @@ public class Mothership : MonoBehaviour
     {
         if (other.tag == TagsAndLayers.SolarSystemTag)
         {
-            inSystem = false;
+            //inSystem = false;
             GalaxyCamera.Instance.targetMothership();
             GalaxyCamera.Instance.changeZoomLevel(CamZoomLevel.SPACE_ZOOM);
 #if FULL_DEBUG

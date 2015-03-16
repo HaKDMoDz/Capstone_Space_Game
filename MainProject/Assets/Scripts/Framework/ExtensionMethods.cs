@@ -30,6 +30,33 @@ public static class ExtensionMethods
     {
         return new Vector4(vec3.x, vec3.y, vec3.z, 1.0f);
     }
+    /// <summary>
+    /// Sets the x component of the vector
+    /// </summary>
+    /// <param name="vec"></param>
+    /// <param name="value"></param>
+    public static void SetX(this Vector3 vec, float value)
+    {
+        vec.Set(value, vec.y, vec.z);
+    }
+    /// <summary>
+    /// Sets the y component of the vector
+    /// </summary>
+    /// <param name="vec"></param>
+    /// <param name="value"></param>
+    public static void SetY(this Vector3 vec, float value)
+    {
+        vec.Set(vec.x, value, vec.z);
+    }
+    /// <summary>
+    /// Sets the z component of the vector
+    /// </summary>
+    /// <param name="vec"></param>
+    /// <param name="value"></param>
+    public static void SetZ(this Vector3 vec, float value)
+    {
+        vec.Set(vec.x, vec.y, value);
+    }
     #endregion Vector Extensions
 
     #region Transform Extensions
