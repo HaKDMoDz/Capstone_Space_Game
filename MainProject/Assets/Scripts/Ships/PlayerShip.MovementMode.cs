@@ -36,7 +36,7 @@ public partial class PlayerShip : TurnBasedUnit
     }
     private IEnumerator MovementMode()
     {
-        yield return StartCoroutine(CameraDirector.Instance.MoveToFocusOn(trans, GlobalVars.CameraMoveToFocusPeriod));
+        //yield return StartCoroutine(CameraDirector.Instance.MoveToFocusOn(trans, GlobalVars.CameraMoveToFocusPeriod));
         yield return StartCoroutine(PreMovementMode());
         Debug.Log("Movement Mode");
         while(!shouldChangeState && !ShouldTurnEnd())

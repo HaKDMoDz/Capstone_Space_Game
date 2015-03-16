@@ -57,6 +57,10 @@ public partial class PlayerShip : TurnBasedUnit
         CameraDirector.Instance.SetFreeCamera(false);
         combatInterface.ShowModeButtons(false);
         InputManager.Instance.DeregisterKeysDown(SwitchToMovementMode, KeyCode.Space, KeyCode.Escape);
+        if (currentState == PlayerState.MovementMode)
+        {
+            yield return StartCoroutine(CameraDirector.Instance.MoveToFocusOn(trans, GlobalVars.CameraMoveToFocusPeriod));
+        }
         yield return null;
     }
     private void SubscribeToAIShipMouseEvents(bool subscribe)

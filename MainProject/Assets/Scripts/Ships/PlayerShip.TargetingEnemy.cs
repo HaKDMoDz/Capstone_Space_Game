@@ -65,6 +65,10 @@ public partial class PlayerShip : TurnBasedUnit
         {
             UnSelectComponents();
             targetComponent = null;
+            if(currentState==PlayerState.MovementMode)
+            {
+                yield return StartCoroutine(CameraDirector.Instance.MoveToFocusOn(trans, GlobalVars.CameraMoveToFocusPeriod));
+            }
         }
         yield return null;
     }

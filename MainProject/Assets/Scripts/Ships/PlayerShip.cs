@@ -109,7 +109,7 @@ public partial class PlayerShip : TurnBasedUnit
     }
     private void HideLineRenderer()
     {
-        line.enabled = false;
+        if(line) line.enabled = false;
     }
     private void ConfigureShip()
     {
