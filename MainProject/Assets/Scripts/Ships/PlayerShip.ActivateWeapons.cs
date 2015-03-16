@@ -43,11 +43,16 @@ public partial class PlayerShip : TurnBasedUnit
 #endif
         float totalPowerUsed = numWeaponsToActivate * selectedWeapons[0].ActivationCost;
         CurrentPower -= totalPowerUsed;
+        int weaponHitCounter = 0;
         for (int i = 0; i < numWeaponsToActivate; i++)
         {
-            yield return StartCoroutine(
-                    selectedWeapons[i].Fire(targetComponent,
-                    () => { }));
+            StartCoroutine(selectedWeapons[i].Fire(targetComponent,
+                    () => { weaponHitCounter++; }));
+            yield return new WaitForSeconds(Random.Range(PlayerShipConfig.WeaponActivationInterval.x, PlayerShipConfig.WeaponActivationInterval.y));
+        }
+        while(weaponHitCounter<numWeaponsToActivate)
+        {
+            yield return null;
         }
         Camera.main.cullingMask = originalCamCulling;
         yield return StartCoroutine(PostActivateWeapons());
