@@ -19,9 +19,12 @@ public class CombatSceneController : Singleton<CombatSceneController>
     [SerializeField]
     private int gridWidth = 7;
     [SerializeField]
-    private Vector3 playerStartSpawnPos = new Vector3(-150.0f, 0.0f,-250.0f);
+    private Vector3 playerStartSpawnPos = new Vector3(-150.0f, 0.0f, -250.0f);
     [SerializeField]
-    private Vector3 aiStartSpawnPos = new Vector3(-150.0f,0.0f, 250.0f);
+    private Vector3 aiStartSpawnPos = new Vector3(-150.0f, 0.0f, 250.0f);
+
+    [SerializeField]
+    private MothershipLaunchCutscene launchCutscene;
     //references
     private PlayerFleetData playerFleetData;
     private AI_Data pirateFleetData;
@@ -30,7 +33,6 @@ public class CombatSceneController : Singleton<CombatSceneController>
 
     #region Methods
 
-    #region PrivateMethods
 
     /// <summary>
     /// Setups up the combat scene: adds ships, background objects, etc., and then tells the turn based system to start combat
@@ -38,9 +40,9 @@ public class CombatSceneController : Singleton<CombatSceneController>
     /// <returns></returns>
     private IEnumerator SetupScene()
     {
-        #if FULL_DEBUG
+#if FULL_DEBUG
         Debug.Log("Setup Combat Scene");
-        #endif
+#endif
 
         //setup background objects, etc.
 
@@ -53,11 +55,11 @@ public class CombatSceneController : Singleton<CombatSceneController>
         //Vector3 aiSpawnPos = new Vector3(0,0,100);
         int numShips = playerFleetData.gridIndex_metaData_table.Count;
 
-        
+
         /////////////////////////////////////////////////
 
         TurnBasedCombatSystem.Instance.Init();
-
+        var ship_gridPos_table = new Dictionary<Transform, Vector3>();
         if (numShips == 0)
         {
             Debug.LogWarning("Empty player fleet - spawning default fleet");
@@ -65,13 +67,11 @@ public class CombatSceneController : Singleton<CombatSceneController>
             foreach (string bpTemplateName in new List<string>() { "DefaultCorvette", "DefaultCorvette" })
             {
                 TurnBasedUnit unit = shipBuilder.BuildShip(ShipType.PlayerShip, BlueprintTemplates.GetBPTemplate(bpTemplateName), playerStartSpawnPos, Quaternion.identity);
-                #if FULL_DEBUG
-                if (unit == null)
-                {
-                    Debug.Log("shipbuilder returned null");
-                }
-                #endif
+#if FULL_DEBUG
+                if (!unit) Debug.LogError("shipbuilder returned null");
+#endif
                 TurnBasedCombatSystem.Instance.AddShip(unit);
+                ship_gridPos_table.Add(unit.transform, playerStartSpawnPos);
                 playerStartSpawnPos.x += gridDimensions.x;
             }
         }
@@ -84,14 +84,15 @@ public class CombatSceneController : Singleton<CombatSceneController>
                 Vector2 gridPos = new Vector2(index % gridWidth, index / gridWidth);
                 Vector3 spawnPos = new Vector3(gridPos.x * gridDimensions.x, 0.0f, gridPos.y * gridDimensions.y);
                 Debug.Log("Index: " + index + " grid pos " + gridPos + "SpawnPos: " + playerStartSpawnPos + spawnPos);
-                TurnBasedCombatSystem.Instance.AddShip(shipBuilder.BuildShip(ShipType.PlayerShip, gridIndex_metaData.Value.BlueprintName, playerStartSpawnPos + spawnPos, Quaternion.identity));
-                //spawnStartPos.x += spawnSpacing;
+                TurnBasedUnit playerShip = shipBuilder.BuildShip(ShipType.PlayerShip, gridIndex_metaData.Value.BlueprintName, playerStartSpawnPos + spawnPos, Quaternion.identity);
+#if FULL_DEBUG
+                if (!playerShip) Debug.LogError("ShipBuilder return null");
+#endif
+                TurnBasedCombatSystem.Instance.AddShip(playerShip);
+                //records ship grid positions for cutscene
+                ship_gridPos_table.Add(playerShip.transform, playerStartSpawnPos + spawnPos);
             }
-            //foreach (string blueprintName in playerFleetData.gridIndex_metaData_table.Values.Select(meta=>meta.BlueprintName))
-            //{
-            //    TurnBasedCombatSystem.Instance.AddShip(shipBuilder.BuildShip(ShipType.PlayerShip, blueprintName, spawnPos, Quaternion.identity));
-            //    spawnPos.x += spawnSpacing;
-            //}
+            
         }
         if (pirateFleetData.currentFleet_BlueprintNames.Count == 0)
         {
@@ -102,50 +103,38 @@ public class CombatSceneController : Singleton<CombatSceneController>
         foreach (string bpTemplateName in pirateFleetData.currentFleet_BlueprintNames)
         {
             TurnBasedUnit unit = shipBuilder.BuildShip(ShipType.AI_Ship, BlueprintTemplates.GetBPTemplate(bpTemplateName), aiStartSpawnPos, Quaternion.identity);
-            #if FULL_DEBUG
-            if (unit == null)
-            {
-                Debug.Log("shipbuilder returned null");
-            }
-            #endif
+#if FULL_DEBUG
+            if (!unit) Debug.LogError("shipbuilder returned null");
+#endif
 
             TurnBasedCombatSystem.Instance.AddShip(unit);
             aiStartSpawnPos.x -= gridDimensions.x;
             unit.transform.RotateAroundYAxis(180.0f);
         }
         //combat start 
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         if (!GameObject.Find("CombatSystemTester"))
         {
+            yield return StartCoroutine(launchCutscene.PlayCutscene(ship_gridPos_table));
             yield return StartCoroutine(TurnBasedCombatSystem.Instance.StartCombat());
         }
-        else
-        {
-            yield return null;
-        }
-        #else
+#else
+        yield return StartCoroutine(launchCutscene.PlayCutscene());
         yield return StartCoroutine(TurnBasedCombatSystem.Instance.StartCombat());
-        #endif
+#endif
     }//SetupScene
 
-    private void Init()
-    {
-        shipBuilder = new ShipBuilder();
-    }
-
     #region UnityCallbacks
-    
+
     private IEnumerator Start()
     {
-        Init();
+        shipBuilder = new ShipBuilder();
         AudioManager.Instance.SetMainTrack(Sound.SciFiTheme);
         yield return StartCoroutine(SetupScene());
     }
-    
+
     #endregion UnityCallbacks
 
-
-    #endregion PrivateMethods
 
     #endregion Methods
 }

@@ -199,7 +199,7 @@ public class CameraDirector : Singleton<CameraDirector>
     #endregion PublicMethods
 
     #region PrivateMethods
-    private IEnumerator MoveAndRotate(Vector3 destination, Quaternion desiredRot, float period)
+    public IEnumerator MoveAndRotate(Vector3 destination, Quaternion desiredRot, float period)
     {
         float time = 0.0f;
         Vector3 startPos = trans.position;
@@ -217,9 +217,9 @@ public class CameraDirector : Singleton<CameraDirector>
     #region UnityCallbacks
     private void Awake()
     {
-        transform.position = Vector3.zero;
+        //transform.position = Vector3.zero;
         trans = transform;
-        initialRot = trans.rotation;
+        initialRot = Quaternion.Euler(36.0f, 0.0f, 0.0f);
         initialAngleX = Mathf.Deg2Rad * initialRot.eulerAngles.x;
         Shaking = false;
         cam = camera;
