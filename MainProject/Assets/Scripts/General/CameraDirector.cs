@@ -199,7 +199,7 @@ public class CameraDirector : Singleton<CameraDirector>
     #endregion PublicMethods
 
     #region PrivateMethods
-    private IEnumerator MoveAndRotate(Vector3 destination, Quaternion desiredRot, float period)
+    public IEnumerator MoveAndRotate(Vector3 destination, Quaternion desiredRot, float period)
     {
         float time = 0.0f;
         Vector3 startPos = trans.position;

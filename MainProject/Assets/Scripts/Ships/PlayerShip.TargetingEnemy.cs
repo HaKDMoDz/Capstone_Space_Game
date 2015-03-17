@@ -196,7 +196,7 @@ public partial class PlayerShip : TurnBasedUnit
         Vector3 componentGridPos = trans.position + ComponentGridTrans.position;
         Vector3 targetCompPos = component.transform.position;
         Vector3 directionToTargetComp = targetCompPos - componentGridPos;
-        Ray ray = new Ray(componentGridPos, targetCompPos - componentGridPos);
+        //Ray ray = new Ray(componentGridPos, targetCompPos - componentGridPos);
         RaycastHit[] hits = Physics.RaycastAll(componentGridPos, directionToTargetComp, GlobalVars.RayCastRange);
 #if FULL_DEBUG
         if (hits == null || hits.Length == 0) Debug.LogError("No raycast hits");
