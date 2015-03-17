@@ -234,7 +234,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
                 _targetComponent = _ship.Components.Where(c => c.gameObject.activeSelf && c.CompType == ComponentType.Engineering).Aggregate((curr, next) => curr.CompHP <= next.CompHP ? curr : next);
             }
 
-            Debug.Log(_targetComponent);
+            Debug.LogError(_targetComponent);
 
             if (_targetComponent == null)
             {
