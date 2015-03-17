@@ -29,9 +29,22 @@ public class MothershipLaunchCutscene : MonoBehaviour
     private Vector3 camMotherShipPos;
     private Quaternion camMotherShipRot;
     private Transform camTrans;
+    Dictionary<Transform, Vector3> ship_gridPos_Table;
+    private bool skipCutscene = false;
 
+    private void SkipCutscene(KeyCode key)
+    {
+        //StopAllCoroutines();
+        foreach (var ship_gridPos in ship_gridPos_Table)
+        {
+            ship_gridPos.Key.position = ship_gridPos.Value;
+        }
+        skipCutscene = true;
+        //this.enabled = false;
+    }
     private IEnumerator PreCutscene()
     {
+        InputManager.Instance.RegisterKeysDown(SkipCutscene, KeyCode.Escape);
         //deactivate UI
         camMotherShipPos = Camera.main.transform.position;
         camMotherShipRot = Camera.main.transform.rotation;
@@ -43,8 +56,9 @@ public class MothershipLaunchCutscene : MonoBehaviour
         camTrans = Camera.main.transform;
         yield return null;
     }
-    public IEnumerator PlayCutscene(Dictionary<Transform, Vector3> ship_gridPos_Table)
+    public IEnumerator PlayCutscene(Dictionary<Transform, Vector3> _ship_gridPos_Table)
     {
+        this.ship_gridPos_Table = _ship_gridPos_Table;
         yield return StartCoroutine(PreCutscene());
         foreach (var ship_gridPos in ship_gridPos_Table)
         {
@@ -55,10 +69,13 @@ public class MothershipLaunchCutscene : MonoBehaviour
         }
         for (int i = 0; i < ship_gridPos_Table.Count; i++)
         {
+            if (skipCutscene) yield break;
             Transform shipTrans = ship_gridPos_Table.ElementAt(i).Key;
             Vector3 destination = ship_gridPos_Table.ElementAt(i).Value;
             yield return StartCoroutine(ExitHangar(shipTrans));
+            if (skipCutscene) yield break;
             yield return StartCoroutine(FlyToGridPos(shipTrans, destination));
+            if (skipCutscene) yield break;
             //swing back to mothership until last ship
             if (i < ship_gridPos_Table.Count - 1)
             {
@@ -77,6 +94,7 @@ public class MothershipLaunchCutscene : MonoBehaviour
         {
             go.SetActive(true);
         }
+        InputManager.Instance.DeregisterKeysDown(SkipCutscene, KeyCode.Escape);
         yield return null;
     }
     private IEnumerator FlyToGridPos(Transform ship, Vector3 destination)
@@ -97,6 +115,7 @@ public class MothershipLaunchCutscene : MonoBehaviour
         float time = 0.0f;
         while (time < 1.0f)
         {
+            if (skipCutscene) yield break;
 #if FULL_DEBUG
             Debug.DrawRay(initialPos, dirToDest, Color.red);
             Debug.DrawRay(ship.position, ship.forward * 500.0f, Color.green);
@@ -127,6 +146,7 @@ public class MothershipLaunchCutscene : MonoBehaviour
             ship.position = Vector3.Lerp(startPos, launchPos.position, time);
             ship.rotation = Quaternion.Slerp(startRot, launchPos.rotation, time);
             time += Time.deltaTime / timeToExitHangar;
+            if (skipCutscene) yield break;
             yield return null;
         }
     }
