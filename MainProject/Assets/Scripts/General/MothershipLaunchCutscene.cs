@@ -13,7 +13,7 @@ using System.Linq;
 public class MothershipLaunchCutscene : MonoBehaviour 
 {
     [SerializeField]
-    private GameObject[] canvases;
+    private GameObject canvas;
     [SerializeField]
     private Transform[] hangars;
     [SerializeField]
@@ -26,6 +26,8 @@ public class MothershipLaunchCutscene : MonoBehaviour
     private float shipTurnSpeed = 1.0f;
     [SerializeField]
     private float camTurnSpeed = 5.0f;
+    [SerializeField]
+    private GameObject skipText;
     private Vector3 camMotherShipPos;
     private Quaternion camMotherShipRot;
     private Transform camTrans;
@@ -34,13 +36,8 @@ public class MothershipLaunchCutscene : MonoBehaviour
 
     private void SkipCutscene(KeyCode key)
     {
-        //StopAllCoroutines();
-        foreach (var ship_gridPos in ship_gridPos_Table)
-        {
-            ship_gridPos.Key.position = ship_gridPos.Value;
-        }
         skipCutscene = true;
-        //this.enabled = false;
+        PostCutscene();
     }
     private IEnumerator PreCutscene()
     {
@@ -49,10 +46,7 @@ public class MothershipLaunchCutscene : MonoBehaviour
         camMotherShipPos = Camera.main.transform.position;
         camMotherShipRot = Camera.main.transform.rotation;
         SpaceGround.Instance.Display(false);
-        foreach (GameObject go in canvases)
-        {
-            go.SetActive(false);
-        }
+        canvas.SetActive(false);
         camTrans = Camera.main.transform;
         yield return null;
     }
@@ -84,18 +78,15 @@ public class MothershipLaunchCutscene : MonoBehaviour
             shipTrans.position = destination;
             shipTrans.rotation = Quaternion.identity;
         }
-        yield return StartCoroutine(PostCutscene());
+        PostCutscene();
     }
-    private IEnumerator PostCutscene()
+    private void PostCutscene()
     {
         //re-activate UI
         SpaceGround.Instance.Display(true);
-        foreach (GameObject go in canvases)
-        {
-            go.SetActive(true);
-        }
+        canvas.SetActive(true);
+        skipText.SetActive(false);
         InputManager.Instance.DeregisterKeysDown(SkipCutscene, KeyCode.Escape);
-        yield return null;
     }
     private IEnumerator FlyToGridPos(Transform ship, Vector3 destination)
     {

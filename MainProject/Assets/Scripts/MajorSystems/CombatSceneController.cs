@@ -100,11 +100,23 @@ public class CombatSceneController : Singleton<CombatSceneController>
         if (!GameObject.Find("CombatSystemTester"))
         {
             yield return StartCoroutine(launchCutscene.PlayCutscene(ship_gridPos_table));
+            foreach (var ship_gridPos in ship_gridPos_table)
+            {
+                Transform ship = ship_gridPos.Key;
+                ship.position = ship_gridPos.Value;
+                ship.rotation = Quaternion.identity;
+            }
             //InputManager.Instance.DeregisterKeysDown(SkipCutscene, KeyCode.Escape);
             yield return StartCoroutine(TurnBasedCombatSystem.Instance.StartCombat());
         }
 #else
         yield return StartCoroutine(launchCutscene.PlayCutscene(ship_gridPos_table));
+        foreach (var ship_gridPos in ship_gridPos_table)
+            {
+                Transform ship = ship_gridPos.Key;
+                ship.position = ship_gridPos.Value;
+                ship.rotation = Quaternion.identity;
+            }
         //InputManager.Instance.DeregisterKeysDown(SkipCutscene, KeyCode.Escape);
         yield return StartCoroutine(TurnBasedCombatSystem.Instance.StartCombat());
 #endif
