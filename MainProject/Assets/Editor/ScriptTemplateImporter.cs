@@ -16,6 +16,9 @@ public class ScriptTemplateImporter : UnityEditor.AssetModificationProcessor
 {
     public static void OnWillCreateAsset(string path)
     {
+        //not a script
+        if (!path.Contains(".cs")) return;
+
         path = path.Replace(".meta", "");
         int index = path.LastIndexOf(".");
         string ext = path.Substring(index);

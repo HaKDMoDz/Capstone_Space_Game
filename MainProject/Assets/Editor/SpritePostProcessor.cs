@@ -14,9 +14,9 @@ public class SpritePostProcessor : AssetPostprocessor
 {
     void OnPreprocessTexture()
     {
-        Debug.LogWarning("Texture Post Processor: " + assetPath + " -- Convering to Sprite as it was placed in the GUI folder");
         if (assetPath.Contains("GUI"))
         {
+            Debug.LogWarning("Texture Post Processor: " + assetPath + " -- Convering to Sprite as it was placed in the GUI folder");
             TextureImporter texImporter = (TextureImporter)assetImporter;
             texImporter.textureType = TextureImporterType.Sprite;
         }
