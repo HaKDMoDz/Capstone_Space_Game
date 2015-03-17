@@ -104,8 +104,8 @@ public class CombatSceneController : Singleton<CombatSceneController>
             yield return StartCoroutine(TurnBasedCombatSystem.Instance.StartCombat());
         }
 #else
-        yield return StartCoroutine(launchCutscene.PlayCutscene());
-        InputManager.Instance.DeregisterKeysDown(SkipCutscene, KeyCode.Escape);
+        yield return StartCoroutine(launchCutscene.PlayCutscene(ship_gridPos_table));
+        //InputManager.Instance.DeregisterKeysDown(SkipCutscene, KeyCode.Escape);
         yield return StartCoroutine(TurnBasedCombatSystem.Instance.StartCombat());
 #endif
     }//SetupScene

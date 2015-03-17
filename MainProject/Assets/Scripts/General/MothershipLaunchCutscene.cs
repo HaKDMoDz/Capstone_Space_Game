@@ -77,7 +77,7 @@ public class MothershipLaunchCutscene : MonoBehaviour
             yield return StartCoroutine(FlyToGridPos(shipTrans, destination));
             if (skipCutscene) yield break;
             //swing back to mothership until last ship
-            if (i < ship_gridPos_Table.Count - 1)
+            if (!skipCutscene && i < ship_gridPos_Table.Count - 1)
             {
                 yield return StartCoroutine(CameraDirector.Instance.MoveAndRotate(camMotherShipPos, camMotherShipRot, 1.0f));
             }
