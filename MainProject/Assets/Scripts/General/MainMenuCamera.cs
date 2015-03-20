@@ -21,7 +21,7 @@ public class MainMenuCamera : Singleton<MainMenuCamera>
     private Vector2 swingAngles = new Vector2(90.0f, 270.0f);
 
     private bool atFirstPoint = true;
-    private Vector3 firstPoint, secondPoint;
+    //private Vector3 firstPoint, secondPoint;
     private Transform trans;
 
     public void SwingOver()
@@ -62,10 +62,7 @@ public class MainMenuCamera : Singleton<MainMenuCamera>
     }
     private void Awake()
     {
-        firstPoint = new Vector3(orbitRadius * Mathf.Sin(swingAngles.x * Mathf.Deg2Rad), 0.0f, orbitRadius * Mathf.Cos(swingAngles.x * Mathf.Deg2Rad));
-        secondPoint = new Vector3(orbitRadius * Mathf.Sin(swingAngles.y * Mathf.Deg2Rad), 0.0f, orbitRadius * Mathf.Cos(swingAngles.y * Mathf.Deg2Rad));
         trans = transform;
-        trans.position = firstPoint;
         trans.LookAt(orbitingPlanet);
     }
 }
