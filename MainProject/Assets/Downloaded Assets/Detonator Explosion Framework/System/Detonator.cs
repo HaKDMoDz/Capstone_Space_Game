@@ -267,7 +267,7 @@ public class Detonator : MonoBehaviour {
 		if (!shockwaveMaterial) shockwaveMaterial = DefaultShockwaveMaterial();
 		if (!sparksMaterial) sparksMaterial = DefaultSparksMaterial();
 		if (!glowMaterial) glowMaterial = DefaultGlowMaterial();
-		//if (!heatwaveMaterial) heatwaveMaterial = DefaultHeatwaveMaterial();
+		if (!heatwaveMaterial) heatwaveMaterial = DefaultHeatwaveMaterial();
 	}
 	
 	void Start()

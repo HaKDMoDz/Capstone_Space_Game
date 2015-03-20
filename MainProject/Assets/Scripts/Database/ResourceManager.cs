@@ -39,7 +39,8 @@ public enum Sound
     GalaxyMapTheme,
     SciFiTheme,
     //effects
-    Laser
+    Laser,
+    Nuke1, Nuke2
 }
 [Serializable]
 public struct SoundInfo

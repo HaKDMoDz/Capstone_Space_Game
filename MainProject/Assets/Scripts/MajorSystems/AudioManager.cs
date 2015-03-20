@@ -11,6 +11,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using Random = UnityEngine.Random;
 #endregion Usings
 public class AudioManager : Singleton<AudioManager>
 {
@@ -19,6 +20,8 @@ public class AudioManager : Singleton<AudioManager>
     //EditorExposed
     [SerializeField]
     private int numSources = 32;
+    [SerializeField]
+    private Vector2 pitchRange = new Vector2(0.7f, 1.3f);
 
     //Internal
     private Queue<AudioSource> availableSources = new Queue<AudioSource>();
@@ -34,27 +37,27 @@ public class AudioManager : Singleton<AudioManager>
     /// Play a sound effect at the camera's position
     /// </summary>
     /// <param name="sound"></param>
-    public void PlayEffect(Sound sound)
+    public void PlayEffect(Sound sound, bool varyPitch = false)
     {
-        PlaySound(sound, Vector3.zero);
+        PlaySound(sound, Vector3.zero, varyPitch);
     }
     /// <summary>
     /// Play a sound effect at the specified world position
     /// </summary>
     /// <param name="sound"></param>
     /// <param name="position"></param>
-    public void PlayEffect(Sound sound, Vector3 position)
+    public void PlayEffect(Sound sound, Vector3 position, bool varyPitch = false)
     {
-        PlaySound(sound, position);
+        PlaySound(sound, position, varyPitch);
     }
     /// <summary>
     /// Play a sound effect and attach it to a specified transform
     /// </summary>
     /// <param name="sound"></param>
     /// <param name="parent"></param>
-    public void PlayEffectAndAttachTo(Sound sound, Transform parent)
+    public void PlayEffectAndAttachTo(Sound sound, Transform parent, bool varyPitch = false)
     {
-        StartCoroutine(PlayEffectAndAttach(GetSoundInfo(sound), parent));
+        StartCoroutine(PlayEffectAndAttach(GetSoundInfo(sound), parent, varyPitch));
     }
     /// <summary>
     /// Set the main track. Will replace the previously playing main track, if there is one.
@@ -62,14 +65,13 @@ public class AudioManager : Singleton<AudioManager>
     /// <param name="sound"></param>
     public void SetMainTrack(Sound sound)
     {
-        
         SetMainTrack(GetSoundInfo(sound));
     }
     #endregion PublicMethods
 
     #region PrivateMethods
 
-    private void PlaySound(Sound sound, Vector3 position)
+    private void PlaySound(Sound sound, Vector3 position, bool varyPitch)
     {
         if(availableSources.Count == 0)
         {
@@ -78,7 +80,7 @@ public class AudioManager : Singleton<AudioManager>
         }
         else
         {
-            StartCoroutine(PlayEffect(GetSoundInfo(sound), position));
+            StartCoroutine(PlayEffect(GetSoundInfo(sound), position, varyPitch));
         }
     
     }
@@ -89,9 +91,10 @@ public class AudioManager : Singleton<AudioManager>
             mainTrackSource.Stop();
         }
         mainTrackSource.clip = soundInfo.audioClip;
+        mainTrackSource.volume = soundInfo.defaultVolume;
         mainTrackSource.Play();
     }
-    private IEnumerator PlayEffect(SoundInfo soundInfo, Vector3 position)
+    private IEnumerator PlayEffect(SoundInfo soundInfo, Vector3 position, bool varyPitch)
     {
         AudioSource source = availableSources.Dequeue();
         if (position != Vector3.zero)
@@ -99,13 +102,17 @@ public class AudioManager : Singleton<AudioManager>
             Transform sourceTrans = source.gameObject.transform;
             sourceTrans.position = position;
             source.clip = soundInfo.audioClip;
+            source.volume = soundInfo.defaultVolume;
+            source.pitch = varyPitch ? Random.Range(pitchRange.x, pitchRange.y) : 1.0f;
             source.Play();
             yield return new WaitForSeconds(soundInfo.audioClip.length);
             sourceTrans.position = Vector3.zero;
         }
         else
         {
+            source.pitch = varyPitch ? Random.Range(pitchRange.x, pitchRange.y) : 1.0f;
             source.clip = soundInfo.audioClip;
+            source.volume = soundInfo.defaultVolume;
             source.Play();
             yield return new WaitForSeconds(soundInfo.audioClip.length);
         }
@@ -114,12 +121,14 @@ public class AudioManager : Singleton<AudioManager>
         availableSources.Enqueue(source);
     }
 
-    private IEnumerator PlayEffectAndAttach(SoundInfo soundInfo, Transform parent)
+    private IEnumerator PlayEffectAndAttach(SoundInfo soundInfo, Transform parent, bool varyPitch)
     {
         AudioSource source = availableSources.Dequeue();
         Transform sourceTrans = source.gameObject.transform;
         sourceTrans.SetParent(parent, false);
         source.clip = soundInfo.audioClip;
+        source.volume = soundInfo.defaultVolume;
+        source.pitch = varyPitch ? Random.Range(pitchRange.x, pitchRange.y) : 1.0f;
         source.Play();
 
         yield return new WaitForSeconds(soundInfo.audioClip.length);
