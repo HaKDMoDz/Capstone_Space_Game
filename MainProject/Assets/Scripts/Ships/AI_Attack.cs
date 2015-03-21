@@ -14,6 +14,7 @@ public class AI_Attack : MonoBehaviour
     /// <returns>null</returns>
     public IEnumerator Attack(ShipComponent _target, float _damageAmount, List<ShipComponent> components)
     {
+        Debug.LogWarning(_target + " targetted");
         GetComponent<AI_Ship>().CurrentPower = GetComponent<AI_Ship>().MaxPower;
         bool keepFiring = true;
         
