@@ -135,6 +135,7 @@ public class ShipBuilder
                 blueprintBeingBuilt.Slot_component_table[slot_component.Key] = builtComponent;
                 builtComponent.transform.SetParent(slotTrans, true);
                 builtComponent.Placement = slot_component.Key.Placement;
+                builtComponent.CompSpecificType = slot_component.Value.CompSpecificType;
                 slot_component.Key.InstalledComponent = slot_component.Value;
             }
             else

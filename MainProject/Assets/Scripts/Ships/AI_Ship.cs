@@ -430,7 +430,6 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         // calculate ai and player  max shield
         float aiMaxShield = ShieldStrength;
         float playerMaxShield = _targetShip.ShieldStrength;
-
         //calculate ai and player weapons vs hull
         ShipComponent[] aiHullComponents = Components.Where(c => c.CompSpecificType == ComponentSpecificType.MASS_D || c.CompSpecificType == ComponentSpecificType.MISSILE).ToArray();
         float aiVsHull = 0;
@@ -438,22 +437,19 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         {
             aiVsHull += component.HullDamage;
         }
-
         ShipComponent[] playerHullComponents = Components.Where(c => c.CompSpecificType == ComponentSpecificType.MASS_D || c.CompSpecificType == ComponentSpecificType.MISSILE).ToArray();
         float playerVsHull = 0;
         foreach (Component_Weapon component in playerHullComponents)
         {
             playerVsHull += component.HullDamage;
         }
-
         //calculate ai and player weapons vs shield
         ShipComponent[] aiShieldComponents = Components.Where(c => c.CompSpecificType == ComponentSpecificType.LASER).ToArray();
-        float aiVsSheild = 0;
+        float aiVsShield = 0;
         foreach (Component_Weapon component in aiHullComponents)
         {
-            aiVsSheild += component.ShieldDamage;
+            aiVsShield += component.ShieldDamage;
         }
-
         ShipComponent[] playerShieldComponents = Components.Where(c => c.CompSpecificType == ComponentSpecificType.LASER).ToArray();
         float playerVsShield = 0;
         foreach (Component_Weapon component in playerHullComponents)
@@ -469,67 +465,88 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         float playerHP = playerMaxHullHP;
         float totalAiDmg = 0;
         float totalPlayerDmg = 0;
-
-        //while (aiHP >= 0 && playerHP >= 0)
-        //{
+        while (aiHP >= 0 && playerHP >= 0)
+        {
+            aiHP -= 10;
+            playerHP -= 100;
         //    //run a typical turn
+
+            Debug.Log("ai excess: " + aiExcessPower);
+            Debug.Log("player excess: " + playerExcessPower);
+
+            Debug.Log("ai vs sh: " + aiVsShield);
+            Debug.Log("player vs sh: " + playerVsShield);
+
+            Debug.Log("ai vs hull: " + aiVsHull);
+            Debug.Log("player vs hull: " + playerVsHull);
 
         //    //simple version. more adv. version to come later
         //    //take damage from each other
-        //    if (playerMaxShield >= 0)
-        //    {
-        //        while (aiExcessPower >= 0)
-        //        {
-        //            playerMaxShield -= aiVsSheild;
-        //            totalAiDmg += aiVsSheild;
-        //            aiExcessPower -= aiVsSheild;
-        //        }
-                
-        //    }
-        //    else
-        //    {
-        //        while (aiExcessPower >= 0)
-        //        {
-        //            playerHP -= aiVsHull;
-        //            totalAiDmg += aiVsHull;
-        //            aiExcessPower -= aiVsHull;
-        //        }
-                
-        //    }
+            if (playerMaxShield >= 0)
+            {
+                while (aiExcessPower >= 0)
+                {
+                    Debug.Log("player shield: " + playerMaxShield);
+                    playerMaxShield -= aiVsShield;
+                    totalAiDmg += aiVsShield;
+                    aiExcessPower -= aiVsShield;
+                    Debug.Log("ai excess power: " + aiExcessPower);
+                }
+            }
+            else
+            {
+                while (aiExcessPower >= 0)
+                {
+                    Debug.Log("player hull: " + playerHP);
+                    playerHP -= aiVsHull;
+                    totalAiDmg += aiVsHull;
+                    aiExcessPower -= aiVsHull;
+                    Debug.Log("ai excess power: " + aiExcessPower);
+                }
 
-        //    if (aiMaxShield >= 0)
-        //    {
-        //        while (playerExcessPower >= 0)
-        //        {
-        //            aiMaxShield -= playerVsShield;
-        //            totalPlayerDmg += playerVsShield;
-        //            playerExcessPower -= playerVsShield;
-        //        }
-                
-        //    }
-        //    else
-        //    {
-        //        while(playerExcessPower >= 0)
-        //        {
-        //            aiHP -= playerVsHull;
-        //            totalPlayerDmg += playerVsHull;
-        //            playerExcessPower -= playerVsHull;
-        //        } 
-        //    }
+            }
 
-        //}
+            if (aiMaxShield >= 0)
+            {
+                while (playerExcessPower >= 0)
+                {
+                    Debug.Log("ai shield: " + aiMaxShield);
+                    aiMaxShield -= playerVsShield;
+                    totalPlayerDmg += playerVsShield;
+                    playerExcessPower -= playerVsShield;
+                    Debug.Log("player excess power: " + playerExcessPower);
+                }
 
+            }
+            else
+            {
+                while (playerExcessPower >= 0)
+                {
+                    aiHP -= playerVsHull;
+                    totalPlayerDmg += playerVsHull;
+                    playerExcessPower -= playerVsHull;
+                    Debug.Log("player excess power: " + playerExcessPower);
+                }
+            }
+
+        }
+
+        Debug.LogError("AI: " + aiHP);
+        Debug.LogError("player: " + playerHP);
         if (aiHP <= 0)
         {
+            Debug.Log("AI ship died during mock encounter");
             runningAdjustment -= 0.25f;//replace with proper external weighting modifiable by GA
         }
 
         if (playerHP <= 0)
         {
+            Debug.Log("player ship died during mock encounter");
             runningAdjustment += 0.25f;//replace with proper external weighting modifiable by GA
         }
 
         //return the confidence adjustment
+        Debug.LogWarning("total confidence adjuster: " + runningAdjustment);
         return runningAdjustment;
     }
 
@@ -553,6 +570,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         confidence = (float)aiFleetStrength / (float)totalShips;
 
         //adjust based on ship and target
+
         confidence += trialShipVsShip(_ship);
 
         //setup a 5 step system ranging from dullard with a club to military commander with laser guided intel

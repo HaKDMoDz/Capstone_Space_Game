@@ -41,6 +41,7 @@ public abstract class ShipComponent : MonoBehaviour , IPointerClickHandler, IPoi
     public ComponentSpecificType CompSpecificType
     {
         get { return compSpecificType; }
+        set { compSpecificType = value; }
     }
     public string componentName;
     public bool unlocked;
