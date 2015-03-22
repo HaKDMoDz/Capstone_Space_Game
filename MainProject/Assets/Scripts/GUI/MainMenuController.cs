@@ -17,14 +17,11 @@ using System;
 public class MainMenuController : MonoBehaviour
 {
     #region Fields
-    #region EditorExposed
     [SerializeField]
     private GUIFields guiFields;
-    #endregion EditorExposed
     #endregion Fields
 
     #region Methods
-    #region Public
     #region GUI_Callbacks
     public void Continue()
     {
@@ -54,14 +51,13 @@ public class MainMenuController : MonoBehaviour
         Application.Quit();
     }
     #endregion GUI_Callbacks
-    #endregion Public
     #region Private
     private void Start()
     {
         SetupMainMenuButtons();
+        MainMenuOptions.Instance.Init();
         AudioManager.Instance.SetMainTrack(Sound.SciFiTheme);
     }
-    #region GUI
     private void SetupMainMenuButtons()
     {
         if(GameController.Instance.AnySavesExist())
@@ -69,7 +65,6 @@ public class MainMenuController : MonoBehaviour
             guiFields.continueButton.SetActive(true);
         }
     }
-    #endregion GUI
     #endregion Private
     #endregion Methods
 }
@@ -78,7 +73,5 @@ public class MainMenuController : MonoBehaviour
 public struct GUIFields
 {
     public GameObject continueButton;
-    //public LayoutGroup buttonLayout;
-    //public Button mainMenuButtonPrefab;
 }
 #endregion AdditionalStructs

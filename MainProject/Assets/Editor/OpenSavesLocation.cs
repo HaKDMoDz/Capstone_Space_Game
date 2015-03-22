@@ -19,7 +19,7 @@ public class OpenSavesLocation
         string path = Application.persistentDataPath.Replace("/", "\\");
         System.Diagnostics.Process.Start("explorer.exe", "/select," + path);
     }
-    [MenuItem("Custom/Saves/Delete All Saves")]
+    [MenuItem("Custom/Saves/Delete All Saves #&d")]
     static void DeleteAllSaves()
     {
         if (EditorUtility.DisplayDialog("Confirm Saves Deletion", "Are you sure you want to delete all save files?", "Delete", "Cancel"))
