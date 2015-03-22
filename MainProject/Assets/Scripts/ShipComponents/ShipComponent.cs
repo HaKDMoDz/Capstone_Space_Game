@@ -15,6 +15,7 @@ using System;
 #endregion Usings
 
 public enum ComponentType { Weapon, Defense, Engineering, Support }
+public enum ComponentSpecificType { LASER, MISSILE, MASS_D, ARMOUR, SHIELD_G, POWER, THRUSTER }
 
 [Serializable]
 public abstract class ShipComponent : MonoBehaviour , IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
@@ -34,6 +35,12 @@ public abstract class ShipComponent : MonoBehaviour , IPointerClickHandler, IPoi
     public ComponentType CompType
     {
         get { return compType; }
+    }
+    [SerializeField]
+    private ComponentSpecificType compSpecificType;
+    public ComponentSpecificType CompSpecificType
+    {
+        get { return compSpecificType; }
     }
     public string componentName;
     public bool unlocked;

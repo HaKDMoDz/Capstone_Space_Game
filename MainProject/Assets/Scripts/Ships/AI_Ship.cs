@@ -407,22 +407,153 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         
     }
 
+    private float trialShipVsShip(PlayerShip _targetShip)
+    {
+        // calculate ai and player defenses
+        float aiShield = Components.Where(c => c.CompSpecificType == ComponentSpecificType.SHIELD_G).ToArray().Length;
+        float aiArmour = Components.Where(c => c.CompSpecificType == ComponentSpecificType.ARMOUR).ToArray().Length;
+        float playerShield = _targetShip.Components.Where(c => c.CompSpecificType == ComponentSpecificType.SHIELD_G).ToArray().Length;
+        float playerArmour = _targetShip.Components.Where(c => c.CompSpecificType == ComponentSpecificType.ARMOUR).ToArray().Length;
+
+        // calculate ai and player excess power
+        float aiExcessPower = ShipBPMetaData.ExcessPower;
+        float playerExcessPower = _targetShip.ShipBPMetaData.ExcessPower;
+
+        // calculate ai and player thrusters
+        float aiThrusters = Components.Where(c => c.CompSpecificType == ComponentSpecificType.THRUSTER).ToArray().Length;
+        float playerThrusters = _targetShip.Components.Where(c => c.CompSpecificType == ComponentSpecificType.THRUSTER).ToArray().Length;
+
+        // calculate ai and player max hull HP
+        float aiMaxHullHP = MaxHullHP;
+        float playerMaxHullHP = _targetShip.MaxHullHP;
+
+        // calculate ai and player  max shield
+        float aiMaxShield = ShieldStrength;
+        float playerMaxShield = _targetShip.ShieldStrength;
+
+        //calculate ai and player weapons vs hull
+        ShipComponent[] aiHullComponents = Components.Where(c => c.CompSpecificType == ComponentSpecificType.MASS_D || c.CompSpecificType == ComponentSpecificType.MISSILE).ToArray();
+        float aiVsHull = 0;
+        foreach (Component_Weapon component in aiHullComponents)
+        {
+            aiVsHull += component.HullDamage;
+        }
+
+        ShipComponent[] playerHullComponents = Components.Where(c => c.CompSpecificType == ComponentSpecificType.MASS_D || c.CompSpecificType == ComponentSpecificType.MISSILE).ToArray();
+        float playerVsHull = 0;
+        foreach (Component_Weapon component in playerHullComponents)
+        {
+            playerVsHull += component.HullDamage;
+        }
+
+        //calculate ai and player weapons vs shield
+        ShipComponent[] aiShieldComponents = Components.Where(c => c.CompSpecificType == ComponentSpecificType.LASER).ToArray();
+        float aiVsSheild = 0;
+        foreach (Component_Weapon component in aiHullComponents)
+        {
+            aiVsSheild += component.ShieldDamage;
+        }
+
+        ShipComponent[] playerShieldComponents = Components.Where(c => c.CompSpecificType == ComponentSpecificType.LASER).ToArray();
+        float playerVsShield = 0;
+        foreach (Component_Weapon component in playerHullComponents)
+        {
+            playerVsShield += component.ShieldDamage;
+        }
+
+        //run a simple trial based on these parameters and see who wins
+
+        float runningAdjustment = 0;
+
+        float aiHP = aiMaxHullHP;
+        float playerHP = playerMaxHullHP;
+        float totalAiDmg = 0;
+        float totalPlayerDmg = 0;
+
+        while (aiHP >= 0 && playerHP >= 0)
+        {
+            //run a typical turn
+
+            //simple version. more adv. version to come later
+            //take damage from each other
+            if (playerMaxShield >= 0)
+            {
+                while (aiExcessPower >= 0)
+                {
+                    playerMaxShield -= aiVsSheild;
+                    totalAiDmg += aiVsSheild;
+                    aiExcessPower -= aiVsSheild;
+                }
+                
+            }
+            else
+            {
+                while (aiExcessPower >= 0)
+                {
+                    playerHP -= aiVsHull;
+                    totalAiDmg += aiVsHull;
+                    aiExcessPower -= aiVsHull;
+                }
+                
+            }
+
+            if (aiMaxShield >= 0)
+            {
+                while (playerExcessPower >= 0)
+                {
+                    aiMaxShield -= playerVsShield;
+                    totalPlayerDmg += playerVsShield;
+                    playerExcessPower -= playerVsShield;
+                }
+                
+            }
+            else
+            {
+                while(playerExcessPower >= 0)
+                {
+                    aiHP -= playerVsHull;
+                    totalPlayerDmg += playerVsHull;
+                    playerExcessPower -= playerVsHull;
+                } 
+            }
+
+        }
+
+        if (aiHP <= 0)
+        {
+            runningAdjustment -= 0.25f;//replace with proper external weighting modifiable by GA
+        }
+
+        if (playerHP <= 0)
+        {
+            runningAdjustment += 0.25f;//replace with proper external weighting modifiable by GA
+        }
+
+        //return the confidence adjustment
+        return runningAdjustment;
+    }
+
     private ShipComponent TargetComponent(PlayerShip _ship)
     {
         ShipComponent _targetComponent = null ;
 
         //float confidence = Random.Range(0.0f, 1.0f);
-        float confidence = 0.55f;
+        float confidence = 0;
 
 
         //get count for player fleet
+        int playerFleetStrength = GameController.Instance.GameData.playerFleetData.gridIndex_metaData_table.Count();
         // get count for enemy fleet
+        int aiFleetStrength = GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Count();
 
         //calculate basis for confidence
 
-        //adjust based on archetypes
+        int totalShips = playerFleetStrength + aiFleetStrength;
 
-        //for now I'm calling the line of confidence at 0.5 this will change as the AI gets more complex -A
+        confidence = (float)aiFleetStrength / (float)totalShips;
+
+        //adjust based on ship and target
+        confidence += trialShipVsShip(_ship);
 
         //setup a 5 step system ranging from dullard with a club to military commander with laser guided intel
         //set confidence to choose from those 5 options
