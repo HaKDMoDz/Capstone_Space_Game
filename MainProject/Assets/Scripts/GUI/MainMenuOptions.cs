@@ -9,9 +9,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
-
+using System;
 public class MainMenuOptions : Singleton<MainMenuOptions>
 {
+    public enum TextureQuality { Full=0, Half=1, Quater=2, Eight=3}
     #region Fields
     //Editor Exposed
     [SerializeField]
@@ -38,16 +39,24 @@ public class MainMenuOptions : Singleton<MainMenuOptions>
     private ButtonWithContent currentQualButton;
     [SerializeField]
     private RectTransform qualButtonsParent;
+    [SerializeField]
+    private Toggle vsyncToggle;
+    [SerializeField]
+    private ButtonWithContent currentTexButton;
+    [SerializeField]
+    private RectTransform texButtonsParent;
     #endregion Fields
 
     #region UI Builder
     public void Init()
     {
+        Debug.Log(QualitySettings.masterTextureLimit);
         SetupGUI();
     }
     private void SetupGUI()
     {
         SetupResolutionDropDown();
+        SetupQualityDropDown();
     }
     private void SetupResolutionDropDown()
     {
@@ -67,8 +76,7 @@ public class MainMenuOptions : Singleton<MainMenuOptions>
                     currentResButton.RemoveOnClickListeners();
                     currentResButton.AddOnClickListener(()=>OpenResolutionDropDown(true));
                     OpenResolutionDropDown(false);
-                }
-                );
+                });
             Debug.Log("Created res button: " + width + "x" + height + "(" + refreshRate + ")");
         }
     }
@@ -81,6 +89,57 @@ public class MainMenuOptions : Singleton<MainMenuOptions>
             {
                 OpenResolutionDropDown(!open);
             });
+    }
+    private void SetupQualityDropDown()
+    {
+        currentQualButton.AddOnClickListener(() => OpenQualityDropDown(true));
+        string[] qualityNames = QualitySettings.names;
+        for (int i = 0; i < qualityNames.Length; i++)
+        {
+            int qualIndex = i;
+            ButtonWithContent buttonClone = (ButtonWithContent)Instantiate(dropDownButtonPrefab);
+            buttonClone.transform.SetParent(qualButtonsParent, false);
+            buttonClone.SetText(qualityNames[qualIndex]);
+            buttonClone.AddOnClickListener(() =>
+            {
+                SetQualityLevel(qualIndex);
+                currentQualButton.SetText(qualityNames[qualIndex]);
+                OpenQualityDropDown(false);
+            });
+        }
+    }
+    private void OpenQualityDropDown(bool open)
+    {
+        Debug.Log("Open qual drop down: " + open);
+        qualButtonsParent.gameObject.SetActive(open);
+        currentQualButton.RemoveOnClickListeners();
+        currentQualButton.AddOnClickListener(() =>
+            {
+                OpenQualityDropDown(!open);
+            });
+    }
+    private void SetupTexQualDropDown()
+    {
+        currentTexButton.AddOnClickListener(()=>OpenTexQualityDropDown(true));
+        foreach (TextureQuality textureQuality in Enum.GetValues(typeof(TextureQuality)))
+        {
+            TextureQuality texQual = textureQuality;
+            ButtonWithContent buttonClone = (ButtonWithContent)Instantiate(dropDownButtonPrefab);
+            buttonClone.transform.SetParent(texButtonsParent, false);
+            buttonClone.SetText(texQual.ToString());
+            buttonClone.AddOnClickListener(() =>
+                {
+                    SetTextureQuality(texQual);
+                    currentResButton.SetText(texQual.ToString());
+                    OpenTexQualityDropDown(false);
+                });
+        }
+    }
+    private void OpenTexQualityDropDown(bool open)
+    {
+        texButtonsParent.gameObject.SetActive(open);
+        currentTexButton.RemoveOnClickListeners();
+        currentTexButton.AddOnClickListener(()=>OpenTexQualityDropDown(!open));
     }
     #endregion UI Builder
 
@@ -149,9 +208,9 @@ public class MainMenuOptions : Singleton<MainMenuOptions>
         Screen.SetResolution(width, height, Screen.fullScreen, refreshRate);
         Debug.Log("Resolution: " + Screen.currentResolution.width + "x" + Screen.currentResolution.height);
     }
-    public void SetVSync(bool set)
+    public void SetVSync()
     {
-        QualitySettings.vSyncCount = set ? 1 : 0;
+        QualitySettings.vSyncCount = vsyncToggle.isOn ? 1 : 0;
         Debug.Log("VSync: " + QualitySettings.vSyncCount);
     }
     public void SetFullScreen()
@@ -159,6 +218,12 @@ public class MainMenuOptions : Singleton<MainMenuOptions>
         Screen.fullScreen = fullScreenToggle.isOn;
         Debug.Log("Full screen: Button: "+fullScreenToggle.isOn+ " Screen: " + Screen.fullScreen);
     }
+    public void SetTextureQuality(TextureQuality texQuality)
+    {
+        QualitySettings.masterTextureLimit = (int)texQuality;
+        Debug.Log("Texture Quality: " + QualitySettings.masterTextureLimit);
+    }
     #endregion Video
+
 
 }
