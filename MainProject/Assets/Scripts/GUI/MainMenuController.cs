@@ -37,14 +37,14 @@ public class MainMenuController : MonoBehaviour
     {
         Debug.Log("Load Game");
     }
-    public void Options()
-    {
-        Debug.Log("options");
-    }
-    public void Credits()
-    {
-        Debug.Log("Credits");
-    }
+    //public void Options()
+    //{
+    //    Debug.Log("options");
+    //}
+    //public void Credits()
+    //{
+    //    Debug.Log("Credits");
+    //}
     public void Quit()
     {
         Debug.Log("Quit");

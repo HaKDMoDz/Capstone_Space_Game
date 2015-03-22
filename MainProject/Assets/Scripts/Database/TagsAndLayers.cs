@@ -27,6 +27,7 @@ public class TagsAndLayers : ScriptableObject
     private int ai_ShipLayer = 13;
     [SerializeField]
     private int shipShieldLayer = 16;
+    
 
 
     public static int UI_Layer { get; private set; }
@@ -44,11 +45,13 @@ public class TagsAndLayers : ScriptableObject
     private string solarSystemTag = "SolarSystem";
     [SerializeField]
     private string planetTag = "Planet";
+    [SerializeField]
+    private string dropDownButtonTag = "DropDownButton";
 
     public static string MotherShipTag { get; private set; }
     public static string SolarSystemTag { get; private set; }
     public static string PlanetTag { get; private set; }
-
+    public static string DropDownButtonTag { get; private set; }
 
     private void OnEnable()
     {
@@ -64,5 +67,6 @@ public class TagsAndLayers : ScriptableObject
         MotherShipTag = motherShipTag;
         SolarSystemTag = solarSystemTag;
         PlanetTag = planetTag;
+        DropDownButtonTag = dropDownButtonTag;
     }
 }
