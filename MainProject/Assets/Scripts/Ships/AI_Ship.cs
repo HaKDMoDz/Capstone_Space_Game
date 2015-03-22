@@ -470,54 +470,54 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         float totalAiDmg = 0;
         float totalPlayerDmg = 0;
 
-        while (aiHP >= 0 && playerHP >= 0)
-        {
-            //run a typical turn
+        //while (aiHP >= 0 && playerHP >= 0)
+        //{
+        //    //run a typical turn
 
-            //simple version. more adv. version to come later
-            //take damage from each other
-            if (playerMaxShield >= 0)
-            {
-                while (aiExcessPower >= 0)
-                {
-                    playerMaxShield -= aiVsSheild;
-                    totalAiDmg += aiVsSheild;
-                    aiExcessPower -= aiVsSheild;
-                }
+        //    //simple version. more adv. version to come later
+        //    //take damage from each other
+        //    if (playerMaxShield >= 0)
+        //    {
+        //        while (aiExcessPower >= 0)
+        //        {
+        //            playerMaxShield -= aiVsSheild;
+        //            totalAiDmg += aiVsSheild;
+        //            aiExcessPower -= aiVsSheild;
+        //        }
                 
-            }
-            else
-            {
-                while (aiExcessPower >= 0)
-                {
-                    playerHP -= aiVsHull;
-                    totalAiDmg += aiVsHull;
-                    aiExcessPower -= aiVsHull;
-                }
+        //    }
+        //    else
+        //    {
+        //        while (aiExcessPower >= 0)
+        //        {
+        //            playerHP -= aiVsHull;
+        //            totalAiDmg += aiVsHull;
+        //            aiExcessPower -= aiVsHull;
+        //        }
                 
-            }
+        //    }
 
-            if (aiMaxShield >= 0)
-            {
-                while (playerExcessPower >= 0)
-                {
-                    aiMaxShield -= playerVsShield;
-                    totalPlayerDmg += playerVsShield;
-                    playerExcessPower -= playerVsShield;
-                }
+        //    if (aiMaxShield >= 0)
+        //    {
+        //        while (playerExcessPower >= 0)
+        //        {
+        //            aiMaxShield -= playerVsShield;
+        //            totalPlayerDmg += playerVsShield;
+        //            playerExcessPower -= playerVsShield;
+        //        }
                 
-            }
-            else
-            {
-                while(playerExcessPower >= 0)
-                {
-                    aiHP -= playerVsHull;
-                    totalPlayerDmg += playerVsHull;
-                    playerExcessPower -= playerVsHull;
-                } 
-            }
+        //    }
+        //    else
+        //    {
+        //        while(playerExcessPower >= 0)
+        //        {
+        //            aiHP -= playerVsHull;
+        //            totalPlayerDmg += playerVsHull;
+        //            playerExcessPower -= playerVsHull;
+        //        } 
+        //    }
 
-        }
+        //}
 
         if (aiHP <= 0)
         {
