@@ -38,6 +38,7 @@ public partial class PlayerShip : TurnBasedUnit
         combatInterface.EnableMoveButton(true, () => ChangeState(PlayerState.MovementMode));
         combatInterface.EnableTacticalButton(true, () => ChangeState(PlayerState.TacticalView));
         InputManager.Instance.RegisterKeysDown(SwitchToTacticalMode, KeyCode.Escape);
+        TutorialSystem.Instance.ShowTutorial(TutorialSystem.TutorialType.ComponentPanel, true);
         targetComponent = null;
         trans.LookAt(aiTrans);
     }
@@ -79,6 +80,7 @@ public partial class PlayerShip : TurnBasedUnit
 #endif
         UnSelectComponents();
         //next tutorial hotkeys
+        TutorialSystem.Instance.ShowNextTutorial(TutorialSystem.TutorialType.Hotkeys);
         foreach (ShipComponent component in components.Where(c => c.GetType() == compType))
         {
             SelectComponent(component, true);
@@ -175,6 +177,7 @@ public partial class PlayerShip : TurnBasedUnit
         targetComponent.Selected = true;
         //attack confirmed
         ChangeState(PlayerState.ActivateWeapons);
+        TutorialSystem.Instance.ShowTutorial(TutorialSystem.TutorialType.ClickOnCompToFire, false);
     }
     void OnTargetShipComponentMouseOver(ShipComponent component)
     {

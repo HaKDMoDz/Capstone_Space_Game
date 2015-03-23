@@ -68,6 +68,7 @@ public partial class PlayerShip : TurnBasedUnit
             targetComponent = null;
         }
         InputManager.Instance.RegisterKeysDown(EndTurn, KeyCode.KeypadEnter, KeyCode.Return);
+        TutorialSystem.Instance.ShowTutorial(TutorialSystem.TutorialType.EndTurn, true);
         yield return null;
     }
     /// <summary>

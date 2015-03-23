@@ -156,9 +156,17 @@ public class CameraDirector : Singleton<CameraDirector>
     public void Pan(Vector2 panVector)
     {
         trans.Translate(panVector * Time.deltaTime);
+        if (TutorialSystem.Instance)
+        {
+            TutorialSystem.Instance.ShowNextTutorial(TutorialSystem.TutorialType.TacticalViewControls);
+        }
     }
     public void Zoom(float zoomAmount)
     {
+        if (TutorialSystem.Instance)
+        {
+            TutorialSystem.Instance.ShowNextTutorial(TutorialSystem.TutorialType.TacticalViewControls);
+        }
         float newCamHeight = trans.position.y - (zoomAmount * zoomSpeed * Time.deltaTime);
         newCamHeight = Mathf.Clamp(newCamHeight, minHeight, maxHeight);
         trans.SetPositionY(newCamHeight);

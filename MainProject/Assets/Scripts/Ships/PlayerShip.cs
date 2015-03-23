@@ -94,6 +94,10 @@ public partial class PlayerShip : TurnBasedUnit
     }
     private void ChangeState(PlayerState nextState)
     {
+        if(TutorialSystem.Instance)
+        {
+            TutorialSystem.Instance.ShowNextTutorial(TutorialSystem.TutorialType.StartTacticalView);
+        }
         currentState = nextState;
         Debug.Log("Change state to " + currentState);
         shouldChangeState = true;

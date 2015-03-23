@@ -19,7 +19,7 @@ public class TutorialSystem : Singleton<TutorialSystem>
         //movement tutorials
         MovementHowTo, MovementUI, MovementPowerCost, MoveCostThruster,
         //targeting an enemy
-        ClickEnemyToEngage, 
+        StartTacticalView, TacticalViewControls, ClickEnemyToEngage, 
         //component panel
         ComponentPanel, ComponentSelection, Hotkeys, ActivationCost,  
         //enemy target panel

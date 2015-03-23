@@ -30,10 +30,17 @@ public class MothershipLaunchCutscene : MonoBehaviour
     private GameObject skipText;
     private Vector3 camMotherShipPos;
     private Quaternion camMotherShipRot;
+    [SerializeField]
+    private Vector3 camPosOnTop;
+    private Quaternion camRotOnTop=Quaternion.Euler(30.88592f,0.0f,0.0f);
     private Transform camTrans;
     Dictionary<Transform, Vector3> ship_gridPos_Table;
     private bool skipCutscene = false;
 
+    public void SkipCutScene()
+    {
+        SkipCutscene(KeyCode.Escape);
+    }
     private void SkipCutscene(KeyCode key)
     {
         skipCutscene = true;
@@ -43,8 +50,10 @@ public class MothershipLaunchCutscene : MonoBehaviour
     {
         InputManager.Instance.RegisterKeysDown(SkipCutscene, KeyCode.Escape);
         //deactivate UI
-        camMotherShipPos = Camera.main.transform.position;
-        camMotherShipRot = Camera.main.transform.rotation;
+        //camMotherShipPos = Camera.main.transform.position;
+        camMotherShipPos = new Vector3(0.0f, 167.5f, -318.6f);
+        //camMotherShipRot = Camera.main.transform.rotation;
+        camMotherShipRot = Quaternion.Euler(30.88592f, 180.0f, 0.0f);
         SpaceGround.Instance.Display(false);
         canvas.SetActive(false);
         camTrans = Camera.main.transform;

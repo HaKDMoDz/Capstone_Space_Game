@@ -97,6 +97,7 @@ public partial class PlayerShip : TurnBasedUnit
     void aiShip_OnShipClick(AI_Ship ship)
     {
         Debug.Log("on Ship click " + ship);
+        TutorialSystem.Instance.ShowTutorial(TutorialSystem.TutorialType.ClickEnemyToEngage, false);
         combatInterface.ShowAttackCursor(false);
         ship.ShowHPBars(false);
         targetShip = ship;
