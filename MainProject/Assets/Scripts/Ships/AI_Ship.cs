@@ -97,7 +97,6 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
 
     public void RetargetNewComponent()
     {
-        Debug.Log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         activeComponents = components;
         ShipComponent targetComponent = TargetComponent(targetPlayer);
         StartCoroutine(ai_Attack.Attack(targetComponent, damagePerAttack, activeComponents));
@@ -211,18 +210,32 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
 
     private void targetCompConfLevel1(PlayerShip _ship, out ShipComponent _targetComponent)
     {
-        _targetComponent = null;
-        Debug.LogError("AI_Ship: Target Component Lvl 1: NO COMPONENTS ON ENEMY SHIP. assigning null target");
+        //lookat target
+        trans.LookAt(_ship.transform);
+
+        //setup raytrace
+        float distanceToTarget;
+        RaycastHit hit;
+
+        Debug.DrawRay(trans.position + ComponentGridTrans.position, ((_ship.transform.position + _ship.ComponentGridTrans.position) - (trans.position + ComponentGridTrans.position)), Color.red, 1000.0f, false);
+        if (Physics.Raycast(transform.position + ComponentGridTrans.position, ((_ship.transform.position + _ship.ComponentGridTrans.position) - (trans.position + ComponentGridTrans.position)), out hit, 1 << TagsAndLayers.ComponentsLayer))
+        {
+            distanceToTarget = hit.distance;
+            Debug.LogError(hit.collider.name + " : " + distanceToTarget);
+        }
+        _targetComponent = hit.collider.GetComponent<ShipComponent>();
+        Debug.LogError(_targetComponent + ":" + _targetComponent.Placement);
+
+        if (false)
+        {
+            _targetComponent = null;
+            Debug.LogError("AI_Ship: Target Component Lvl 1: NO COMPONENTS ON ENEMY SHIP. assigning null target"); 
+        }
+        
     }
 
 
     private void targetCompConfLevel2(PlayerShip _ship, out ShipComponent _targetComponent)
-    {
-        _targetComponent = null;
-        Debug.LogError("AI_Ship: Target Component Lvl 2: NO COMPONENTS ON ENEMY SHIP. assigning null target");
-    }
-
-    private void targetCompConfLevel3(PlayerShip _ship, out ShipComponent _targetComponent)
     {
         //lookat target
         trans.LookAt(_ship.transform);
@@ -239,6 +252,32 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         }
         _targetComponent = hit.collider.GetComponent<ShipComponent>();
         Debug.LogError(_targetComponent + ":" + _targetComponent.Placement);
+
+        if (false)
+        {
+            _targetComponent = null;
+            Debug.LogError("AI_Ship: Target Component Lvl 2: NO COMPONENTS ON ENEMY SHIP. assigning null target");
+        }
+        
+    }
+
+    private void targetCompConfLevel3(PlayerShip _ship, out ShipComponent _targetComponent)
+    {
+        //lookat target
+        trans.LookAt(_ship.transform);
+
+        //setup raytrace
+        float distanceToTarget;
+        RaycastHit hit;
+
+        //Debug.DrawRay(trans.position + ComponentGridTrans.position, ((_ship.transform.position + _ship.ComponentGridTrans.position) - (trans.position + ComponentGridTrans.position)), Color.red, 1000.0f, false);
+        if (Physics.Raycast(transform.position + ComponentGridTrans.position, ((_ship.transform.position + _ship.ComponentGridTrans.position) - (trans.position + ComponentGridTrans.position)), out hit, 1 << TagsAndLayers.ComponentsLayer))
+        {
+            distanceToTarget = hit.distance;
+            //Debug.LogError(hit.collider.name + " : " + distanceToTarget);
+        }
+        _targetComponent = hit.collider.GetComponent<ShipComponent>();
+        //Debug.LogError(_targetComponent + ":" + _targetComponent.Placement);
 
         //go in order of: weapons, defensive, support, engineering
         if (_ship.Components.Where(c => c.gameObject.activeSelf && c.CompType == ComponentType.Weapon).ToList().Count > 0)
@@ -499,17 +538,14 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
 
             //simple version. more adv. version to come later
             //take damage from each other
-            Debug.Log(CurrentPower);
             aiExcessPower = CurrentPower;
             playerExcessPower = _targetShip.CurrentPower;
 
             // damage the player
             if (playerMaxShield >= 0)
             {
-                Debug.Log("p: sh: " + playerMaxShield);
                 while (aiExcessPower >= 0)
                 {
-                    Debug.Log("ai: ex-p: " + aiExcessPower);
                     playerMaxShield -= aiVsShield;
                     aiExcessPower -= aiVsShield;
                 }
@@ -518,10 +554,8 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
             {
                 while (aiExcessPower >= 0)
                 {
-                    Debug.Log("ai: ex-p: " + aiExcessPower);
                     playerHP -= aiVsHull;
                     aiExcessPower -= aiVsHull;
-                    Debug.Log("p: hp: " + playerHP);
                 }
             }
 
@@ -534,10 +568,8 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
             //damage the ai
             if (aiMaxShield >= 0 && playerHP >= 0)
             {
-                Debug.Log("ai: sh: " + aiMaxShield);
                 while (playerExcessPower >= 0)
                 {
-                    Debug.Log("p: ex-p: " + playerExcessPower);
                     aiMaxShield -= playerVsShield;
                     playerExcessPower -= playerVsShield;
                 }
@@ -546,10 +578,8 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
             {
                 while (playerExcessPower >= 0)
                 {
-                    Debug.Log("p: ex-p: " + playerExcessPower);
                     aiHP -= playerVsHull;
                     playerExcessPower -= playerVsHull;
-                    Debug.Log("ai: hp: " + aiHP);
                 }
             }
 
@@ -560,22 +590,17 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
             }
         }
 
-        Debug.LogError("AI: " + aiHP);
-        Debug.LogError("player: " + playerHP);
         if (aiHP <= 0)
         {
-            Debug.Log("AI ship died during mock encounter");
             runningAdjustment -= 0.25f;//replace with proper external weighting modifiable by GA
         }
 
         if (playerHP <= 0)
         {
-            Debug.Log("player ship died during mock encounter");
             runningAdjustment += 0.25f;//replace with proper external weighting modifiable by GA
         }
 
         //return the confidence adjustment
-        Debug.LogWarning("total confidence adjuster: " + runningAdjustment);
         return runningAdjustment;
     }
 
@@ -585,7 +610,6 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
 
         //float confidence = Random.Range(0.0f, 1.0f);
         float confidence = 0;
-        Debug.LogWarning("current confidence: " + confidence);
 
         //get count for player fleet
         int playerFleetStrength = GameObject.FindObjectsOfType<PlayerShip>().Count();
@@ -595,19 +619,15 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         //calculate basis for confidence
 
         int totalShips = playerFleetStrength + aiFleetStrength;
-        Debug.LogWarning("totalShips: " + totalShips);
 
         confidence = (float)playerFleetStrength / (float)totalShips;
-        Debug.LogWarning("current confidence: " + confidence);
         //adjust based on ship and target
 
         confidence += trialShipVsShip(_ship);
 
-        //setup a 5 step system ranging from dullard with a club to military commander with laser guided intel
+        //setup a 5 step system ranging from kite at max range to target most valuable components first and get to them any way you can
         //set confidence to choose from those 5 options
-        //Debug.LogWarning(confidence);
 
-        Debug.LogWarning("current confidence: " + confidence);
 
         float confLevel1Cutoff = 0.2f;
         float confLevel2Cutoff = 0.4f;

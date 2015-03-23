@@ -38,11 +38,9 @@ public class Mothership : MonoBehaviour
 
             if (moveDir.magnitude > moveSpeed * Time.deltaTime && moveDir.magnitude > GlobalVars.LerpDistanceEpsilon && !orbiting)
             {
-                Debug.Log("update: translate phase: moving");
                 Vector3 moveDirNorm = moveDir.normalized;
                 trans.LookAt(destination);
                 trans.position += moveDirNorm * moveSpeed * Time.deltaTime;
-                //moveDir = destination - trans.position;
                 GalaxyCamera.Instance.targetMothership();  
             }
             trans.LookAt(destination);
