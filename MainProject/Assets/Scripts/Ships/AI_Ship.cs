@@ -431,104 +431,95 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         float aiMaxShield = ShieldStrength;
         float playerMaxShield = _targetShip.ShieldStrength;
         //calculate ai and player weapons vs hull
-        ShipComponent[] aiHullComponents = Components.Where(c => c.CompSpecificType == ComponentSpecificType.MASS_D || c.CompSpecificType == ComponentSpecificType.MISSILE).ToArray();
+        ShipComponent[] aiVsHullComponents = Components.Where(c => c.CompSpecificType == ComponentSpecificType.MASS_D || c.CompSpecificType == ComponentSpecificType.MISSILE).ToArray();
         float aiVsHull = 0;
-        foreach (Component_Weapon component in aiHullComponents)
+        foreach (Component_Weapon component in aiVsHullComponents)
         {
             aiVsHull += component.HullDamage;
         }
-        ShipComponent[] playerHullComponents = Components.Where(c => c.CompSpecificType == ComponentSpecificType.MASS_D || c.CompSpecificType == ComponentSpecificType.MISSILE).ToArray();
+        ShipComponent[] playerVsHullComponents = _targetShip.Components.Where(c => c.CompSpecificType == ComponentSpecificType.MASS_D || c.CompSpecificType == ComponentSpecificType.MISSILE).ToArray();
         float playerVsHull = 0;
-        foreach (Component_Weapon component in playerHullComponents)
+        foreach (Component_Weapon component in playerVsHullComponents)
         {
             playerVsHull += component.HullDamage;
         }
         //calculate ai and player weapons vs shield
-        ShipComponent[] aiShieldComponents = Components.Where(c => c.CompSpecificType == ComponentSpecificType.LASER).ToArray();
+        ShipComponent[] aiVsShieldComponents = Components.Where(c => c.CompSpecificType == ComponentSpecificType.LASER).ToArray();
         float aiVsShield = 0;
-        foreach (Component_Weapon component in aiHullComponents)
+        foreach (Component_Weapon component in aiVsHullComponents)
         {
             aiVsShield += component.ShieldDamage;
         }
-        ShipComponent[] playerShieldComponents = Components.Where(c => c.CompSpecificType == ComponentSpecificType.LASER).ToArray();
+        ShipComponent[] playerVsShieldComponents = _targetShip.Components.Where(c => c.CompSpecificType == ComponentSpecificType.LASER).ToArray();
         float playerVsShield = 0;
-        foreach (Component_Weapon component in playerHullComponents)
+        foreach (Component_Weapon component in playerVsHullComponents)
         {
             playerVsShield += component.ShieldDamage;
+        }
+
+        float aiHP = 0;
+        ShipComponent[] aiHullComponents = Components.Where(c => c.CompSpecificType == ComponentSpecificType.ARMOUR).ToArray();
+        foreach (Comp_Def_Armour item in aiHullComponents)
+        {
+            aiHP += item.CompHP;
+        }
+
+        float playerHP = 0;
+        ShipComponent[] playerHullComponents = _targetShip.Components.Where(c => c.CompSpecificType == ComponentSpecificType.ARMOUR).ToArray();
+        foreach (Comp_Def_Armour item in playerHullComponents)
+        {
+            playerHP += item.CompHP;
         }
 
         //run a simple trial based on these parameters and see who wins
 
         float runningAdjustment = 0;
 
-        float aiHP = aiMaxHullHP;
-        float playerHP = playerMaxHullHP;
-        float totalAiDmg = 0;
-        float totalPlayerDmg = 0;
         while (aiHP >= 0 && playerHP >= 0)
         {
-            aiHP -= 10;
-            playerHP -= 100;
-        //    //run a typical turn
+            //run a typical turn
 
-            Debug.Log("ai excess: " + aiExcessPower);
-            Debug.Log("player excess: " + playerExcessPower);
+            //simple version. more adv. version to come later
+            //take damage from each other
 
-            Debug.Log("ai vs sh: " + aiVsShield);
-            Debug.Log("player vs sh: " + playerVsShield);
+            aiExcessPower = ShipBPMetaData.ExcessPower;
+            playerExcessPower = _targetShip.ShipBPMetaData.ExcessPower;
 
-            Debug.Log("ai vs hull: " + aiVsHull);
-            Debug.Log("player vs hull: " + playerVsHull);
-
-        //    //simple version. more adv. version to come later
-        //    //take damage from each other
+            // damage the player
             if (playerMaxShield >= 0)
             {
                 while (aiExcessPower >= 0)
                 {
-                    Debug.Log("player shield: " + playerMaxShield);
                     playerMaxShield -= aiVsShield;
-                    totalAiDmg += aiVsShield;
                     aiExcessPower -= aiVsShield;
-                    Debug.Log("ai excess power: " + aiExcessPower);
                 }
             }
             else
             {
                 while (aiExcessPower >= 0)
                 {
-                    Debug.Log("player hull: " + playerHP);
                     playerHP -= aiVsHull;
-                    totalAiDmg += aiVsHull;
                     aiExcessPower -= aiVsHull;
-                    Debug.Log("ai excess power: " + aiExcessPower);
                 }
-
             }
 
+            //damage the ai
             if (aiMaxShield >= 0)
             {
                 while (playerExcessPower >= 0)
                 {
-                    Debug.Log("ai shield: " + aiMaxShield);
                     aiMaxShield -= playerVsShield;
-                    totalPlayerDmg += playerVsShield;
                     playerExcessPower -= playerVsShield;
-                    Debug.Log("player excess power: " + playerExcessPower);
                 }
-
             }
             else
             {
                 while (playerExcessPower >= 0)
                 {
                     aiHP -= playerVsHull;
-                    totalPlayerDmg += playerVsHull;
                     playerExcessPower -= playerVsHull;
-                    Debug.Log("player excess power: " + playerExcessPower);
                 }
             }
-
         }
 
         Debug.LogError("AI: " + aiHP);
