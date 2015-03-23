@@ -136,6 +136,19 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
                     break;
             }
             receivedMoveCommand = true;
+
+            float moveDistance = Vector3.Distance(shipMove.destination, trans.position);
+            float movePowerCost = Mathf.Round(moveDistance * MoveCost);
+
+            if (CurrentPower - movePowerCost >= 0)
+            {
+                CurrentPower = CurrentPower - movePowerCost;
+            }
+            else
+            {
+                shipMove.destination = trans.position;
+            }
+            
         }
     }
     public void Attack()
@@ -416,8 +429,8 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         float playerArmour = _targetShip.Components.Where(c => c.CompSpecificType == ComponentSpecificType.ARMOUR).ToArray().Length;
 
         // calculate ai and player excess power
-        float aiExcessPower = ShipBPMetaData.ExcessPower;
-        float playerExcessPower = _targetShip.ShipBPMetaData.ExcessPower;
+        float aiExcessPower = CurrentPower;
+        float playerExcessPower = _targetShip.CurrentPower;
 
         // calculate ai and player thrusters
         float aiThrusters = Components.Where(c => c.CompSpecificType == ComponentSpecificType.THRUSTER).ToArray().Length;
@@ -481,9 +494,9 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
 
             //simple version. more adv. version to come later
             //take damage from each other
-
-            aiExcessPower = ShipBPMetaData.ExcessPower;
-            playerExcessPower = _targetShip.ShipBPMetaData.ExcessPower;
+            Debug.Log(CurrentPower);
+            aiExcessPower = CurrentPower;
+            playerExcessPower = _targetShip.CurrentPower;
 
             // damage the player
             if (playerMaxShield >= 0)
