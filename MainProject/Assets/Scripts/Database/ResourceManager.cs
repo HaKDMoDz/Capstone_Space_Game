@@ -97,6 +97,10 @@ public class ResourceManager : ScriptableObject
         return sound_info_table[sound];
 #endif
     }
+    public static float GetDefaultVolume(AudioClip clip)
+    {
+        return sound_info_table.FirstOrDefault((s)=>s.Value.audioClip == clip).Value.defaultVolume;
+    }
 
     private void OnEnable()
     {

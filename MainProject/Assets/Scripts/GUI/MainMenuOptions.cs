@@ -250,31 +250,37 @@ public class MainMenuOptions : Singleton<MainMenuOptions>
     {
         Debug.Log("Mute master " + muteMaster.isOn);
         settings.MuteMaster = muteMaster.isOn;
+        AudioManager.Instance.UpdateSettings(settings);
     }
     public void SetMasterVolume()
     {
         Debug.Log("Master Volume: " + masterVolume.value);
         settings.MasterVolume = masterVolume.value;
+        AudioManager.Instance.UpdateSettings(settings);
     }
     public void MuteMusic()
     {
         Debug.Log("Mute music " + muteMusic.isOn);
         settings.MuteMusic = muteMusic.isOn;
+        AudioManager.Instance.UpdateSettings(settings);
     }
     public void SetMusicVol()
     {
         Debug.Log("Music vol: " + musicVolume.value);
         settings.MusicVolume = musicVolume.value;
+        AudioManager.Instance.UpdateSettings(settings);
     }
     public void MuteEffects()
     {
         Debug.Log("Mute Effects " + muteEffects.isOn);
         settings.MuteEffects = muteEffects.isOn;
+        AudioManager.Instance.UpdateSettings(settings);
     }
     public void SetEffectsVol()
     {
         Debug.Log("Effects Vol " + effectsVolume.value);
         settings.EffectsVolume = effectsVolume.value;
+        AudioManager.Instance.UpdateSettings(settings);
     }
     #endregion Audio
 
