@@ -248,14 +248,11 @@ public class GameSaveSystem
     private bool Load(ref GameData gameData, string fileName)
     {
         path = BuildPathString(fileName);
-
-        #if FULL_DEBUG
-        //Debug.Log("filename: "+fileName);
-        Debug.Log("Loading game data from " + path);
-        #endif
-
         if (File.Exists(path))
         {
+#if FULL_DEBUG
+            Debug.Log("Loading game data from " + path);
+#endif
             fileStream = File.Open(path, FileMode.Open);
             sz_gameData = serializer.Deserialize(fileStream) as SerializedGameData;
             sz_gameData.DeSerialize(ref gameData);

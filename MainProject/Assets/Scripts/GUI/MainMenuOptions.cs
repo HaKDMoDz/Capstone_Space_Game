@@ -13,9 +13,10 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 #endregion Usings
+public enum TextureQuality { Full = 0, Half = 1, Quater = 2 }
+
 public class MainMenuOptions : Singleton<MainMenuOptions>
 {
-    public enum TextureQuality { Full=0, Half=1, Quater=2, Eight=3}
     private int[] aaValues = { 8,4,2,0};
     #region Fields
     //Editor Exposed
@@ -57,6 +58,9 @@ public class MainMenuOptions : Singleton<MainMenuOptions>
     private Toggle anisToggle;
     [SerializeField]
     private Toggle tripBuffToggle;
+
+    //References
+    GameSettings settings;
     #endregion Fields
 
     #region UI Builder
@@ -64,6 +68,34 @@ public class MainMenuOptions : Singleton<MainMenuOptions>
     {
         SetupGUI();
         InputManager.Instance.RegisterMouseButtonsDown((button) => CloseAllDropDowns(), MouseButton.Left, MouseButton.Middle, MouseButton.Right);
+        settings = new GameSettings();
+        settings.LoadSettings();
+        SetGUIFromSettingsFile();
+    }
+    private void SetGUIFromSettingsFile()
+    {
+        muteMaster.isOn = settings.MuteMaster;
+        masterVolume.value = settings.MasterVolume;
+        muteMusic.isOn = settings.MuteMusic;
+        musicVolume.value = settings.MusicVolume;
+        muteEffects.isOn = settings.MuteEffects;
+        effectsVolume.value = settings.EffectsVolume;
+        currentResButton.SetText(settings.ScreenWidth + "x" + settings.ScreenHeight + "(" + settings.RefreshRate + ")");
+        SetResolution(settings.ScreenWidth, settings.ScreenHeight, settings.RefreshRate);
+        fullScreenToggle.isOn = settings.FullScreen;
+        SetFullScreen();
+        currentQualButton.SetText(QualitySettings.names[settings.QualityPreset]);
+        SetQualityLevel(settings.QualityPreset);
+        vsyncToggle.isOn = settings.Vsync;
+        SetVSync();
+        currentTexButton.SetText(settings.TexQuality.ToString());
+        SetTextureQuality(settings.TexQuality);
+        currentAAButton.SetText(settings.AAValue.ToString() + 'x');
+        SetAntiAliasing(settings.AAValue);
+        anisToggle.isOn = settings.AnisoFiltering;
+        SetAnistropicFiltering();
+        tripBuffToggle.isOn = settings.TripleBuffering;
+        SetTripleBuffering();
     }
     private void SetupGUI()
     {
@@ -80,7 +112,6 @@ public class MainMenuOptions : Singleton<MainMenuOptions>
         EventSystem.current.RaycastAll(pointerData, rayCastResults);
         if (!(rayCastResults
             .Select(result => result.gameObject)
-            //.Any(go => go == currentAAButton.gameObject || go == currentQualButton.gameObject || go == currentResButton.gameObject || go == currentTexButton.gameObject)))
             .Any(go=>go.tag == TagsAndLayers.DropDownButtonTag)))
         {
             OpenResolutionDropDown(false);
@@ -209,34 +240,41 @@ public class MainMenuOptions : Singleton<MainMenuOptions>
     }
     #endregion UI Builder
 
+    public void SaveSettings()
+    {
+        settings.SaveSettings();
+    }
+
     #region Audio
     public void MuteMaster()
     {
         Debug.Log("Mute master " + muteMaster.isOn);
-        foreach (var item in Screen.resolutions)
-        {
-            Debug.Log(item.width + "x" + item.height + "(" + item.refreshRate + ")");
-        }
+        settings.MuteMaster = muteMaster.isOn;
     }
     public void SetMasterVolume()
     {
         Debug.Log("Master Volume: " + masterVolume.value);
+        settings.MasterVolume = masterVolume.value;
     }
     public void MuteMusic()
     {
         Debug.Log("Mute music " + muteMusic.isOn);
+        settings.MuteMusic = muteMusic.isOn;
     }
     public void SetMusicVol()
     {
         Debug.Log("Music vol: " + musicVolume.value);
+        settings.MusicVolume = musicVolume.value;
     }
     public void MuteEffects()
     {
         Debug.Log("Mute Effects " + muteEffects.isOn);
+        settings.MuteEffects = muteEffects.isOn;
     }
     public void SetEffectsVol()
     {
         Debug.Log("Effects Vol " + effectsVolume.value);
+        settings.EffectsVolume = effectsVolume.value;
     }
     #endregion Audio
 
@@ -246,6 +284,17 @@ public class MainMenuOptions : Singleton<MainMenuOptions>
     {
         QualitySettings.SetQualityLevel(index);
         Debug.Log("Quality Level: " + QualitySettings.names[QualitySettings.GetQualityLevel()]);
+        settings.QualityPreset = index;
+        vsyncToggle.isOn = GetVsync();
+        settings.Vsync = vsyncToggle.isOn;
+        settings.TexQuality = GetTextureQuality();
+        currentTexButton.SetText(settings.TexQuality.ToString());
+        settings.AAValue = GetAALevel();
+        currentAAButton.SetText(settings.AAValue.ToString() + 'x');
+        settings.AnisoFiltering = GetAnisoFiltering();
+        anisToggle.isOn = settings.AnisoFiltering;
+        settings.TripleBuffering = GetTripleBuffering();
+        tripBuffToggle.isOn = settings.TripleBuffering;
     }
     public void SetAntiAliasing(int aaLevel)
     {
@@ -258,38 +307,66 @@ public class MainMenuOptions : Singleton<MainMenuOptions>
 #endif
         QualitySettings.antiAliasing = aaLevel;
         Debug.Log("AA level: " + QualitySettings.antiAliasing);
+        settings.AAValue = aaLevel;
+    }
+    public int GetAALevel()
+    {
+        return QualitySettings.antiAliasing;
     }
     public void SetTripleBuffering()
     {
         QualitySettings.maxQueuedFrames = tripBuffToggle.isOn ? 3 : 0;
         Debug.Log("Triple buffering: " + QualitySettings.maxQueuedFrames);
+        settings.TripleBuffering = tripBuffToggle.isOn;
+    }
+    public bool GetTripleBuffering()
+    {
+        return !(QualitySettings.maxQueuedFrames == 0);
     }
     public void SetAnistropicFiltering()
     {
         QualitySettings.anisotropicFiltering = anisToggle.isOn ? AnisotropicFiltering.ForceEnable : AnisotropicFiltering.Disable;
         Debug.Log("Anistropic Filtering: " + QualitySettings.anisotropicFiltering);
+        settings.AnisoFiltering = anisToggle.isOn;
+    }
+    public bool GetAnisoFiltering()
+    {
+        return QualitySettings.anisotropicFiltering == AnisotropicFiltering.ForceEnable || QualitySettings.anisotropicFiltering == AnisotropicFiltering.Enable;
     }
     public void SetResolution(int width, int height, int refreshRate)
     {
         Screen.SetResolution(width, height, Screen.fullScreen, refreshRate);
         Debug.Log("Resolution: " + Screen.currentResolution.width + "x" + Screen.currentResolution.height);
+        settings.ScreenWidth = width;
+        settings.ScreenHeight = height;
+        settings.RefreshRate = refreshRate;
     }
     public void SetVSync()
     {
         QualitySettings.vSyncCount = vsyncToggle.isOn ? 1 : 0;
         Debug.Log("VSync: " + QualitySettings.vSyncCount);
+        settings.Vsync = vsyncToggle.isOn;
+    }
+    private bool GetVsync()
+    {
+        return QualitySettings.vSyncCount == 1 || QualitySettings.vSyncCount == 2;
     }
     public void SetFullScreen()
     {
         Screen.fullScreen = fullScreenToggle.isOn;
         Debug.Log("Full screen: Button: "+fullScreenToggle.isOn+ " Screen: " + Screen.fullScreen);
+        settings.FullScreen = fullScreenToggle.isOn;
     }
     public void SetTextureQuality(TextureQuality texQuality)
     {
         QualitySettings.masterTextureLimit = (int)texQuality;
         Debug.Log("Texture Quality: " + QualitySettings.masterTextureLimit);
+        settings.TexQuality = texQuality;
     }
-    
+    public TextureQuality GetTextureQuality()
+    {
+        return (TextureQuality)QualitySettings.masterTextureLimit;
+    }
     #endregion Video
 
 

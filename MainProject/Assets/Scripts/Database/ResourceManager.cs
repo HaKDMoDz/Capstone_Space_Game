@@ -40,7 +40,7 @@ public enum Sound
     SciFiTheme,
     //effects
     Laser,
-    Nuke1, Nuke2
+    Nuke
 }
 [Serializable]
 public struct SoundInfo

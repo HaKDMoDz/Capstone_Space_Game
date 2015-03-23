@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
 public class SaveFilesConfig : ScriptableObject
 {
-    #region GameSaves
+    //GameSaves
     [SerializeField]
     private string fileExtension_GameSave;
     [SerializeField]
@@ -37,9 +37,9 @@ public class SaveFilesConfig : ScriptableObject
     public static string QuickSaveName { get; private set; }
     public static int NumQuickSaves { get; private set; }
     public static int NumNormalSaves { get; private set; }
-    #endregion GameSaves
+    //GameSaves
 
-    #region BlueprintSaves
+    //BlueprintSaves
     [SerializeField]
     private string fileExtension_ShipBP;
     [SerializeField]
@@ -50,8 +50,19 @@ public class SaveFilesConfig : ScriptableObject
     public static string FileExtension_ShipBP { get; private set; }
     public static string Directory_ShipBP { get; private set; }
     public static string FileName_ShipBP_SaveList { get; private set; }
-    #endregion BlueprintSaves
+    //BlueprintSaves
 
+    //Settings
+    [SerializeField]
+    private string fileExtension_Settings = "ini";
+    [SerializeField]
+    private string directory_Settings = "Settings";
+    [SerializeField]
+    private string fileName_settings = "Settings";
+
+    public static string FileExtension_Settings { get; private set; }
+    public static string Directory_Settings { get; private set; }
+    public static string FileName_settings { get; private set; }
     private void OnEnable()
     {
         FileExtension_GameSave = fileExtension_GameSave;
@@ -66,6 +77,10 @@ public class SaveFilesConfig : ScriptableObject
         FileExtension_ShipBP= fileExtension_ShipBP;
         Directory_ShipBP = directory_ShipBP;
         FileName_ShipBP_SaveList = fileName_ShipBP_SaveList;
+
+        FileExtension_Settings = fileExtension_Settings;
+        Directory_Settings = directory_Settings;
+        FileName_settings = fileName_settings;
     }
 
 }
