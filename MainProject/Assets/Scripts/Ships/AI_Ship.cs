@@ -211,6 +211,19 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
 
     private void targetCompConfLevel1(PlayerShip _ship, out ShipComponent _targetComponent)
     {
+        _targetComponent = null;
+        Debug.LogError("AI_Ship: Target Component Lvl 1: NO COMPONENTS ON ENEMY SHIP. assigning null target");
+    }
+
+
+    private void targetCompConfLevel2(PlayerShip _ship, out ShipComponent _targetComponent)
+    {
+        _targetComponent = null;
+        Debug.LogError("AI_Ship: Target Component Lvl 2: NO COMPONENTS ON ENEMY SHIP. assigning null target");
+    }
+
+    private void targetCompConfLevel3(PlayerShip _ship, out ShipComponent _targetComponent)
+    {
         //lookat target
         trans.LookAt(_ship.transform);
 
@@ -247,17 +260,11 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         else
         {
             _targetComponent = null;
-            Debug.LogError("AI_Ship: Target Component Lvl 1: NO COMPONENTS ON ENEMY SHIP. assigning null target");
+            Debug.LogError("AI_Ship: Target Component Lvl 3: NO COMPONENTS ON ENEMY SHIP. assigning null target");
         }
     }
 
-    private void targetCompConfLevel2(PlayerShip _ship, out ShipComponent _targetComponent)
-    {
-        _targetComponent = null;
-        Debug.LogError("AI_Ship: Target Component Lvl 2: NO COMPONENTS ON ENEMY SHIP. assigning null target");
-    }
-
-    private void targetCompConfLevel3(PlayerShip _ship, out ShipComponent _targetComponent)
+    private void targetCompConfLevel4(PlayerShip _ship, out ShipComponent _targetComponent)
     {
         //make lists of components by placement
         List<ShipComponent> fwdComponents = new List<ShipComponent>();
@@ -301,7 +308,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
             else
             {
                 _targetComponent = null;
-                Debug.LogError("AI_Ship: Target Component Lvl 3: fwd:  NO COMPONENTS ON ENEMY SHIP FWD. assigning null target");
+                Debug.LogError("AI_Ship: Target Component Lvl 4: fwd:  NO COMPONENTS ON ENEMY SHIP FWD. assigning null target");
             }
         }
         else if (aftArmour <= fwdArmour && aftArmour <= portArmour && aftArmour <= starArmour)
@@ -327,7 +334,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
             else
             {
                 _targetComponent = null;
-                Debug.LogError("AI_Ship: Target Component Lvl 3: fwd:  NO COMPONENTS ON ENEMY SHIP FWD. assigning null target");
+                Debug.LogError("AI_Ship: Target Component Lvl 4: aft:  NO COMPONENTS ON ENEMY SHIP FWD. assigning null target");
             }
         }
         else if (portArmour <= fwdArmour && portArmour <= aftArmour && portArmour <= starArmour)
@@ -353,7 +360,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
             else
             {
                 _targetComponent = null;
-                Debug.LogError("AI_Ship: Target Component Lvl 3: fwd:  NO COMPONENTS ON ENEMY SHIP FWD. assigning null target");
+                Debug.LogError("AI_Ship: Target Component Lvl 4: port:  NO COMPONENTS ON ENEMY SHIP FWD. assigning null target");
             }
         }
         else
@@ -379,18 +386,12 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
             else
             {
                 _targetComponent = null;
-                Debug.LogError("AI_Ship: Target Component Lvl 3: fwd:  NO COMPONENTS ON ENEMY SHIP FWD. assigning null target");
+                Debug.LogError("AI_Ship: Target Component Lvl 4: starboard:  NO COMPONENTS ON ENEMY SHIP FWD. assigning null target");
             }
         }
 
         
         
-    }
-
-    private void targetCompConfLevel4(PlayerShip _ship, out ShipComponent _targetComponent)
-    {
-        _targetComponent = null;
-        Debug.LogError("AI_Ship: Target Component Lvl 4: NO COMPONENTS ON ENEMY SHIP. assigning null target");
     }
 
     private void targetCompConfLevel5(PlayerShip _ship, out ShipComponent _targetComponent)
@@ -488,7 +489,11 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
 
         float runningAdjustment = 0;
 
-        while (aiHP >= 0 && playerHP >= 0)
+        //this is the simplest trial. it's basically punchies.
+        //simple rules. 2 players. each player punches the other in the arm
+        //whichever player punched lightest looses
+        bool keepGoing = true;
+        while (keepGoing)
         {
             //run a typical turn
 
@@ -501,8 +506,10 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
             // damage the player
             if (playerMaxShield >= 0)
             {
+                Debug.Log("p: sh: " + playerMaxShield);
                 while (aiExcessPower >= 0)
                 {
+                    Debug.Log("ai: ex-p: " + aiExcessPower);
                     playerMaxShield -= aiVsShield;
                     aiExcessPower -= aiVsShield;
                 }
@@ -511,16 +518,26 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
             {
                 while (aiExcessPower >= 0)
                 {
+                    Debug.Log("ai: ex-p: " + aiExcessPower);
                     playerHP -= aiVsHull;
                     aiExcessPower -= aiVsHull;
+                    Debug.Log("p: hp: " + playerHP);
                 }
             }
 
-            //damage the ai
-            if (aiMaxShield >= 0)
+            if (playerHP <= 0)
             {
+                keepGoing = false;
+                break;
+            }
+
+            //damage the ai
+            if (aiMaxShield >= 0 && playerHP >= 0)
+            {
+                Debug.Log("ai: sh: " + aiMaxShield);
                 while (playerExcessPower >= 0)
                 {
+                    Debug.Log("p: ex-p: " + playerExcessPower);
                     aiMaxShield -= playerVsShield;
                     playerExcessPower -= playerVsShield;
                 }
@@ -529,9 +546,17 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
             {
                 while (playerExcessPower >= 0)
                 {
+                    Debug.Log("p: ex-p: " + playerExcessPower);
                     aiHP -= playerVsHull;
                     playerExcessPower -= playerVsHull;
+                    Debug.Log("ai: hp: " + aiHP);
                 }
+            }
+
+            if (aiHP <= 0)
+            {
+                keepGoing = false;
+                break;
             }
         }
 
@@ -556,23 +581,24 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
 
     private ShipComponent TargetComponent(PlayerShip _ship)
     {
-        ShipComponent _targetComponent = null ;
+        ShipComponent _targetComponent = null;
 
         //float confidence = Random.Range(0.0f, 1.0f);
         float confidence = 0;
-
+        Debug.LogWarning("current confidence: " + confidence);
 
         //get count for player fleet
-        int playerFleetStrength = GameController.Instance.GameData.playerFleetData.gridIndex_metaData_table.Count();
+        int playerFleetStrength = GameObject.FindObjectsOfType<PlayerShip>().Count();
         // get count for enemy fleet
-        int aiFleetStrength = GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Count();
+        int aiFleetStrength = GameObject.FindObjectsOfType<AI_Ship>().Count();
 
         //calculate basis for confidence
 
         int totalShips = playerFleetStrength + aiFleetStrength;
+        Debug.LogWarning("totalShips: " + totalShips);
 
-        confidence = (float)aiFleetStrength / (float)totalShips;
-
+        confidence = (float)playerFleetStrength / (float)totalShips;
+        Debug.LogWarning("current confidence: " + confidence);
         //adjust based on ship and target
 
         confidence += trialShipVsShip(_ship);
@@ -580,6 +606,8 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         //setup a 5 step system ranging from dullard with a club to military commander with laser guided intel
         //set confidence to choose from those 5 options
         //Debug.LogWarning(confidence);
+
+        Debug.LogWarning("current confidence: " + confidence);
 
         float confLevel1Cutoff = 0.2f;
         float confLevel2Cutoff = 0.4f;
@@ -612,60 +640,10 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
             targetCompConfLevel5(_ship, out _targetComponent);
         }
 
-        //if (confidence >= 0.5f)
-        //{
-        //    //go in order of: weapons, defensive, support, engineering
-        //    if (_ship.Components.Where(c => c.gameObject.activeSelf && c.CompType == ComponentType.Weapon).ToList().Count > 0)
-        //    {
-        //        _targetComponent = _ship.Components.Where(c => c.gameObject.activeSelf && c.CompType == ComponentType.Weapon).Aggregate((curr, next) => curr.CompHP <= next.CompHP ? curr : next);
-        //    }
-        //    else if (_ship.Components.Where(c => c.gameObject.activeSelf && c.CompType == ComponentType.Defense).ToList().Count > 0)
-        //    {
-        //       _targetComponent = _ship.Components.Where(c => c.gameObject.activeSelf && c.CompType == ComponentType.Defense).Aggregate((curr, next) => curr.CompHP <= next.CompHP ? curr : next);
-        //    }
-        //    else if (_ship.Components.Where(c => c.gameObject.activeSelf && c.CompType == ComponentType.Support).ToList().Count > 0)
-        //    {
-        //        _targetComponent = _ship.Components.Where(c => c.gameObject.activeSelf && c.CompType == ComponentType.Support).Aggregate((curr, next) => curr.CompHP <= next.CompHP ? curr : next);
-        //    }
-        //    else if (_ship.Components.Where(c => c.gameObject.activeSelf && c.CompType == ComponentType.Engineering).ToList().Count > 0)
-        //    {
-        //        _targetComponent = _ship.Components.Where(c => c.gameObject.activeSelf && c.CompType == ComponentType.Engineering).Aggregate((curr, next) => curr.CompHP <= next.CompHP ? curr : next);
-        //    }
-
-        //    //Debug.LogError(_targetComponent);
-
-        //    if (_targetComponent == null)
-        //    {
-        //        Debug.LogError("Something is very wrong. all component lists empty. AI cannot target components on an empty ship");
-        //    }
-        //}
-        //else
-        //{
-        //    // go in order of: engineering, support, weapons, defensive
-        //    if (_ship.Components.Where(c => c.gameObject.activeSelf && c.CompType == ComponentType.Engineering).ToList().Count > 0)
-        //    {
-        //        _targetComponent = _ship.Components.Where(c => c.gameObject.activeSelf && c.CompType == ComponentType.Engineering).Aggregate((curr, next) => curr.CompHP <= next.CompHP ? curr : next);
-        //    }
-        //    else if (_ship.Components.Where(c => c.gameObject.activeSelf && c.CompType == ComponentType.Support).ToList().Count > 0)
-        //    {
-        //       _targetComponent = _ship.Components.Where(c => c.gameObject.activeSelf && c.CompType == ComponentType.Support).Aggregate((curr, next) => curr.CompHP <= next.CompHP ? curr : next);
-        //    }
-        //    else if (_ship.Components.Where(c => c.gameObject.activeSelf && c.CompType == ComponentType.Weapon).ToList().Count > 0)
-        //    {
-        //        _targetComponent = _ship.Components.Where(c => c.gameObject.activeSelf && c.CompType == ComponentType.Weapon).Aggregate((curr, next) => curr.CompHP <= next.CompHP ? curr : next);
-        //    }
-        //    else if (_ship.Components.Where(c => c.gameObject.activeSelf && c.CompType == ComponentType.Defense).ToList().Count > 0)
-        //    {
-        //        _targetComponent = _ship.Components.Where(c => c.gameObject.activeSelf && c.CompType == ComponentType.Defense).Aggregate((curr, next) => curr.CompHP <= next.CompHP ? curr : next);
-        //    }
-
-           // Debug.LogError(_targetComponent);
-
-            if (_targetComponent == null)
-            {
-                Debug.LogError("Something is very wrong. all component lists empty. AI cannot target components on an empty ship");
-            }
-       // }
+        if (_targetComponent == null)
+        {
+            Debug.LogError("Something is very wrong. all component lists empty. AI cannot target components on an empty ship");
+        }
 
         return _targetComponent;
     }
