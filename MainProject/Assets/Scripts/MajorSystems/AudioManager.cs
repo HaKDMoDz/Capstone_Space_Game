@@ -25,8 +25,10 @@ public class AudioManager : Singleton<AudioManager>
 
     //Internal
     private Queue<AudioSource> availableSources = new Queue<AudioSource>();
+    private List<AudioSource> playingSources = new List<AudioSource>();
     private AudioSource mainTrackSource;
     private Transform audioSrcParent;
+    private GameSettings settings;
 
     #endregion Fields
 
@@ -67,6 +69,19 @@ public class AudioManager : Singleton<AudioManager>
     {
         SetMainTrack(GetSoundInfo(sound));
     }
+    public void UpdateSettings(GameSettings settings)
+    {
+        this.settings = settings;
+        mainTrackSource.volume = ResourceManager.GetDefaultVolume(mainTrackSource.clip) * settings.MasterVolume * settings.MusicVolume;
+        if (settings.MuteMaster || settings.MuteMusic) mainTrackSource.volume = 0.0f;
+        if(settings.MuteMusic || settings.MuteEffects)
+        {
+            foreach (AudioSource source in playingSources)
+            {
+                source.volume = 0.0f;
+            }
+        }
+    }
     #endregion PublicMethods
 
     #region PrivateMethods
@@ -91,18 +106,19 @@ public class AudioManager : Singleton<AudioManager>
             mainTrackSource.Stop();
         }
         mainTrackSource.clip = soundInfo.audioClip;
-        mainTrackSource.volume = soundInfo.defaultVolume;
+        mainTrackSource.volume = (settings.MuteMaster || settings.MuteMusic)? 0.0f : soundInfo.defaultVolume * settings.MasterVolume * settings.MusicVolume;
         mainTrackSource.Play();
     }
     private IEnumerator PlayEffect(SoundInfo soundInfo, Vector3 position, bool varyPitch)
     {
         AudioSource source = availableSources.Dequeue();
+        playingSources.Add(source);
         if (position != Vector3.zero)
         {
             Transform sourceTrans = source.gameObject.transform;
             sourceTrans.position = position;
             source.clip = soundInfo.audioClip;
-            source.volume = soundInfo.defaultVolume;
+            source.volume = (settings.MuteMaster || settings.MuteEffects) ? 0.0f : soundInfo.defaultVolume * settings.MasterVolume * settings.EffectsVolume;
             source.pitch = varyPitch ? Random.Range(pitchRange.x, pitchRange.y) : 1.0f;
             source.Play();
             yield return new WaitForSeconds(soundInfo.audioClip.length);
@@ -112,22 +128,24 @@ public class AudioManager : Singleton<AudioManager>
         {
             source.pitch = varyPitch ? Random.Range(pitchRange.x, pitchRange.y) : 1.0f;
             source.clip = soundInfo.audioClip;
-            source.volume = soundInfo.defaultVolume;
+            source.volume = (settings.MuteMaster || settings.MuteEffects) ? 0.0f: soundInfo.defaultVolume * settings.MasterVolume * settings.EffectsVolume;
             source.Play();
             yield return new WaitForSeconds(soundInfo.audioClip.length);
         }
 
         source.Stop();
         availableSources.Enqueue(source);
+        playingSources.Remove(source);
     }
 
     private IEnumerator PlayEffectAndAttach(SoundInfo soundInfo, Transform parent, bool varyPitch)
     {
         AudioSource source = availableSources.Dequeue();
+        playingSources.Add(source);
         Transform sourceTrans = source.gameObject.transform;
         sourceTrans.SetParent(parent, false);
         source.clip = soundInfo.audioClip;
-        source.volume = soundInfo.defaultVolume;
+        source.volume = (settings.MuteMaster || settings.MuteEffects) ? 0.0f : soundInfo.defaultVolume * settings.MasterVolume * settings.EffectsVolume;
         source.pitch = varyPitch ? Random.Range(pitchRange.x, pitchRange.y) : 1.0f;
         source.Play();
 
@@ -137,6 +155,7 @@ public class AudioManager : Singleton<AudioManager>
         sourceTrans.SetParent(audioSrcParent, false);
         sourceTrans.position = Vector3.zero;
         availableSources.Enqueue(source);
+        playingSources.Remove(source);
     }
 
     private SoundInfo GetSoundInfo(Sound sound)
@@ -165,6 +184,8 @@ public class AudioManager : Singleton<AudioManager>
         }
         mainTrackSource = availableSources.Dequeue();
         mainTrackSource.loop = true;
+        settings = new GameSettings();
+        settings.LoadSettings();
     }
     #endregion UnityCallbacks
 

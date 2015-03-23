@@ -28,7 +28,7 @@ public class MainMenuMotherShip : MonoBehaviour
     private GameObject[] explosionPrefabs;
     [SerializeField]
     private Vector2 nukeInterval = new Vector2(0.5f, 1.5f);
-    
+
     private bool onFarSide = false;
     //References
     private Transform trans;
@@ -45,7 +45,7 @@ public class MainMenuMotherShip : MonoBehaviour
             trans.rotation = Quaternion.LookRotation(orbitTangent);
             bool previousSide = onFarSide;
             onFarSide = Vector3.Dot(trans.right, orbitingPlanet.forward) >= 0.0f;
-            if(onFarSide != previousSide)
+            if (onFarSide != previousSide)
             {
                 MainMenuCamera.Instance.SwingOver();
             }
@@ -72,23 +72,15 @@ public class MainMenuMotherShip : MonoBehaviour
                 {
                     int explosionIndex = Random.Range(0, explosionPrefabs.Length);
                     Instantiate(explosionPrefabs[explosionIndex], nukeClone.transform.position, nukePrefab.transform.rotation);
-                    bool effect1 = Random.value > 0.5f;
-                    if(effect1)
-                    {
-                        AudioManager.Instance.PlayEffect(Sound.Nuke1, true);
-                    }
-                    else
-                    {
-                        AudioManager.Instance.PlayEffect(Sound.Nuke2, true);
-                    }
+                    AudioManager.Instance.PlayEffect(Sound.Nuke, true);
                     Destroy(nukeClone.gameObject);
                 }
-                #if FULL_DEBUG
+#if FULL_DEBUG
                 else
                 {
                     Debug.LogError("Nuke hit something but the planet");
                 }
-                #endif
+#endif
             };
     }
 

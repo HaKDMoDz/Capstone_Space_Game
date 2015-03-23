@@ -40,7 +40,7 @@ public enum Sound
     SciFiTheme,
     //effects
     Laser,
-    Nuke1, Nuke2
+    Nuke
 }
 [Serializable]
 public struct SoundInfo
@@ -96,6 +96,10 @@ public class ResourceManager : ScriptableObject
 #else
         return sound_info_table[sound];
 #endif
+    }
+    public static float GetDefaultVolume(AudioClip clip)
+    {
+        return sound_info_table.FirstOrDefault((s)=>s.Value.audioClip == clip).Value.defaultVolume;
     }
 
     private void OnEnable()

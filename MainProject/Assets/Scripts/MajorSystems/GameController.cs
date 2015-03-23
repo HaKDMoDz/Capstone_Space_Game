@@ -147,17 +147,10 @@ public class GameController : Singleton<GameController>
         #if FULL_DEBUG
         //Debug.Log("GameController Awake");
         #endif
-
         saveSystem = new GameSaveSystem();
-            //saveFields.fileExtension, saveFields.saveDirectory, saveFields.fileName_SavesList, 
-            //saveFields.autoSaveFileName,saveFields.quickSaveName,
-            //saveFields.numAutoSaves, saveFields.numQuickSaves, saveFields.numNormalSaves);
-
         //empty game data - will be filled up upon loading an autosave
         gameData = new GameData();
         gameData.prevScene = GameConfig.GetSceneEnum(Application.loadedLevelName);
-        //Debug.Log("autosave: " + autosaveFileName);
-
         if (gameData.prevScene == GameScene.MainMenu)
         {
             #if FULL_DEBUG
@@ -182,7 +175,6 @@ public class GameController : Singleton<GameController>
             }
         }
     }//Awake
-
     /// <summary>
     /// Unity call back after a scene is loaded
     /// Raises the PostSceneChange event
@@ -211,7 +203,6 @@ public class GameController : Singleton<GameController>
             #if !NO_DEBUG
             Debug.Log("Post Scene Change: from " + gameData.prevScene + " to " + gameData.nextScene);
             #endif
-
             //notifies all systems that a new scene has loaded
             OnPostSceneChange(new SceneChangeArgs(gameData.prevScene, gameData.nextScene));
         }
@@ -222,33 +213,13 @@ public class GameController : Singleton<GameController>
         #if !NO_DEBUG
         Debug.Log("Application Quit");
         #endif
-        //if (gameData.prevScene != GameScene.MainMenu)
+        if (gameData.prevScene != GameScene.MainMenu)
         {
             OnQuit();
-            saveSystem.AutoSave(gameData); 
+            AutoSave();
         }
-    }
-    private void Start()
-    {
-        #if FULL_DEBUG
-        //Debug.Log("GameController Start");
-        #endif
-        //InputManager.Instance.RegisterKeysDown(KeyDown, KeyCode.F5, KeyCode.F9);
     }
     #endregion UnityCallbacks
-
-    private void KeyDown(KeyCode key)
-    {
-        switch (key)
-        {
-            case KeyCode.F5:
-                QuickSave();
-                break;
-            case KeyCode.F9:
-                QuickLoad();
-                break;
-        }
-    }
 
     /// <summary>
     /// Performs a quicksave of the current game state
@@ -259,6 +230,10 @@ public class GameController : Singleton<GameController>
         Debug.Log("quick save");
         #endif
         saveSystem.QuickSave(gameData);
+    }
+    private void AutoSave()
+    {
+        saveSystem.AutoSave(gameData); 
     }
     private void QuickLoad()
     {
