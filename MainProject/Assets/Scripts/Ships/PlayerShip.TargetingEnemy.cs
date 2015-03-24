@@ -39,6 +39,7 @@ public partial class PlayerShip : TurnBasedUnit
         combatInterface.EnableTacticalButton(true, () => ChangeState(PlayerState.TacticalView));
         InputManager.Instance.RegisterKeysDown(SwitchToTacticalMode, KeyCode.Escape);
         TutorialSystem.Instance.ShowTutorial(TutorialSystem.TutorialType.ComponentPanel, true);
+        spaceGround.Display(false);
         targetComponent = null;
         trans.LookAt(aiTrans);
     }
@@ -55,6 +56,7 @@ public partial class PlayerShip : TurnBasedUnit
     private IEnumerator PostTargetingEnemy()
     {
         Debug.Log("Post TargetingMode");
+        spaceGround.Display(true);
         combatInterface.ShowComponentSelectionPanel(false);
         ShowTargetingPanel(false);
         AllowEnemyTargeting(false);

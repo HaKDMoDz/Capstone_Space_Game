@@ -8,6 +8,8 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System;
 #endregion Usings
 
 /// <summary>
@@ -123,6 +125,35 @@ public partial class PlayerShip : TurnBasedUnit
         line = lineObj.GetComponent<LineRenderer>();
         lineMat = line.renderer.material;
         line.enabled = false;
+
+        //setup targeting arcs
+        GameObject targetingArcs = new GameObject("TargetingArcs");
+        targetingArcTrans = targetingArcs.transform;
+        targetingArcTrans.Translate(Vector3.up);
+        //targetingArcTrans.RotateAroundXAxis(90.0f);
+        targetingArcTrans.SetParent(trans, false);
+        float yPos = 0.5f;
+        foreach (Component_Weapon weapon in 
+            components
+            .Where(c => c is Component_Weapon)
+            .Select(c => c.GetType())
+            .Distinct()
+            .Select((type)=>(Component_Weapon)components.Find(c=>c.GetType()==type))
+            .OrderBy((weapon)=>weapon.range))
+        {
+            //Component_Weapon weapon = (Component_Weapon)components.First(c => c.GetType() == type);
+            GameObject arcObj = new GameObject(weapon.componentName + " Arc");
+            Transform arcTrans = arcObj.transform;
+            arcTrans.SetParent(targetingArcTrans, false);
+            arcTrans.SetPositionY(yPos);
+            arcTrans.RotateAroundXAxis(90.0f);
+            ArcMesh arc = arcObj.AddComponent<ArcMesh>();
+            Material arcMat = new Material(PlayerShipConfig.ArcMat);
+            arcMat.color = weapon.WeaponColour.WithAplha(PlayerShipConfig.ArcAlpha);
+            arc.BuildArc(weapon.range, PlayerShipConfig.ArcAngle, PlayerShipConfig.ArcSegments, arcMat);
+            yPos -= 0.5f;
+        }
+        ShowTargetingArc(false);
     }
     #endregion Methods
 }

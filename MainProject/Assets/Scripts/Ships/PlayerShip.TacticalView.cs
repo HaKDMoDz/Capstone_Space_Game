@@ -13,6 +13,8 @@ using System.Collections.Generic;
 /// </summary>
 public partial class PlayerShip : TurnBasedUnit 
 {
+    private Transform targetingArcTrans;
+
     private IEnumerator PreTacticalView()
     {
         Debug.Log("PreTacticalView");
@@ -20,10 +22,14 @@ public partial class PlayerShip : TurnBasedUnit
         combatInterface.ShowModeButtons(true);
         combatInterface.EnableMoveButton(true, () => ChangeState(PlayerState.MovementMode));
         InputManager.Instance.RegisterKeysDown(SwitchToMovementMode, KeyCode.Space, KeyCode.Escape);
+        InputManager.Instance.OnMouseMoveEvent += OnMouseMove;
+        ShowTargetingArc(true);
+        Camera.main.transparencySortMode = TransparencySortMode.Orthographic;
         SubscribeToAIShipMouseEvents(true);
         CameraDirector.Instance.SetFreeCamera(true);
         yield return null;
     }
+
     private IEnumerator TacticalView()
     {
         //Setup ai ships and camera before pre-tactical view
@@ -53,6 +59,8 @@ public partial class PlayerShip : TurnBasedUnit
     private IEnumerator PostTacticalView()
     {
         Debug.Log("Post TacticalView");
+        ShowTargetingArc(false);
+        Camera.main.transparencySortMode = TransparencySortMode.Default;
         SubscribeToAIShipMouseEvents(false);
         CameraDirector.Instance.SetFreeCamera(false);
         combatInterface.ShowModeButtons(false);
@@ -103,8 +111,17 @@ public partial class PlayerShip : TurnBasedUnit
         targetShip = ship;
         ChangeState(PlayerState.TargetingEnemy);
     }
+    void OnMouseMove(Vector2 direction)
+    {
+        MouseOverSpaceGround();
+        targetingArcTrans.LookAtWithSameY(mousePosOnGround);
+    }
     private void SwitchToMovementMode(KeyCode key)
     {
         ChangeState(PlayerState.MovementMode);
+    }
+    private void ShowTargetingArc(bool show)
+    {
+        targetingArcTrans.gameObject.SetActive(show);               
     }
 }
