@@ -3,7 +3,6 @@ using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
 
 public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
@@ -105,7 +104,6 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         if (targetPlayer != null)
         {
             ShipComponent targetComponent = TargetComponent(targetPlayer);
-            EditorGUIUtility.PingObject(targetComponent.gameObject);
         }
         //StartCoroutine(ai_Attack.Attack(targetComponent, damagePerAttack, activeComponents));
     }
