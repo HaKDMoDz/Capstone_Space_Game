@@ -514,6 +514,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
         if (allow)
         {
             saveButtonImage.color = saveButtonImage.color.WithAplha(1.0f);
+            TutorialSystem.Instance.ShowTutorial(TutorialSystem.TutorialType.ShipStats, false);
         }
         else
         {

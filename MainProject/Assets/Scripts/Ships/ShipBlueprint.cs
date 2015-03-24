@@ -122,7 +122,7 @@ public class ShipBlueprint
     public bool IsValid()
     {
         GenerateMetaData();
-        return (metaData.ExcessPower > 0.0f && metaData.MoveCost > 0.0f);
+        return (metaData.ExcessPower > 0.0f && metaData.MoveCost > 0.0f && slot_component_table.Values.Count(comp=>comp is Component_Weapon)>0);
     }
     public void GenerateMetaData()
     {

@@ -104,6 +104,10 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
                 ShipDesignInterface.Instance.AllowSaving(true);
                 TutorialSystem.Instance.ShowTutorial(TutorialSystem.TutorialType.SaveShip, true);
             }
+            else
+            {
+                ShipDesignInterface.Instance.AllowSaving(false);
+            }
             ShipDesignInterface.Instance.UpdateStatsPanel(blueprintBeingBuilt.MetaData);
             
         }
