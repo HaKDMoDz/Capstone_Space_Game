@@ -106,7 +106,7 @@ public abstract class Component_Weapon : ShipComponent
         Vector3 hitPoint=-Vector3.zero;
         Ray ray = new Ray(shootPoint.position, ship.transform.position - shootPoint.position);
         RaycastHit hit;
-        Debug.DrawRay(ray.origin, ray.direction, Color.red, 10.0f);
+        Debug.DrawRay(ray.origin, ray.direction, Color.green, GlobalVars.RayCastRange);
         if(Physics.Raycast(ray, out hit, GlobalVars.RayCastRange, 1<<TagsAndLayers.ShipShieldLayer))
         {
             hitPoint = hit.point;
