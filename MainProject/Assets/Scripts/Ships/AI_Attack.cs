@@ -17,9 +17,17 @@ public class AI_Attack : MonoBehaviour
         Debug.LogWarning(_target + " targetted");
         GetComponent<AI_Ship>().CurrentPower = GetComponent<AI_Ship>().MaxPower;
         bool keepFiring = true;
-        
+
+
+
         while (keepFiring)
         {
+            if (TurnBasedCombatSystem.Instance.playerShips == null || TurnBasedCombatSystem.Instance.playerShips.Count() <= 0)
+            {
+                keepFiring = false;
+                break;
+            }
+
             if (_target.ParentShip.HullHP <= 0)
             {
                 GetComponent<AI_Ship>().RetargetNewShip();
@@ -34,6 +42,12 @@ public class AI_Attack : MonoBehaviour
                     {
                         GetComponent<AI_Ship>().CurrentPower -= weapon.PowerDrain;
                         yield return StartCoroutine(weapon.Fire(_target, () => { }));
+                        
+                        if (_target.ParentShip.HullHP <= 0)
+                        {
+                            GetComponent<AI_Ship>().RetargetNewShip();
+                            GetComponent<AI_Ship>().RetargetNewComponent();
+                        }
                     }
                     else
                     {
@@ -52,6 +66,12 @@ public class AI_Attack : MonoBehaviour
                     {
                         GetComponent<AI_Ship>().CurrentPower -= weapon.PowerDrain;
                         yield return StartCoroutine(weapon.Fire(_target, () => { }));
+                        
+                        if (_target.ParentShip.HullHP <= 0)
+                        {
+                            GetComponent<AI_Ship>().RetargetNewShip();
+                            GetComponent<AI_Ship>().RetargetNewComponent();
+                        }
                     }
                     else
                     {
