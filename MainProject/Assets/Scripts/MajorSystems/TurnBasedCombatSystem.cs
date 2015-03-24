@@ -120,6 +120,7 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
         }
         else if(unit is PlayerShip)
         {
+            Debug.LogError("Playership removed from combat system");
             playerShips.Remove((PlayerShip)unit);
         }
         CombatSystemInterface.Instance.UpdateTurnOrderPanel(units, true);
