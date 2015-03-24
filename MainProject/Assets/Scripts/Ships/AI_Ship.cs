@@ -102,6 +102,11 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         StartCoroutine(ai_Attack.Attack(targetComponent, damagePerAttack, activeComponents));
     }
 
+    public void RetargetNewShip()
+    {
+        targetPlayer = TargetEnemy(TurnBasedCombatSystem.Instance.playerShips);
+    }
+
     protected override void PostTurnActions()
     {
         
@@ -251,6 +256,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
             Debug.LogError(hit.collider.name + " : " + distanceToTarget);
         }
         _targetComponent = hit.collider.GetComponent<ShipComponent>();
+        Debug.LogError(_ship + " " + _targetComponent);
         Debug.LogError(_targetComponent + ":" + _targetComponent.Placement);
 
         if (false)
@@ -616,6 +622,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
 
     private ShipComponent TargetComponent(PlayerShip _ship)
     {
+        Debug.LogError(_ship);
         ShipComponent _targetComponent = null;
 
         //float confidence = Random.Range(0.0f, 1.0f);

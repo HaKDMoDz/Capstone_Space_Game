@@ -20,6 +20,12 @@ public class AI_Attack : MonoBehaviour
         
         while (keepFiring)
         {
+            if (_target.ParentShip.HullHP <= 0)
+            {
+                GetComponent<AI_Ship>().RetargetNewShip();
+                GetComponent<AI_Ship>().RetargetNewComponent();
+            }
+
             if (_target.ParentShip.ShieldStrength > 0)
             {
                 foreach (Comp_Wpn_Laser weapon in components.Where(c => c is Comp_Wpn_Laser))
