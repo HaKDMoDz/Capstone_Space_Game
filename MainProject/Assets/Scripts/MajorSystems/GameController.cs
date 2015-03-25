@@ -216,7 +216,7 @@ public class GameController : Singleton<GameController>
         if (gameData.prevScene != GameScene.MainMenu)
         {
             OnQuit();
-            AutoSave();
+            saveSystem.AutoSave(gameData); 
         }
     }
     #endregion UnityCallbacks
