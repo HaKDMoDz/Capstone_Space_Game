@@ -218,6 +218,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
         {
             transform.FindChild("OrganicFrigate").gameObject.SetActive(false);
         }
+        transform.FindChild("ComponentGrid").gameObject.SetActive(false);
 
         //play explosion sound
 
