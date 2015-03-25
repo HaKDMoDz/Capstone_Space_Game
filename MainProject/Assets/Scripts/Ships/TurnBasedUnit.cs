@@ -206,6 +206,18 @@ public abstract class TurnBasedUnit : MonoBehaviour
     {
         //play explosion particle effect
         expolosionObject.SetActive(true);
+        yield return new WaitForSeconds(0.75f);
+
+        //remove ship graphics
+        if (GetComponent<Hull>().hullName == "Organic Corvette")
+        {
+            transform.FindChild("OrganicCorvette").gameObject.SetActive(false);
+        }
+
+        if (GetComponent<Hull>().hullName == "Organic Frigate")
+        {
+            transform.FindChild("OrganicFrigate").gameObject.SetActive(false);
+        }
 
         //play explosion sound
 

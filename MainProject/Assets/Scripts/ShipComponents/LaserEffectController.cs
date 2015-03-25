@@ -25,6 +25,7 @@ public class LaserEffectController : MonoBehaviour
         if (beamParticleEffect)
         {
             GameObject particles = (GameObject)Instantiate(beamParticleEffect, transform.position, transform.rotation);
+            particles.transform.LookAt(impactPos);
             Destroy(particles, duration);
         }
         yield return new WaitForSeconds(duration);
