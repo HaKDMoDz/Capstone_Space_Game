@@ -95,7 +95,7 @@ public class MothershipLaunchCutscene : MonoBehaviour
         SpaceGround.Instance.Display(true);
         canvas.SetActive(true);
         skipText.SetActive(false);
-        InputManager.Instance.DeregisterKeysDown(SkipCutscene, KeyCode.Escape);
+        //InputManager.Instance.DeregisterKeysDown(SkipCutscene, KeyCode.Escape);
     }
     private IEnumerator FlyToGridPos(Transform ship, Vector3 destination)
     {

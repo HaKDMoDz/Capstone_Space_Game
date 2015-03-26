@@ -144,6 +144,8 @@ MonoBehaviour:
   laser1: {fileID: 11467214}
   laser2: {fileID: 11497842}
   beamParticleEffect: {fileID: 100004, guid: 10ff8a9e46930094c80b58bd973e4d00, type: 2}
+  forwardPlasmaName: forwardPlasma
+  particleVelocity: 400
 --- !u!114 &11467214
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -160,6 +162,7 @@ MonoBehaviour:
   endWidth: .100000001
   startColour: {r: 1, g: 1, b: 1, a: .498039216}
   endColour: {r: 1, g: 1, b: 1, a: 0}
+  uvLength: 4
 --- !u!114 &11497842
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -176,6 +179,7 @@ MonoBehaviour:
   endWidth: 4
   startColour: {r: 1, g: 0, b: 0, a: .333333343}
   endColour: {r: 1, g: 0, b: 0, a: 0}
+  uvLength: 4
 --- !u!120 &12000000
 LineRenderer:
   m_ObjectHideFlags: 1

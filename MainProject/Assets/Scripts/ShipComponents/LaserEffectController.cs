@@ -8,6 +8,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class LaserEffectController : MonoBehaviour 
 {
@@ -17,17 +18,22 @@ public class LaserEffectController : MonoBehaviour
     private LaserEffect laser2;
     [SerializeField]
     private GameObject beamParticleEffect;
+    [SerializeField]
+    private string forwardPlasmaName;
+    [SerializeField]
+    private float particleVelocity = 200.0f;
 
     public IEnumerator PlayLaserEffect(float duration, Vector3 impactPos)
     {
         StartCoroutine(laser1.PlayLaserEffect(duration, impactPos));
         StartCoroutine(laser2.PlayLaserEffect(duration, impactPos));
-        if (beamParticleEffect)
-        {
-            GameObject particles = (GameObject)Instantiate(beamParticleEffect, transform.position, transform.rotation);
-            particles.transform.LookAt(impactPos);
-            Destroy(particles, duration);
-        }
+        GameObject particles = (GameObject)Instantiate(beamParticleEffect, transform.position, transform.rotation);
+        particles.transform.LookAt(impactPos);
+        ParticleSystem forwardPlasma = particles.GetComponentsInChildren<ParticleSystem>().FirstOrDefault(p => p.name == forwardPlasmaName);
+        forwardPlasma.startLifetime = Vector3.Distance(impactPos, particles.transform.position) / particleVelocity;
+        forwardPlasma.startLifetime *= 2.0f;
+        Debug.Log("particle lifetime: " + forwardPlasma.startLifetime);
+        Destroy(particles, duration);
         yield return new WaitForSeconds(duration);
     }
 
