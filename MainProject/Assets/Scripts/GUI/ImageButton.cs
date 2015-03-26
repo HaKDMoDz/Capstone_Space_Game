@@ -23,6 +23,10 @@ public class ImageButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     [SerializeField]
     private Image image;
+    public Image Image
+    {
+        get { return image; }
+    }
 
     private delegate void ButtonPointerEnterEvent();
     private event ButtonPointerEnterEvent OnButtonPointerEnter = new ButtonPointerEnterEvent(() => { });

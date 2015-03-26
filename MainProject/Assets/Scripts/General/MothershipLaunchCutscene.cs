@@ -32,7 +32,7 @@ public class MothershipLaunchCutscene : MonoBehaviour
     private Quaternion camMotherShipRot;
     [SerializeField]
     private Vector3 camPosOnTop;
-    private Quaternion camRotOnTop=Quaternion.Euler(30.88592f,0.0f,0.0f);
+    //private Quaternion camRotOnTop=Quaternion.Euler(30.88592f,0.0f,0.0f);
     private Transform camTrans;
     Dictionary<Transform, Vector3> ship_gridPos_Table;
     private bool skipCutscene = false;

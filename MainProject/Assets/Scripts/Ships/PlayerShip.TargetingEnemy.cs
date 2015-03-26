@@ -18,6 +18,7 @@ public partial class PlayerShip : TurnBasedUnit
 {
     private AI_Ship targetShip = null;
     private ShipComponent targetComponent = null;
+    Transform aiTrans = null;
     private List<ShipComponent> selectedComponents = new List<ShipComponent>();
     private float totalActivationCost = 0.0f;
     private bool allowingEnemyTargeting = false;
@@ -28,11 +29,14 @@ public partial class PlayerShip : TurnBasedUnit
         if (!targetShip) Debug.LogError("No target ship");
         Debug.Log("PreTargetingMode");
 #endif
-        Transform aiTrans = targetShip.transform;
+        aiTrans = targetShip.transform;
         yield return StartCoroutine(CameraDirector.Instance.OverheadAimAt(trans, aiTrans, GlobalVars.CameraAimAtPeriod));
         combatInterface.EnableComponentSelectionPanel(true);
         combatInterface.ShowComponentSelectionPanel(true);
-        combatInterface.ShowComponentHotkeyButtons(SelectAllComponents, components.Where(c => c.CanActivate));
+        //combatInterface.ShowComponentHotkeyButtons(SelectAllComponents, components.Where(c => c.CanActivate));
+        combatInterface.ShowComponentHotkeyButtons(SelectAllComponents, 
+            components.Where(comp=>comp.CanActivate)
+            .ToDictionary(comp=>comp,comp=>WeaponCanHitEnemy((Component_Weapon)comp)));
         ShowTargetingPanel(true);
         combatInterface.ShowModeButtons(true);
         combatInterface.EnableMoveButton(true, () => ChangeState(PlayerState.MovementMode));
@@ -63,6 +67,7 @@ public partial class PlayerShip : TurnBasedUnit
         InputManager.Instance.DeregisterKeysDown(SwitchToTacticalMode, KeyCode.Escape);
         combatInterface.ShowModeButtons(false);
         HideLineRenderer();
+        combatInterface.SetCursorType(CursorType.Default);
         if (targetComponent) targetComponent.Selected = false;
         if (currentState != PlayerState.ActivateWeapons)
         {
@@ -77,6 +82,16 @@ public partial class PlayerShip : TurnBasedUnit
     }
     private void SelectAllComponents(Type compType)
     {
+        Component_Weapon weaponToSelect = components.FirstOrDefault(c => c.GetType() == compType) as Component_Weapon;
+#if FULL_DEBUG
+        if(!weaponToSelect)  Debug.LogError("Not weapon found of type " + compType);
+#endif
+        if(!WeaponCanHitEnemy(weaponToSelect))
+        {
+            Debug.Log("Cannot hit enemy");
+            return;
+        }
+
 #if FULL_DEBUG
         Debug.Log("Activating all " + compType.ToString());
 #endif
@@ -87,6 +102,10 @@ public partial class PlayerShip : TurnBasedUnit
         {
             SelectComponent(component, true);
         }
+    }
+    private bool WeaponCanHitEnemy(Component_Weapon weapon)
+    {
+        return weapon.range >= Vector3.Distance(trans.position, aiTrans.position);
     }
     private void SelectComponent(ShipComponent component, bool select)
     {
@@ -188,6 +207,7 @@ public partial class PlayerShip : TurnBasedUnit
         targetComponent.Selected = true;
         combatInterface.ShowToolTip(component.componentName, Input.mousePosition);
         DisplayLineRenderer(targetComponent.transform.position, Color.cyan);
+        combatInterface.SetCursorType(CursorType.Attack);
     }
     void OnTargetShipComponentPointerExit(ShipComponent component)
     {
@@ -195,6 +215,7 @@ public partial class PlayerShip : TurnBasedUnit
         if (component.Selected) component.Selected = false;
         combatInterface.HideTooltip();
         HideLineRenderer();
+        combatInterface.SetCursorType(CursorType.Default);
     }
     private ShipComponent GetFirstComponentInDirection(ShipComponent component)
     {

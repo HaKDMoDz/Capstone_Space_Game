@@ -45,6 +45,7 @@ public struct CombatGUIFields
     //Cursors
     public Texture2D defaultCursor;
     public Texture2D attackCursor;
+    public Texture2D invalidCursor;
     //tooltip
     public TextExtended tooltip;
     //Player ship mode buttons
@@ -53,7 +54,7 @@ public struct CombatGUIFields
     public Button tacticalButton;
     public Button endTurnButton;
 }
-
+public enum CursorType { Default, Attack, Invalid }
 #endregion AdditionalStructs
 public class CombatSystemInterface : Singleton<CombatSystemInterface>
 {
@@ -96,33 +97,68 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
     /// </summary>
     /// <param name="activationMethod"></param>
     /// <param name="components"></param>
-    public void ShowComponentHotkeyButtons(UnityAction<Type> activationMethod, IEnumerable<ShipComponent> components)
+    //public void ShowComponentHotkeyButtons(UnityAction<Type> activationMethod, IEnumerable<ShipComponent> components)
+    //{
+    //    for (int i = compButtons.Count - 1; i >= 0; i--)
+    //    {
+    //        Destroy(compButtons[i].gameObject);
+    //        compButtons.RemoveAt(i);
+    //    }
+    //    if (components == null || activationMethod==null)
+    //    {
+    //        guiFields.compHotkeysPanel.SetActive(false);
+    //        return;
+    //    }
+    //    guiFields.compHotkeysPanel.SetActive(true);
+    //    foreach (Type type in components.Select(c => c.GetType()).Distinct())
+    //    {
+    //        Type currentType = type;
+    //        ShipComponent component = components.First(c => c.GetType() == currentType);
+    //        ImageButton buttonClone = Instantiate(guiFields.imageButtonPrefab) as ImageButton;
+    //        buttonClone.SetImage(component.MultipleSprite);
+    //        buttonClone.AddOnClickListener(() => activationMethod(currentType));
+    //        //buttonClone.AddOnPointerEnterListener(()=>{Debug.Log("Mouse over "+component.componentName);});
+    //        //buttonClone.AddOnPointerExitListener(() => { Debug.Log("Mouse exit " + component.componentName); });
+    //        compButtons.Add(buttonClone);
+    //        buttonClone.transform.SetParent(guiFields.compHotkeysParent, false);
+    //    }
+    //}//ShowComponentActivationButtons
+    public void ShowComponentHotkeyButtons(UnityAction<Type> activate, Dictionary<ShipComponent, bool> component_valid_table)
     {
         for (int i = compButtons.Count - 1; i >= 0; i--)
         {
             Destroy(compButtons[i].gameObject);
             compButtons.RemoveAt(i);
         }
-        if (components == null || activationMethod==null)
+        if (component_valid_table == null || activate == null)
         {
             guiFields.compHotkeysPanel.SetActive(false);
             return;
         }
         guiFields.compHotkeysPanel.SetActive(true);
-        foreach (Type type in components.Select(c => c.GetType()).Distinct())
+        foreach (Type type in component_valid_table.Keys.Select(comp=>comp.GetType()).Distinct())
         {
             Type currentType = type;
-            ShipComponent component = components.First(c => c.GetType() == currentType);
+            ShipComponent component = component_valid_table.Keys.First(comp=>comp.GetType()==currentType);
             ImageButton buttonClone = Instantiate(guiFields.imageButtonPrefab) as ImageButton;
             buttonClone.SetImage(component.MultipleSprite);
-            buttonClone.AddOnClickListener(() => activationMethod(currentType));
-            //buttonClone.AddOnPointerEnterListener(()=>{Debug.Log("Mouse over "+component.componentName);});
-            //buttonClone.AddOnPointerExitListener(() => { Debug.Log("Mouse exit " + component.componentName); });
+            if (component_valid_table[component])
+            {
+                buttonClone.AddOnClickListener(() => activate(currentType));
+            }
+            else
+            {
+                SetInvalidButton(buttonClone);
+            }
             compButtons.Add(buttonClone);
             buttonClone.transform.SetParent(guiFields.compHotkeysParent, false);
         }
     }//ShowComponentActivationButtons
-
+    private void SetInvalidButton(ImageButton button)
+    {
+        button.Button.interactable = false;
+        button.Image.color = button.Image.color.WithAplha(0.25f);
+    }
     public void ShowToolTip(string toolTipText, Vector3 screenPos)
     {
         guiFields.tooltip.gameObject.SetActive(true);
@@ -230,17 +266,32 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
         guiFields.endTurnButton.onClick.RemoveAllListeners();
         guiFields.endTurnButton.onClick.AddListener(action);
     }
-    public void ShowAttackCursor(bool show)
+    public void SetCursorType(CursorType type)
     {
-        if(show)
+        switch (type)
         {
-            Cursor.SetCursor(guiFields.attackCursor,attackCursorOffset , CursorMode.Auto);
-        }
-        else
-        {
-            Cursor.SetCursor(guiFields.defaultCursor, defaultCursorOffset, CursorMode.Auto);
+            case CursorType.Default:
+                Cursor.SetCursor(guiFields.defaultCursor, defaultCursorOffset, CursorMode.Auto);
+                break;
+            case CursorType.Attack:
+                Cursor.SetCursor(guiFields.attackCursor,attackCursorOffset , CursorMode.Auto);
+                break;
+            case CursorType.Invalid:
+                Cursor.SetCursor(guiFields.invalidCursor, attackCursorOffset, CursorMode.Auto);
+                break;
         }
     }
+    //public void ShowAttackCursor(bool show)
+    //{
+    //    if(show)
+    //    {
+    //        Cursor.SetCursor(guiFields.attackCursor,attackCursorOffset , CursorMode.Auto);
+    //    }
+    //    else
+    //    {
+    //        Cursor.SetCursor(guiFields.defaultCursor, defaultCursorOffset, CursorMode.Auto);
+    //    }
+    //}
 
     /// <summary>
     /// Shows the units in the turn order list, in the order that it was passed in (top to bottom)
@@ -326,7 +377,7 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
         HideMoveUI();
         attackCursorOffset = new Vector2(guiFields.attackCursor.width * 0.5f, guiFields.attackCursor.height * 0.5f);
         defaultCursorOffset = new Vector2(guiFields.defaultCursor.width * 0.1f, guiFields.defaultCursor.height * 0.1f);
-        ShowAttackCursor(false);
+        SetCursorType(CursorType.Default);
     }
     
 

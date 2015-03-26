@@ -206,7 +206,7 @@ public class PlayerShip_Old : TurnBasedUnit
         combatInterface.EnableComponentSelectionPanel(true);
         combatInterface.ShowComponentSelectionPanel(true);
         //show hotkeys
-        combatInterface.ShowComponentHotkeyButtons(SelectAllComponents, components.Where(c => c.CanActivate));
+        //combatInterface.ShowComponentHotkeyButtons(SelectAllComponents, components.Where(c => c.CanActivate));
         ShowTargetingPanel(true);
         trans.LookAt(aiTargetTrans);
         InputManager.Instance.RegisterKeysDown(TargetNext, KeyCode.Tab);
@@ -605,20 +605,20 @@ public class PlayerShip_Old : TurnBasedUnit
     }
     void aiShip_OnShipMouseExit(AI_Ship ship)
     {
-        combatInterface.ShowAttackCursor(false);
+        combatInterface.SetCursorType(CursorType.Default);
         ship.ShowHPBars(false);
     }
     void aiShip_OnShipMouseEnter(AI_Ship ship)
     {
         if (!startTargetingSequence)
         {
-            combatInterface.ShowAttackCursor(true);
+            combatInterface.SetCursorType(CursorType.Attack);
             ship.ShowHPBars(true);
         }
     }
     void aiShip_OnShipClick(AI_Ship ship)
     {
-        combatInterface.ShowAttackCursor(false);
+        combatInterface.SetCursorType(CursorType.Default);
         startTargetingSequence = true;
         targetShip = ship;
         Debug.Log("on Ship click " + ship);
