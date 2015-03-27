@@ -24,9 +24,9 @@ public class Comp_Wpn_Railgun : Component_Weapon
     [SerializeField]
     private GameObject muzzleFlash;
     [SerializeField]
-    private GameObject impactEffect;
-    //[SerializeField]
-    //private float projectileSpeed = 10.0f;
+    private GameObject explosionPrefab;
+    [SerializeField]
+    private float projectileSpeed = 10.0f;
 
     public override void Init(TurnBasedUnit _parentShip)
     {
@@ -34,7 +34,7 @@ public class Comp_Wpn_Railgun : Component_Weapon
     }
     public override IEnumerator Fire(ShipComponent targetComp, Action OnActivationComplete)
     {
-        if(targetComp && targetComp.CompHP > 0.0f)
+        //if(targetComp && targetComp.CompHP > 0.0f)
         {
             #if FULL_DEBUG
             //Debug.Log("Firing Railgun");
@@ -43,31 +43,32 @@ public class Comp_Wpn_Railgun : Component_Weapon
             targetTrans = targetComp.transform;
             shootPoint.LookAt(targetTrans);
             
-            yield return StartCoroutine(CreateRailEffect());
+            //for laser style railgun
+            //yield return StartCoroutine(CreateRailEffect());
             
-            //Projectile_Missile bulletClone = (Projectile_Missile)Instantiate(projectilePrefab, shootPoint.position, shootPoint.rotation);
-            //bulletClone.rigidbody.velocity = shootPoint.forward * projectileSpeed;
-            //////muzzle flash
-            //bool bulletCollided = false;
-            //bulletClone.OnCollision +=
-            //    (GameObject other) =>
-            //    {
-            //        if ((targetComp.ParentShip.ShieldStrength > 0.0f
-            //        && other.layer == TagsAndLayers.ShipShieldLayer
-            //        && other.GetComponentInParent<TurnBasedUnit>() == targetComp.ParentShip)
-            //        || (other.layer == TagsAndLayers.ComponentsLayer
-            //        && other.GetComponent<ShipComponent>() == targetComp))
-            //        {
-            //            bulletCollided = true;
-            //            //explosion
-            //            Destroy(bulletClone.gameObject);
-            //        }
-            //    };
-            //while (!bulletCollided)
-            //{
-            //    yield return null;
-            //}
-            
+            //for projectile railgun
+            Projectile_Missile bulletClone = (Projectile_Missile)Instantiate(projectilePrefab, shootPoint.position, shootPoint.rotation);
+            bulletClone.rigidbody.velocity = shootPoint.forward * projectileSpeed;
+            ////muzzle flash
+            bool bulletCollided = false;
+            bulletClone.OnCollision +=
+                (GameObject other) =>
+                {
+                    if ((targetComp.ParentShip.ShieldStrength > 0.0f
+                    && other.layer == TagsAndLayers.ShipShieldLayer
+                    && other.GetComponentInParent<TurnBasedUnit>() == targetComp.ParentShip)
+                    || (other.layer == TagsAndLayers.ComponentsLayer
+                    && other.GetComponent<ShipComponent>() == targetComp))
+                    {
+                        bulletCollided = true;
+                        Instantiate(explosionPrefab, bulletClone.transform.position, Quaternion.identity);
+                        Destroy(bulletClone.gameObject);
+                    }
+                };
+            while (!bulletCollided)
+            {
+                yield return null;
+            }
             yield return StartCoroutine(DoDamage(targetComp));
         }
 

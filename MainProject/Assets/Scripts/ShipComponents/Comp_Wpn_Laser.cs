@@ -6,13 +6,12 @@ public class Comp_Wpn_Laser : Component_Weapon
 {
     [SerializeField]
     private float effectDuration = 0.4f;
-    [SerializeField]
-    private ParticleSystem laserImpactEffect;
+    //[SerializeField]
+    //private ParticleSystem laserImpactEffect;
     [SerializeField]
     private float lineNoise;
     [SerializeField]
     private LaserEffectController laserEffectPrefab;
-
 
     //private LineRenderer line;
     //int length;

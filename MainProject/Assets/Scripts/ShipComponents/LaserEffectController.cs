@@ -22,6 +22,8 @@ public class LaserEffectController : MonoBehaviour
     private string forwardPlasmaName;
     [SerializeField]
     private float particleVelocity = 200.0f;
+    [SerializeField]
+    private GameObject explosionPrefab;
 
     public IEnumerator PlayLaserEffect(float duration, Vector3 impactPos)
     {
@@ -31,9 +33,10 @@ public class LaserEffectController : MonoBehaviour
         particles.transform.LookAt(impactPos);
         ParticleSystem forwardPlasma = particles.GetComponentsInChildren<ParticleSystem>().FirstOrDefault(p => p.name == forwardPlasmaName);
         forwardPlasma.startLifetime = Vector3.Distance(impactPos, particles.transform.position) / particleVelocity;
-        forwardPlasma.startLifetime *= 2.0f;
-        Debug.Log("particle lifetime: " + forwardPlasma.startLifetime);
+        forwardPlasma.startLifetime *= 1.5f;
+        GameObject explosion = (GameObject)Instantiate(explosionPrefab, impactPos, Quaternion.identity);
         Destroy(particles, duration);
+        Destroy(explosion, duration);
         yield return new WaitForSeconds(duration);
     }
 
