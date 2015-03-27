@@ -74,7 +74,8 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     private Button saveButton;
     [SerializeField]
     private Image saveButtonImage;
-
+    [SerializeField]
+    private bool showAI_Hulls=false;
     //Internal
     private Dictionary<string, GameObject> blueprintName_button_table;
     private string selectedBP;
@@ -104,7 +105,12 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     private void SetupGUI()
     {
         //Setup Hull Buttons
-        foreach (var id_hull in HullTable.id_hull_table)
+#if FULL_DEBUG
+        Dictionary<int, Hull> hullTable = showAI_Hulls ? HullTable.id_hull_table : HullTable.id_hull_table.Where(h => h.Value.PlayerAccessible).ToDictionary(h => h.Key, h => h.Value);
+        foreach (var id_hull in hullTable)
+#else
+        foreach (var id_hull in HullTable.id_hull_table.Where(h=>h.Value.PlayerAccessible))
+#endif
         {
             //create the button and position it
             ButtonWithContent buttonClone = Instantiate(buttonPrefab) as ButtonWithContent;

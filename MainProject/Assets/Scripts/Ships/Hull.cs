@@ -41,10 +41,15 @@ public class Hull : MonoBehaviour
     {
         get { return hullIcon; }
     }
+    [SerializeField]
+    private bool playerAccessible;
+    public bool PlayerAccessible
+    {
+        get { return playerAccessible; }
+    }
     //Internal
     public Dictionary<int, ComponentSlot> index_slot_table { get; private set; }
-    public bool unlocked { get; private set; }
-
+    
     #endregion Fields
 
     #region Methods

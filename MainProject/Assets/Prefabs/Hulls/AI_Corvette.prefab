@@ -61,7 +61,7 @@ GameObject:
   - 4: {fileID: 400070}
   - 114: {fileID: 11400000}
   m_Layer: 8
-  m_Name: Corvette
+  m_Name: AI_Corvette
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3229,7 +3229,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f55182a9300150c4093409e9f3b686f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ID: 0
+  hullName: K'Taerran Corvette
+  hullHP: 100
+  componnentGridTrans: {fileID: 416998, guid: dddb9f26021f35442b71ae897a8e8c24, type: 2}
   emptyComponentGrid:
   - {fileID: 11458592}
   - {fileID: 11458590}
@@ -3265,6 +3267,7 @@ MonoBehaviour:
   - {fileID: 11467280}
   - {fileID: 11467282}
   - {fileID: 11467284}
+  hullIcon: {fileID: 0}
 --- !u!114 &11458576
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3277,6 +3280,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 8
+  placement: 0
+  installedComponent: {fileID: 0}
 --- !u!114 &11458578
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3289,6 +3294,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 7
+  placement: 0
+  installedComponent: {fileID: 0}
 --- !u!114 &11458580
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3301,6 +3308,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 6
+  placement: 0
+  installedComponent: {fileID: 0}
 --- !u!114 &11458582
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3313,6 +3322,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 5
+  placement: 0
+  installedComponent: {fileID: 0}
 --- !u!114 &11458584
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3325,6 +3336,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 4
+  placement: 0
+  installedComponent: {fileID: 0}
 --- !u!114 &11458586
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3337,6 +3350,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 3
+  placement: 0
+  installedComponent: {fileID: 0}
 --- !u!114 &11458588
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3349,6 +3364,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 2
+  placement: 0
+  installedComponent: {fileID: 0}
 --- !u!114 &11458590
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3361,6 +3378,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 1
+  placement: 0
+  installedComponent: {fileID: 0}
 --- !u!114 &11458592
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3373,6 +3392,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 0
+  placement: 0
+  installedComponent: {fileID: 0}
 --- !u!114 &11467236
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3385,6 +3406,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 9
+  placement: 0
+  installedComponent: {fileID: 0}
 --- !u!114 &11467238
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3397,6 +3420,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 10
+  placement: 0
+  installedComponent: {fileID: 0}
 --- !u!114 &11467240
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3409,6 +3434,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 11
+  placement: 0
+  installedComponent: {fileID: 0}
 --- !u!114 &11467242
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3421,6 +3448,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 12
+  placement: 0
+  installedComponent: {fileID: 0}
 --- !u!114 &11467244
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3433,6 +3462,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 13
+  placement: 0
+  installedComponent: {fileID: 0}
 --- !u!114 &11467246
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3445,6 +3476,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 14
+  placement: 0
+  installedComponent: {fileID: 0}
 --- !u!114 &11467248
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3457,6 +3490,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 15
+  placement: 0
+  installedComponent: {fileID: 0}
 --- !u!114 &11467250
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3469,6 +3504,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 16
+  placement: 0
+  installedComponent: {fileID: 0}
 --- !u!114 &11467252
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3481,6 +3518,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 17
+  placement: 0
+  installedComponent: {fileID: 0}
 --- !u!114 &11467254
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3493,6 +3532,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 18
+  placement: 0
+  installedComponent: {fileID: 0}
 --- !u!114 &11467256
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3505,6 +3546,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 19
+  placement: 0
+  installedComponent: {fileID: 0}
 --- !u!114 &11467258
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3517,6 +3560,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 20
+  placement: 0
+  installedComponent: {fileID: 0}
 --- !u!114 &11467260
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3529,6 +3574,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 21
+  placement: 0
+  installedComponent: {fileID: 0}
 --- !u!114 &11467262
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3541,6 +3588,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 22
+  placement: 0
+  installedComponent: {fileID: 0}
 --- !u!114 &11467264
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3553,6 +3602,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 23
+  placement: 0
+  installedComponent: {fileID: 0}
 --- !u!114 &11467266
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3565,6 +3616,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 24
+  placement: 0
+  installedComponent: {fileID: 0}
 --- !u!114 &11467268
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3577,6 +3630,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 25
+  placement: 0
+  installedComponent: {fileID: 0}
 --- !u!114 &11467270
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3589,6 +3644,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 26
+  placement: 0
+  installedComponent: {fileID: 0}
 --- !u!114 &11467272
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3601,6 +3658,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 27
+  placement: 0
+  installedComponent: {fileID: 0}
 --- !u!114 &11467274
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3613,6 +3672,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 28
+  placement: 0
+  installedComponent: {fileID: 0}
 --- !u!114 &11467276
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3625,6 +3686,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 29
+  placement: 0
+  installedComponent: {fileID: 0}
 --- !u!114 &11467278
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3637,6 +3700,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 30
+  placement: 0
+  installedComponent: {fileID: 0}
 --- !u!114 &11467280
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3649,6 +3714,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 31
+  placement: 0
+  installedComponent: {fileID: 0}
 --- !u!114 &11467282
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3661,6 +3728,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 32
+  placement: 0
+  installedComponent: {fileID: 0}
 --- !u!114 &11467284
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3673,6 +3742,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 33
+  placement: 0
+  installedComponent: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
