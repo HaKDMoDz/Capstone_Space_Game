@@ -938,6 +938,8 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
 
     private IEnumerator ActivateWeapons(PlayerShip _targetShip, ShipComponent _targetComponent)
     {
+        yield return StartCoroutine(CameraDirector.Instance.OverheadAimAt(trans, _targetShip.transform, GlobalVars.CameraAimAtPeriod));
+
         float distanceToTarget = (_targetShip.transform.position - trans.position).magnitude;
 
         List<ShipComponent> selectedComponents;
