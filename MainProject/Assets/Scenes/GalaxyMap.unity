@@ -6994,9 +6994,10 @@ GameObject:
   - 222: {fileID: 270297093}
   - 114: {fileID: 270297092}
   - 114: {fileID: 270297091}
-  - 114: {fileID: 270297090}
   - 114: {fileID: 270297089}
   - 114: {fileID: 270297088}
+  - 95: {fileID: 270297095}
+  - 114: {fileID: 270297090}
   m_Layer: 5
   m_Name: ShipDesignSceneButton
   m_TagString: Untagged
@@ -7040,7 +7041,7 @@ MonoBehaviour:
 --- !u!114 &270297090
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400002, guid: 9075a17656475c14a85b2635790066c8,
+  m_PrefabParentObject: {fileID: 11472896, guid: 9075a17656475c14a85b2635790066c8,
     type: 2}
   m_PrefabInternal: {fileID: 824355003}
   m_GameObject: {fileID: 270297087}
@@ -7049,11 +7050,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdefea4ce8acce0498f21a8f436a63c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
-    m_NormalColor: {r: .572549045, g: .701960802, b: .725490212, a: 1}
-    m_HighlightedColor: {r: .760784328, g: .886274517, b: .909803927, a: 1}
-    m_PressedColor: {r: .262745112, g: .509803951, b: .541176498, a: 1}
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: .960784316, g: .960784316, b: .960784316, a: 1}
+    m_PressedColor: {r: .784313738, g: .784313738, b: .784313738, a: 1}
     m_DisabledColor: {r: .784313738, g: .784313738, b: .784313738, a: .501960814}
     m_ColorMultiplier: 1
     m_FadeDuration: .100000001
@@ -7066,7 +7067,7 @@ MonoBehaviour:
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
-  m_TargetGraphic: {fileID: 501482401}
+  m_TargetGraphic: {fileID: 0}
   m_TargetGameObject: {fileID: 0}
 --- !u!114 &270297091
 MonoBehaviour:
@@ -7081,12 +7082,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 2
+  m_Transition: 3
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: .960784316, g: .960784316, b: .960784316, a: 1}
@@ -7176,6 +7177,22 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
+--- !u!95 &270297095
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 9506688, guid: 9075a17656475c14a85b2635790066c8,
+    type: 2}
+  m_PrefabInternal: {fileID: 824355003}
+  m_GameObject: {fileID: 270297087}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b6f8b0540bd10284ca24d43499236a23, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 1
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!1 &271868858
 GameObject:
   m_ObjectHideFlags: 0
@@ -8814,7 +8831,7 @@ ParticleSystem:
           tangentMode: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
-      minMaxState: 3
+      minMaxState: 0
     startSpeed:
       scalar: 0
       maxCurve:
@@ -8943,7 +8960,7 @@ ParticleSystem:
         rgba: 4294967295
       minMaxState: 0
     startSize:
-      scalar: .75
+      scalar: 1.25
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -8958,7 +8975,7 @@ ParticleSystem:
         serializedVersion: 2
         m_Curve:
         - time: 0
-          value: .666666687
+          value: .800000012
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -9325,17 +9342,17 @@ ParticleSystem:
         m_PostInfinity: 2
       minMaxState: 2
     z:
-      scalar: 200
+      scalar: 400
       maxCurve:
         serializedVersion: 2
         m_Curve:
         - time: 0
-          value: .19188191
-          inSlope: -.47241047
-          outSlope: -.47241047
+          value: 1
+          inSlope: 0
+          outSlope: 0
           tangentMode: 0
         - time: 1
-          value: -.0073800683
+          value: 1
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -9344,13 +9361,13 @@ ParticleSystem:
       minCurve:
         serializedVersion: 2
         m_Curve:
-        - time: 0
-          value: .996309936
-          inSlope: -1.64443815
-          outSlope: -1.64443815
+        - time: .0240384582
+          value: .00891047716
+          inSlope: 0
+          outSlope: 0
           tangentMode: 0
         - time: 1
-          value: 0
+          value: .0107523203
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -12112,10 +12129,10 @@ ParticleSystem:
           rgba: 1895825663
         key2:
           serializedVersion: 2
-          rgba: 255
+          rgba: 587202815
         key3:
           serializedVersion: 2
-          rgba: 0
+          rgba: 255
         key4:
           serializedVersion: 2
           rgba: 0
@@ -12130,22 +12147,22 @@ ParticleSystem:
           rgba: 0
         ctime0: 0
         ctime1: 19468
-        ctime2: 65535
-        ctime3: 0
+        ctime2: 48959
+        ctime3: 65535
         ctime4: 0
         ctime5: 0
         ctime6: 0
         ctime7: 0
         atime0: 0
         atime1: 8867
-        atime2: 65535
-        atime3: 0
+        atime2: 56283
+        atime3: 65535
         atime4: 0
         atime5: 0
         atime6: 0
         atime7: 0
-        m_NumColorKeys: 3
-        m_NumAlphaKeys: 3
+        m_NumColorKeys: 4
+        m_NumAlphaKeys: 4
       minGradient:
         key0:
           serializedVersion: 2
@@ -16542,6 +16559,47 @@ Light:
   m_ShadowAngle: 0
   m_IndirectIntensity: 1
   m_AreaSize: {x: 1, y: 1}
+--- !u!1 &581752071
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 581752073}
+  - 114: {fileID: 581752072}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &581752072
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 581752071}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09e38a06e8302c64290dfc57484eb6c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  numSources: 32
+  pitchRange: {x: .699999988, y: 1.29999995}
+--- !u!4 &581752073
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 581752071}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -786.136719, y: -.137451172, z: 225.062622}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 14
 --- !u!1 &605755913
 GameObject:
   m_ObjectHideFlags: 0
@@ -16735,6 +16793,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   hullIcon: {fileID: 0}
+  playerAccessible: 0
 --- !u!4 &646591262
 Transform:
   m_ObjectHideFlags: 0
@@ -19720,7 +19779,7 @@ GameObject:
   m_Layer: 0
   m_Name: laserMuzzleFire
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -1003283189, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
