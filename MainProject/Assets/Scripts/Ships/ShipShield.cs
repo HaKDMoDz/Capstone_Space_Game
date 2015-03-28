@@ -25,7 +25,7 @@ public class ShipShield : MonoBehaviour
     {
         Vector3 localHitPoint = trans.InverseTransformPoint(hitPoint);
         //Debug.Log("Hit Point: " + hitPoint + " Local: " + localHitPoint);
-        shieldMat.SetVector("_Position", localHitPoint.GetVector4());
+        shieldMat.SetVector("_Position", localHitPoint.ToVector4());
         StartCoroutine(ShieldEffect());
     }
 

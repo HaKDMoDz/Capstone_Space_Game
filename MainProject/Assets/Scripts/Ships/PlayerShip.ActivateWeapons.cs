@@ -66,8 +66,8 @@ public partial class PlayerShip : TurnBasedUnit
         {
             targetComponent.Selected = false;
             targetComponent = null;
-            targetShip.ShowHPBars(false);
         }
+        if (targetShip) targetShip.ShowHPBars(false);
         InputManager.Instance.RegisterKeysDown(EndTurn, KeyCode.KeypadEnter, KeyCode.Return);
         TutorialSystem.Instance.ShowTutorial(TutorialSystem.TutorialType.EndTurn, true);
         yield return null;
