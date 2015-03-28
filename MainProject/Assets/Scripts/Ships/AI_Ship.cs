@@ -108,8 +108,13 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
                 activeComponents = components;
 
                 trans.LookAt(targetPlayer.transform);
-                yield return StartCoroutine(ActivateWeapons(targetPlayer, targetComponent));
-
+                while ( targetPlayer.HullHP > 0 && CurrentPower > activeComponents.Where(c => c.CompType == ComponentType.Weapon).Aggregate((curr, next) => curr.ActivationCost < next.ActivationCost ? curr : next).ActivationCost)
+                {
+                    Debug.LogWarning(targetPlayer.HullHP);
+                    yield return StartCoroutine(ActivateWeapons(targetPlayer, targetComponent));
+                    yield return new WaitForSeconds(0.25f);
+                    targetComponent = TargetComponent(targetPlayer);
+                }
                 receivedAttackCommand = false;
 #if FULL_DEBUG
                 Debug.Log(name + "- Attack end");
@@ -219,8 +224,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
                 confidence = (float)aiFleetStrength / (float)totalShips;
                 //adjust based on ship and target
 
-                Debug.LogWarning(confidence);
-                //case 1 ... closeset
+                //case 1 ... closest enemy
                 if (confidence < AIManager.tgtClosest) //closest enemy
                 {
                     return playerShips.Aggregate((current, next) => Vector3.Distance(current.transform.position, selfPos) < Vector3.Distance(next.transform.position, selfPos) ? current : next);
@@ -752,10 +756,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         {
             return null;
         }
-        Debug.LogError(_ship);
         ShipComponent _targetComponent = null;
-
-        //float confidence = Random.Range(0.0f, 1.0f);
         float confidence = 0;
 
         //get count for player fleet
@@ -764,13 +765,10 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         int aiFleetStrength = GameObject.FindObjectsOfType<AI_Ship>().Count();
 
         //calculate basis for confidence
-
         int totalShips = playerFleetStrength + aiFleetStrength;
 
         confidence = (float)aiFleetStrength / (float)totalShips;
         //adjust based on ship and target
-
-        Debug.LogError(confidence);
 
         confidence += trialShipVsShip(_ship);
 
@@ -782,31 +780,24 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         float confLevel3Cutoff = 0.75f;
         float confLevel4Cutoff = 0.9f;
 
-        Debug.LogError(confidence);
-
         if (confidence < confLevel1Cutoff)
         {
-            Debug.LogWarning("AI_Ship: Targeting component: level 1");
             targetCompConfLevel1(_ship, out _targetComponent);
         }
         else if (confidence < confLevel2Cutoff)
         {
-            Debug.LogWarning("AI_Ship: Targeting component: level 2");
             targetCompConfLevel2(_ship, out _targetComponent);
         }
         else if (confidence < confLevel3Cutoff)
         {
-            Debug.LogWarning("AI_Ship: Targeting component: level 3");
             targetCompConfLevel3(_ship, out _targetComponent);
         }
         else if (confidence < confLevel4Cutoff)
         {
-            Debug.LogWarning("AI_Ship: Targeting component: level 4");
             targetCompConfLevel4(_ship, out _targetComponent);
         }
         else
         {
-            Debug.LogWarning("AI_Ship: Targeting component: level 5");
             targetCompConfLevel5(_ship, out _targetComponent);
         }
 
@@ -943,13 +934,24 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
     {
         float distanceToTarget = (_targetShip.transform.position - trans.position).magnitude;
 
-        Debug.LogWarning(distanceToTarget);
         List<ShipComponent> selectedComponents;
         if (distanceToTarget < laserRange)
         {
-            selectedComponents = components.Where(c => c.CompSpecificType == ComponentSpecificType.LASER && c.gameObject.activeSelf).ToList();
-            selectedComponents.AddRange(components.Where(c => c.CompSpecificType == ComponentSpecificType.MISSILE && c.gameObject.activeSelf));
-            selectedComponents.AddRange(components.Where(c => c.CompSpecificType == ComponentSpecificType.MASS_D && c.gameObject.activeSelf));
+            selectedComponents = new List<ShipComponent>();
+
+            if (_targetShip.ShieldStrength > 0)
+            {
+                selectedComponents.AddRange(components.Where(c => c.CompSpecificType == ComponentSpecificType.LASER && c.gameObject.activeSelf));
+                selectedComponents.AddRange(components.Where(c => c.CompSpecificType == ComponentSpecificType.MISSILE && c.gameObject.activeSelf));
+                selectedComponents.AddRange(components.Where(c => c.CompSpecificType == ComponentSpecificType.MASS_D && c.gameObject.activeSelf));
+            }
+            else
+            {
+                selectedComponents.AddRange(components.Where(c => c.CompSpecificType == ComponentSpecificType.MISSILE && c.gameObject.activeSelf));
+                selectedComponents.AddRange(components.Where(c => c.CompSpecificType == ComponentSpecificType.MASS_D && c.gameObject.activeSelf));
+                selectedComponents.AddRange(components.Where(c => c.CompSpecificType == ComponentSpecificType.LASER && c.gameObject.activeSelf));
+            }
+           
         }
         else if (distanceToTarget < missileRange)
         {
