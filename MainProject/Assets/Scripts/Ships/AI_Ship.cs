@@ -7,7 +7,7 @@ using System.Linq;
 public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     #region Fields
-    
+
     private bool receivedMoveCommand;
     private bool receivedAttackCommand;
 
@@ -16,17 +16,17 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
     //TEMP
     //private float damagePerAttack = 35.0f;
 
-    private static float frontalAssaultRange = 50.0f;
-    private static Component_Weapon laser = ComponentTable.id_comp_table.Where(c => c.Value.CompSpecificType == ComponentSpecificType.LASER) as Component_Weapon;
-    private static float laserRange = laser.range;
-    private static Component_Weapon missile = ComponentTable.id_comp_table.Where(c => c.Value.CompSpecificType == ComponentSpecificType.MISSILE)   as Component_Weapon;
-    private float missileRange = missile.range;
-    private static Component_Weapon railgun = ComponentTable.id_comp_table.Where(c => c.Value.CompSpecificType == ComponentSpecificType.MASS_D) as Component_Weapon;
-    private float railgunRange = railgun.range;
+    private float frontalAssaultRange = 50.0f;
+    private Component_Weapon laser;
+    public float laserRange;
+    private Component_Weapon missile;
+    public float missileRange;
+    private Component_Weapon railgun;
+    public float railgunRange;
 
     private PlayerShip targetShip;
 
-    private float range = frontalAssaultRange;
+    private float range;
 
     //references
     public AI_Attack ai_Attack { get; private set; }
@@ -61,19 +61,28 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
 
         trans = transform;
 
+        laser = ComponentTable.id_comp_table.Where(c => c.Value.CompSpecificType == ComponentSpecificType.LASER).ToList().First().Value as Component_Weapon;
+        missile = ComponentTable.id_comp_table.Where(c => c.Value.CompSpecificType == ComponentSpecificType.MISSILE).ToList().First().Value as Component_Weapon;
+        railgun = ComponentTable.id_comp_table.Where(c => c.Value.CompSpecificType == ComponentSpecificType.MASS_D).ToList().First().Value as Component_Weapon;
 
+        Debug.Log(laser);
+        laserRange = laser.range;
+        missileRange = missile.range;
+        railgunRange = railgun.range;
+
+        range = frontalAssaultRange;
     }
 
     protected override void PreTurnActions()
     {
-        
+
     }
     public override IEnumerator ExecuteTurn()
     {
         yield return StartCoroutine(base.ExecuteTurn());
-        #if FULL_DEBUG
+#if FULL_DEBUG
         Debug.Log("AI unit turn");
-        #endif
+#endif
 
         PreTurnActions();
 
@@ -127,21 +136,21 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
 
     protected override void PostTurnActions()
     {
-        
+
     }
 
     public void Move(PlayerShip targetPlayer, AI_Fleet.PlacementType _placement)
     {
         if (!receivedMoveCommand)
         {
-            #if FULL_DEBUG
+#if FULL_DEBUG
             Debug.Log("Move command received " + ShipBPMetaData.BlueprintName);
-            #endif
+#endif
             Vector3 enemyPosition = targetPlayer.transform.position;
             switch (_placement)
             {
                 case AI_Fleet.PlacementType.FORWARD:
-                    
+
                     shipMove.destination = enemyPosition + (targetPlayer.transform.forward * range);
                     break;
                 case AI_Fleet.PlacementType.AFT:
@@ -170,16 +179,16 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
             {
                 shipMove.destination = trans.position;
             }
-            
+
         }
     }
     public void Attack()
     {
         if (!receivedAttackCommand)
         {
-            #if FULL_DEBUG
+#if FULL_DEBUG
             Debug.Log("Attack command received " + ShipBPMetaData.BlueprintName);
-            #endif
+#endif
             receivedAttackCommand = true;
         }
     }
@@ -195,7 +204,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
             if (targetShip == null)
             {
                 Vector3 selfPos = trans.position;
-                
+
                 //determine which enemy to target: strongest, weakest, closest, furthest
                 float confidence = Random.Range(0.0f, 1.0f);
 
@@ -210,7 +219,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
                 if (confidence > 1 - AIManager.tgtClosest + AIManager.tgtFarthest)
                 {
                     //farthest enemy
-                    return playerShips.Aggregate((current, next) =>Vector3.Distance(current.transform.position, selfPos) > Vector3.Distance(next.transform.position, selfPos) ? current : next);
+                    return playerShips.Aggregate((current, next) => Vector3.Distance(current.transform.position, selfPos) > Vector3.Distance(next.transform.position, selfPos) ? current : next);
                 }
 
                 //case 3 ... strongest
@@ -228,7 +237,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
 
             //target ship wasn't null so return your current target
             return targetShip;
-        }     
+        }
     }
 
     private ShipComponent GetFirstComponentInDirection(ShipComponent component)
@@ -274,53 +283,25 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         //lookat target
         trans.LookAt(_ship.transform);
 
-        ////setup raytrace
-        //float distanceToTarget;
-        //RaycastHit hit;
 
-        //Debug.DrawRay(trans.position + ComponentGridTrans.position, ((_ship.transform.position + _ship.ComponentGridTrans.position) - (trans.position + ComponentGridTrans.position)), Color.red, 1000.0f, false);
-        //if (Physics.Raycast(transform.position + ComponentGridTrans.position, ((_ship.transform.position + _ship.ComponentGridTrans.position) - (trans.position + ComponentGridTrans.position)), out hit, 1 << TagsAndLayers.ComponentsLayer))
-        //{
-        //    distanceToTarget = hit.distance;
-        //    Debug.LogError(hit.collider.name + " : " + distanceToTarget);
-        //}
-        //_targetComponent = hit.collider.GetComponent<ShipComponent>();
-        //Debug.LogError(_targetComponent + ":" + _targetComponent.Placement);
-
-        ShipComponent idealTargetComponent = null;
-        //go in order of: weapons, defensive, support, engineering
-        if (_ship.Components.Where(c => c.gameObject.activeSelf && c.CompType == ComponentType.Weapon).ToList().Count > 0)
+        //select range based on longest range of component
+        if (components.Where(c => c.CompSpecificType == ComponentSpecificType.MASS_D && c.gameObject.activeSelf).Count() > 0)
         {
-            idealTargetComponent = _ship.Components.Where(c => c.gameObject.activeSelf && c.CompType == ComponentType.Weapon).Aggregate((curr, next) => curr.CompHP <= next.CompHP ? curr : next);
+            range = railgunRange;
         }
-        else if (_ship.Components.Where(c => c.gameObject.activeSelf && c.CompType == ComponentType.Defense).ToList().Count > 0)
+        else if (components.Where(c => c.CompSpecificType == ComponentSpecificType.MISSILE && c.gameObject.activeSelf).Count() > 0)
         {
-            idealTargetComponent = _ship.Components.Where(c => c.gameObject.activeSelf && c.CompType == ComponentType.Defense).Aggregate((curr, next) => curr.CompHP <= next.CompHP ? curr : next);
+            range = missileRange;
         }
-        else if (_ship.Components.Where(c => c.gameObject.activeSelf && c.CompType == ComponentType.Support).ToList().Count > 0)
+        else if (components.Where(c => c.CompSpecificType == ComponentSpecificType.LASER && c.gameObject.activeSelf).Count() > 0)
         {
-            idealTargetComponent = _ship.Components.Where(c => c.gameObject.activeSelf && c.CompType == ComponentType.Support).Aggregate((curr, next) => curr.CompHP <= next.CompHP ? curr : next);
-        }
-        else if (_ship.Components.Where(c => c.gameObject.activeSelf && c.CompType == ComponentType.Engineering).ToList().Count > 0)
-        {
-            idealTargetComponent = _ship.Components.Where(c => c.gameObject.activeSelf && c.CompType == ComponentType.Engineering).Aggregate((curr, next) => curr.CompHP <= next.CompHP ? curr : next);
-
+            range = laserRange;
         }
         else
         {
-            idealTargetComponent = null;
-            Debug.LogError("AI_Ship: Target Component Lvl 1: NO COMPONENTS ON ENEMY SHIP. assigning null target"); 
+            range = frontalAssaultRange;
         }
 
-        _targetComponent = GetFirstComponentInDirection(idealTargetComponent);
-
-    }
-
-
-    private void targetCompConfLevel2(PlayerShip _ship, out ShipComponent _targetComponent)
-    {
-        //lookat target
-        trans.LookAt(_ship.transform);
 
         ShipComponent idealTargetComponent = null;
         //go in order of: weapons, defensive, support, engineering
@@ -348,7 +329,61 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         }
 
         _targetComponent = GetFirstComponentInDirection(idealTargetComponent);
-        
+
+    }
+
+
+    private void targetCompConfLevel2(PlayerShip _ship, out ShipComponent _targetComponent)
+    {
+        //lookat target
+        trans.LookAt(_ship.transform);
+
+        //select range based on shortest range of component
+        if (components.Where(c => c.CompSpecificType == ComponentSpecificType.LASER && c.gameObject.activeSelf).Count() > 0)
+        {
+            range = laserRange;
+        }
+        else if (components.Where(c => c.CompSpecificType == ComponentSpecificType.MISSILE && c.gameObject.activeSelf).Count() > 0)
+        {
+            range = missileRange;
+        }
+        else if (components.Where(c => c.CompSpecificType == ComponentSpecificType.MASS_D && c.gameObject.activeSelf).Count() > 0)
+        {
+            range = railgunRange;
+        }
+        else
+        {
+            range = frontalAssaultRange;
+        }
+
+
+        ShipComponent idealTargetComponent = null;
+        //go in order of: weapons, defensive, support, engineering
+        if (_ship.Components.Where(c => c.gameObject.activeSelf && c.CompType == ComponentType.Weapon).ToList().Count > 0)
+        {
+            idealTargetComponent = _ship.Components.Where(c => c.gameObject.activeSelf && c.CompType == ComponentType.Weapon).Aggregate((curr, next) => curr.CompHP <= next.CompHP ? curr : next);
+        }
+        else if (_ship.Components.Where(c => c.gameObject.activeSelf && c.CompType == ComponentType.Defense).ToList().Count > 0)
+        {
+            idealTargetComponent = _ship.Components.Where(c => c.gameObject.activeSelf && c.CompType == ComponentType.Defense).Aggregate((curr, next) => curr.CompHP <= next.CompHP ? curr : next);
+        }
+        else if (_ship.Components.Where(c => c.gameObject.activeSelf && c.CompType == ComponentType.Support).ToList().Count > 0)
+        {
+            idealTargetComponent = _ship.Components.Where(c => c.gameObject.activeSelf && c.CompType == ComponentType.Support).Aggregate((curr, next) => curr.CompHP <= next.CompHP ? curr : next);
+        }
+        else if (_ship.Components.Where(c => c.gameObject.activeSelf && c.CompType == ComponentType.Engineering).ToList().Count > 0)
+        {
+            idealTargetComponent = _ship.Components.Where(c => c.gameObject.activeSelf && c.CompType == ComponentType.Engineering).Aggregate((curr, next) => curr.CompHP <= next.CompHP ? curr : next);
+
+        }
+        else
+        {
+            idealTargetComponent = null;
+            Debug.LogError("AI_Ship: Target Component Lvl 1: NO COMPONENTS ON ENEMY SHIP. assigning null target");
+        }
+
+        _targetComponent = GetFirstComponentInDirection(idealTargetComponent);
+
     }
 
     private void targetCompConfLevel3(PlayerShip _ship, out ShipComponent _targetComponent)
@@ -356,6 +391,8 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         //lookat target
         trans.LookAt(_ship.transform);
         ShipComponent idealTargetComponent = null;
+
+        range = frontalAssaultRange;
 
         //go in order of: weapons, defensive, support, engineering
         if (_ship.Components.Where(c => c.gameObject.activeSelf && c.CompType == ComponentType.Weapon).ToList().Count > 0)
@@ -386,6 +423,8 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
 
     private void targetCompConfLevel4(PlayerShip _ship, out ShipComponent _targetComponent)
     {
+        range = frontalAssaultRange;
+
         //make lists of components by placement
         List<ShipComponent> fwdComponents = new List<ShipComponent>();
         fwdComponents = _ship.Components.Where(c => c.Placement == AI_Fleet.PlacementType.FORWARD && c.gameObject.activeSelf).ToList<ShipComponent>();
@@ -413,7 +452,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         Debug.Log("aft arm: " + aftArmour);
         Debug.Log("port arm: " + portArmour);
         Debug.Log("star arm: " + starArmour);
-        
+
         //target from that side
         if (fwdArmour <= aftArmour && fwdArmour <= portArmour && fwdArmour <= starArmour)
         {
@@ -524,11 +563,13 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         {
             targetCompConfLevel5(_ship, out _targetComponent);
         }
-        
+
     }
 
     private void targetCompConfLevel5(PlayerShip _ship, out ShipComponent _targetComponent)
     {
+        range = frontalAssaultRange;
+
         ShipComponent idealTargetComponent = null;
         //go in order of: engineering, support, weapons, defensive
         if (_ship.Components.Where(c => c.gameObject.activeSelf && c.CompType == ComponentType.Engineering).ToList().Count > 0)
@@ -554,7 +595,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         }
 
         _targetComponent = GetFirstComponentInDirection(idealTargetComponent);
-        
+
     }
 
     private float trialShipVsShip(PlayerShip _targetShip)
@@ -689,12 +730,12 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
 
         if (aiHP <= 0)
         {
-            runningAdjustment -= 0.25f;//replace with proper external weighting modifiable by GA
+            runningAdjustment -= 0.1f;//replace with proper external weighting modifiable by GA
         }
 
         if (playerHP <= 0)
         {
-            runningAdjustment += 0.25f;//replace with proper external weighting modifiable by GA
+            runningAdjustment += 0.1f;//replace with proper external weighting modifiable by GA
         }
 
         //return the confidence adjustment
@@ -722,21 +763,22 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
 
         int totalShips = playerFleetStrength + aiFleetStrength;
 
-        confidence = (float)playerFleetStrength / (float)totalShips;
+        confidence = (float)aiFleetStrength / (float)totalShips;
         //adjust based on ship and target
+
+        Debug.LogError(confidence);
 
         confidence += trialShipVsShip(_ship);
 
         //setup a 5 step system ranging from kite at max range to target most valuable components first and get to them any way you can
         //set confidence to choose from those 5 options
 
-        //TEST force confidence for testing
-        confidence = 0.54f;
+        float confLevel1Cutoff = 0.3f;
+        float confLevel2Cutoff = 0.5f;
+        float confLevel3Cutoff = 0.75f;
+        float confLevel4Cutoff = 0.9f;
 
-        float confLevel1Cutoff = 0.2f;
-        float confLevel2Cutoff = 0.4f;
-        float confLevel3Cutoff = 0.6f;
-        float confLevel4Cutoff = 0.8f;
+        Debug.LogError(confidence);
 
         if (confidence < confLevel1Cutoff)
         {
@@ -758,7 +800,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
             Debug.LogWarning("AI_Ship: Targeting component: level 4");
             targetCompConfLevel4(_ship, out _targetComponent);
         }
-        else 
+        else
         {
             Debug.LogWarning("AI_Ship: Targeting component: level 5");
             targetCompConfLevel5(_ship, out _targetComponent);

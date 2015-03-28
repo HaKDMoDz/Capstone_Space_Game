@@ -18,7 +18,7 @@ public class AI_Attack : MonoBehaviour
         GetComponent<AI_Ship>().CurrentPower = GetComponent<AI_Ship>().MaxPower;
         bool keepFiring = true;
 
-
+        float distanceToTarget = (_target.transform.position - transform.position).magnitude;
 
         while (keepFiring)
         {
@@ -38,7 +38,7 @@ public class AI_Attack : MonoBehaviour
             {
                 foreach (Comp_Wpn_Laser weapon in components.Where(c => c is Comp_Wpn_Laser))
                 {
-                    if (_target.CompHP > 0 && weapon.PowerDrain <= GetComponent<AI_Ship>().CurrentPower && _target.ParentShip.HullHP > 0)
+                    if (_target.CompHP > 0 && weapon.PowerDrain <= GetComponent<AI_Ship>().CurrentPower && _target.ParentShip.HullHP > 0 && distanceToTarget < GetComponent<AI_Ship>().laserRange)
                     {
                         GetComponent<AI_Ship>().CurrentPower -= weapon.PowerDrain;
                         yield return StartCoroutine(weapon.Fire(_target, () => { }));
@@ -60,13 +60,35 @@ public class AI_Attack : MonoBehaviour
             }
             else
             {
-                foreach (Component_Weapon weapon in components.Where(c => c is Comp_Wpn_Missile || c is Comp_Wpn_Railgun))
+                foreach (Component_Weapon weapon in components.Where(c => c is Comp_Wpn_Missile))
                 {
-                    if (_target.CompHP > 0 && weapon.PowerDrain <= GetComponent<AI_Ship>().CurrentPower && _target.ParentShip.HullHP > 0)
+                    if (_target.CompHP > 0 && weapon.PowerDrain <= GetComponent<AI_Ship>().CurrentPower && _target.ParentShip.HullHP > 0 && distanceToTarget < GetComponent<AI_Ship>().missileRange)
                     {
                         GetComponent<AI_Ship>().CurrentPower -= weapon.PowerDrain;
                         yield return StartCoroutine(weapon.Fire(_target, () => { }));
                         
+                        if (_target.ParentShip.HullHP <= 0)
+                        {
+                            GetComponent<AI_Ship>().RetargetNewShip();
+                            GetComponent<AI_Ship>().RetargetNewComponent();
+                        }
+                    }
+                    else
+                    {
+                        {
+                            keepFiring = false;
+                        }
+                        break;
+                    }
+                }
+
+                foreach (Component_Weapon weapon in components.Where(c => c is Comp_Wpn_Railgun))
+                {
+                    if (_target.CompHP > 0 && weapon.PowerDrain <= GetComponent<AI_Ship>().CurrentPower && _target.ParentShip.HullHP > 0 && distanceToTarget < GetComponent<AI_Ship>().railgunRange)
+                    {
+                        GetComponent<AI_Ship>().CurrentPower -= weapon.PowerDrain;
+                        yield return StartCoroutine(weapon.Fire(_target, () => { }));
+
                         if (_target.ParentShip.HullHP <= 0)
                         {
                             GetComponent<AI_Ship>().RetargetNewShip();
