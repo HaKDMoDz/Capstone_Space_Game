@@ -973,10 +973,11 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         
 
         Component_Weapon[] selectedWeapons = selectedComponents.Cast<Component_Weapon>().ToArray();
-        int numWeaponsToActivate = GetNumWeaponsToActivate(selectedWeapons[0], _targetShip, _targetComponent);
+        int numWeaponsToActivate = GetNumWeaponsToActivate(selectedWeapons[0], _targetShip, _targetComponent, selectedWeapons.Length);
 #if FULL_DEBUG
         Debug.Log("ActivateWeapons");
         Debug.Log("numWeaponsToActivate " + numWeaponsToActivate);
+        Debug.Log("num selected weapons: " + selectedWeapons.Length);
 #endif
         float totalPowerUsed = numWeaponsToActivate * selectedWeapons[0].ActivationCost;
         CurrentPower -= totalPowerUsed;
@@ -997,30 +998,30 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
     /// Returns the number of weapon activations required to kill the target component or ship - avoids over-firing
     /// </summary>
     /// <returns></returns>
-    private int GetNumWeaponsToActivate(Component_Weapon weapon, PlayerShip _targetShip, ShipComponent _targetComponent)
+    private int GetNumWeaponsToActivate(Component_Weapon weapon, PlayerShip _targetShip, ShipComponent _targetComponent, int numSelectedWeapons)
     {
         int numWeaponsToKillShields = Mathf.CeilToInt(_targetShip.ShieldStrength / weapon.ShieldDamage);
 #if FULL_DEBUG
-        //Debug.LogWarning("Weapon activation calculation: ");
-        //Debug.Log("Target shield: " + _targetShip.ShieldStrength + " weapon shield dmg " + weapon.ShieldDamage + " num to kill shield " + numWeaponsToKillShields);
+        Debug.LogWarning("Weapon activation calculation: ");
+        Debug.Log("Target shield: " + _targetShip.ShieldStrength + " weapon shield dmg " + weapon.ShieldDamage + " num to kill shield " + numWeaponsToKillShields);
 #endif
-        List<ShipComponent> selectedComponents = components.Where(c => c.CompType == ComponentType.Weapon && c.gameObject.activeSelf).ToList();
+        //List<ShipComponent> selectedComponents = components.Where(c => c.CompType == ComponentType.Weapon && c.gameObject.activeSelf).ToList();
 
-        if (numWeaponsToKillShields > selectedComponents.Count)
+        if (numWeaponsToKillShields > numSelectedWeapons)
         {
-            return selectedComponents.Count;
+            return numSelectedWeapons;
         }
         int numWpnsToKillComp = Mathf.CeilToInt(_targetComponent.CompHP / weapon.ComponentDamage);
         int numWpnsToKillHull = Mathf.CeilToInt(_targetShip.HullHP / weapon.HullDamage);
 #if FULL_DEBUG
-        //Debug.Log("Target comp HP: " + _targetComponent.CompHP + " weapon comp dmg " + weapon.ComponentDamage + " num to kill comp " + numWpnsToKillComp);
-        //Debug.Log("Target hull HP: " + _targetShip.HullHP + " weapon hull dmg " + weapon.HullDamage + " num to kill hull " + numWpnsToKillHull);
+        Debug.Log("Target comp HP: " + _targetComponent.CompHP + " weapon comp dmg " + weapon.ComponentDamage + " num to kill comp " + numWpnsToKillComp);
+        Debug.Log("Target hull HP: " + _targetShip.HullHP + " weapon hull dmg " + weapon.HullDamage + " num to kill hull " + numWpnsToKillHull);
 #endif
         //num weapon activations is the minimum to kill target component or to kill hull
         int totalWpnActivations = numWeaponsToKillShields + (numWpnsToKillComp < numWpnsToKillHull ? numWpnsToKillComp : numWpnsToKillHull);
-        if (totalWpnActivations > selectedComponents.Count)
+        if (totalWpnActivations > numSelectedWeapons)
         {
-            return selectedComponents.Count;
+            return numSelectedWeapons;
         }
         return totalWpnActivations;
     }

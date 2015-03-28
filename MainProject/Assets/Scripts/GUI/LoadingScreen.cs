@@ -27,11 +27,11 @@ public class LoadingScreen : MonoBehaviour
     private IEnumerator LoadLevelAsync()
     {
         Debug.LogWarning("Loading sync level " + levelToLoad);
-        loadingbar.SetValue(0.0f);
+        loadingbar.SetValue(0.0f, false);
         async = Application.LoadLevelAsync(levelToLoad);
         while (!async.isDone)
         {
-            loadingbar.SetValue(async.progress);
+            loadingbar.SetValue(async.progress, true);
             Debug.Log("Loading Progress: " + async.progress);
             yield return null;
         }

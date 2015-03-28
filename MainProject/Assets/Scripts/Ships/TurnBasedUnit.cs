@@ -119,7 +119,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
         private set 
         {
             float damage = hullHP - value;
-            hpBar.ChangeValue(-damage / MaxHullHP);
+            hpBar.ChangeValue(-damage / MaxHullHP, true);
             hullHP = value; 
         }
     }
@@ -132,7 +132,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
         private set
         {
             float damage = shieldStrength - value;
-            shieldBar.ChangeValue(-damage / MaxShields);
+            shieldBar.ChangeValue(-damage / MaxShields, true);
             shieldStrength = value; 
         }
     }

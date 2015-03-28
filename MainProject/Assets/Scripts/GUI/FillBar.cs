@@ -14,8 +14,11 @@ public class FillBar : MonoBehaviour
 {
     [SerializeField]
     private Image fillImage;
+    private float fillSpeed = 10.0f;
 
-    public void SetValue(float value)
+    private float targetValue;
+
+    public void SetValue(float value, bool lerp)
     {
 #if FULL_DEBUG
         if (value < 0.0f || value > 1.0f)
@@ -25,10 +28,21 @@ public class FillBar : MonoBehaviour
         }
 #endif
         //Debug.Log("Value " + value);
-        fillImage.fillAmount = value;
+        //fillImage.fillAmount = value;
+        //Debug.Log("enabled " + this.enabled);
+        if (lerp && gameObject.activeInHierarchy)
+        {
+            targetValue = value;
+            StopCoroutine("LerpToTargetValue");
+            StartCoroutine("LerpToTargetValue");
+        }
+        else
+        {
+            fillImage.fillAmount = value;
+        }
     }
 
-    public void ChangeValue(float delta)
+    public void ChangeValue(float delta, bool lerp)
     {
 #if FULL_DEBUG
         float currentVal = fillImage.fillAmount;
@@ -38,7 +52,8 @@ public class FillBar : MonoBehaviour
             Debug.LogWarning("Value would be outside the 0 - 1 range if incremented by " + delta + "current value: " + currentVal + " result: "+newVal);
         }
 #endif
-        fillImage.fillAmount += delta;
+        //fillImage.fillAmount += delta;
+        SetValue(fillImage.fillAmount + delta, lerp);
     }
 
     public void SetFillColour(Color fillColour)
@@ -46,4 +61,15 @@ public class FillBar : MonoBehaviour
         fillImage.color = fillColour;
     }
 
+    private IEnumerator LerpToTargetValue()
+    {
+        float currentVal = fillImage.fillAmount;
+        while (Mathf.Abs(currentVal - targetValue) > float.Epsilon)
+        {
+            currentVal = Mathf.Lerp(currentVal, targetValue, fillSpeed * Time.deltaTime);
+            fillImage.fillAmount = currentVal;
+            yield return null;
+        }
+        fillImage.fillAmount = targetValue;
+    }
 }
