@@ -45,7 +45,7 @@ public class MainMenuCamera : Singleton<MainMenuCamera>
         currentAngle *= Mathf.Deg2Rad;
         destAngle *= Mathf.Deg2Rad;
         //not at dest angle
-        while(Mathf.Abs(destAngle-currentAngle)>GlobalVars.LerpDistanceEpsilon)
+        while(Mathf.Abs(destAngle-currentAngle)> Mathf.Pow(GlobalVars.LerpDistanceEpsilon,4.0f))
         {
             float xOffset = orbitRadius * Mathf.Sin(currentAngle);
             float yOffset = orbitRadius * Mathf.Cos(currentAngle);

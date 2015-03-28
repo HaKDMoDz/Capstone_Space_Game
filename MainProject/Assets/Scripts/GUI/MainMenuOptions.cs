@@ -148,7 +148,7 @@ public class MainMenuOptions : Singleton<MainMenuOptions>
                     currentResButton.AddOnClickListener(()=>OpenResolutionDropDown(true));
                     OpenResolutionDropDown(false);
                 });
-            Debug.Log("Created res button: " + width + "x" + height + "(" + refreshRate + ")");
+            //Debug.Log("Created res button: " + width + "x" + height + "(" + refreshRate + ")");
         }
     }
     private void OpenResolutionDropDown(bool open)
@@ -248,37 +248,37 @@ public class MainMenuOptions : Singleton<MainMenuOptions>
     #region Audio
     public void MuteMaster()
     {
-        Debug.Log("Mute master " + muteMaster.isOn);
+        //Debug.Log("Mute master " + muteMaster.isOn);
         settings.MuteMaster = muteMaster.isOn;
         AudioManager.Instance.UpdateSettings(settings);
     }
     public void SetMasterVolume()
     {
-        Debug.Log("Master Volume: " + masterVolume.value);
+        //Debug.Log("Master Volume: " + masterVolume.value);
         settings.MasterVolume = masterVolume.value;
         AudioManager.Instance.UpdateSettings(settings);
     }
     public void MuteMusic()
     {
-        Debug.Log("Mute music " + muteMusic.isOn);
+        //Debug.Log("Mute music " + muteMusic.isOn);
         settings.MuteMusic = muteMusic.isOn;
         AudioManager.Instance.UpdateSettings(settings);
     }
     public void SetMusicVol()
     {
-        Debug.Log("Music vol: " + musicVolume.value);
+        //Debug.Log("Music vol: " + musicVolume.value);
         settings.MusicVolume = musicVolume.value;
         AudioManager.Instance.UpdateSettings(settings);
     }
     public void MuteEffects()
     {
-        Debug.Log("Mute Effects " + muteEffects.isOn);
+        //Debug.Log("Mute Effects " + muteEffects.isOn);
         settings.MuteEffects = muteEffects.isOn;
         AudioManager.Instance.UpdateSettings(settings);
     }
     public void SetEffectsVol()
     {
-        Debug.Log("Effects Vol " + effectsVolume.value);
+        //Debug.Log("Effects Vol " + effectsVolume.value);
         settings.EffectsVolume = effectsVolume.value;
         AudioManager.Instance.UpdateSettings(settings);
     }
@@ -289,7 +289,7 @@ public class MainMenuOptions : Singleton<MainMenuOptions>
     public void SetQualityLevel(int index)
     {
         QualitySettings.SetQualityLevel(index);
-        Debug.Log("Quality Level: " + QualitySettings.names[QualitySettings.GetQualityLevel()]);
+        //Debug.Log("Quality Level: " + QualitySettings.names[QualitySettings.GetQualityLevel()]);
         settings.QualityPreset = index;
         vsyncToggle.isOn = GetVsync();
         settings.Vsync = vsyncToggle.isOn;
@@ -312,7 +312,7 @@ public class MainMenuOptions : Singleton<MainMenuOptions>
         }
 #endif
         QualitySettings.antiAliasing = aaLevel;
-        Debug.Log("AA level: " + QualitySettings.antiAliasing);
+        //Debug.Log("AA level: " + QualitySettings.antiAliasing);
         settings.AAValue = aaLevel;
     }
     public int GetAALevel()
@@ -322,7 +322,7 @@ public class MainMenuOptions : Singleton<MainMenuOptions>
     public void SetTripleBuffering()
     {
         QualitySettings.maxQueuedFrames = tripBuffToggle.isOn ? 3 : 0;
-        Debug.Log("Triple buffering: " + QualitySettings.maxQueuedFrames);
+        //Debug.Log("Triple buffering: " + QualitySettings.maxQueuedFrames);
         settings.TripleBuffering = tripBuffToggle.isOn;
     }
     public bool GetTripleBuffering()
@@ -332,7 +332,7 @@ public class MainMenuOptions : Singleton<MainMenuOptions>
     public void SetAnistropicFiltering()
     {
         QualitySettings.anisotropicFiltering = anisToggle.isOn ? AnisotropicFiltering.ForceEnable : AnisotropicFiltering.Disable;
-        Debug.Log("Anistropic Filtering: " + QualitySettings.anisotropicFiltering);
+        //Debug.Log("Anistropic Filtering: " + QualitySettings.anisotropicFiltering);
         settings.AnisoFiltering = anisToggle.isOn;
     }
     public bool GetAnisoFiltering()
@@ -342,7 +342,7 @@ public class MainMenuOptions : Singleton<MainMenuOptions>
     public void SetResolution(int width, int height, int refreshRate)
     {
         Screen.SetResolution(width, height, Screen.fullScreen, refreshRate);
-        Debug.Log("Resolution: " + Screen.currentResolution.width + "x" + Screen.currentResolution.height);
+        //Debug.Log("Resolution: " + Screen.currentResolution.width + "x" + Screen.currentResolution.height);
         settings.ScreenWidth = width;
         settings.ScreenHeight = height;
         settings.RefreshRate = refreshRate;
@@ -350,7 +350,7 @@ public class MainMenuOptions : Singleton<MainMenuOptions>
     public void SetVSync()
     {
         QualitySettings.vSyncCount = vsyncToggle.isOn ? 1 : 0;
-        Debug.Log("VSync: " + QualitySettings.vSyncCount);
+        //Debug.Log("VSync: " + QualitySettings.vSyncCount);
         settings.Vsync = vsyncToggle.isOn;
     }
     private bool GetVsync()
@@ -360,13 +360,13 @@ public class MainMenuOptions : Singleton<MainMenuOptions>
     public void SetFullScreen()
     {
         Screen.fullScreen = fullScreenToggle.isOn;
-        Debug.Log("Full screen: Button: "+fullScreenToggle.isOn+ " Screen: " + Screen.fullScreen);
+        //Debug.Log("Full screen: Button: "+fullScreenToggle.isOn+ " Screen: " + Screen.fullScreen);
         settings.FullScreen = fullScreenToggle.isOn;
     }
     public void SetTextureQuality(TextureQuality texQuality)
     {
         QualitySettings.masterTextureLimit = (int)texQuality;
-        Debug.Log("Texture Quality: " + QualitySettings.masterTextureLimit);
+        //Debug.Log("Texture Quality: " + QualitySettings.masterTextureLimit);
         settings.TexQuality = texQuality;
     }
     public TextureQuality GetTextureQuality()
