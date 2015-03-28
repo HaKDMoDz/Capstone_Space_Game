@@ -124,4 +124,17 @@ public abstract class Component_Weapon : ShipComponent
         }
         #endif
     }
+    protected Vector3 GetBeamImpactPoint(Transform targetCompTrans)
+    {
+        Ray ray = new Ray(shootPoint.position, targetCompTrans.position - shootPoint.position);
+        RaycastHit hit;
+        if(Physics.Raycast(ray, out hit, GlobalVars.RayCastRange, 1<<TagsAndLayers.ShipShieldLayer))
+        {
+            return hit.point;
+        }
+        else
+        {
+            return targetCompTrans.position;
+        }
+    }
 }
