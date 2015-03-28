@@ -53,6 +53,8 @@ public struct CombatGUIFields
     public Button moveButton;
     public Button tacticalButton;
     public Button endTurnButton;
+    //floating damage
+    public TextExtended floatingDamagePrefab;
 }
 public enum CursorType { Default, Attack, Invalid }
 #endregion AdditionalStructs
@@ -95,34 +97,8 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
     /// <summary>
     /// Shows buttons along the bottom to activate all components of a type at once. Pass in null to remove the buttons from the screen.
     /// </summary>
-    /// <param name="activationMethod"></param>
-    /// <param name="components"></param>
-    //public void ShowComponentHotkeyButtons(UnityAction<Type> activationMethod, IEnumerable<ShipComponent> components)
-    //{
-    //    for (int i = compButtons.Count - 1; i >= 0; i--)
-    //    {
-    //        Destroy(compButtons[i].gameObject);
-    //        compButtons.RemoveAt(i);
-    //    }
-    //    if (components == null || activationMethod==null)
-    //    {
-    //        guiFields.compHotkeysPanel.SetActive(false);
-    //        return;
-    //    }
-    //    guiFields.compHotkeysPanel.SetActive(true);
-    //    foreach (Type type in components.Select(c => c.GetType()).Distinct())
-    //    {
-    //        Type currentType = type;
-    //        ShipComponent component = components.First(c => c.GetType() == currentType);
-    //        ImageButton buttonClone = Instantiate(guiFields.imageButtonPrefab) as ImageButton;
-    //        buttonClone.SetImage(component.MultipleSprite);
-    //        buttonClone.AddOnClickListener(() => activationMethod(currentType));
-    //        //buttonClone.AddOnPointerEnterListener(()=>{Debug.Log("Mouse over "+component.componentName);});
-    //        //buttonClone.AddOnPointerExitListener(() => { Debug.Log("Mouse exit " + component.componentName); });
-    //        compButtons.Add(buttonClone);
-    //        buttonClone.transform.SetParent(guiFields.compHotkeysParent, false);
-    //    }
-    //}//ShowComponentActivationButtons
+    /// <param name="activate"></param>
+    /// <param name="component_valid_table"></param>
     public void ShowComponentHotkeyButtons(UnityAction<Type> activate, Dictionary<ShipComponent, bool> component_valid_table)
     {
         for (int i = compButtons.Count - 1; i >= 0; i--)
@@ -159,14 +135,21 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
         button.Button.interactable = false;
         button.Image.color = button.Image.color.WithAplha(0.25f);
     }
+    public void ShowFloatingDamage(float damage, Vector3 worldPos, Color textColour)
+    {
+        TextExtended floatingDmgClone = (TextExtended)Instantiate(guiFields.floatingDamagePrefab);
+        floatingDmgClone.SetText(damage.ToString());
+        floatingDmgClone.SetTextColour(textColour);
+        RectTransform textTrans = (RectTransform)floatingDmgClone.transform;
+        textTrans.SetParent(guiFields.overlayCanvas.transform, false);
+        Vector2 screenPos = RectTransformUtility.WorldToScreenPoint(Camera.main, worldPos);
+        textTrans.position = screenPos.ToVector3();
+    }
     public void ShowToolTip(string toolTipText, Vector3 screenPos)
     {
         guiFields.tooltip.gameObject.SetActive(true);
         guiFields.tooltip.SetText(toolTipText);
-        //Vector2 viewPortPos = RectTransformUtility.WorldToScreenPoint(Camera.main, worldPos);
-        //Vector2 viewPortPos = viewCamera.WorldToScreenPoint(worldPos);
-        //guiFields.tooltip.Trans.position = viewPortPos;
-        guiFields.tooltip.RectTrans.anchoredPosition = screenPos.GetVector2() - guiFields.mainCanvas.sizeDelta * 0.5f;
+        guiFields.tooltip.RectTrans.anchoredPosition = screenPos.ToVector2() - guiFields.overlayCanvas.sizeDelta * 0.5f;
     }
     public void HideTooltip()
     {
