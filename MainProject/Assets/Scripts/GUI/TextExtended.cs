@@ -41,5 +41,8 @@ public class TextExtended : MonoBehaviour
         #endif
         this.text.text = text;
     }
-
+    public void SetTextColour(Color textColour)
+    {
+        text.color = textColour;
+    }
 }

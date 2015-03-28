@@ -17,16 +17,25 @@ public static class ExtensionMethods
     /// </summary>
     /// <param name="vec3"></param>
     /// <returns></returns>
-    public static Vector2 GetVector2(this Vector3 vec3)
+    public static Vector2 ToVector2(this Vector3 vec3)
     {
         return new Vector2(vec3.x, vec3.y);
+    }
+    /// <summary>
+    /// Returns a Vector3 with 0.0f padded after the Vec2
+    /// </summary>
+    /// <param name="vec2"></param>
+    /// <returns></returns>
+    public static Vector3 ToVector3(this Vector2 vec2)
+    {
+        return new Vector3(vec2.x, vec2.y, 0.0f);
     }
     /// <summary>
     /// Returns a Vector4 with 1.0f padded after the Vector3
     /// </summary>
     /// <param name="vec3"></param>
     /// <returns></returns>
-    public static Vector4 GetVector4(this Vector3 vec3)
+    public static Vector4 ToVector4(this Vector3 vec3)
     {
         return new Vector4(vec3.x, vec3.y, vec3.z, 1.0f);
     }

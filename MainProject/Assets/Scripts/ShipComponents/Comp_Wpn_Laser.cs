@@ -43,9 +43,9 @@ public class Comp_Wpn_Laser : Component_Weapon
 
             targetTrans = targetComp.transform;
             //length = Mathf.RoundToInt(Vector3.Distance(targetTrans.position, shootPoint.position));
-
-            yield return StartCoroutine(CreateBeamEffectForDuration());
+            bool beamHitsShields = targetComp.ParentShip.ShieldStrength > 0.0f;
             yield return StartCoroutine(DoDamage(targetComp));
+            yield return StartCoroutine(CreateBeamEffectForDuration(beamHitsShields));
         }
         OnActivationComplete();
     }
@@ -54,7 +54,7 @@ public class Comp_Wpn_Laser : Component_Weapon
     /// Creates the beam effect for the predefined duration
     /// </summary>
     /// <returns></returns>
-    private IEnumerator CreateBeamEffectForDuration()
+    private IEnumerator CreateBeamEffectForDuration(bool hitShield)
     {
         //float currentTime = 0.0f;
         //line.enabled = true;
@@ -70,7 +70,7 @@ public class Comp_Wpn_Laser : Component_Weapon
 
         //Vector3 targetDir = (targetTrans.position - shootPoint.position).normalized;
         LaserEffectController laserClone = (LaserEffectController)Instantiate(laserEffectPrefab, shootPoint.position, shootPoint.rotation);
-        yield return StartCoroutine(laserClone.PlayLaserEffect(effectDuration, targetTrans.position));
+        yield return StartCoroutine(laserClone.PlayLaserEffect(effectDuration, hitShield? GetBeamImpactPoint(targetTrans):targetTrans.position));
         Destroy(laserClone.gameObject);
     }
 

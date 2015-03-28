@@ -77,6 +77,7 @@ public abstract class Component_Weapon : ShipComponent
         }
         else
         {
+            //CombatSystemInterface.Instance.ShowFloatingDamage(damage, targetComp.transform.position);
             if (targetShip.ShieldStrength >= damage)
             {
                 ApplyShieldDamageEffect(targetComp.ParentShip);
@@ -89,6 +90,7 @@ public abstract class Component_Weapon : ShipComponent
                 float remainingDamage = damage - targetShip.ShieldStrength;
                 float componentDamage = remainingDamage * (1.0f - hullDamagePercent / 100.0f);
                 float hullDamage = remainingDamage * hullDamagePercent / 100.0f;
+                CombatSystemInterface.Instance.ShowFloatingDamage(damage, targetComp.transform.position, Color.red);
                 yield return StartCoroutine(targetComp.TakeDamage(componentDamage));
                 yield return StartCoroutine(targetComp.ParentShip.TakeDamage(hullDamage));
             }
@@ -106,11 +108,14 @@ public abstract class Component_Weapon : ShipComponent
         Vector3 hitPoint=-Vector3.zero;
         Ray ray = new Ray(shootPoint.position, ship.transform.position - shootPoint.position);
         RaycastHit hit;
+#if FULL_DEBUG
         Debug.DrawRay(ray.origin, ray.direction, Color.green, GlobalVars.RayCastRange);
+#endif
         if(Physics.Raycast(ray, out hit, GlobalVars.RayCastRange, 1<<TagsAndLayers.ShipShieldLayer))
         {
             hitPoint = hit.point;
             ship.PlayShieldEffect(hitPoint);
+            CombatSystemInterface.Instance.ShowFloatingDamage(damage, hitPoint, Color.cyan);
         }
         #if FULL_DEBUG
         else
@@ -118,5 +123,18 @@ public abstract class Component_Weapon : ShipComponent
             Debug.LogError("Weapon did not hit shields but was expected to");
         }
         #endif
+    }
+    protected Vector3 GetBeamImpactPoint(Transform targetCompTrans)
+    {
+        Ray ray = new Ray(shootPoint.position, targetCompTrans.position - shootPoint.position);
+        RaycastHit hit;
+        if(Physics.Raycast(ray, out hit, GlobalVars.RayCastRange, 1<<TagsAndLayers.ShipShieldLayer))
+        {
+            return hit.point;
+        }
+        else
+        {
+            return targetCompTrans.position;
+        }
     }
 }

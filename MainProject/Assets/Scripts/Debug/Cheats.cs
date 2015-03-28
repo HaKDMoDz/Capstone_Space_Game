@@ -15,13 +15,21 @@ public class Cheats : MonoBehaviour
     void Start()
     {
         InputManager.Instance.RegisterKeysDown((key) => Damage(), KeyCode.D);
+        InputManager.Instance.RegisterKeysDown((key) => ChangeToGalaxyMap(), KeyCode.G);
     }
-    void Damage()
+    private void Damage()
     {
         if (Input.GetKey(KeyCode.LeftShift) 
             && TurnBasedCombatSystem.Instance.ai_Ships[0])
         {
             StartCoroutine(TurnBasedCombatSystem.Instance.ai_Ships[0].TakeDamage(150.0f));
+        }
+    }
+    private void ChangeToGalaxyMap()
+    {
+        if(Input.GetKey(KeyCode.LeftShift)||Input.GetKey(KeyCode.RightShift))
+        {
+            GameController.Instance.ChangeScene(GameScene.GalaxyMap);
         }
     }
 

@@ -60,13 +60,22 @@ public partial class PlayerShip : TurnBasedUnit
     private IEnumerator PostActivateWeapons()
     {
         Debug.Log("PostActivateWeapons");
-        ChangeState(PlayerState.TargetingEnemy);
         UnSelectComponents();
         if (targetComponent)
         {
             targetComponent.Selected = false;
             targetComponent = null;
+        }
+        //Debug.Log(targetShip + " hp " + targetShip.HullHP);
+        if (targetShip && targetShip.HullHP>0.0f)
+        {
             targetShip.ShowHPBars(false);
+            ChangeState(PlayerState.TargetingEnemy);
+        }
+        else
+        {
+            ChangeState(PlayerState.MovementMode);
+            yield return StartCoroutine(CameraDirector.Instance.MoveToFocusOn(trans, GlobalVars.CameraMoveToFocusPeriod));
         }
         InputManager.Instance.RegisterKeysDown(EndTurn, KeyCode.KeypadEnter, KeyCode.Return);
         TutorialSystem.Instance.ShowTutorial(TutorialSystem.TutorialType.EndTurn, true);
