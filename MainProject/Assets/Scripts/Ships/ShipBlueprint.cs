@@ -129,6 +129,7 @@ public class ShipBlueprint
         metaData.ExcessPower = CalculateExcessPower();
         metaData.MoveCost = CalculateMoveCost();
         metaData.FleetCost = CalculateFleetCost();
+        metaData.ShieldStr = CalculateShieldStr();
     }
 
     public void GenerateMetaData(string blueprintName)
@@ -153,16 +154,17 @@ public class ShipBlueprint
     public float CalculateMoveCost()
     {
         int numThrusters = slot_component_table.Values.Count(c => c is Comp_Eng_Thruster);
-        #if FULL_DEBUG || LOW_DEBUG
-        if (numThrusters <= 0)
-        {
-            return 0.0f;
-        }
-        #endif
+        if (numThrusters <= 0) return 0.0f;
         float thrust = ((Comp_Eng_Thruster)(slot_component_table.Values).FirstOrDefault(c => c is Comp_Eng_Thruster)).Thrust;
         float totalThrust = thrust * numThrusters;
         int mass = Hull.EmptyComponentGrid.Count;
         return (mass / totalThrust * 1.5f);
+    }
+    public float CalculateShieldStr()
+    {
+        IEnumerable<Comp_Def_Shield> shields = slot_component_table.Values.Where(comp=>comp is Comp_Def_Shield).Cast<Comp_Def_Shield>();
+        int numShieldGens = shields.Count();
+        return numShieldGens > 0 ? numShieldGens * shields.ElementAt(0).shieldStrength : 0.0f;
     }
     public void Clear()
     {
@@ -204,18 +206,20 @@ public class ShipBlueprintMetaData
     //public string BlueprintName;
     public float ExcessPower;
     public float MoveCost;
+    public float ShieldStr;
     public int FleetCost;
 
     public ShipBlueprintMetaData()
     {
         Reset();
     }
-    public ShipBlueprintMetaData(string blueprintName, float excessPower, float moveCost, int fleetCost)
+    public ShipBlueprintMetaData(string blueprintName, float excessPower, float moveCost, float shieldStr ,int fleetCost)
     {
         this.BlueprintName = blueprintName;
         this.ExcessPower = excessPower;
         this.MoveCost = moveCost;
         this.FleetCost = fleetCost;
+        this.ShieldStr = shieldStr;
     }
     public ShipBlueprintMetaData(ShipBlueprintMetaData metaData)
     {
@@ -223,6 +227,7 @@ public class ShipBlueprintMetaData
         this.ExcessPower = metaData.ExcessPower;
         this.MoveCost = metaData.MoveCost;
         this.FleetCost = metaData.FleetCost;
+        this.ShieldStr = metaData.ShieldStr;
     }
     public void Reset()
     {
@@ -231,6 +236,7 @@ public class ShipBlueprintMetaData
         ExcessPower = 0.0f;
         MoveCost = 0.0f;
         FleetCost = 0;
+        ShieldStr = 0.0f;
     }
 }
 #if FULL_DEBUG || LOW_DEBUG

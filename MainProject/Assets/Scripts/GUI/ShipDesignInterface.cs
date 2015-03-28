@@ -512,7 +512,7 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
         {
             ShowStatsPanel(true);
         }
-        statsPanel.UpdateStats(shipBPMetaData.BlueprintName, shipBPMetaData.ExcessPower, shipBPMetaData.MoveCost);
+        statsPanel.UpdateStats(shipBPMetaData.BlueprintName, shipBPMetaData.ExcessPower, shipBPMetaData.MoveCost, shipBPMetaData.ShieldStr);
     }
     public void AllowSaving(bool allow)
     {

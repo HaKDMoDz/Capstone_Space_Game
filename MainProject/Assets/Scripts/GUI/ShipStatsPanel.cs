@@ -18,6 +18,8 @@ public class ShipStatsPanel : MonoBehaviour
     private Text excessPowerText;
     [SerializeField]
     private Text thrustText;
+    [SerializeField]
+    private Text shieldText;
     
     private float excessPower=0.0f;
     public float ExcessPower
@@ -39,7 +41,16 @@ public class ShipStatsPanel : MonoBehaviour
             thrustText.text = thrust.ToString("0.000");
         }
     }
-    
+    private float shieldStr = 0.0f;
+    public float ShieldStr
+    {
+        get { return shieldStr; }
+        set 
+        { 
+            shieldStr = value;
+            shieldText.text = shieldStr.ToString();
+        }
+    }
 
     public string GetBlueprintName()
     {
@@ -49,27 +60,15 @@ public class ShipStatsPanel : MonoBehaviour
     {
         inputField.text = bpName;
     }
-    public void UpdateStats(string blueprintName, float excessPower, float thrust)
+    public void UpdateStats(string blueprintName, float excessPower, float thrust, float shieldStr)
     {
         SetBlueprintName(blueprintName);
         ExcessPower = excessPower;
+        excessPowerText.color = ExcessPower <= 0.0f ? Color.red : Color.white;
         Thrust = thrust;
-        if(ExcessPower<=0.0f)
-        {
-            excessPowerText.color = Color.red;
-        }
-        else
-        {
-            excessPowerText.color = Color.white;
-        }
-        if(Thrust <= 0.0f)
-        {
-            thrustText.color = Color.red;
-        }
-        else
-        {
-            thrustText.color = Color.white;
-        }
+        thrustText.color = Thrust <= 0.0f ? Color.red : Color.white;
+        ShieldStr = shieldStr;
+        shieldText.color = ShieldStr > 0.0f ? Color.white : Color.red;
     }
 
 }
