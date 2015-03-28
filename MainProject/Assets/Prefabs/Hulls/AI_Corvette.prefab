@@ -60,6 +60,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400070}
   - 114: {fileID: 11400000}
+  - 65: {fileID: 6594346}
   m_Layer: 8
   m_Name: AI_Corvette
   m_TagString: Untagged
@@ -67,6 +68,23 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &100238
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 400238}
+  - 20: {fileID: 2000238}
+  - 114: {fileID: 11400238}
+  m_Layer: 0
+  m_Name: ComponentCamera
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
 --- !u!1 &154694
 GameObject:
   m_ObjectHideFlags: 0
@@ -1150,8 +1168,21 @@ Transform:
   - {fileID: 454726}
   - {fileID: 454728}
   - {fileID: 480532}
+  - {fileID: 400238}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!4 &400238
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100238}
+  m_LocalRotation: {x: .707106829, y: 0, z: 0, w: .707106829}
+  m_LocalPosition: {x: 0, y: 16.4200001, z: -1.79999995}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 400070}
+  m_RootOrder: 8
 --- !u!4 &454706
 Transform:
   m_ObjectHideFlags: 1
@@ -1770,6 +1801,38 @@ Transform:
   m_Children: []
   m_Father: {fileID: 400070}
   m_RootOrder: 7
+--- !u!20 &2000238
+Camera:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100238}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 3
+  m_BackGroundColor: {r: .192156866, g: .301960796, b: .474509805, a: .0196078438}
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: -.270000011
+    y: .25999999
+    width: .600000024
+    height: .600000024
+  near clip plane: .300000012
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 1
+  orthographic size: 16.4799995
+  m_Depth: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 13056
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_HDR: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: .0219999999
 --- !u!20 &2054728
 Camera:
   m_ObjectHideFlags: 1
@@ -3309,6 +3372,18 @@ MeshCollider:
   m_SmoothSphereCollisions: 0
   m_Convex: 0
   m_Mesh: {fileID: 4300000, guid: 3dd04e617abc17e4293799b8ca5cb4f2, type: 3}
+--- !u!65 &6594346
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100070}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 30.2202263, y: 9.96795845, z: 22.4594383}
+  m_Center: {x: -.126075745, y: .665167809, z: 1.0165596}
 --- !u!95 &9558576
 Animator:
   serializedVersion: 3
@@ -3870,6 +3945,20 @@ MonoBehaviour:
   - {fileID: 11467284}
   hullIcon: {fileID: 0}
   playerAccessible: 0
+--- !u!114 &11400238
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -768656878, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EventMask:
+    serializedVersion: 2
+    m_Bits: 4096
 --- !u!114 &11454704
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5098,7 +5187,7 @@ MonoBehaviour:
   timeOfSnapshot: 0
   isSnapshot: 0
   shurikenParticleSystem: {fileID: 19880532}
-  particleSystemId: 3
+  particleSystemId: 2
   particleSystemGameObject: {fileID: 180532}
   particleSystemTransform: {fileID: 480532}
   particleSystemRenderer: {fileID: 19980532}
