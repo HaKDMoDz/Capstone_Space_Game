@@ -145,7 +145,7 @@ public class FleetInterface : Singleton<FleetInterface>
     private void DeleteShipItem(FleetGridItem gridItem)
     {
         fleetManager.RemoveFromFleet(gridItem.Index);
-        RefreshFleetStrBarValue();
+        RefreshFleetStrBarValue(true);
         FleetGridItem emptyClone = (FleetGridItem)Instantiate(emptyPrefab);
         AddToGridAtIndex(emptyClone, gridItem.Index);
         fleetDeletion = false;
@@ -263,7 +263,7 @@ public class FleetInterface : Singleton<FleetInterface>
         if (fleetManager.TryAddToFleet(index, metaData))
         {
             //AddToCurrentFleet(metaData);
-            RefreshFleetStrBarValue();
+            RefreshFleetStrBarValue(true);
             return true;
         }
         else
@@ -293,13 +293,13 @@ public class FleetInterface : Singleton<FleetInterface>
         }
         fleetStrBar.SetFillColour(Color.green);
     }
-    private void RefreshFleetStrBarValue()
+    private void RefreshFleetStrBarValue(bool lerp)
     {
         if(!fleetManager)
         {
             Debug.LogError("fleet mg null");
         }
-        fleetStrBar.SetValue(((float)fleetManager.CurrentFleetStrength) / (float)fleetManager.MaxFleetStrength);
+        fleetStrBar.SetValue(((float)fleetManager.CurrentFleetStrength) / (float)fleetManager.MaxFleetStrength, lerp);
     }
     private void SetupGUI()
     {
@@ -327,7 +327,7 @@ public class FleetInterface : Singleton<FleetInterface>
             }
         }
         //fleet str bar
-        RefreshFleetStrBarValue();
+        RefreshFleetStrBarValue(false);
         //blueprint buttons
         foreach (string blueprintName in ShipDesignSystem.Instance.GetSaveFileList())
         {

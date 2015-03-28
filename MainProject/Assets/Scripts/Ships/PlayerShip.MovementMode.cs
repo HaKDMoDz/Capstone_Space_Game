@@ -26,7 +26,10 @@ public partial class PlayerShip : TurnBasedUnit
     #region Methods
     private IEnumerator PreMovementMode()
     {
+#if FULL_DEBUG
+        if (!trans) Debug.LogError("Ship destroyed");
         Debug.Log("Pre Movement Mode");
+#endif
         spaceGround.OnGroundClick += SpaceGroundClick;
         ShowMovementUI(true);
         combatInterface.ShowModeButtons(true);

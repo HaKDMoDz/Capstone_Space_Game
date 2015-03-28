@@ -37,6 +37,6 @@ public class InvasionGUIManager : Singleton<InvasionGUIManager>
             _value = 10; 
         }
 
-        fillbar.SetValue((float)_value / 10.0f);
+        fillbar.SetValue((float)_value / 10.0f, true);
     }
 }
