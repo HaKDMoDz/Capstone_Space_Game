@@ -223,7 +223,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
         //play explosion sound
 
         //play explosion juice (screen shake, etc)
-        yield return new WaitForSeconds(1.75f);
+        yield return new WaitForSeconds(0.75f);
         Camera.main.GetComponent<CameraDirector>().DoShake();
 
         //wait for explosion to finish

@@ -112,7 +112,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
                 {
                     Debug.LogWarning(targetPlayer.HullHP);
                     yield return StartCoroutine(ActivateWeapons(targetPlayer, targetComponent));
-                    yield return new WaitForSeconds(0.25f);
+                    yield return new WaitForSeconds(0.125f);
                     targetComponent = TargetComponent(targetPlayer);
                 }
                 receivedAttackCommand = false;
@@ -267,22 +267,20 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
                 hitComponents.Add(comp);
             }
         }
-#if FULL_DEBUG
-        if (hitComponents == null || hitComponents.Count() == 0) Debug.LogError("No hit components");
-#endif
-        ShipComponent closestComp = hitComponents
+        ShipComponent closestComp = null;
+
+        if (hitComponents.Count > 0)
+        {
+          closestComp = hitComponents
             .Select(c => c.transform)
             .Aggregate((curr, next) =>
                 Vector3.Distance(curr.position, componentGridPos)
                 < Vector3.Distance(next.position, componentGridPos)
                 ? curr : next)
-            .GetComponent<ShipComponent>();
-#if FULL_DEBUG
-        if (!closestComp)
-        {
-            Debug.LogError("No component found");
+            .GetComponent<ShipComponent>();  
         }
-#endif
+        
+        
         return closestComp;
     }
 
@@ -336,6 +334,10 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
             Debug.LogError("AI_Ship: Target Component Lvl 1: NO COMPONENTS ON ENEMY SHIP. assigning null target");
         }
 
+        if (idealTargetComponent == null)
+        {
+            idealTargetComponent = TargetComponent(targetShip);
+        }
         _targetComponent = GetFirstComponentInDirection(idealTargetComponent);
 
     }
@@ -803,7 +805,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
 
         if (_targetComponent == null)
         {
-            Debug.LogError("Something is very wrong. all component lists empty. AI cannot target components on an empty ship");
+            Debug.LogWarning("all component lists empty. AI cannot target components on an empty or dead ship. skipping turn");
         }
 
         return _targetComponent;
