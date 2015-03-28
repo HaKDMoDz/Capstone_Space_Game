@@ -32,9 +32,10 @@ public class FillBar : MonoBehaviour
         //Debug.Log("enabled " + this.enabled);
         if (lerp && gameObject.activeInHierarchy)
         {
+            //StopCoroutine("LerpToTargetValue");
+            //fillImage.fillAmount = targetValue;
             targetValue = value;
-            StopCoroutine("LerpToTargetValue");
-            StartCoroutine("LerpToTargetValue");
+            StartCoroutine(LerpToTargetValue());
         }
         else
         {

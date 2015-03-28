@@ -60,6 +60,10 @@ public abstract class ShipComponent : MonoBehaviour , IPointerClickHandler, IPoi
     }
     [SerializeField]
     private float maxHP;
+    public float MaxHP
+    {
+        get { return maxHP; }
+    }
     
     private float compHP;
     public float CompHP
@@ -130,7 +134,10 @@ public abstract class ShipComponent : MonoBehaviour , IPointerClickHandler, IPoi
     #endregion Fields
 
     #region Methods
-
+    public void ShowHPBars(bool show)
+    {
+        hpBar.gameObject.SetActive(show);
+    }
     /// <summary>
     /// Called when a component is clicked on. Raises the OnComponentClicked event.
     /// </summary>
@@ -173,9 +180,9 @@ public abstract class ShipComponent : MonoBehaviour , IPointerClickHandler, IPoi
     /// <returns></returns>
     public IEnumerator TakeDamage(float _amountOfDamage)
     {
-
         compHP -= _amountOfDamage;
         hpBar.value -= _amountOfDamage/maxHP;
+        ShowHPBars(true);
         #if FULL_DEBUG
         Debug.Log(componentName+ " takes "+ _amountOfDamage+" damage. Remaining HP: " + compHP);
         #endif

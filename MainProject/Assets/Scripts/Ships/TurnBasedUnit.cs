@@ -118,9 +118,10 @@ public abstract class TurnBasedUnit : MonoBehaviour
         get { return hullHP; }
         private set 
         {
-            float damage = hullHP - value;
-            hpBar.ChangeValue(-damage / MaxHullHP, true);
-            hullHP = value; 
+            //float damage = hullHP - value;
+            //hpBar.ChangeValue(-damage / MaxHullHP, true);
+            hullHP = value;
+            hpBar.SetValue(hullHP / MaxHullHP, true);
         }
     }
 
@@ -131,9 +132,10 @@ public abstract class TurnBasedUnit : MonoBehaviour
         get { return shieldStrength; }
         private set
         {
-            float damage = shieldStrength - value;
-            shieldBar.ChangeValue(-damage / MaxShields, true);
+            //float damage = shieldStrength - value;
+            //shieldBar.ChangeValue(-damage / MaxShields, true);
             shieldStrength = value; 
+            shieldBar.SetValue(shieldStrength / MaxShields,true);
         }
     }
     private Transform componentGridTrans;
@@ -252,6 +254,9 @@ public abstract class TurnBasedUnit : MonoBehaviour
 
         InitStats();
         InitReferences();
+        //component hp bars are only displayed when damaged
+        Components.Where(comp => comp.CompHP >= comp.MaxHP).ToList()
+                      .ForEach(comp => comp.ShowHPBars(false));
 
     }//Init
 
@@ -267,7 +272,6 @@ public abstract class TurnBasedUnit : MonoBehaviour
         Debug.Log(ShipBPMetaData.BlueprintName + " executing turn");
         #endif
         currentPower = MaxPower;
-
         yield return null;
     }
 
