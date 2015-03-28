@@ -88,7 +88,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
 
         targetPlayer = TargetEnemy(TurnBasedCombatSystem.Instance.playerShips);
         ShipComponent targetComponent = TargetComponent(targetPlayer);
-
+        targetPlayer.ShowHPBars(true);
         if (targetComponent != null)
         {
             //move phase
@@ -141,7 +141,11 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
 
     protected override void PostTurnActions()
     {
-
+        if (targetShip)
+	    {
+            targetShip.ShowHPBars(false);
+	    }
+        
     }
 
     public void Move(PlayerShip targetPlayer, AI_Fleet.PlacementType _placement)
