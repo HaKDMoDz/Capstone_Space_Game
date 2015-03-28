@@ -12,7 +12,7 @@ public class AI_Attack : MonoBehaviour
     /// note: it takes a unit... it can be used for 
     /// friendly fire</param>
     /// <returns>null</returns>
-    public IEnumerator Attack(ShipComponent _target, float _damageAmount, List<ShipComponent> components)
+    public IEnumerator Attack(ShipComponent _target, List<ShipComponent> components)
     {
         Debug.LogWarning(_target + " targetted");
         GetComponent<AI_Ship>().CurrentPower = GetComponent<AI_Ship>().MaxPower;
