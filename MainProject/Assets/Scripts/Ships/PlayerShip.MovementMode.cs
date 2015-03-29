@@ -107,10 +107,18 @@ public partial class PlayerShip : TurnBasedUnit
     #region InternalCallbacks
     void SpaceGroundClick(Vector3 worldPosition)
     {
-        if (!receivedMoveCommand && movePowerCost <= CurrentPower) 
+        if (!receivedMoveCommand)
         {
-            shipMove.destination = worldPosition;
-            receivedMoveCommand = true;
+            if (movePowerCost <= CurrentPower)
+            {
+                shipMove.destination = worldPosition;
+                receivedMoveCommand = true;
+            }
+            else
+            {
+                combatInterface.SetPowerValid(false);
+
+            }
         }
     }
     #endregion InternalCallbacks

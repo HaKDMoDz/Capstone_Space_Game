@@ -99,13 +99,16 @@ public partial class PlayerShip : TurnBasedUnit
 #if FULL_DEBUG
         Debug.Log("Activating all " + compType.ToString());
 #endif
+        Debug.Log("Power before select all " + CurrentPower + " total cost " + totalActivationCost + " displayed: " + (CurrentPower - totalActivationCost));
         UnSelectComponents();
+        Debug.Log("Power after unselect " + CurrentPower + " total cost " + totalActivationCost+ " displayed: "+(CurrentPower - totalActivationCost));
         //next tutorial hotkeys
         TutorialSystem.Instance.ShowNextTutorial(TutorialSystem.TutorialType.Hotkeys);
         foreach (ShipComponent component in components.Where(c => c.GetType() == compType))
         {
             SelectComponent(component, true);
         }
+        Debug.Log("Power after select " + CurrentPower + " total cost " + totalActivationCost + " displayed: "+(CurrentPower - totalActivationCost));
     }
     private bool WeaponCanHitEnemy(Component_Weapon weapon)
     {

@@ -38,6 +38,8 @@ public struct CombatGUIFields
     public GameObject statsPanel;
     public Text powerText;
     public Text moveCostText;
+    public Animator powerTextAnim;
+    public float textTweenSpeed;
     //move UI
     public GameObject moveUI;
     public Text moveDistance;
@@ -184,39 +186,48 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
         guiFields.moveUI.SetActive(false);
     }
 
+    float targetValue;
     public void UpdateStats(float currentPower, float moveCost, bool tween)
     {
         //Debug.Log("Current power = " + unit.CurrentPower);
         if (tween)
         {
-            StartCoroutine(TweenTextNumber(guiFields.powerText, currentPower));
+            //StartCoroutine(TweenTextNumber(guiFields.powerText, currentPower));
+            //StopCoroutine("TweenTextNumber");
+            //guiFields.powerText.text = currentPower.ToString();
+            targetValue = currentPower;
+            StartCoroutine(TweenTextNumber());
         }
         else
         {
+            StopAllCoroutines();
             guiFields.powerText.text = currentPower.ToString();
         }
         guiFields.moveCostText.text = moveCost.ToString("0.00");
     }
-    private IEnumerator TweenTextNumber(Text textField, float targetValue)
+    //private IEnumerator TweenTextNumber(Text textField, float targetValue)
+    private IEnumerator TweenTextNumber()
     {
 #if FULL_DEBUG
         float currentValue;
-        if(!float.TryParse(textField.text, out currentValue))
+        if(!float.TryParse(guiFields.powerText.text, out currentValue))
         {
-            Debug.LogError("Could not parse text " + textField.name + " to float");
+            Debug.LogError("Could not parse text " + guiFields.powerText.name + " to float");
         }
 #else
         float currentValue = float.Parse(textField.text);
 #endif
-        float increment = targetValue > currentValue ? textTweenSpeed : -textTweenSpeed;
+        //float increment = targetValue > currentValue ? textTweenSpeed : -textTweenSpeed;
         //Debug.Log("Current value: " + currentValue + " target " + targetValue + " diff " + Mathf.Abs(currentValue - targetValue));
-        while (Mathf.Abs(currentValue - targetValue)>textTweenSpeed)
+        //while (Mathf.Abs(currentValue - targetValue)>textTweenSpeed)
+        while (Mathf.Abs(currentValue - targetValue) > GlobalVars.LerpDistanceEpsilon)
         {
-            currentValue += increment;
-            textField.text = currentValue.ToString();
+            //currentValue += increment;
+            currentValue = Mathf.Lerp(currentValue, targetValue, textTweenSpeed * Time.deltaTime);
+            guiFields.powerText.text = currentValue.ToString("0");
             yield return null;
         }
-        textField.text = targetValue.ToString();
+        guiFields.powerText.text = targetValue.ToString();
     }
     public void SetPowerValid(bool valid=true)
     {
@@ -226,8 +237,16 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
         }
         else
         {
+            StopAllCoroutines();
             guiFields.powerText.color = Color.red;
+            guiFields.powerTextAnim.SetTrigger("Blink");
+            StartCoroutine(SetPowerBackToValidAfterAnim());
         }
+    }
+    private IEnumerator SetPowerBackToValidAfterAnim()
+    {
+        yield return new WaitForSeconds(0.75f);
+        SetPowerValid();
     }
     /// <summary>
     /// Shows the power to be displayed on the GUI
