@@ -103,7 +103,7 @@ public class PlayerShip_Old : TurnBasedUnit
         //combatInterface.EnableComponentSelectionPanel(true);
         combatInterface.ShowStatsPanel(true);
         //combatInterface.ShowComponentActivationButtons(SelectAllComponents, components.Where(c => c.CanActivate));
-        combatInterface.UpdateStats(CurrentPower, MoveCost);
+        combatInterface.UpdateStats(CurrentPower, MoveCost,false);
         combatInterface.SetPowerValid();
         EnableInputEvents(true);
     }
@@ -559,7 +559,7 @@ public class PlayerShip_Old : TurnBasedUnit
                 TutorialSystem.Instance.ShowNextTutorial(TutorialSystem.TutorialType.ComponentSelection);
                 if (!allowingEnemyTargeting) AllowEnemyTargeting(true);
                 totalActivationCost += component.ActivationCost;
-                combatInterface.UpdateStats(CurrentPower - totalActivationCost, MoveCost);
+                combatInterface.UpdateStats(CurrentPower - totalActivationCost, MoveCost,true);
 
             }//selected component contains
         }
@@ -574,7 +574,7 @@ public class PlayerShip_Old : TurnBasedUnit
                     AllowEnemyTargeting(false);
                 }
                 totalActivationCost -= component.ActivationCost;
-                combatInterface.UpdateStats(CurrentPower - totalActivationCost, MoveCost);
+                combatInterface.UpdateStats(CurrentPower - totalActivationCost, MoveCost,true);
             }
         }
     }//SelectComponent

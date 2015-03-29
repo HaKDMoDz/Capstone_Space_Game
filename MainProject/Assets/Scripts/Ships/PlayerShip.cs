@@ -42,7 +42,7 @@ public partial class PlayerShip : TurnBasedUnit
         shouldEndTurn = false;
         shouldChangeState = false;
         combatInterface.ShowStatsPanel(true);
-        combatInterface.UpdateStats(CurrentPower, MoveCost);
+        combatInterface.UpdateStats(CurrentPower, MoveCost,false);
         combatInterface.SetPowerValid();
         combatInterface.ShowModeButtons(true);
         combatInterface.SetEndTurnEvent(()=>EndTurn(KeyCode.Return));

@@ -64,6 +64,9 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
     //EditorExposed
     [SerializeField]
     private CombatGUIFields guiFields;
+    [SerializeField]
+    private float textTweenSpeed = 5.0f;
+
 
     //internal
     private Dictionary<TurnBasedUnit, TextExtended> unit_buttonRect_table = new Dictionary<TurnBasedUnit, TextExtended>();
@@ -181,11 +184,39 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
         guiFields.moveUI.SetActive(false);
     }
 
-    public void UpdateStats(float currentPower, float moveCost)
+    public void UpdateStats(float currentPower, float moveCost, bool tween)
     {
         //Debug.Log("Current power = " + unit.CurrentPower);
-        guiFields.powerText.text = currentPower.ToString();
+        if (tween)
+        {
+            StartCoroutine(TweenTextNumber(guiFields.powerText, currentPower));
+        }
+        else
+        {
+            guiFields.powerText.text = currentPower.ToString();
+        }
         guiFields.moveCostText.text = moveCost.ToString("0.00");
+    }
+    private IEnumerator TweenTextNumber(Text textField, float targetValue)
+    {
+#if FULL_DEBUG
+        float currentValue;
+        if(!float.TryParse(textField.text, out currentValue))
+        {
+            Debug.LogError("Could not parse text " + textField.name + " to float");
+        }
+#else
+        float currentValue = float.Parse(textField.text);
+#endif
+        float increment = targetValue > currentValue ? textTweenSpeed : -textTweenSpeed;
+        //Debug.Log("Current value: " + currentValue + " target " + targetValue + " diff " + Mathf.Abs(currentValue - targetValue));
+        while (Mathf.Abs(currentValue - targetValue)>textTweenSpeed)
+        {
+            currentValue += increment;
+            textField.text = currentValue.ToString();
+            yield return null;
+        }
+        textField.text = targetValue.ToString();
     }
     public void SetPowerValid(bool valid=true)
     {

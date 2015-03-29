@@ -20,6 +20,8 @@ public class ShipStatsPanel : MonoBehaviour
     private Text thrustText;
     [SerializeField]
     private Text shieldText;
+    [SerializeField]
+    private float textTweenSpeed = 2.0f;
     
     private float excessPower=0.0f;
     public float ExcessPower
@@ -28,7 +30,8 @@ public class ShipStatsPanel : MonoBehaviour
         set
         {
             excessPower = value;
-            excessPowerText.text = excessPower.ToString();
+            StartCoroutine(TweenTextNumber(excessPowerText, excessPower,"0"));
+            //excessPowerText.text = excessPower.ToString();
         }
     }
     private float thrust = 0.0f;
@@ -38,7 +41,8 @@ public class ShipStatsPanel : MonoBehaviour
         set 
         { 
             thrust = value;
-            thrustText.text = thrust.ToString("0.000");
+            StartCoroutine(TweenTextNumber(thrustText, thrust, "0.000"));
+            //thrustText.text = thrust.ToString("0.000");
         }
     }
     private float shieldStr = 0.0f;
@@ -48,7 +52,8 @@ public class ShipStatsPanel : MonoBehaviour
         set 
         { 
             shieldStr = value;
-            shieldText.text = shieldStr.ToString();
+            StartCoroutine(TweenTextNumber(shieldText, shieldStr,"0"));
+            //shieldText.text = shieldStr.ToString();
         }
     }
 
@@ -70,5 +75,23 @@ public class ShipStatsPanel : MonoBehaviour
         ShieldStr = shieldStr;
         shieldText.color = ShieldStr > 0.0f ? Color.white : Color.red;
     }
-
+    private IEnumerator TweenTextNumber(Text textField, float targetValue, string formatting=null)
+    {
+#if FULL_DEBUG
+        float currentValue;
+        if (!float.TryParse(textField.text, out currentValue))
+        {
+            Debug.LogError("Could not parse text " + textField.name + " to float");
+        }
+#else
+        float currentValue = float.Parse(textField.text);
+#endif
+        while (Mathf.Abs(currentValue - targetValue) > GlobalVars.LerpDistanceEpsilon)
+        {
+            currentValue = Mathf.Lerp(currentValue, targetValue, textTweenSpeed * Time.deltaTime);
+            textField.text = currentValue.ToString(formatting);
+            yield return null;
+        }
+        textField.text = targetValue.ToString(formatting);
+    }
 }

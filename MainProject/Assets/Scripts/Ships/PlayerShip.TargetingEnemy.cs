@@ -148,7 +148,7 @@ public partial class PlayerShip : TurnBasedUnit
             totalActivationCost -= component.ActivationCost;
         }
         component.Selected = select;
-        combatInterface.UpdateStats(CurrentPower - totalActivationCost, MoveCost);
+        combatInterface.UpdateStats(CurrentPower - totalActivationCost, MoveCost, true);
     }//SelectComponent
     private void UnSelectComponents()
     {
