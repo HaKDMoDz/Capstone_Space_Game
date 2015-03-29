@@ -83,7 +83,7 @@ public class CombatSceneController : Singleton<CombatSceneController>
         {
             Debug.LogWarning("Empty enemy fleet - spawning default fleet");
             pirateFleetData.currentFleet_BlueprintNames = new List<string>() { "AI_Corvette", "AI_Frigate" };
-            //pirateFleetData.currentFleet_BlueprintNames = new List<string>() { "NewAICorv", "NewAIFrig" };
+            //pirateFleetData.currentFleet_BlueprintNames = new List<string>() { "AI_Test"};//, "AI_Test" };
         }
         foreach (string bpTemplateName in pirateFleetData.currentFleet_BlueprintNames)
         {

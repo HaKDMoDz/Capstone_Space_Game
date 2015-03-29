@@ -214,7 +214,7 @@ public class ShipBlueprintSaveSystem
             ComponentSlot slot = shipBP.Hull.index_slot_table[slotIndex_CompID.slotIndex];
             #else
             ShipComponent component = ComponentTable.GetComp(slotIndex_CompID.Value);
-            ComponentSlot slot = shipBP.hull.index_slot_table[slotIndex_CompID.Key];
+            ComponentSlot slot = shipBP.Hull.index_slot_table[slotIndex_CompID.Key];
             #endif
             shipBP.AddComponent(slot, component);
         }

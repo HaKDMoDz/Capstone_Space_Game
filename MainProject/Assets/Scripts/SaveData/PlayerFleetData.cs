@@ -22,7 +22,7 @@ public class PlayerFleetData
             sz_playerFleetData.gridIndex_metaData_List.Add(item);
         }        
 #else
-        sz_playerFleetData.gridIndex_metaData_List = gridIndex_metaData_table;    
+        sz_playerFleetData.gridIndex_metaData_table = gridIndex_metaData_table;    
 #endif
     }
 }

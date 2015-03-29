@@ -37,13 +37,13 @@ public partial class PlayerShip : TurnBasedUnit
         //get first ai
         int targetShipIndex = 0;
         List<AI_Ship> aiShips = TurnBasedCombatSystem.Instance.ai_Ships;
+#if FULL_DEBUG
         int numAIShips = aiShips.Count;
-        #if FULL_DEBUG
         if (numAIShips == 0)
         {
             Debug.LogError("No ai ships found");
         }
-        #endif
+#endif
         AI_Ship targetShip = aiShips[targetShipIndex];
         targetShipIndex = aiShips.IndexOf(targetShip);
         Transform aiTargetTrans = targetShip.transform;

@@ -99,7 +99,6 @@ public class MothershipLaunchCutscene : MonoBehaviour
     }
     private IEnumerator FlyToGridPos(Transform ship, Vector3 destination)
     {
-        Vector3 initialPos = ship.position;
         Vector3 dirToDest = destination - ship.position;
         float dirMag = dirToDest.magnitude;
         float timeToReachDest = dirMag / shipMoveSpeed;
@@ -111,12 +110,13 @@ public class MothershipLaunchCutscene : MonoBehaviour
         //Debug.Log("Dot: " + dot / dirMag + " Angle: " + angle + " isRight " + isToTheRight);
         float doubleAngle = isToTheRight ? angle * 2.0f : angle * -2.0f;
         Quaternion halfDistRot = Quaternion.AngleAxis(doubleAngle, Vector3.up);
-        Vector3 doubleAngleVec = halfDistRot * ship.forward;
         float time = 0.0f;
         while (time < 1.0f)
         {
             if (skipCutscene) yield break;
 #if FULL_DEBUG
+            Vector3 initialPos = ship.position;
+            Vector3 doubleAngleVec = halfDistRot * ship.forward;
             Debug.DrawRay(initialPos, dirToDest, Color.red);
             Debug.DrawRay(ship.position, ship.forward * 500.0f, Color.green);
             Debug.DrawRay(initialPos, doubleAngleVec * 500.0f, Color.blue);

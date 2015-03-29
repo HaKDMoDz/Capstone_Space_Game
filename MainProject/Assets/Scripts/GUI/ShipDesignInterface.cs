@@ -74,8 +74,10 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     private Button saveButton;
     [SerializeField]
     private Image saveButtonImage;
+#if FULL_DEBUG
     [SerializeField]
     private bool showAI_Hulls=false;
+#endif
     //Internal
     private Dictionary<string, GameObject> blueprintName_button_table;
     private string selectedBP;

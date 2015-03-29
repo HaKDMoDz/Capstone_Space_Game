@@ -213,7 +213,7 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
             Debug.LogError("Could not parse text " + guiFields.powerText.name + " to float");
         }
 #else
-        float currentValue = float.Parse(textField.text);
+        float currentValue = float.Parse(guiFields.powerText.text);
 #endif
         //float increment = targetValue > currentValue ? textTweenSpeed : -textTweenSpeed;
         //Debug.Log("Current value: " + currentValue + " target " + targetValue + " diff " + Mathf.Abs(currentValue - targetValue));
@@ -346,12 +346,13 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
         {
             for (int i = 0; i < units.Count; i++)
             {
+                Debug.Log("Unit: " + units[i].ShipBPMetaData.BlueprintName + " time left " + units[i].TimeLeftToTurn);
                 TextExtended button = unit_buttonRect_table[units[i]];
                 //button.SetText( units[i].ShipBPMetaData.BlueprintName);
                 button.RectTrans.SetSiblingIndex(i);
                 
             }
-            guiFields.turnOrderHeader.SetSiblingIndex(0);
+            //guiFields.turnOrderHeader.SetSiblingIndex(0);
         }
     }
     /// <summary>

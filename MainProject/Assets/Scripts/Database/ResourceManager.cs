@@ -81,7 +81,7 @@ public class ResourceManager : ScriptableObject
             return spriteInfo.sprite;
         }
 #else
-        return image_info_table[imageName].image;
+        return sprite_info_table[spriteName].sprite;
 #endif
     }
     public static SoundInfo GetSoundInfo(Sound sound)

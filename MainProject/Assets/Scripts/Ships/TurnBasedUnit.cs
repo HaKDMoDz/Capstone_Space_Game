@@ -399,8 +399,8 @@ public abstract class TurnBasedUnit : MonoBehaviour
         componentCamera = trans.FindChild("ComponentCamera").gameObject;
         componentCamera.SetActive(false);
 
-        #if FULL_DEBUG
         targetCamTrans = trans.FindChild("TargetingCamera");
+        #if FULL_DEBUG
         if (targetCamTrans == null)
         {
             Debug.LogError("No Targeting camera found");
