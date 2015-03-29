@@ -60,7 +60,7 @@ public partial class PlayerShip : TurnBasedUnit
     private IEnumerator PostActivateWeapons()
     {
         Debug.Log("PostActivateWeapons");
-        UnSelectComponents();
+        //UnSelectComponents();
         if (targetComponent)
         {
             targetComponent.Selected = false;
@@ -74,6 +74,7 @@ public partial class PlayerShip : TurnBasedUnit
         }
         else
         {
+            UnSelectComponents();
             ChangeState(PlayerState.MovementMode);
             yield return StartCoroutine(CameraDirector.Instance.MoveToFocusOn(trans, GlobalVars.CameraMoveToFocusPeriod));
         }

@@ -46,6 +46,10 @@ public partial class PlayerShip : TurnBasedUnit
         spaceGround.Display(false);
         targetComponent = null;
         trans.LookAt(aiTrans);
+        if(selectedComponents.Count>0)
+        {
+            SelectAllComponents(selectedComponents[0].GetType());
+        }
     }
     private IEnumerator TargetingEnemy()
     {
