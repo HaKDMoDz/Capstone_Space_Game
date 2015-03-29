@@ -69,7 +69,7 @@ public class CombatSceneController : Singleton<CombatSceneController>
                 int index = gridIndex_metaData.Key;
                 Vector2 gridPos = new Vector2(index % gridWidth, index / gridWidth);
                 Vector3 spawnPos = new Vector3(gridPos.x * gridDimensions.x, 0.0f, gridPos.y * gridDimensions.y);
-                Debug.Log("Index: " + index + " grid pos " + gridPos + "SpawnPos: " + playerStartSpawnPos + spawnPos);
+                //Debug.Log("Index: " + index + " grid pos " + gridPos + "SpawnPos: " + playerStartSpawnPos + spawnPos);
                 TurnBasedUnit playerShip = shipBuilder.BuildShip(ShipType.PlayerShip, gridIndex_metaData.Value.BlueprintName, playerStartSpawnPos + spawnPos, Quaternion.identity);
 #if FULL_DEBUG
                 if (!playerShip) Debug.LogError("ShipBuilder return null");

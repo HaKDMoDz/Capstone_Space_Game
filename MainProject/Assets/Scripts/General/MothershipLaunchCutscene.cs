@@ -108,7 +108,7 @@ public class MothershipLaunchCutscene : MonoBehaviour
         float dot = Vector3.Dot(ship.forward, dirToDest);
         bool isToTheRight = Vector3.Dot(ship.right, dirToDest) > 0.0f;
         float angle = Mathf.Acos(dot / dirMag) * Mathf.Rad2Deg;
-        Debug.Log("Dot: " + dot / dirMag + " Angle: " + angle + " isRight " + isToTheRight);
+        //Debug.Log("Dot: " + dot / dirMag + " Angle: " + angle + " isRight " + isToTheRight);
         float doubleAngle = isToTheRight ? angle * 2.0f : angle * -2.0f;
         Quaternion halfDistRot = Quaternion.AngleAxis(doubleAngle, Vector3.up);
         Vector3 doubleAngleVec = halfDistRot * ship.forward;

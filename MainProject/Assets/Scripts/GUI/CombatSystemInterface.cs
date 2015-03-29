@@ -28,6 +28,7 @@ public struct CombatGUIFields
     public RectTransform overlayCanvas;
     //turn order list
     public RectTransform turnOrderButtonParent;
+    public RectTransform turnOrderHeader;
     //comp hotkeys
     public GameObject compHotkeysPanel;
     public RectTransform compHotkeysParent;
@@ -89,12 +90,9 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
     /// <param name="unit"></param>
     public void AddShipButton(TurnBasedUnit unit)
     {
-        //ButtonWithContent buttonClone = Instantiate(guiFields.buttonPrefab) as ButtonWithContent;
-        //buttonClone.SetText(unit.ShipBPMetaData.BlueprintName);
-        //buttonClone.transform.SetParent(guiFields.turnOrderButtonParent, false);
-        //unit_buttonRect_table.Add(unit, buttonClone);
-
         TextExtended textClone = Instantiate(guiFields.textFieldPrefab) as TextExtended;
+        textClone.AddOnPointerEnterListener(() => unit.ShowHPBars(true));
+        textClone.AddOnPointerExitListener(() => unit.ShowHPBars(false));
         textClone.SetText( unit.ShipBPMetaData.BlueprintName);
         textClone.transform.SetParent(guiFields.turnOrderButtonParent, false);
         unit_buttonRect_table.Add(unit, textClone);
@@ -351,7 +349,9 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
                 TextExtended button = unit_buttonRect_table[units[i]];
                 //button.SetText( units[i].ShipBPMetaData.BlueprintName);
                 button.RectTrans.SetSiblingIndex(i);
+                
             }
+            guiFields.turnOrderHeader.SetSiblingIndex(0);
         }
     }
     /// <summary>

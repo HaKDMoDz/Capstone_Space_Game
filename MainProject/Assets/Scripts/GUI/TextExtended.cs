@@ -4,13 +4,16 @@
   Created by Rohun Banerji on Feb 23/2015
   Copyright (c) 2015 Rohun Banerji. All rights reserved.
 */
-
+#region Usings
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using UnityEngine.Events;
 using System.Collections;
 using System.Collections.Generic;
 using System;
-public class TextExtended : MonoBehaviour 
+#endregion Usings
+public class TextExtended : MonoBehaviour , IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField]
     private Text text;
@@ -20,6 +23,11 @@ public class TextExtended : MonoBehaviour
     {
         get { return rectTrans; }
     }
+
+    private delegate void TextPointerEnterEvent();
+    private event TextPointerEnterEvent OnTextPointerEnter = new TextPointerEnterEvent(() => { });
+    private delegate void TextPointerExitEvent();
+    private event TextPointerExitEvent OnTextPointerExit = new TextPointerExitEvent(() => { });
 
     public void ShowText(bool show)
     {
@@ -44,5 +52,24 @@ public class TextExtended : MonoBehaviour
     public void SetTextColour(Color textColour)
     {
         text.color = textColour;
+    }
+    public void AddOnPointerEnterListener(UnityAction action)
+    {
+        OnTextPointerEnter += () => action();
+    }
+    public void AddOnPointerExitListener(UnityAction action)
+    {
+        OnTextPointerExit += () => action();
+    }
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        //Debug.Log("pointer enter");
+        OnTextPointerEnter();   
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        //Debug.Log("pointer exit");
+        OnTextPointerExit();
     }
 }
