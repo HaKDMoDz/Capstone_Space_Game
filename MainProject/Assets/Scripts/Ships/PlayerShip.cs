@@ -47,6 +47,7 @@ public partial class PlayerShip : TurnBasedUnit
         combatInterface.ShowModeButtons(true);
         combatInterface.SetEndTurnEvent(()=>EndTurn(KeyCode.Return));
         InputManager.Instance.RegisterKeysDown(EndTurn, KeyCode.KeypadEnter, KeyCode.Return);
+        TutorialSystem.Instance.ShowTutorial(TutorialSystem.TutorialType.MovementHowTo, true);
     }
     /// <summary>
     /// Execution for the player ship loops in this coroutine. It handles state transitions.

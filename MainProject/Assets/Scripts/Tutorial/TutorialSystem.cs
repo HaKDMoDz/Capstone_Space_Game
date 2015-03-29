@@ -129,10 +129,10 @@ public class TutorialSystem : Singleton<TutorialSystem>
                     }
                 });
         }
-        if (GameController.Instance.GameData.tutorialData.ShowTutorials)
-        {
-            StartTutorial();
-        }
+        //if (GameController.Instance.GameData.tutorialData.ShowTutorials)
+        //{
+        //    StartTutorial();
+        //}
     }
 
     [Serializable]
