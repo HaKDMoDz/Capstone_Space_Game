@@ -112,7 +112,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
                 {
                     Debug.LogWarning(targetPlayer.HullHP);
                     yield return StartCoroutine(ActivateWeapons(targetPlayer, targetComponent));
-                    yield return new WaitForSeconds(0.125f);
+                    yield return new WaitForSeconds(0.2f);
                     targetComponent = TargetComponent(targetPlayer);
                 }
                 receivedAttackCommand = false;
@@ -985,9 +985,9 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
             Debug.LogWarning(item.CompSpecificType);
         }
 
-        Component_Weapon[] selectedLasers = selectedWeapons.Where(c => c.CompSpecificType == ComponentSpecificType.LASER).ToArray();
-        Component_Weapon[] selectedMissiles = selectedWeapons.Where(c => c.CompSpecificType == ComponentSpecificType.MISSILE).ToArray();
-        Component_Weapon[] selectedRailguns = selectedWeapons.Where(c => c.CompSpecificType == ComponentSpecificType.MASS_D).ToArray();
+        Component_Weapon[] selectedLasers = selectedWeapons.Where(c => c.CompSpecificType == ComponentSpecificType.LASER && c.gameObject.activeSelf).ToArray();
+        Component_Weapon[] selectedMissiles = selectedWeapons.Where(c => c.CompSpecificType == ComponentSpecificType.MISSILE && c.gameObject.activeSelf).ToArray();
+        Component_Weapon[] selectedRailguns = selectedWeapons.Where(c => c.CompSpecificType == ComponentSpecificType.MASS_D && c.gameObject.activeSelf).ToArray();
 
         float totalPowerUsed = 0;
         bool lasersDone = false;
@@ -996,7 +996,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
 
         //int numWeaponsToActivate = GetNumWeaponsToActivate(selectedWeapons[0], _targetShip, _targetComponent, selectedWeapons.Length);
         int numLasersToActivate;
-        if (selectedLasers.Count() > 0)
+        if (selectedLasers.Count() > 0 && _targetComponent)
         {
             numLasersToActivate = GetNumWeaponsToActivate(selectedLasers[0], _targetShip, _targetComponent, selectedLasers.Length);
             totalPowerUsed += (numLasersToActivate * selectedLasers[0].ActivationCost);
@@ -1009,7 +1009,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         }
 
         int numMissilesToActivate;
-        if (selectedMissiles.Count() > 0)
+        if (selectedMissiles.Count() > 0 && _targetComponent)
         {
             numMissilesToActivate = GetNumWeaponsToActivate(selectedMissiles[0], _targetShip, _targetComponent, selectedMissiles.Length);
             totalPowerUsed += (numMissilesToActivate * selectedMissiles[0].ActivationCost);
@@ -1021,7 +1021,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         }
 
         int numRailgunsToActivate;
-        if (selectedRailguns.Count() > 0)
+        if (selectedRailguns.Count() > 0 && _targetComponent)
         {
             numRailgunsToActivate = GetNumWeaponsToActivate(selectedRailguns[0], _targetShip, _targetComponent, selectedRailguns.Length);
             totalPowerUsed += (numRailgunsToActivate * selectedRailguns[0].ActivationCost);
@@ -1046,7 +1046,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
 
         for (int i = 0; i < numLasersToActivate; i++)
         {
-            if (selectedLasers[i].gameObject.activeSelf && _targetComponent.CompHP > 0)
+            if (selectedLasers[i].gameObject.activeSelf && _targetComponent.CompHP > 0.0f)
             {
                 StartCoroutine(selectedLasers[i].Fire(_targetComponent, () => { weaponHitCounter++; }));
                 yield return new WaitForSeconds(Random.Range(PlayerShipConfig.WeaponActivationInterval.x, PlayerShipConfig.WeaponActivationInterval.y));
@@ -1071,7 +1071,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         weaponHitCounter = 0;
         for (int i = 0; i < numMissilesToActivate; i++)
         {
-            if (selectedMissiles[i].gameObject.activeSelf && _targetComponent.CompHP > 0)
+            if (selectedMissiles[i].gameObject.activeSelf && _targetComponent.CompHP > 0.0f)
             {
                 StartCoroutine(selectedMissiles[i].Fire(_targetComponent, () => { weaponHitCounter++; }));
                 yield return new WaitForSeconds(Random.Range(PlayerShipConfig.WeaponActivationInterval.x, PlayerShipConfig.WeaponActivationInterval.y));
@@ -1096,7 +1096,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         weaponHitCounter = 0;
         for (int i = 0; i < numRailgunsToActivate; i++)
         {
-            if (selectedRailguns[i].gameObject.activeSelf && _targetComponent.CompHP > 0)
+            if (selectedRailguns[i].gameObject.activeSelf && _targetComponent.CompHP > 0.0f)
             {
                 StartCoroutine(selectedRailguns[i].Fire(_targetComponent, () => { weaponHitCounter++; }));
                 yield return new WaitForSeconds(Random.Range(PlayerShipConfig.WeaponActivationInterval.x, PlayerShipConfig.WeaponActivationInterval.y));
