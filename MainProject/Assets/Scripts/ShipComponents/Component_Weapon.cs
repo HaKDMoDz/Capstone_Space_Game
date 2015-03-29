@@ -90,9 +90,13 @@ public abstract class Component_Weapon : ShipComponent
                 float remainingDamage = damage - targetShip.ShieldStrength;
                 float componentDamage = remainingDamage * (1.0f - hullDamagePercent / 100.0f);
                 float hullDamage = remainingDamage * hullDamagePercent / 100.0f;
-                CombatSystemInterface.Instance.ShowFloatingDamage(damage, targetComp.transform.position, Color.red);
-                yield return StartCoroutine(targetComp.TakeDamage(componentDamage));
-                yield return StartCoroutine(targetComp.ParentShip.TakeDamage(hullDamage));
+                if (targetComp.CompHP > 0.0f)
+                {
+                    CombatSystemInterface.Instance.ShowFloatingDamage(damage, targetComp.transform.position, Color.red);
+                    yield return StartCoroutine(targetComp.TakeDamage(componentDamage));
+                    yield return StartCoroutine(targetComp.ParentShip.TakeDamage(hullDamage));
+                }
+                
             }
         }
         //if comp is armour
