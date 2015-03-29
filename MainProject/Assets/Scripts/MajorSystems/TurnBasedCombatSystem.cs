@@ -26,6 +26,8 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
     private float currentTurnTime;
     private List<TurnBasedUnit> unitsWithSameTime;
     public TurnBasedUnit firstUnit { get; private set; }
+
+    private bool playerWins = false;
     
     #endregion Fields
 
@@ -245,6 +247,10 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
     {
         if(ai_Ships.Count==0 || playerShips.Count == 0)
         {
+            if (ai_Ships.Count <= 0 && playerShips.Count > 0)
+            {
+                playerWins = true;
+            }
             EndCombat();
         }
         //multiple ships with the same time
@@ -295,7 +301,11 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
         #if FULL_DEBUG
         Debug.LogWarning("Combat Complete!");
         #endif  
-        GameController.Instance.GameData.galaxyMapData.completeStatus[GameController.Instance.GameData.galaxyMapData.currentMissionID - 1] = true;
+        if (playerWins)
+        {
+            GameController.Instance.GameData.galaxyMapData.completeStatus[GameController.Instance.GameData.galaxyMapData.currentMissionID - 1] = true;
+        }
+        
         GameController.Instance.ChangeScene(GameScene.GalaxyMap);
     }
     
