@@ -76,6 +76,7 @@ public partial class PlayerShip : TurnBasedUnit
     public void EndTurn(KeyCode key)
     {
         Debug.LogWarning("End Turn");
+        TutorialSystem.Instance.ShowTutorial(TutorialSystem.TutorialType.EndTurn, false);
         shouldEndTurn = true;
     }
     public override void Init(ShipBlueprint shipBP, ShipMove shipMove)

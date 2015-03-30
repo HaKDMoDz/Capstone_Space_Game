@@ -26,7 +26,6 @@ public class TutorialSystem : Singleton<TutorialSystem>
         TargetedEnemyShip, ClickOnCompToFire,EnemyShieldHP,
         //End turn
         EndTurn,
-
         //Ship Design
         //Build
         BuildHull, BuildComponent, DragPaint,
@@ -45,6 +44,23 @@ public class TutorialSystem : Singleton<TutorialSystem>
     
     private Dictionary<TutorialType, TutorialEntry> tutorialType_entry_table;
 
+    public void ToggleTutorials(bool show)
+    {
+        if(show)
+        {
+            foreach (var type_entry in tutorialType_entry_table)
+            {
+                type_entry.Value.shown = false;
+                type_entry.Value.panel.Toggle.isOn = false;
+            }
+            GameController.Instance.GameData.tutorialData.ShowTutorials = true;
+            StartTutorial();
+        }
+        else
+        {
+            ShowAllTutorials(false);
+        }
+    }
     public void ShowAllTutorials(bool show)
     {
         GameController.Instance.GameData.tutorialData.ShowTutorials = show;
@@ -52,6 +68,7 @@ public class TutorialSystem : Singleton<TutorialSystem>
         {
             panel.SetActive(show);
         }
+        CombatSystemInterface.Instance.SetTutorialToggle(show);
     }
     public void ShowNextTutorial(TutorialType currentType)
     {
@@ -96,11 +113,13 @@ public class TutorialSystem : Singleton<TutorialSystem>
     }
     private void Start()
     {
+        CombatSystemInterface.Instance.SetTutorialToggle(GameController.Instance.GameData.tutorialData.ShowTutorials);
         foreach (var type_entry in tutorialType_entry_table)
         {
             //Debug.Log("Type " + type_entry.Key + " toggle " + type_entry.Value.show);
             TutorialType currentType = type_entry.Key;
             TutorialPanel panel = type_entry.Value.panel;
+            panel.Toggle.isOn = false;
             if(!panel.AutoAdvance && !panel.TurnOffOnOk)
             {
                 panel.OkButton.gameObject.SetActive(false);
@@ -108,7 +127,7 @@ public class TutorialSystem : Singleton<TutorialSystem>
             }
             panel.AddOnClickListener(() => 
                 {
-                    if (!panel.ToggleIsOn)
+                    if (panel.ToggleIsOn)
                     {
                         ShowAllTutorials(false);
                     }
