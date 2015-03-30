@@ -141,7 +141,7 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
     public void ShowFloatingDamage(float damage, Vector3 worldPos, Color textColour)
     {
         TextExtended floatingDmgClone = (TextExtended)Instantiate(guiFields.floatingDamagePrefab);
-        floatingDmgClone.SetText(damage.ToString());
+        floatingDmgClone.SetText(damage.ToString("0"));
         floatingDmgClone.SetTextColour(textColour);
         RectTransform textTrans = (RectTransform)floatingDmgClone.transform;
         textTrans.SetParent(guiFields.overlayCanvas.transform, false);

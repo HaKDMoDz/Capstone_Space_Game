@@ -14,7 +14,6 @@ using System.Linq;
 public abstract class TurnBasedUnit : MonoBehaviour
 {
     #region Fields
-
     [SerializeField]
     private float turnDelay;
     public float TurnDelay
@@ -48,19 +47,16 @@ public abstract class TurnBasedUnit : MonoBehaviour
             }
         }
     }
-
     private float maxHullHP;
     public float MaxHullHP
     {
         get { return maxHullHP; }
     }
-
     private float maxPower;
     public float MaxPower
     {
         get { return maxPower; }
     }
-
     private float currentPower;
     public float CurrentPower
     {
@@ -71,15 +67,12 @@ public abstract class TurnBasedUnit : MonoBehaviour
             CombatSystemInterface.Instance.UpdateStats(CurrentPower, MoveCost,true); 
         }
     }
-
     public float MoveCost {get; private set;}
-
     protected List<ShipComponent> components = new List<ShipComponent>();
     public List<ShipComponent> Components
     {
         get { return components; }
     }
-
     //references
     [SerializeField]
     private GameObject componentCamera;
@@ -93,14 +86,12 @@ public abstract class TurnBasedUnit : MonoBehaviour
     {
         get { return targetingCamera; }
     }
-
     [SerializeField]
     protected GameObject expolosionObject;
     public GameObject getExplosionObject()
     {
         return expolosionObject;
     }
-
     private ShipBlueprintMetaData shipBPMetaData;
     public ShipBlueprintMetaData ShipBPMetaData
     {
@@ -147,12 +138,18 @@ public abstract class TurnBasedUnit : MonoBehaviour
     private ShipShield shipShield;
     private FillBar hpBar;
     private FillBar shieldBar;
-
     private Vector3 defaultTargetCamEuler;
     private Transform targetCamTrans;
-
+    private Transform hpBarTrans;
+    public Vector3 HpBarPositon
+    {
+        get 
+        {
+            Debug.Log("hp bar pos " + hpBarTrans.position);
+            return hpBarTrans.position + hpBarTrans.forward*30.0f; 
+        }
+    }
     #endregion Fields
-
 
     #region Methods
 
@@ -306,9 +303,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
 
     #endregion PublicMethods
 
-
     #region PrivateMethods
-
     //Helper
     private void InitStats()
     {
@@ -344,12 +339,10 @@ public abstract class TurnBasedUnit : MonoBehaviour
         }
         #endif
         ShowHPBars(false);
-
         maxHullHP = shipBP.Hull.HullHP;
         HullHP = maxHullHP;
-
-
         MaxShields = 0.0f;
+        hpBarTrans = hpBar.transform;
         foreach (ShipComponent component in shipBP.Slot_component_table.Values)
         {
             component.Init(this);

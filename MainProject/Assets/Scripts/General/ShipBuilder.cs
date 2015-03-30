@@ -78,6 +78,10 @@ public class ShipBuilder
         {
             Debug.LogError("ship null");
         }
+        else
+        {
+            Debug.Log("Building ship from template " + bpTemplate.MetaData.BlueprintName);
+        }
         #endif
         hullBeingBuilt.Init();
 

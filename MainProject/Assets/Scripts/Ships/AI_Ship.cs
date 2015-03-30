@@ -65,7 +65,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         missile = ComponentTable.id_comp_table.Where(c => c.Value.CompSpecificType == ComponentSpecificType.MISSILE).ToList().First().Value as Component_Weapon;
         railgun = ComponentTable.id_comp_table.Where(c => c.Value.CompSpecificType == ComponentSpecificType.MASS_D).ToList().First().Value as Component_Weapon;
 
-        Debug.Log(laser);
+        //Debug.Log(laser);
         laserRange = laser.range;
         missileRange = missile.range;
         railgunRange = railgun.range;

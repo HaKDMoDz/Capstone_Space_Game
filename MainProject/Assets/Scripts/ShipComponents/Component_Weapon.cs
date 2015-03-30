@@ -36,7 +36,7 @@ public abstract class Component_Weapon : ShipComponent
     public override void Init(TurnBasedUnit parentShip)
     {
         base.Init(parentShip);
-        ShieldDamage = damage;
+        ShieldDamage = damage * shieldDmgModifier * 0.01f;
         ComponentDamage = damage * (1.0f - hullDamagePercent *.01f);
         HullDamage = damage* hullDamagePercent* .01f;
     }
@@ -51,16 +51,6 @@ public abstract class Component_Weapon : ShipComponent
         Debug.Log("Weapon fire");
         yield return null;
     }
-
-    /// /////////////////////////
-    /// temp overloading for AI
-    /// //////////////////////////
-    public virtual IEnumerator Fire(Transform target, Action OnActivationComplete)
-    {
-        Debug.Log("Weapon fire");
-        yield return null;
-    }
-
     /// <summary>
     /// Calculates the damage to be done based on the target's shielding, and the weapon's stats for hull penetration, etc. Calls the TakeDamage coroutines on the target component and target ship.
     /// </summary>
@@ -78,22 +68,25 @@ public abstract class Component_Weapon : ShipComponent
         else
         {
             //CombatSystemInterface.Instance.ShowFloatingDamage(damage, targetComp.transform.position);
-            if (targetShip.ShieldStrength >= damage)
+            
+            if (targetShip.ShieldStrength >= ShieldDamage)
             {
                 ApplyShieldDamageEffect(targetComp.ParentShip);
-                yield return StartCoroutine(targetShip.TakeDamage(damage));
+                yield return StartCoroutine(targetShip.TakeDamage(ShieldDamage));
             }
             else
             {
-                Debug.Log("Killing shields " + targetShip.ShieldStrength);
+                float rawDamageToKillShields = targetShip.ShieldStrength / shieldDmgModifier * 0.01f;
+                Debug.Log("Killing shields " + targetShip.ShieldStrength + " rawDamageToKillShields: " + rawDamageToKillShields);
                 yield return StartCoroutine(targetShip.TakeDamage(targetShip.ShieldStrength));
-                float remainingDamage = damage - targetShip.ShieldStrength;
+                float remainingDamage = damage - rawDamageToKillShields;
                 float componentDamage = remainingDamage * (1.0f - hullDamagePercent / 100.0f);
                 float hullDamage = remainingDamage * hullDamagePercent / 100.0f;
                 if (targetComp.CompHP > 0.0f)
                 {
-                    CombatSystemInterface.Instance.ShowFloatingDamage(damage, targetComp.transform.position, Color.red);
+                    CombatSystemInterface.Instance.ShowFloatingDamage(componentDamage, targetComp.transform.position, Color.red);
                     yield return StartCoroutine(targetComp.TakeDamage(componentDamage));
+                    CombatSystemInterface.Instance.ShowFloatingDamage(hullDamage, targetComp.ParentShip.HpBarPositon, Color.green);
                     yield return StartCoroutine(targetComp.ParentShip.TakeDamage(hullDamage));
                 }
                 
@@ -119,7 +112,7 @@ public abstract class Component_Weapon : ShipComponent
         {
             hitPoint = hit.point;
             ship.PlayShieldEffect(hitPoint);
-            CombatSystemInterface.Instance.ShowFloatingDamage(damage, hitPoint, Color.cyan);
+            CombatSystemInterface.Instance.ShowFloatingDamage(ShieldDamage, hitPoint, Color.cyan);
         }
         #if FULL_DEBUG
         else
