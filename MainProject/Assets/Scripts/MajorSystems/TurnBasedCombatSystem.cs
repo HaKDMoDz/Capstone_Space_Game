@@ -125,7 +125,7 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
             playerShips.Remove((PlayerShip)unit);
         }
         CombatSystemInterface.Instance.UpdateTurnOrderPanel(units, true);
-        StartCoroutine(Explode(unit));
+        //StartCoroutine(Explode(unit));
 
         if (ai_Ships.Count <= 0 || playerShips.Count <= 0)
         {
@@ -146,13 +146,6 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
     #endregion PublicMethods
 
     #region PrivateMethods
-
-    private IEnumerator Explode(TurnBasedUnit unit)
-    {
-        unit.getExplosionObject().SetActive(true);
-        yield return new WaitForSeconds(1.25f);
-        Destroy(unit.gameObject);
-    }
 
     /// <summary>
     /// does some preliminary actions like calculating each ship's turn delay and setting up the GUI
