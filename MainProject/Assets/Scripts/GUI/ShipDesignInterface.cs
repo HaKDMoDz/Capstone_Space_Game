@@ -51,16 +51,6 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     private GameObject loadPanel;
     [SerializeField]
     private RectTransform loadButtonParent;
-    //fleet panel
-    //[SerializeField]
-    //private GameObject fleetPanel;
-    //[SerializeField]
-    //private RectTransform currentFleetParent;
-    //[SerializeField]
-    //private RectTransform savedBPsParent;
-    //[SerializeField]
-    //private FillBar fleetStrBar;
-    
     //stats
     [SerializeField]
     private Animator statsPanelAnim;
@@ -211,42 +201,8 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
                 loadButtonClone.Button.Select();
                 SelectBlueprintToLoad(fileName);
             });
-
-        //ButtonWithContent fleetPanel_savedBP_ButtonClone = Instantiate(buttonPrefab) as ButtonWithContent;
-        //fleetPanel_savedBP_ButtonClone.transform.SetParent(savedBPsParent, false);
-        //fleetPanel_savedBP_ButtonClone.SetText(fileName);
-        //fleetPanel_savedBP_ButtonClone.AddOnClickListener(() => AddBlueprintToFleet(fileName));
-        //fleetPanel_savedBP_ButtonClone.AddOnPointerEnterListener(() => BPButtonMouseEnter(fileName));
-        //fleetPanel_savedBP_ButtonClone.AddOnPointerExitListener(() => BPButtonMouseExit(fileName));
-        blueprintName_button_table.Add(fileName, loadButtonClone.gameObject);//, fleetPanel_savedBP_ButtonClone.gameObject });
+        blueprintName_button_table.Add(fileName, loadButtonClone.gameObject);
     }
-    //private void BPButtonMouseEnter(string blueprintName)
-    //{
-    //    if (FleetManager.Instance.WouldExceedMaxStr(shipDesignSystem.GetMetaData(blueprintName)))
-    //    {
-    //        fleetStrBar.SetFillColour(Color.red);
-    //    }
-    //}
-    //private void BPButtonMouseExit(string blueprintName)
-    //{
-    //    fleetStrBar.SetFillColour(Color.green);
-    //}
-//    private void AddBlueprintToFleet(string blueprintName)
-//    {
-//        ShipBlueprintMetaData metaData = shipDesignSystem.GetMetaData(blueprintName);
-//        if (FleetManager.Instance.TryAddToFleet(metaData))
-//        {
-//            AddCurrentFleetButton(blueprintName);
-//            fleetStrBar.SetValue((float)(FleetManager.Instance.CurrentFleetStrength) / (float)(FleetManager.Instance.MaxFleetStrength));
-//        }
-//#if FULL_DEBUG
-//        else
-//        {
-//            fleetStrBar.SetFillColour(Color.red);
-//            Debug.LogWarning("Would exceed max fleet strength");
-//        }
-//#endif
-//    }
     /// <summary>
     /// Removes a blueprint button
     /// </summary>
@@ -276,20 +232,6 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
         blueprintName_button_table.Remove(fileName);
 #endif
     }
-
-    //public void AddCurrentFleetButton(string fileName)
-    //{
-    //    ButtonWithContent buttonClone = Instantiate(buttonPrefab) as ButtonWithContent;
-    //    buttonClone.transform.SetParent(currentFleetParent, false);
-    //    buttonClone.SetText(fileName);
-    //    buttonClone.AddOnClickListener(() =>
-    //        {
-    //            FleetManager.Instance.RemoveFromFleet(shipDesignSystem.GetMetaData(fileName));
-    //            fleetStrBar.SetValue((float)(FleetManager.Instance.CurrentFleetStrength) / (float)(FleetManager.Instance.MaxFleetStrength));
-    //            Destroy(buttonClone.gameObject);
-    //        });
-    //}
-    //private void RemoveCurrentFleetButton(string fileName)
     #endregion GUIBuilders
     public void StopBuilding()
     {

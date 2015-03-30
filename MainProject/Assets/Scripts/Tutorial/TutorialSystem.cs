@@ -6,6 +6,7 @@
 */
 
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using System;
@@ -38,15 +39,16 @@ public class TutorialSystem : Singleton<TutorialSystem>
 
     [SerializeField]
     private List<TutorialType> tutorialSequence;
-    
     [SerializeField]
     private List<TutorialEntry> tutorialEntryList;
+    [SerializeField]
+    private Toggle tutorialOptionsToggle;
     
     private Dictionary<TutorialType, TutorialEntry> tutorialType_entry_table;
 
-    public void ToggleTutorials(bool show)
+    public void ToggleTutorials()
     {
-        if(show)
+        if(tutorialOptionsToggle.isOn)
         {
             foreach (var type_entry in tutorialType_entry_table)
             {
@@ -68,7 +70,7 @@ public class TutorialSystem : Singleton<TutorialSystem>
         {
             panel.SetActive(show);
         }
-        CombatSystemInterface.Instance.SetTutorialToggle(show);
+        tutorialOptionsToggle.isOn = show;
     }
     public void ShowNextTutorial(TutorialType currentType)
     {
@@ -113,7 +115,7 @@ public class TutorialSystem : Singleton<TutorialSystem>
     }
     private void Start()
     {
-        CombatSystemInterface.Instance.SetTutorialToggle(GameController.Instance.GameData.tutorialData.ShowTutorials);
+        tutorialOptionsToggle.isOn = GameController.Instance.GameData.tutorialData.ShowTutorials;
         foreach (var type_entry in tutorialType_entry_table)
         {
             //Debug.Log("Type " + type_entry.Key + " toggle " + type_entry.Value.show);

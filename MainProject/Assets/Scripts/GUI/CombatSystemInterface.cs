@@ -58,8 +58,6 @@ public struct CombatGUIFields
     public Button endTurnButton;
     //floating damage
     public TextExtended floatingDamagePrefab;
-    //tutorial
-    public Toggle tutorialToggle;
 }
 public enum CursorType { Default, Attack, Invalid }
 #endregion AdditionalStructs
@@ -258,14 +256,6 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
     //}
     #endregion GUISetup
 
-    public void ToggleTutorials()
-    {
-        TutorialSystem.Instance.ToggleTutorials(guiFields.tutorialToggle.isOn);
-    }
-    public void SetTutorialToggle(bool set)
-    {
-        guiFields.tutorialToggle.isOn = set;
-    }
     public void ShowModeButtons(bool show)
     {
         guiFields.modeButtons.SetActive(show);
