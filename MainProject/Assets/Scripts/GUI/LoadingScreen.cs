@@ -32,7 +32,7 @@ public class LoadingScreen : MonoBehaviour
         while (!async.isDone)
         {
             loadingbar.SetValue(async.progress, true);
-            Debug.Log("Loading Progress: " + async.progress);
+            //Debug.Log("Loading Progress: " + async.progress);
             yield return null;
         }
     }

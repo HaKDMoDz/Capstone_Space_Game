@@ -312,18 +312,6 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
                 break;
         }
     }
-    //public void ShowAttackCursor(bool show)
-    //{
-    //    if(show)
-    //    {
-    //        Cursor.SetCursor(guiFields.attackCursor,attackCursorOffset , CursorMode.Auto);
-    //    }
-    //    else
-    //    {
-    //        Cursor.SetCursor(guiFields.defaultCursor, defaultCursorOffset, CursorMode.Auto);
-    //    }
-    //}
-
     /// <summary>
     /// Shows the units in the turn order list, in the order that it was passed in (top to bottom)
     /// </summary>

@@ -28,7 +28,7 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
     public TurnBasedUnit firstUnit { get; private set; }
 
     private bool playerWins = false;
-    
+
     #endregion Fields
 
     #region Methods
@@ -44,7 +44,6 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
         unitsWithSameTime = new List<TurnBasedUnit>();
         playerShips = new List<PlayerShip>();
         ai_Ships = new List<AI_Ship>();
-        //raised whenever user clicks on the "ground"
     }
 
     /// <summary>
@@ -52,10 +51,10 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
     /// </summary>
     public IEnumerator StartCombat()
     {
-        #if FULL_DEBUG
+#if FULL_DEBUG
         Debug.LogWarning("Starting Combat");
         //Debug.Log("Mission ID: " + GameController.Instance.GameData.galaxyMapData.currentMissionID);
-        #endif
+#endif
         combatOn = true;
         PrepareForCombat();
 
@@ -69,7 +68,7 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
             PostTurnActions();
         }
         EndCombat();
-        
+
     }
 
     /// <summary>
@@ -79,7 +78,7 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
     public void AddShip(TurnBasedUnit unit)
     {
 #if FULL_DEBUG
-        
+
         if (units.Contains(unit))
         {
             Debug.LogError("Unit already exists in list");
@@ -90,7 +89,7 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
             Debug.Log("adding null unit");
         }
         units.Add(unit);
-        
+
         CombatSystemInterface.Instance.AddShipButton(unit);
 
         if (unit is PlayerShip)
@@ -101,12 +100,12 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
         {
             ai_Ships.Add((AI_Ship)unit);
         }
-        #if FULL_DEBUG
+#if FULL_DEBUG
         else
         {
             Debug.LogWarning("Not player nor AI");
         }
-        #endif
+#endif
 #else
         units.Add(unit);
 #endif
@@ -116,11 +115,11 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
     {
         units.Remove(unit);
         unitsWithSameTime.Remove(unit);
-        if(unit is AI_Ship)
+        if (unit is AI_Ship)
         {
             ai_Ships.Remove((AI_Ship)unit);
         }
-        else if(unit is PlayerShip)
+        else if (unit is PlayerShip)
         {
             Debug.LogWarning("Playership removed from combat system");
             playerShips.Remove((PlayerShip)unit);
@@ -168,36 +167,26 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
     /// </summary>
     private void CalculateTurnDelay()
     {
-        #if FULL_DEBUG
-        if(units == null)
+#if FULL_DEBUG
+        if (units == null) Debug.Log("units null");
+        for (int i = 0; i < units.Count; i++)
         {
-            Debug.Log("units null");
+            if (units[i] == null) Debug.LogError("item " + i + " null");
+            if (units[i].ShipBPMetaData == null) Debug.LogError(i + "meta null");
         }
-            for (int i = 0; i < units.Count; i++)
-        {
-            if(units[i]==null)
-            {
-                Debug.Log("item "+i+" null");
-            }
-                if(units[i].ShipBPMetaData==null)
-                {
-                    Debug.Log(i + "meta null");
-                }
-        }
-        #endif
-
+#endif
         float minPower = units.Min(s => s.ShipBPMetaData.ExcessPower);
-        #if FULL_DEBUG
+#if FULL_DEBUG
         Debug.Log("Min power: " + minPower + " Factor: " + GlobalVars.TurnDelayFactor);
-        #endif
+#endif
         foreach (TurnBasedUnit unit in units)
         {
             float shipPower = unit.ShipBPMetaData.ExcessPower;
-            float turnFrequency = shipPower / minPower - (shipPower - minPower) /GlobalVars.TurnDelayFactor;
+            float turnFrequency = shipPower / minPower - (shipPower - minPower) / GlobalVars.TurnDelayFactor;
             unit.TurnDelay = 1 / turnFrequency;
-            #if FULL_DEBUG
+#if FULL_DEBUG
             Debug.Log(unit.ShipBPMetaData.BlueprintName + " Ship Power:" + shipPower + " Turn Freq:" + turnFrequency + " Turn delay" + ": " + unit.TurnDelay);
-            #endif
+#endif
         }
     }//CalculateTurnDelay
 
@@ -207,22 +196,21 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
     private void PreTurnActions()
     {
         //if there are multiple ships with the same time, it just updates the GUI and sets the first unit
-        if(unitsWithSameTime.Count > 0 )
+        if (unitsWithSameTime.Count > 0)
         {
+            Debug.Log("Pre turn actions: units with same time: " + unitsWithSameTime.Count);
             CombatSystemInterface.Instance.UpdateTurnOrderPanel(units, false);
             firstUnit = units[0];
         }
         else //if there are no other ships with the same turn delay
         {
-            //sorts the units based on  their time left to turn
+            //sorts the units based on their time left to turn
             units = units.OrderBy(s => s.TimeLeftToTurn).ToList();
             firstUnit = units[0];
-
             //records the time left to turn for the first unit - is used to subtract from all other units
             currentTurnTime = firstUnit.TimeLeftToTurn;
-
             //more than 1 unit with the same time as first unit
-            if(units.Count(unit=>unit.TimeLeftToTurn==currentTurnTime)>1)
+            if (units.Count(unit => unit.TimeLeftToTurn == currentTurnTime) > 1)
             {
                 //copies all units with the same time into another list
                 unitsWithSameTime = units.Where(unit => unit.TimeLeftToTurn == currentTurnTime).ToList();
@@ -245,16 +233,13 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
     /// </summary>
     private void PostTurnActions()
     {
-        if(ai_Ships.Count==0 || playerShips.Count == 0)
+        if (ai_Ships.Count == 0 || playerShips.Count == 0)
         {
-            if (ai_Ships.Count <= 0 && playerShips.Count > 0)
-            {
-                playerWins = true;
-            }
+            playerWins = (ai_Ships.Count <= 0 && playerShips.Count > 0);
             EndCombat();
         }
         //multiple ships with the same time
-        if(unitsWithSameTime.Count > 0)
+        if (unitsWithSameTime.Count > 0)
         {
             //moves the unit that just took it's turn to the back of the list
             units.RemoveAt(0);
@@ -262,7 +247,7 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
             //remove the first unit from the list for units with the same time as well
             unitsWithSameTime.RemoveAt(0);
             //if there are still any units left that have the same time
-            if(unitsWithSameTime.Count>0)
+            if (unitsWithSameTime.Count > 0)
             {
                 //sort the units in the main list, but only those that do not have the same time and so still need to take their turn
                 units = units
@@ -298,17 +283,17 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
     }
     public void EndCombat()
     {
-        #if FULL_DEBUG
+#if FULL_DEBUG
         Debug.LogWarning("Combat Complete!");
-        #endif  
+#endif
         if (playerWins)
         {
             GameController.Instance.GameData.galaxyMapData.completeStatus[GameController.Instance.GameData.galaxyMapData.currentMissionID - 1] = true;
         }
-        
+
         GameController.Instance.ChangeScene(GameScene.GalaxyMap);
     }
-    
+
     #endregion PrivateMethods
 
     #endregion Methods
