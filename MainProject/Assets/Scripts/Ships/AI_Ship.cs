@@ -112,7 +112,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
                 {
                     Debug.LogWarning(targetPlayer.HullHP);
                     yield return StartCoroutine(ActivateWeapons(targetPlayer, targetComponent));
-                    yield return new WaitForSeconds(0.125f);
+                    yield return new WaitForSeconds(0.2f);
                     targetComponent = TargetComponent(targetPlayer);
                 }
                 receivedAttackCommand = false;
@@ -979,22 +979,146 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         
 
         Component_Weapon[] selectedWeapons = selectedComponents.Cast<Component_Weapon>().ToArray();
-        int numWeaponsToActivate = GetNumWeaponsToActivate(selectedWeapons[0], _targetShip, _targetComponent, selectedWeapons.Length);
+
+        foreach (Component_Weapon item in selectedWeapons)
+        {
+            Debug.LogWarning(item.CompSpecificType);
+        }
+
+        Component_Weapon[] selectedLasers = selectedWeapons.Where(c => c.CompSpecificType == ComponentSpecificType.LASER && c.gameObject.activeSelf).ToArray();
+        Component_Weapon[] selectedMissiles = selectedWeapons.Where(c => c.CompSpecificType == ComponentSpecificType.MISSILE && c.gameObject.activeSelf).ToArray();
+        Component_Weapon[] selectedRailguns = selectedWeapons.Where(c => c.CompSpecificType == ComponentSpecificType.MASS_D && c.gameObject.activeSelf).ToArray();
+
+        float totalPowerUsed = 0;
+        bool lasersDone = false;
+        bool missilesDone = false;
+        bool railgunsDone = false;
+
+        //int numWeaponsToActivate = GetNumWeaponsToActivate(selectedWeapons[0], _targetShip, _targetComponent, selectedWeapons.Length);
+        int numLasersToActivate;
+        if (selectedLasers.Count() > 0 && _targetComponent)
+        {
+            numLasersToActivate = GetNumWeaponsToActivate(selectedLasers[0], _targetShip, _targetComponent, selectedLasers.Length);
+            totalPowerUsed += (numLasersToActivate * selectedLasers[0].ActivationCost);
+        }
+        else
+        {
+            numLasersToActivate = 0;
+            lasersDone = true;
+            
+        }
+
+        int numMissilesToActivate;
+        if (selectedMissiles.Count() > 0 && _targetComponent)
+        {
+            numMissilesToActivate = GetNumWeaponsToActivate(selectedMissiles[0], _targetShip, _targetComponent, selectedMissiles.Length);
+            totalPowerUsed += (numMissilesToActivate * selectedMissiles[0].ActivationCost);
+        }
+        else
+        {
+            numMissilesToActivate = 0;
+            missilesDone = true;
+        }
+
+        int numRailgunsToActivate;
+        if (selectedRailguns.Count() > 0 && _targetComponent)
+        {
+            numRailgunsToActivate = GetNumWeaponsToActivate(selectedRailguns[0], _targetShip, _targetComponent, selectedRailguns.Length);
+            totalPowerUsed += (numRailgunsToActivate * selectedRailguns[0].ActivationCost);
+        }
+        else
+        {
+            numRailgunsToActivate = 0;
+            railgunsDone = true;
+        }
+      
 #if FULL_DEBUG
         Debug.Log("ActivateWeapons");
-        Debug.Log("numWeaponsToActivate " + numWeaponsToActivate);
+        //Debug.Log("numWeaponsToActivate " + numWeaponsToActivate);
+        Debug.Log("numLasersToActivate " + numLasersToActivate);
+        Debug.Log("numMissilesToActivate " + numMissilesToActivate);
+        Debug.Log("numRailgunsToActivate " + numRailgunsToActivate);
         Debug.Log("num selected weapons: " + selectedWeapons.Length);
 #endif
-        float totalPowerUsed = numWeaponsToActivate * selectedWeapons[0].ActivationCost;
+        
         CurrentPower -= totalPowerUsed;
         int weaponHitCounter = 0;
 
-        for (int i = 0; i < numWeaponsToActivate; i++)
+        for (int i = 0; i < numLasersToActivate; i++)
         {
-                    StartCoroutine(selectedWeapons[i].Fire(_targetComponent, () => { weaponHitCounter++; }));
-                            yield return new WaitForSeconds(Random.Range(PlayerShipConfig.WeaponActivationInterval.x, PlayerShipConfig.WeaponActivationInterval.y));
+            if (selectedLasers[i].gameObject.activeSelf && _targetComponent.CompHP > 0.0f)
+            {
+                StartCoroutine(selectedLasers[i].Fire(_targetComponent, () => { weaponHitCounter++; }));
+                yield return new WaitForSeconds(Random.Range(PlayerShipConfig.WeaponActivationInterval.x, PlayerShipConfig.WeaponActivationInterval.y));
+            }
+            else
+            {
+                weaponHitCounter++;
+            }
+
+            if (_targetComponent.CompHP <= 0)
+            {
+                RetargetNewComponent();
+                break;
+            }
         }
-        while (weaponHitCounter < numWeaponsToActivate)
+        while (weaponHitCounter < numLasersToActivate)
+        {
+            lasersDone = true;
+            break;
+        }
+
+        weaponHitCounter = 0;
+        for (int i = 0; i < numMissilesToActivate; i++)
+        {
+            if (selectedMissiles[i].gameObject.activeSelf && _targetComponent.CompHP > 0.0f)
+            {
+                StartCoroutine(selectedMissiles[i].Fire(_targetComponent, () => { weaponHitCounter++; }));
+                yield return new WaitForSeconds(Random.Range(PlayerShipConfig.WeaponActivationInterval.x, PlayerShipConfig.WeaponActivationInterval.y));
+            }
+            else
+            {
+                weaponHitCounter++;
+            }
+
+            if (_targetComponent.CompHP <= 0)
+            {
+                RetargetNewComponent();
+                break;
+            }
+        }
+        while (weaponHitCounter < numMissilesToActivate)
+        {
+            missilesDone = true;
+            break;
+        }
+
+        weaponHitCounter = 0;
+        for (int i = 0; i < numRailgunsToActivate; i++)
+        {
+            if (selectedRailguns[i].gameObject.activeSelf && _targetComponent.CompHP > 0.0f)
+            {
+                StartCoroutine(selectedRailguns[i].Fire(_targetComponent, () => { weaponHitCounter++; }));
+                yield return new WaitForSeconds(Random.Range(PlayerShipConfig.WeaponActivationInterval.x, PlayerShipConfig.WeaponActivationInterval.y));
+            }
+            else
+            {
+                weaponHitCounter++;
+            }
+
+            if (_targetComponent.CompHP <= 0)
+            {
+                RetargetNewComponent();
+                break;
+            }
+        }
+        while (weaponHitCounter < numRailgunsToActivate)
+        {
+            railgunsDone = true;
+            break;
+        }
+
+        if (lasersDone && missilesDone && railgunsDone)
         {
             yield return null;
         }
@@ -1006,30 +1130,38 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
     /// <returns></returns>
     private int GetNumWeaponsToActivate(Component_Weapon weapon, PlayerShip _targetShip, ShipComponent _targetComponent, int numSelectedWeapons)
     {
-        int numWeaponsToKillShields = Mathf.CeilToInt(_targetShip.ShieldStrength / weapon.ShieldDamage);
+        if (_targetComponent.CompHP > 0)
+        {
+            int numWeaponsToKillShields = Mathf.CeilToInt(_targetShip.ShieldStrength / weapon.ShieldDamage);
 #if FULL_DEBUG
-        Debug.LogWarning("Weapon activation calculation: ");
-        Debug.Log("Target shield: " + _targetShip.ShieldStrength + " weapon shield dmg " + weapon.ShieldDamage + " num to kill shield " + numWeaponsToKillShields);
+            Debug.LogWarning("Weapon activation calculation: ");
+            Debug.Log("Target shield: " + _targetShip.ShieldStrength + " weapon shield dmg " + weapon.ShieldDamage + " num to kill shield " + numWeaponsToKillShields);
 #endif
-        //List<ShipComponent> selectedComponents = components.Where(c => c.CompType == ComponentType.Weapon && c.gameObject.activeSelf).ToList();
+            //List<ShipComponent> selectedComponents = components.Where(c => c.CompType == ComponentType.Weapon && c.gameObject.activeSelf).ToList();
 
-        if (numWeaponsToKillShields > numSelectedWeapons)
-        {
-            return numSelectedWeapons;
-        }
-        int numWpnsToKillComp = Mathf.CeilToInt(_targetComponent.CompHP / weapon.ComponentDamage);
-        int numWpnsToKillHull = Mathf.CeilToInt(_targetShip.HullHP / weapon.HullDamage);
+            if (numWeaponsToKillShields > numSelectedWeapons)
+            {
+                return numSelectedWeapons;
+            }
+            int numWpnsToKillComp = Mathf.CeilToInt(_targetComponent.CompHP / weapon.ComponentDamage);
+            int numWpnsToKillHull = Mathf.CeilToInt(_targetShip.HullHP / weapon.HullDamage);
 #if FULL_DEBUG
-        Debug.Log("Target comp HP: " + _targetComponent.CompHP + " weapon comp dmg " + weapon.ComponentDamage + " num to kill comp " + numWpnsToKillComp);
-        Debug.Log("Target hull HP: " + _targetShip.HullHP + " weapon hull dmg " + weapon.HullDamage + " num to kill hull " + numWpnsToKillHull);
+            Debug.Log("Target comp HP: " + _targetComponent.CompHP + " weapon comp dmg " + weapon.ComponentDamage + " num to kill comp " + numWpnsToKillComp);
+            Debug.Log("Target hull HP: " + _targetShip.HullHP + " weapon hull dmg " + weapon.HullDamage + " num to kill hull " + numWpnsToKillHull);
 #endif
-        //num weapon activations is the minimum to kill target component or to kill hull
-        int totalWpnActivations = numWeaponsToKillShields + (numWpnsToKillComp < numWpnsToKillHull ? numWpnsToKillComp : numWpnsToKillHull);
-        if (totalWpnActivations > numSelectedWeapons)
-        {
-            return numSelectedWeapons;
+            //num weapon activations is the minimum to kill target component or to kill hull
+            int totalWpnActivations = numWeaponsToKillShields + (numWpnsToKillComp < numWpnsToKillHull ? numWpnsToKillComp : numWpnsToKillHull);
+            if (totalWpnActivations > numSelectedWeapons)
+            {
+                return numSelectedWeapons;
+            }
+            return totalWpnActivations;
         }
-        return totalWpnActivations;
+        else
+        {
+            return 0;
+        }
+        
     }
 
     #endregion PublicMethods
