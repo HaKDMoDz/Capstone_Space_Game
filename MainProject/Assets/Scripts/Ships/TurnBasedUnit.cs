@@ -112,7 +112,8 @@ public abstract class TurnBasedUnit : MonoBehaviour
             //float damage = hullHP - value;
             //hpBar.ChangeValue(-damage / MaxHullHP, true);
             hullHP = value;
-            hpBar.SetValue(hullHP / MaxHullHP, true);
+            float normHP = hullHP / maxHullHP;
+            hpBar.SetValue(normHP <= 0.05f && normHP>0.0? 0.05f : normHP, true);
         }
     }
 
@@ -145,8 +146,8 @@ public abstract class TurnBasedUnit : MonoBehaviour
     {
         get 
         {
-            Debug.Log("hp bar pos " + hpBarTrans.position);
-            return hpBarTrans.position + hpBarTrans.forward*30.0f; 
+            //Debug.Log("hp bar pos " + hpBarTrans.position);
+            return hpBarTrans.position; 
         }
     }
     #endregion Fields
@@ -162,7 +163,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
     /// <returns>null or the Destroy() Coroutine</returns>
     public IEnumerator TakeDamage(float _amountOfDamage)
     {
-        //Debug.Log("Shield: " + ShieldStrength + " Damage " + _amountOfDamage);
+        Debug.Log("Starting Unit.TakeDamage: Shield: " + ShieldStrength + " Damage " + _amountOfDamage);
         if (ShieldStrength >= _amountOfDamage)
         {
             ShieldStrength -= _amountOfDamage;
@@ -182,6 +183,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
                 yield return StartCoroutine(Destroy());
             }
         }
+        Debug.Log("Return from Unit.TakeDamage");
     }
     public void DestroyComponent(ShipComponent component)
     {
@@ -203,40 +205,34 @@ public abstract class TurnBasedUnit : MonoBehaviour
     /// <returns>null after it finishes</returns>
     protected virtual IEnumerator Destroy()
     {
+        Debug.LogWarning("Starting Destroy");
         //play explosion particle effect
         expolosionObject.SetActive(true);
         yield return new WaitForSeconds(0.75f);
-
         //remove ship graphics
         if (GetComponent<Hull>().hullName == "Organic Corvette")
         {
             transform.FindChild("OrganicCorvette").gameObject.SetActive(false);
         }
-
         if (GetComponent<Hull>().hullName == "Organic Frigate")
         {
             transform.FindChild("OrganicFrigate").gameObject.SetActive(false);
         }
         transform.FindChild("ComponentGrid").gameObject.SetActive(false);
         ShowHPBars(false);
-
         //play explosion sound
-
         //play explosion juice (screen shake, etc)
         yield return new WaitForSeconds(0.75f);
-        Camera.main.GetComponent<CameraDirector>().DoShake();
-
+        CameraDirector.Instance.DoShake();
         //wait for explosion to finish
         yield return new WaitForSeconds(1.0f);
-
         //remove ship
-        TurnBasedCombatSystem.Instance.KillShip(this);
-
         yield return new WaitForSeconds(1.0f);
-
+        StartCoroutine(TurnBasedCombatSystem.Instance.KillShip(this));
         #if FULL_DEBUG
         Debug.Log(name+" Destroyed");
         #endif
+        Debug.Log("Return from Unit.Destroy");
     }
     /// <summary>
     /// sets up references
