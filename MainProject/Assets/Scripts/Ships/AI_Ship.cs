@@ -108,11 +108,16 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
                 activeComponents = components;
 
                 trans.LookAt(targetPlayer.transform);
-                while ( targetPlayer.HullHP > 0 && CurrentPower > activeComponents.Where(c => c.CompType == ComponentType.Weapon).Aggregate((curr, next) => curr.ActivationCost < next.ActivationCost ? curr : next).ActivationCost)
+                while (targetPlayer.HullHP > 0 && CurrentPower > activeComponents.Where(c => c.CompType == ComponentType.Weapon).Aggregate((curr, next) => curr.ActivationCost < next.ActivationCost ? curr : next).ActivationCost)
                 {
                     Debug.LogWarning(targetPlayer.HullHP);
                     yield return StartCoroutine(ActivateWeapons(targetPlayer, targetComponent));
                     yield return new WaitForSeconds(0.2f);
+                    while(targetPlayer.GettingDestroyed)
+                    {
+                        Debug.Log("Waiting for " + targetPlayer + " to get destroyed");
+                        yield return null;
+                    }
                     targetComponent = TargetComponent(targetPlayer);
                 }
                 receivedAttackCommand = false;

@@ -135,7 +135,11 @@ public abstract class TurnBasedUnit : MonoBehaviour
     {
         get { return componentGridTrans; }
     }
-
+    private bool gettingDestroyed = false;
+    public bool GettingDestroyed
+    {
+        get { return gettingDestroyed; }
+    }
     private ShipShield shipShield;
     private FillBar hpBar;
     private FillBar shieldBar;
@@ -181,6 +185,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
             if (HullHP <= 0.0f)
             {
                 yield return StartCoroutine(Destroy());
+                //yield return StartCoroutine(TurnBasedCombatSystem.Instance.KillShip(this));
             }
         }
         Debug.Log("Return from Unit.TakeDamage");
@@ -206,19 +211,22 @@ public abstract class TurnBasedUnit : MonoBehaviour
     protected virtual IEnumerator Destroy()
     {
         Debug.LogWarning("Starting Destroy");
+        gettingDestroyed = true;
         //play explosion particle effect
         expolosionObject.SetActive(true);
+        expolosionObject.transform.parent = null;
         yield return new WaitForSeconds(0.75f);
+
         //remove ship graphics
-        if (GetComponent<Hull>().hullName == "Organic Corvette")
-        {
-            transform.FindChild("OrganicCorvette").gameObject.SetActive(false);
-        }
-        if (GetComponent<Hull>().hullName == "Organic Frigate")
-        {
-            transform.FindChild("OrganicFrigate").gameObject.SetActive(false);
-        }
-        transform.FindChild("ComponentGrid").gameObject.SetActive(false);
+        //if (GetComponent<Hull>().hullName == "Organic Corvette")
+        //{
+        //    transform.FindChild("OrganicCorvette").gameObject.SetActive(false);
+        //}
+        //if (GetComponent<Hull>().hullName == "Organic Frigate")
+        //{
+        //    transform.FindChild("OrganicFrigate").gameObject.SetActive(false);
+        //}
+        //transform.FindChild("ComponentGrid").gameObject.SetActive(false);
         ShowHPBars(false);
         //play explosion sound
         //play explosion juice (screen shake, etc)
@@ -233,6 +241,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
         Debug.Log(name+" Destroyed");
         #endif
         Debug.Log("Return from Unit.Destroy");
+        gettingDestroyed = false;
     }
     /// <summary>
     /// sets up references

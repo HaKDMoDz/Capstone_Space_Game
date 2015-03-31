@@ -113,6 +113,7 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
 
     public IEnumerator KillShip(TurnBasedUnit unit)
     {
+        Debug.Log("Starting System.KillShip");
         units.Remove(unit);
         unitsWithSameTime.Remove(unit);
         if (unit is AI_Ship)
@@ -129,6 +130,7 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
         Destroy(unit.gameObject);
         combatOn = (ai_Ships.Count > 0 && playerShips.Count > 0);
         yield return null;
+        Debug.LogWarning("Returnig from System.KillShip");
     }
 
     #region GUIAccess
