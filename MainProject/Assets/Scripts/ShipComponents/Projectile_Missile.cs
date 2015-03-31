@@ -16,6 +16,7 @@ public class Projectile_Missile : MonoBehaviour
     
     private void OnTriggerEnter(Collider other)
     {
+        //Debug.Log("projectile collision with " + other.name);
         OnCollision(other.gameObject);    
     }
 

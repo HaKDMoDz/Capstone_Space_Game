@@ -50,10 +50,12 @@ public partial class PlayerShip : TurnBasedUnit
                     () => { weaponHitCounter++; }));
             yield return new WaitForSeconds(Random.Range(PlayerShipConfig.WeaponActivationInterval.x, PlayerShipConfig.WeaponActivationInterval.y));
         }
-        while(weaponHitCounter<numWeaponsToActivate)
+        while(weaponHitCounter<numWeaponsToActivate  )
         {
+            //Debug.Log("waiting for weapons to activate - weaponHitCounter: " + weaponHitCounter + " numWeaponsToActivate " + numWeaponsToActivate);
             yield return null;
         }
+        Debug.Log("Ending activate weapons");
         Camera.main.cullingMask = originalCamCulling;
         yield return StartCoroutine(PostActivateWeapons());
     }
@@ -90,8 +92,8 @@ public partial class PlayerShip : TurnBasedUnit
     {
         int numWeaponsToKillShields = Mathf.CeilToInt(targetShip.ShieldStrength / weapon.ShieldDamage);
 #if FULL_DEBUG
-        //Debug.LogWarning("Weapon activation calculation: ");
-        //Debug.Log("Target shield: " + targetShip.ShieldStrength + " weapon shield dmg " + weapon.ShieldDamage + " num to kill shield " + numWeaponsToKillShields);
+        Debug.LogWarning("Weapon activation calculation: ");
+        Debug.Log("Target shield: " + targetShip.ShieldStrength + " weapon shield dmg " + weapon.ShieldDamage + " num to kill shield " + numWeaponsToKillShields);
 #endif
         if (numWeaponsToKillShields > selectedComponents.Count)
         {
@@ -100,8 +102,8 @@ public partial class PlayerShip : TurnBasedUnit
         int numWpnsToKillComp = Mathf.CeilToInt(targetComponent.CompHP / weapon.ComponentDamage);
         int numWpnsToKillHull = Mathf.CeilToInt(targetShip.HullHP / weapon.HullDamage);
 #if FULL_DEBUG
-        //Debug.Log("Target comp HP: " + targetComponent.CompHP + " weapon comp dmg " + weapon.ComponentDamage + " num to kill comp " + numWpnsToKillComp);
-        //Debug.Log("Target hull HP: " + targetShip.HullHP + " weapon hull dmg " + weapon.HullDamage + " num to kill hull " + numWpnsToKillHull);
+        Debug.Log("Target comp HP: " + targetComponent.CompHP + " weapon comp dmg " + weapon.ComponentDamage + " num to kill comp " + numWpnsToKillComp);
+        Debug.Log("Target hull HP: " + targetShip.HullHP + " weapon hull dmg " + weapon.HullDamage + " num to kill hull " + numWpnsToKillHull);
 #endif
         //num weapon activations is the minimum to kill target component or to kill hull
         int totalWpnActivations = numWeaponsToKillShields + (numWpnsToKillComp < numWpnsToKillHull ? numWpnsToKillComp : numWpnsToKillHull);

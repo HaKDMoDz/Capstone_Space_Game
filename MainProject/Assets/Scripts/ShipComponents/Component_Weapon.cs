@@ -71,7 +71,7 @@ public abstract class Component_Weapon : ShipComponent
             
             if (targetShip.ShieldStrength >= ShieldDamage)
             {
-                ApplyShieldDamageEffect(targetComp.ParentShip);
+                ApplyShieldDamageEffect(targetShip);
                 yield return StartCoroutine(targetShip.TakeDamage(ShieldDamage));
             }
             else
@@ -86,12 +86,13 @@ public abstract class Component_Weapon : ShipComponent
                 {
                     CombatSystemInterface.Instance.ShowFloatingDamage(componentDamage, targetComp.transform.position, Color.red);
                     yield return StartCoroutine(targetComp.TakeDamage(componentDamage));
-                    CombatSystemInterface.Instance.ShowFloatingDamage(hullDamage, targetComp.ParentShip.HpBarPositon, Color.green);
-                    yield return StartCoroutine(targetComp.ParentShip.TakeDamage(hullDamage));
+                    CombatSystemInterface.Instance.ShowFloatingDamage(hullDamage, targetShip.HpBarPositon, Color.green);
+                    yield return StartCoroutine(targetShip.TakeDamage(hullDamage));
                 }
                 
             }
         }
+        Debug.Log("return from Weapon.DoDamage");
         //if comp is armour
         //  compDmg+=compDmg*armourMod%/100
         //if(targetComp is Comp_Def_Shield)

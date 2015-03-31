@@ -42,13 +42,14 @@ public class Comp_Wpn_Railgun : Component_Weapon
 
             targetTrans = targetComp.transform;
             shootPoint.LookAt(targetTrans);
-            
             //for laser style railgun
             //yield return StartCoroutine(CreateRailEffect());
             
             //for projectile railgun
             Projectile_Missile bulletClone = (Projectile_Missile)Instantiate(projectilePrefab, shootPoint.position, shootPoint.rotation);
             bulletClone.rigidbody.velocity = shootPoint.forward * projectileSpeed;
+            float distanceToTarget = Vector3.Distance(targetTrans.position, shootPoint.position);
+            float timeToTarget = distanceToTarget / projectileSpeed;
             ////muzzle flash
             bool bulletCollided = false;
             bulletClone.OnCollision +=
@@ -65,13 +66,15 @@ public class Comp_Wpn_Railgun : Component_Weapon
                         Destroy(bulletClone.gameObject);
                     }
                 };
+            //float currentTimer = 
             while (!bulletCollided)
             {
                 yield return null;
             }
+            Debug.Log("Weapon doing damage");
             yield return StartCoroutine(DoDamage(targetComp));
         }
-
+        Debug.Log("Weapon activation complete");
         OnActivationComplete();
     }
 

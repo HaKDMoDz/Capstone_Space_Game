@@ -111,12 +111,13 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
 #endif
     }
 
-    public void KillShip(TurnBasedUnit unit)
+    public IEnumerator KillShip(TurnBasedUnit unit)
     {
         units.Remove(unit);
         unitsWithSameTime.Remove(unit);
         if (unit is AI_Ship)
         {
+            Debug.LogWarning("Removing AI unit ");
             ai_Ships.Remove((AI_Ship)unit);
         }
         else if (unit is PlayerShip)
@@ -125,12 +126,9 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
             playerShips.Remove((PlayerShip)unit);
         }
         CombatSystemInterface.Instance.UpdateTurnOrderPanel(units, true);
-        //StartCoroutine(Explode(unit));
-
-        if (ai_Ships.Count <= 0 || playerShips.Count <= 0)
-        {
-            combatOn = false;
-        }
+        Destroy(unit.gameObject);
+        combatOn = (ai_Ships.Count > 0 && playerShips.Count > 0);
+        yield return null;
     }
 
     #region GUIAccess

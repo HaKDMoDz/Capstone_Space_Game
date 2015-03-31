@@ -79,11 +79,11 @@ public class CombatSceneController : Singleton<CombatSceneController>
                 ship_gridPos_table.Add(playerShip.transform, playerStartSpawnPos + spawnPos);
             }
         }
-        if (pirateFleetData.currentFleet_BlueprintNames.Count == 0)
+        //if (pirateFleetData.currentFleet_BlueprintNames.Count == 0)
         {
             Debug.LogWarning("Empty enemy fleet - spawning default fleet");
-            pirateFleetData.currentFleet_BlueprintNames = new List<string>() { "AI_Corvette", "AI_Frigate" };
-            //pirateFleetData.currentFleet_BlueprintNames = new List<string>() { "AI_Test"};//, "AI_Test" };
+            //pirateFleetData.currentFleet_BlueprintNames = new List<string>() { "AI_Corvette", "AI_Frigate" };
+            pirateFleetData.currentFleet_BlueprintNames = new List<string>() { "NewAICorv","NewAIFrig"};//, "AI_Test" };
         }
         foreach (string bpTemplateName in pirateFleetData.currentFleet_BlueprintNames)
         {

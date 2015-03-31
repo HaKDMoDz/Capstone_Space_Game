@@ -141,7 +141,7 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
     public void ShowFloatingDamage(float damage, Vector3 worldPos, Color textColour)
     {
         TextExtended floatingDmgClone = (TextExtended)Instantiate(guiFields.floatingDamagePrefab);
-        floatingDmgClone.SetText(damage.ToString("0"));
+        floatingDmgClone.SetText(damage.ToString(damage % 1==0 ? "0": "0.0"));
         floatingDmgClone.SetTextColour(textColour);
         RectTransform textTrans = (RectTransform)floatingDmgClone.transform;
         textTrans.SetParent(guiFields.overlayCanvas.transform, false);
@@ -334,7 +334,7 @@ public class CombatSystemInterface : Singleton<CombatSystemInterface>
         {
             for (int i = 0; i < units.Count; i++)
             {
-                Debug.Log("Unit: " + units[i].ShipBPMetaData.BlueprintName + " time left " + units[i].TimeLeftToTurn);
+                //Debug.Log("Unit: " + units[i].ShipBPMetaData.BlueprintName + " time left " + units[i].TimeLeftToTurn);
                 TextExtended button = unit_buttonRect_table[units[i]];
                 //button.SetText( units[i].ShipBPMetaData.BlueprintName);
                 button.RectTrans.SetSiblingIndex(i);
