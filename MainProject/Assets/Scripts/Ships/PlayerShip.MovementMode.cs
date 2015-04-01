@@ -44,8 +44,18 @@ public partial class PlayerShip : TurnBasedUnit
         Debug.Log("Movement Mode");
         while(!shouldChangeState && !ShouldTurnEnd())
         {
-            ShowMovementUI(true);
+            //ShowMovementUI(true);
             MouseOverSpaceGround();
+            if (CanUnitMoveTo(mousePosOnGround))
+            {
+                combatInterface.SetCursorType(CursorType.Default);
+                ShowMovementUI(true);
+            }
+            else
+            {
+                ShowMovementUI(false);
+                combatInterface.SetCursorType(CursorType.Invalid);
+            }
             if(receivedMoveCommand)
             {
                 //hide movement ui
@@ -71,6 +81,7 @@ public partial class PlayerShip : TurnBasedUnit
         ShowMovementUI(false);
         combatInterface.ShowModeButtons(false);
         InputManager.Instance.DeregisterKeysDown(SwitchToTacticalMode, KeyCode.Space);
+        combatInterface.SetCursorType(CursorType.Default);
         yield return null;
     }
     private void SwitchToTacticalMode(KeyCode key)
@@ -99,19 +110,9 @@ public partial class PlayerShip : TurnBasedUnit
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, GlobalVars.RayCastRange, 1 << TagsAndLayers.SpaceGroundLayer))
         {
-            if (CanUnitMoveTo(hit.point))
-            {
-                mousePosOnGround = hit.point;
-                moveDistance = Vector3.Distance(mousePosOnGround, trans.position);
-                movePowerCost = Mathf.Round(moveDistance * MoveCost);
-                combatInterface.SetCursorType(CursorType.Default);
-                ShowMovementUI(true);
-            }
-            else
-            {
-                ShowMovementUI(false);
-                combatInterface.SetCursorType(CursorType.Invalid);
-            }
+            mousePosOnGround = hit.point;
+            moveDistance = Vector3.Distance(mousePosOnGround, trans.position);
+            movePowerCost = Mathf.Round(moveDistance * MoveCost);
         }
     }
     #region InternalCallbacks

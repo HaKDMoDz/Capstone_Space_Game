@@ -115,7 +115,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
                     yield return new WaitForSeconds(0.2f);
                     while(targetPlayer.GettingDestroyed)
                     {
-                        Debug.Log("Waiting for " + targetPlayer + " to get destroyed");
+                        //Debug.Log("Waiting for " + targetPlayer + " to get destroyed");
                         yield return null;
                     }
                     targetComponent = TargetComponent(targetPlayer);
