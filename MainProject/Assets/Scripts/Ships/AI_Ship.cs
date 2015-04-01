@@ -87,51 +87,62 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
 
         PreTurnActions();
 
-        targetPlayer = TargetEnemy(TurnBasedCombatSystem.Instance.playerShips);
-        TargetComponent(targetPlayer, out targetComponent);
-        targetPlayer.ShowHPBars(true);
-        if (targetComponent != null)
+        if (TurnBasedCombatSystem.Instance.playerShips.Count > 0)
         {
-            //move phase
-            Move(targetPlayer, targetComponent.Placement);
-            if (receivedMoveCommand)
+            targetPlayer = TargetEnemy(TurnBasedCombatSystem.Instance.playerShips);
+            TargetComponent(targetPlayer, out targetComponent);
+            targetPlayer.ShowHPBars(true);
+            if (targetComponent != null)
             {
-                yield return StartCoroutine(shipMove.Move());
-                receivedMoveCommand = false;
-#if FULL_DEBUG
-                Debug.Log(name + "- Movement end");
-#endif
-            }
-            //attack phase
-            Attack();
-            if (receivedAttackCommand)
-            {
-                activeComponents = components;
-
-                trans.LookAt(targetPlayer.transform);
-                while (targetPlayer.HullHP > 0 && CurrentPower > activeComponents.Where(c => c.CompType == ComponentType.Weapon).Aggregate((curr, next) => curr.ActivationCost < next.ActivationCost ? curr : next).ActivationCost)
+                //move phase
+                Move(targetPlayer, targetComponent.Placement);
+                if (receivedMoveCommand)
                 {
-                    Debug.LogWarning(targetPlayer.HullHP);
-                    yield return StartCoroutine(ActivateWeapons(targetPlayer));
-                    yield return new WaitForSeconds(0.2f);
-                    while(targetPlayer.GettingDestroyed)
-                    {
-                        //Debug.Log("Waiting for " + targetPlayer + " to get destroyed");
-                        yield return null;
-                    }
-                    TargetComponent(targetPlayer, out targetComponent);
-
-                    if (targetPlayer.ShieldStrength <= 0.0f)
-                    {
-                        break;
-                    }
-                }
-                receivedAttackCommand = false;
+                    yield return StartCoroutine(shipMove.Move());
+                    receivedMoveCommand = false;
 #if FULL_DEBUG
-                Debug.Log(name + "- Attack end");
+                    Debug.Log(name + "- Movement end");
 #endif
+                }
+                //attack phase
+                targetComponent = GetFirstComponentInDirection(targetComponent);
+                Attack();
+                if (receivedAttackCommand)
+                {
+                    activeComponents = components;
+
+                    trans.LookAt(targetPlayer.transform);
+                    while (targetPlayer.HullHP > 0 
+                        && CurrentPower > activeComponents
+                        .Where(c => c.CompType == ComponentType.Weapon)
+                        .Aggregate((curr, next) => curr.ActivationCost < next.ActivationCost ? curr : next).ActivationCost)
+                    {
+                        Debug.LogWarning(targetPlayer.HullHP);
+                        yield return StartCoroutine(ActivateWeapons(targetPlayer));
+                        yield return new WaitForSeconds(0.2f);
+                        while (targetPlayer.GettingDestroyed)
+                        {
+                            Debug.LogWarning("Waiting for " + targetPlayer + " to get destroyed");
+                            yield return null;
+                        }
+
+                        if (targetPlayer)
+                        {
+                            //TargetComponent(targetPlayer, out targetComponent);
+                        }
+                        if (targetPlayer.ShieldStrength <= 0.0f)
+                        {
+                            break;
+                        }
+                    }
+                    receivedAttackCommand = false;
+#if FULL_DEBUG
+                    Debug.Log(name + "- Attack end");
+#endif
+                }
             }
         }
+        
         PostTurnActions();
     }
 
@@ -152,10 +163,9 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
     protected override void PostTurnActions()
     {
         if (targetShip)
-	    {
+        {
             targetShip.ShowHPBars(false);
-	    }
-        
+        }
     }
 
     public void Move(PlayerShip targetPlayer, AI_Fleet.PlacementType _placement)
@@ -166,20 +176,54 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
             Debug.Log("Move command received " + ShipBPMetaData.BlueprintName);
 #endif
             Vector3 enemyPosition = targetPlayer.transform.position;
+            Vector3 desiredPos;
             switch (_placement)
             {
                 case AI_Fleet.PlacementType.FORWARD:
 
-                    shipMove.destination = enemyPosition + (targetPlayer.transform.forward * (range - 10));
+                    desiredPos = enemyPosition + (targetPlayer.transform.forward * (range - 10));
+                    while (!CanUnitMoveTo(desiredPos))
+                    {
+                        Vector2 direction2D = Random.insideUnitCircle;
+                        Vector3 direction3D = new Vector3(direction2D.x, desiredPos.y, direction2D.y);
+                        direction3D *= (range - 10);
+                        desiredPos = enemyPosition + direction3D;
+                    }
+
+                    shipMove.destination = desiredPos;
+
                     break;
                 case AI_Fleet.PlacementType.AFT:
-                    shipMove.destination = enemyPosition + (-targetPlayer.transform.forward * (range - 10));
+                    desiredPos = enemyPosition + (-targetPlayer.transform.forward * (range - 10));
+                    while (!CanUnitMoveTo(desiredPos))
+                    {
+                        Vector2 direction2D = Random.insideUnitCircle;
+                        Vector3 direction3D = new Vector3(direction2D.x, desiredPos.y, direction2D.y);
+                        direction3D *= (range - 10);
+                        desiredPos = enemyPosition + direction3D;
+                    }
+
+                    shipMove.destination = desiredPos;
                     break;
                 case AI_Fleet.PlacementType.PORT:
-                    shipMove.destination = enemyPosition + (-targetPlayer.transform.right * (range - 10));
+                    desiredPos = enemyPosition + (-targetPlayer.transform.right * (range - 10));
+                    while (!CanUnitMoveTo(desiredPos))
+                    {
+                        Vector2 direction2D = Random.insideUnitCircle;
+                        Vector3 direction3D = new Vector3(direction2D.x, desiredPos.y, direction2D.y);
+                        direction3D *= (range - 10);
+                        desiredPos = enemyPosition + direction3D;
+                    }
                     break;
                 case AI_Fleet.PlacementType.STARBOARD:
-                    shipMove.destination = enemyPosition + (targetPlayer.transform.right * (range - 10));
+                    desiredPos = enemyPosition + (targetPlayer.transform.right * (range - 10));
+                    while (!CanUnitMoveTo(desiredPos))
+                    {
+                        Vector2 direction2D = Random.insideUnitCircle;
+                        Vector3 direction3D = new Vector3(direction2D.x, desiredPos.y, direction2D.y);
+                        direction3D *= (range - 10);
+                        desiredPos = enemyPosition + direction3D;
+                    }
                     break;
                 case AI_Fleet.PlacementType.COUNT:
                 default:
@@ -220,45 +264,39 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         }
         else
         {
-            if (targetShip == null)
+            Vector3 selfPos = trans.position;
+
+            float confidence = 0;
+
+            //get count for player fleet
+            int playerFleetStrength = GameObject.FindObjectsOfType<PlayerShip>().Count();
+            // get count for enemy fleet
+            int aiFleetStrength = GameObject.FindObjectsOfType<AI_Ship>().Count();
+
+            //calculate basis for confidence
+
+            int totalShips = playerFleetStrength + aiFleetStrength;
+
+            confidence = (float)aiFleetStrength / (float)totalShips;
+            //adjust based on ship and target
+
+            //case 1 ... closest enemy
+            if (confidence < AIManager.tgtClosest) //closest enemy
             {
-                Vector3 selfPos = trans.position;
-
-                float confidence = 0;
-
-                //get count for player fleet
-                int playerFleetStrength = GameObject.FindObjectsOfType<PlayerShip>().Count();
-                // get count for enemy fleet
-                int aiFleetStrength = GameObject.FindObjectsOfType<AI_Ship>().Count();
-
-                //calculate basis for confidence
-
-                int totalShips = playerFleetStrength + aiFleetStrength;
-
-                confidence = (float)aiFleetStrength / (float)totalShips;
-                //adjust based on ship and target
-
-                //case 1 ... closest enemy
-                if (confidence < AIManager.tgtClosest) //closest enemy
-                {
-                    return playerShips.Aggregate((current, next) => Vector3.Distance(current.transform.position, selfPos) < Vector3.Distance(next.transform.position, selfPos) ? current : next);
-                }
-                else if (confidence < AIManager.tgtWeakest) //weakest enemy
-                {  
-                return playerShips.Aggregate((current, next) => (current.HullHP + current.ShieldStrength) <= (next.HullHP + next.ShieldStrength) ? current : next); 
-                }
-                else if (confidence > 1 - AIManager.tgtClosest + AIManager.tgtFarthest + AIManager.tgtStrongest)
-                {
-                    //farthest enemy
+                return playerShips.Aggregate((current, next) => Vector3.Distance(current.transform.position, selfPos) < Vector3.Distance(next.transform.position, selfPos) ? current : next);
+            }
+            else if (confidence < AIManager.tgtWeakest) //weakest enemy
+            {
+                return playerShips.Aggregate((current, next) => (current.HullHP + current.ShieldStrength) <= (next.HullHP + next.ShieldStrength) ? current : next);
+            }
+            else if (confidence > 1 - AIManager.tgtClosest + AIManager.tgtFarthest + AIManager.tgtStrongest)
+            {
+                //farthest enemy
                 return playerShips.Aggregate((current, next) => Vector3.Distance(current.transform.position, selfPos) > Vector3.Distance(next.transform.position, selfPos) ? current : next);
-                }
-
-                //assume case 4... strongest
-                return playerShips.Aggregate((current, next) => (current.HullHP + current.ShieldStrength) >= (next.HullHP + next.ShieldStrength) ? current : next);
             }
 
-            //target ship wasn't null so return your current target
-            return targetShip;
+            //assume case 4... strongest
+            return playerShips.Aggregate((current, next) => (current.HullHP + current.ShieldStrength) >= (next.HullHP + next.ShieldStrength) ? current : next);
         }
     }
 
@@ -276,7 +314,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         foreach (RaycastHit hit in hits)
         {
             ShipComponent comp = hit.collider.GetComponent<ShipComponent>();
-            if (comp && comp.ParentShip != this)
+            if (comp && !(comp.ParentShip is AI_Ship))
             {
                 hitComponents.Add(comp);
             }
@@ -285,16 +323,16 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
 
         if (hitComponents.Count > 0)
         {
-          closestComp = hitComponents
-            .Select(c => c.transform)
-            .Aggregate((curr, next) =>
-                Vector3.Distance(curr.position, componentGridPos)
-                < Vector3.Distance(next.position, componentGridPos)
-                ? curr : next)
-            .GetComponent<ShipComponent>();  
+            closestComp = hitComponents
+              .Select(c => c.transform)
+              .Aggregate((curr, next) =>
+                  Vector3.Distance(curr.position, componentGridPos)
+                  < Vector3.Distance(next.position, componentGridPos)
+                  ? curr : next)
+              .GetComponent<ShipComponent>();
         }
-        
-        
+
+
         return closestComp;
     }
 
@@ -601,6 +639,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
 
     private void targetCompConfLevel5(PlayerShip _ship, out ShipComponent _targetComponent)
     {
+
         range = frontalAssaultRange;
 
         ShipComponent idealTargetComponent = null;
@@ -803,12 +842,9 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
 
         if (_ship.ShieldStrength <= 0.0f)
         {
-            confidence += 0.5f;
+            confidence += 0.25f;
         }
-        if (confidence < 0.9f)
-        {
-            confidence = 0.9f;
-        }
+
 
         Debug.LogWarning("confidence: " + confidence);
 
@@ -829,7 +865,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         {
             Debug.LogWarning("level two response");
             targetCompConfLevel2(_ship, out _targetComponent);
-            Debug.LogWarning("Level 2: "+ _targetComponent);
+            Debug.LogWarning("Level 2: " + _targetComponent);
         }
         else if (confidence < confLevel3Cutoff)
         {
@@ -847,6 +883,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
             targetCompConfLevel5(_ship, out _targetComponent);
         }
 
+        targetComponent = GetFirstComponentInDirection(targetComponent);
 
         if (_targetComponent == null)
         {
@@ -879,13 +916,13 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
                 selectedComponents.AddRange(components.Where(c => c.CompSpecificType == ComponentSpecificType.MASS_D && c.gameObject.activeSelf));
                 selectedComponents.AddRange(components.Where(c => c.CompSpecificType == ComponentSpecificType.LASER && c.gameObject.activeSelf));
             }
-           
+
         }
         else if (distanceToTarget < missileRange)
         {
-             selectedComponents = components.Where(c => (c.CompSpecificType == ComponentSpecificType.MISSILE) && c.gameObject.activeSelf).ToList();
-             selectedComponents.AddRange(components.Where(c => c.CompSpecificType == ComponentSpecificType.MASS_D && c.gameObject.activeSelf));
-             
+            selectedComponents = components.Where(c => (c.CompSpecificType == ComponentSpecificType.MISSILE) && c.gameObject.activeSelf).ToList();
+            selectedComponents.AddRange(components.Where(c => c.CompSpecificType == ComponentSpecificType.MASS_D && c.gameObject.activeSelf));
+
         }
         else if (distanceToTarget < railgunRange)
         {
@@ -896,7 +933,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
             selectedComponents = new List<ShipComponent>();
             Debug.LogWarning("AI_Ship::ActivateWeapons() No components can fire at this range");
         }
-        
+
         Component_Weapon[] selectedWeapons = selectedComponents.Cast<Component_Weapon>().ToArray();
 
         foreach (Component_Weapon item in selectedWeapons)
@@ -921,7 +958,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         else
         {
             Debug.LogWarning("targetShip has NO sheilds");
-            if (_targetShip.HullHP > (_targetShip.MaxHullHP * 0.5f))
+            if (_targetShip.HullHP > (_targetShip.MaxHullHP * 0.75f))
             {
                 Debug.LogWarning("targetShip has > 50% hull");
                 float maxCompDmg = selectedWeapons.Max(c => c.ComponentDamage);
@@ -935,6 +972,11 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
             }
         }
 
+        foreach (var weapon in weaponsToFire)
+        {
+            Debug.LogWarning(weapon.componentName);
+        }
+
         //fire weapons
         int numWeaponsToFire;
 
@@ -945,10 +987,9 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         else
         {
             numWeaponsToFire = 0;
-            //RetargetNewComponent();
             yield return null;
         }
-        
+
         int weaponHitCounter = 0;
 
         foreach (var weapon in weaponsToFire)
@@ -958,7 +999,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
                 CurrentPower -= weapon.ActivationCost;
                 StartCoroutine(weapon.Fire(targetComponent, () => { weaponHitCounter++; }));
                 yield return new WaitForSeconds(Random.Range(PlayerShipConfig.WeaponActivationInterval.x, PlayerShipConfig.WeaponActivationInterval.y));
-            }   
+            }
         }
 
         if (targetComponent.CompHP <= 0 && _targetShip.HullHP > 0.0f)
@@ -1010,7 +1051,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         {
             return 0;
         }
-        
+
     }
 
     #endregion PublicMethods
