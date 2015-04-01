@@ -24,7 +24,7 @@ public partial class PlayerShip : TurnBasedUnit
         combatInterface.EnableMoveButton(true, () => ChangeState(PlayerState.MovementMode));
         InputManager.Instance.RegisterKeysDown(SwitchToMovementMode, KeyCode.Space, KeyCode.Escape);
         InputManager.Instance.OnMouseMoveEvent += OnMouseMove;
-        ShowTargetingArc(true);
+        if (components.Count(comp => comp is Component_Weapon) > 0) ShowTargetingArc(true);
         Camera.main.transparencySortMode = TransparencySortMode.Orthographic;
         SubscribeToAIShipMouseEvents(true);
         CameraDirector.Instance.SetFreeCamera(true);
@@ -126,6 +126,7 @@ public partial class PlayerShip : TurnBasedUnit
     }
     bool AIShipIsInMaxRange(AI_Ship ship)
     {
+        if (components.Count(comp => comp is Component_Weapon) == 0) return false;
         float maxWeaponRange = components
             .Where(comp => comp is Component_Weapon)
             .Select(comp => (Component_Weapon)comp)
@@ -135,6 +136,7 @@ public partial class PlayerShip : TurnBasedUnit
     }
     void OnMouseMove(Vector2 direction)
     {
+        if (components.Count(comp => comp is Component_Weapon) == 0) return;
         MouseOverSpaceGround();
         targetingArcTrans.LookAtWithSameY(mousePosOnGround);
     }

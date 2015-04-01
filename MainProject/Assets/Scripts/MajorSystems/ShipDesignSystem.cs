@@ -86,11 +86,7 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
                 }
 
                 //if a component is already present, delete it from the scene and blueprint
-                Debug.Log("Replacing component");
-                ShipComponent otherComp = slot_compsBeingBuilt_table[slot];
-                componentsBeingBuilt.Remove(otherComp);
-                Destroy(otherComp.gameObject);
-                blueprintBeingBuilt.RemoveComponent(slot.index);
+                RemoveComponent(slot);
             }
             #if FULL_DEBUG
             Debug.Log("Building component " + component.componentName + " on slot " + slot.index);
@@ -122,7 +118,18 @@ public class ShipDesignSystem : Singleton<ShipDesignSystem>
         blueprintBeingBuilt.AddComponent(slot, component);
 #endif
     }//BuildComponent
-
+    public void RemoveComponent(ComponentSlot slot)
+    {
+#if FULL_DEBUG
+        if (!slot.InstalledComponent) Debug.LogError("No installed component on slot " + slot.index);
+        if (!slot_compsBeingBuilt_table[slot]) Debug.LogError("No component found in slot_comp table");
+        Debug.Log("Removing component");
+#endif
+        ShipComponent comp = slot_compsBeingBuilt_table[slot];
+        componentsBeingBuilt.Remove(comp);
+        Destroy(comp.gameObject);
+        blueprintBeingBuilt.RemoveComponent(slot.index);
+    }
 
     /// <summary>
     /// Removes everything from the scene, destroying all instantiated objects

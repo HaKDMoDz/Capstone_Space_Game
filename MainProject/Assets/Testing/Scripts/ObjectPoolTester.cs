@@ -27,7 +27,7 @@ public class ObjectPoolTester : MonoBehaviour
 
     void GroundClick(Vector3 worldPosition)
     {
-        Debug.Log("ground click");
+        //Debug.Log("ground click");
         //AudioManager.Instance.PlayEffect(Sound.LaserBeam, worldPosition);
     }
 
@@ -35,7 +35,7 @@ public class ObjectPoolTester : MonoBehaviour
     {
         GameObject currentBullet = ObjectPool.Instance.GetPooledObject(bulletPrefab, false);
         currentBullet.transform.position = trans.position;
-        AudioManager.Instance.PlayEffectAndAttachTo(Sound.Laser, currentBullet.transform);
+        //AudioManager.Instance.PlayEffectAndAttachTo(Sound.Laser, currentBullet.transform);
         currentBullet.rigidbody.AddForce(trans.forward * 300.0f);
         StartCoroutine(currentBullet.GetSafeComponent<TimedAction>().SetTimedAction(2.0f,
             () =>

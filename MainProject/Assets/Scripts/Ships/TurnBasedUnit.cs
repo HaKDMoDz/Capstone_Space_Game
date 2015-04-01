@@ -277,7 +277,12 @@ public abstract class TurnBasedUnit : MonoBehaviour
         currentPower = MaxPower;
         yield return null;
     }
-
+    protected bool CanUnitMoveTo(Vector3 destination)
+    {
+        Collider[] hitColliders = Physics.OverlapSphere(destination, PlayerShipConfig.MovementRadius);
+        //colliding with ground or itself is valid
+        return !(hitColliders.Any(col => col.gameObject.layer != TagsAndLayers.SpaceGroundLayer && col.gameObject != gameObject));
+    }
     public void ShowComponentSelection(bool show)
     {
         componentCamera.SetActive(show);
