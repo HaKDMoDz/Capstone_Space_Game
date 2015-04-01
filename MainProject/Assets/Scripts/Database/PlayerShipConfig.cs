@@ -21,12 +21,15 @@ public class PlayerShipConfig : ScriptableObject
     private float arcAlpha = 0.55f;
     [SerializeField]
     private Vector2 weaponActivationInterval = new Vector2(0.2f,0.4f);
+    [SerializeField]
+    private float movementRadius = 10.0f;
 
-    public static float ArcAngle;
-    public static int ArcSegments;
-    public static Material ArcMat;
-    public static float ArcAlpha;
-    public static Vector2 WeaponActivationInterval;
+    public static float ArcAngle {get; private set;}
+    public static int ArcSegments{get; private set;}
+    public static Material ArcMat{get; private set;}
+    public static float ArcAlpha{get; private set;}
+    public static Vector2 WeaponActivationInterval{get; private set;}
+    public static float MovementRadius {get; private set;}
 
     private void OnEnable()
     {
@@ -35,5 +38,6 @@ public class PlayerShipConfig : ScriptableObject
         ArcMat = arcMat;
         ArcAlpha = arcAlpha;
         WeaponActivationInterval = weaponActivationInterval;
+        MovementRadius = movementRadius;
     }
 }

@@ -99,9 +99,19 @@ public partial class PlayerShip : TurnBasedUnit
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, GlobalVars.RayCastRange, 1 << TagsAndLayers.SpaceGroundLayer))
         {
-            mousePosOnGround = hit.point;
-            moveDistance = Vector3.Distance(mousePosOnGround, trans.position);
-            movePowerCost = Mathf.Round(moveDistance * MoveCost);
+            if (CanUnitMoveTo(hit.point))
+            {
+                mousePosOnGround = hit.point;
+                moveDistance = Vector3.Distance(mousePosOnGround, trans.position);
+                movePowerCost = Mathf.Round(moveDistance * MoveCost);
+                combatInterface.SetCursorType(CursorType.Default);
+                ShowMovementUI(true);
+            }
+            else
+            {
+                ShowMovementUI(false);
+                combatInterface.SetCursorType(CursorType.Invalid);
+            }
         }
     }
     #region InternalCallbacks
@@ -109,15 +119,22 @@ public partial class PlayerShip : TurnBasedUnit
     {
         if (!receivedMoveCommand)
         {
-            if (movePowerCost <= CurrentPower)
+            if (CanUnitMoveTo(worldPosition))
             {
-                shipMove.destination = worldPosition;
-                receivedMoveCommand = true;
+                if (movePowerCost <= CurrentPower)
+                {
+                    shipMove.destination = worldPosition;
+                    receivedMoveCommand = true;
+                }
+                else
+                {
+                    combatInterface.SetPowerValid(false);
+
+                }
             }
             else
             {
-                combatInterface.SetPowerValid(false);
-
+                combatInterface.SetCursorType(CursorType.Invalid);
             }
         }
     }
