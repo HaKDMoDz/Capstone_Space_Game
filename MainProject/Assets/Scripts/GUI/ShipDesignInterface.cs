@@ -18,9 +18,9 @@ using System.Linq;
 
 public class ShipDesignInterface : Singleton<ShipDesignInterface>
 {
+    private enum CursorType { Default, Eraser };
     #region Fields
     //Editor Exposed
-
     //Prefabs
     [SerializeField]
     private ButtonWithContent buttonPrefab;
@@ -64,6 +64,11 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     private Button saveButton;
     [SerializeField]
     private Image saveButtonImage;
+    //cursors
+    [SerializeField]
+    private Texture2D defaultCursor;
+    [SerializeField]
+    private Texture2D eraserCursor;
 #if FULL_DEBUG
     [SerializeField]
     private bool showAI_Hulls=false;
@@ -74,8 +79,8 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     private ShipComponent selectedComp;
     //References
     ShipDesignSystem shipDesignSystem;
-
     #endregion Fields
+
 
     #region Methods
     #region Private
@@ -233,6 +238,20 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
 #endif
     }
     #endregion GUIBuilders
+    private void SetCursor(CursorType type)
+    {
+        switch (type)
+        {
+            case CursorType.Default:
+                Cursor.SetCursor(defaultCursor, Vector2.zero, CursorMode.Auto);
+                break;
+            case CursorType.Eraser:
+                Cursor.SetCursor(eraserCursor, Vector2.zero, CursorMode.Auto);
+                break;
+            default:
+                break;
+        }
+    }
     public void StopBuilding()
     {
         StopCoroutine("StartPlacementSequence");
@@ -252,17 +271,30 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
             {
                 if (Input.GetMouseButton((int)MouseButton.Left))
                 {
-                    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                    RaycastHit hit;
-                    if (Physics.Raycast(ray, out hit, GlobalVars.RayCastRange, 1 << TagsAndLayers.ComponentSlotLayer))
+                    ComponentSlot slot;
+                    if (GetSlotAtMouse(out slot))
                     {
-                        ComponentSlot slot = hit.transform.GetComponent<ComponentSlot>();
                         shipDesignSystem.BuildComponent(slot, selectedComp);
                     }
                 }
                 yield return null;
             }
         }
+    }
+    private bool GetSlotAtMouse(out ComponentSlot slot)
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, GlobalVars.RayCastRange, 1 << TagsAndLayers.ComponentSlotLayer))
+        {
+            slot = hit.collider.GetComponent<ComponentSlot>();
+            return true;
+        }
+        else
+        {
+            slot = null;
+            return false;
+        }        
     }
     /// <summary>
     /// Removes all GUI elements from the screen
@@ -297,6 +329,8 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     public void Init()
     {
         SetupGUI();
+        InputManager.Instance.RegisterMouseButtonsHold(RemoveComponent, MouseButton.Right);
+        InputManager.Instance.RegisterMouseButtonsUp((button) => SetCursor(CursorType.Default), MouseButton.Right);
     }
     #region GUIAccess
 
@@ -492,6 +526,16 @@ public class ShipDesignInterface : Singleton<ShipDesignInterface>
     public void BuildComponent(ComponentSlot slot, ShipComponent component)
     {
         shipDesignSystem.BuildComponent(slot, component);
+    }
+    public void RemoveComponent(MouseButton button)
+    {
+        if (!shipDesignSystem.buildingShip) return;
+        SetCursor(CursorType.Eraser);
+        ComponentSlot slot;
+        if(GetSlotAtMouse(out slot) && slot.InstalledComponent)
+        {
+            shipDesignSystem.RemoveComponent(slot);
+        }
     }
     //GUI should not access directly
     /// <summary>

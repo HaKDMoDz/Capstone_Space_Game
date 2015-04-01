@@ -281,19 +281,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
     {
         Collider[] hitColliders = Physics.OverlapSphere(destination, PlayerShipConfig.MovementRadius);
         //colliding with ground or itself is valid
-#if FULL_DEBUG
-        if(hitColliders.Any(col=>col.gameObject.layer != TagsAndLayers.SpaceGroundLayer && col.gameObject!=gameObject))
-        {
-            Debug.Log("Cannot move to " + destination);
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-#else
         return !(hitColliders.Any(col => col.gameObject.layer != TagsAndLayers.SpaceGroundLayer && col.gameObject != gameObject));
-#endif
     }
     public void ShowComponentSelection(bool show)
     {
