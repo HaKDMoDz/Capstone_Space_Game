@@ -9,6 +9,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 
 public abstract class Component_Weapon : ShipComponent
 {
@@ -103,36 +104,53 @@ public abstract class Component_Weapon : ShipComponent
 
     protected void ApplyShieldDamageEffect(TurnBasedUnit ship)
     {
-        Vector3 hitPoint=-Vector3.zero;
-        Ray ray = new Ray(shootPoint.position, ship.transform.position - shootPoint.position);
-        RaycastHit hit;
+//        Vector3 hitPoint=-Vector3.zero;
+//        Ray ray = new Ray(shootPoint.position, ship.transform.position - shootPoint.position);
+//        RaycastHit hit;
+//#if FULL_DEBUG
+//        Debug.DrawRay(ray.origin, ray.direction, Color.green, GlobalVars.RayCastRange);
+//#endif
+//        if(Physics.Raycast(ray, out hit, GlobalVars.RayCastRange, 1<<TagsAndLayers.ShipShieldLayer))
+//        {
+//            hitPoint = hit.point;
+//            ship.PlayShieldEffect(hitPoint);
+//            CombatSystemInterface.Instance.ShowFloatingDamage(ShieldDamage, hitPoint, Color.cyan);
+//        }
+//        #if FULL_DEBUG
+//        else
+//        {
+//            Debug.LogError("Weapon did not hit shields but was expected to");
+//        }
+//        #endif
+
+        Vector3 dirToTargetShip = ship.transform.position - shootPoint.position;
+        RaycastHit[] hits = Physics.RaycastAll(shootPoint.position, dirToTargetShip, GlobalVars.RayCastRange, 1<<TagsAndLayers.ShipShieldLayer);
 #if FULL_DEBUG
-        Debug.DrawRay(ray.origin, ray.direction, Color.green, GlobalVars.RayCastRange);
+        if (hits == null || hits.Length == 0) Debug.LogError("Weapon did not hit shields but was expected to");
 #endif
-        if(Physics.Raycast(ray, out hit, GlobalVars.RayCastRange, 1<<TagsAndLayers.ShipShieldLayer))
-        {
-            hitPoint = hit.point;
-            ship.PlayShieldEffect(hitPoint);
-            CombatSystemInterface.Instance.ShowFloatingDamage(ShieldDamage, hitPoint, Color.cyan);
-        }
-        #if FULL_DEBUG
-        else
-        {
-            Debug.LogError("Weapon did not hit shields but was expected to");
-        }
-        #endif
+        RaycastHit hitOnTargetShip = hits.FirstOrDefault(hit => hit.collider.GetComponent<ShipShield>().ParentShip == ship);
+        ship.PlayShieldEffect(hitOnTargetShip.point);
+        CombatSystemInterface.Instance.ShowFloatingDamage(ShieldDamage, hitOnTargetShip.point, Color.cyan);
     }
-    protected Vector3 GetBeamImpactPoint(Transform targetCompTrans)
+    //protected Vector3 GetBeamImpactPoint(Transform targetCompTrans)
+    protected Vector3 GetBeamImpactPoint(ShipComponent targetComp)
     {
-        Ray ray = new Ray(shootPoint.position, targetCompTrans.position - shootPoint.position);
-        RaycastHit hit;
-        if(Physics.Raycast(ray, out hit, GlobalVars.RayCastRange, 1<<TagsAndLayers.ShipShieldLayer))
-        {
-            return hit.point;
-        }
-        else
-        {
-            return targetCompTrans.position;
-        }
+        //Ray ray = new Ray(shootPoint.position, targetCompTrans.position - shootPoint.position);
+        //RaycastHit hit;
+        //if(Physics.Raycast(ray, out hit, GlobalVars.RayCastRange, 1<<TagsAndLayers.ShipShieldLayer))
+        //{
+        //    return hit.point;
+        //}
+        //else
+        //{
+        //    return targetCompTrans.position;
+        //}
+        Vector3 dirToTargetComp = targetComp.transform.position - shootPoint.position;
+        RaycastHit[] hits = Physics.RaycastAll(shootPoint.position, dirToTargetComp, GlobalVars.RayCastRange, 1 << TagsAndLayers.ShipShieldLayer);
+#if FULL_DEBUG
+        if (hits == null || hits.Length == 0) Debug.LogError("Weapon did not hit shields but was expected to");
+#endif
+        RaycastHit hitOnTargetShip = hits.FirstOrDefault(hit => hit.collider.GetComponent<ShipShield>().ParentShip == targetComp.ParentShip);
+        return hitOnTargetShip.point;
     }
 }

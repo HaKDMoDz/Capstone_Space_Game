@@ -238,7 +238,7 @@ public partial class PlayerShip : TurnBasedUnit
         foreach (RaycastHit hit in hits)
         {
             ShipComponent comp = hit.collider.GetComponent<ShipComponent>();
-            if (comp && comp.ParentShip != this)
+            if (comp && comp.ParentShip != this && comp.ParentShip is AI_Ship)
             {
                 hitComponents.Add(comp);
             }

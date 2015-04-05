@@ -15,9 +15,9 @@ public class ShipShield : MonoBehaviour
     private float effectDuration = 1.0f;
     [SerializeField]
     private float effectSpeed = 0.1f;
+    public TurnBasedUnit ParentShip { get; private set; }
     
     private Material shieldMat;
-
     private Transform trans;
     private Color originalColour; 
 
@@ -47,12 +47,16 @@ public class ShipShield : MonoBehaviour
         }
         //gameObject.SetActive(false);
     }
-
-    private void Awake()
+    public void Init(TurnBasedUnit parentShip)
     {
         trans = transform;
         shieldMat = renderer.material;
         originalColour = shieldMat.GetColor("_Color");
+        ParentShip = parentShip;
+    }
+    private void Awake()
+    {
+        
     }
 
 }

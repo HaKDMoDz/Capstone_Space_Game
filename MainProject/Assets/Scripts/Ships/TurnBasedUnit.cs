@@ -422,6 +422,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
             Debug.LogError("Ship shield not found");
         }
         #endif
+        shipShield.Init(this);
         
     }
     #endregion PrivateMethods
