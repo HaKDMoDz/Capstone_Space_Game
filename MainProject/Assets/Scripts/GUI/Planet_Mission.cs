@@ -229,7 +229,8 @@ public class Planet_Mission : MonoBehaviour
     private void invasionPlanet02()
     {
         GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames = new List<string>();
-        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("K-104B");
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("NewAIFrig");
+        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("NewAICorv");
         GameController.Instance.ChangeScene(GameScene.CombatScene);
     }
 
