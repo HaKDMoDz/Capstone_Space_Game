@@ -676,22 +676,22 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
     private float trialShipVsShip(PlayerShip _targetShip)
     {
         // calculate ai and player defenses
-        float aiShield = Components.Where(c => c.CompSpecificType == ComponentSpecificType.SHIELD_G).ToArray().Length;
-        float aiArmour = Components.Where(c => c.CompSpecificType == ComponentSpecificType.ARMOUR).ToArray().Length;
-        float playerShield = _targetShip.Components.Where(c => c.CompSpecificType == ComponentSpecificType.SHIELD_G).ToArray().Length;
-        float playerArmour = _targetShip.Components.Where(c => c.CompSpecificType == ComponentSpecificType.ARMOUR).ToArray().Length;
+        //float aiShield = Components.Where(c => c.CompSpecificType == ComponentSpecificType.SHIELD_G).ToArray().Length;
+        //float aiArmour = Components.Where(c => c.CompSpecificType == ComponentSpecificType.ARMOUR).ToArray().Length;
+        //float playerShield = _targetShip.Components.Where(c => c.CompSpecificType == ComponentSpecificType.SHIELD_G).ToArray().Length;
+        //float playerArmour = _targetShip.Components.Where(c => c.CompSpecificType == ComponentSpecificType.ARMOUR).ToArray().Length;
 
         // calculate ai and player excess power
         float aiExcessPower = CurrentPower;
         float playerExcessPower = _targetShip.CurrentPower;
 
         // calculate ai and player thrusters
-        float aiThrusters = Components.Where(c => c.CompSpecificType == ComponentSpecificType.THRUSTER).ToArray().Length;
-        float playerThrusters = _targetShip.Components.Where(c => c.CompSpecificType == ComponentSpecificType.THRUSTER).ToArray().Length;
+        //float aiThrusters = Components.Where(c => c.CompSpecificType == ComponentSpecificType.THRUSTER).ToArray().Length;
+        //float playerThrusters = _targetShip.Components.Where(c => c.CompSpecificType == ComponentSpecificType.THRUSTER).ToArray().Length;
 
         // calculate ai and player max hull HP
-        float aiMaxHullHP = MaxHullHP;
-        float playerMaxHullHP = _targetShip.MaxHullHP;
+        //float aiMaxHullHP = MaxHullHP;
+        //float playerMaxHullHP = _targetShip.MaxHullHP;
 
         // calculate ai and player  max shield
         float aiMaxShield = ShieldStrength;
@@ -710,13 +710,13 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
             playerVsHull += component.HullDamage;
         }
         //calculate ai and player weapons vs shield
-        ShipComponent[] aiVsShieldComponents = Components.Where(c => c.CompSpecificType == ComponentSpecificType.LASER).ToArray();
+        //ShipComponent[] aiVsShieldComponents = Components.Where(c => c.CompSpecificType == ComponentSpecificType.LASER).ToArray();
         float aiVsShield = 0;
         foreach (Component_Weapon component in aiVsHullComponents)
         {
             aiVsShield += component.ShieldDamage;
         }
-        ShipComponent[] playerVsShieldComponents = _targetShip.Components.Where(c => c.CompSpecificType == ComponentSpecificType.LASER).ToArray();
+        //ShipComponent[] playerVsShieldComponents = _targetShip.Components.Where(c => c.CompSpecificType == ComponentSpecificType.LASER).ToArray();
         float playerVsShield = 0;
         foreach (Component_Weapon component in playerVsHullComponents)
         {
@@ -941,9 +941,9 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
             Debug.LogWarning(item.CompSpecificType);
         }
 
-        Component_Weapon[] selectedLasers = selectedWeapons.Where(c => c.CompSpecificType == ComponentSpecificType.LASER && c.gameObject.activeSelf).ToArray();
-        Component_Weapon[] selectedMissiles = selectedWeapons.Where(c => c.CompSpecificType == ComponentSpecificType.MISSILE && c.gameObject.activeSelf).ToArray();
-        Component_Weapon[] selectedRailguns = selectedWeapons.Where(c => c.CompSpecificType == ComponentSpecificType.MASS_D && c.gameObject.activeSelf).ToArray();
+        //Component_Weapon[] selectedLasers = selectedWeapons.Where(c => c.CompSpecificType == ComponentSpecificType.LASER && c.gameObject.activeSelf).ToArray();
+        //Component_Weapon[] selectedMissiles = selectedWeapons.Where(c => c.CompSpecificType == ComponentSpecificType.MISSILE && c.gameObject.activeSelf).ToArray();
+        //Component_Weapon[] selectedRailguns = selectedWeapons.Where(c => c.CompSpecificType == ComponentSpecificType.MASS_D && c.gameObject.activeSelf).ToArray();
 
         IEnumerable<Component_Weapon> weaponsToFire;
 

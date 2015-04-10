@@ -48,8 +48,8 @@ public class Comp_Wpn_Railgun : Component_Weapon
             //for projectile railgun
             Projectile_Missile bulletClone = (Projectile_Missile)Instantiate(projectilePrefab, shootPoint.position, shootPoint.rotation);
             bulletClone.rigidbody.velocity = shootPoint.forward * projectileSpeed;
-            float distanceToTarget = Vector3.Distance(targetTrans.position, shootPoint.position);
-            float timeToTarget = distanceToTarget / projectileSpeed;
+            //float distanceToTarget = Vector3.Distance(targetTrans.position, shootPoint.position);
+            //float timeToTarget = distanceToTarget / projectileSpeed;
             ////muzzle flash
             bool bulletCollided = false;
             bulletClone.OnCollision +=

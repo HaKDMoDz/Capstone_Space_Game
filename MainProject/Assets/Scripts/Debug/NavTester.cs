@@ -19,7 +19,7 @@ public class NavTester : MonoBehaviour
     [SerializeField]
     private float radius = 5.0f;
 
-    private NavMeshAgent agent;
+    //private NavMeshAgent agent;
     private Vector3 destination;
     private Vector3 gizmoDest;
     private Transform trans;
@@ -29,7 +29,7 @@ public class NavTester : MonoBehaviour
     {
         trans = transform;
         destination = trans.position;
-        agent = GetComponent<NavMeshAgent>();
+        //agent = GetComponent<NavMeshAgent>();
         SpaceGround.Instance.OnGroundClick += OnGroundClick;
     }
 
