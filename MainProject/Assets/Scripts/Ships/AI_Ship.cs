@@ -24,8 +24,6 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
     private Component_Weapon railgun;
     public float railgunRange;
 
-    private PlayerShip targetShip;
-
     private float range;
 
     //references
@@ -162,9 +160,9 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
 
     protected override void PostTurnActions()
     {
-        if (targetShip)
+        if (targetPlayer)
         {
-            targetShip.ShowHPBars(false);
+            targetPlayer.ShowHPBars(false);
         }
     }
 
@@ -392,7 +390,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
 
         if (idealTargetComponent == null)
         {
-            TargetComponent(targetShip, out idealTargetComponent);
+            TargetComponent(targetPlayer, out idealTargetComponent);
         }
         _targetComponent = GetFirstComponentInDirection(idealTargetComponent);
 

@@ -35,8 +35,6 @@ public class AIManager : Singleton<AIManager>
 
 	public void Init (ShipBuilder _shipBuilder) 
     {
-        AI_Fleet.RandomManager.InitializeManager();
-        pop1 = new AI_Fleet.Population(10, this);
         blueprints = pop1.GenerateBluePrints();
         //pop1.DebugDisplay();
 
