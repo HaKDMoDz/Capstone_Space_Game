@@ -66,11 +66,9 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         missile = ComponentTable.id_comp_table.Where(c => c.Value.CompSpecificType == ComponentSpecificType.MISSILE).ToList().First().Value as Component_Weapon;
         railgun = ComponentTable.id_comp_table.Where(c => c.Value.CompSpecificType == ComponentSpecificType.MASS_D).ToList().First().Value as Component_Weapon;
 
-        //Debug.Log(laser);
         laserRange = laser.range;
         missileRange = missile.range;
         railgunRange = railgun.range;
-
         range = frontalAssaultRange;
     }
 
@@ -828,9 +826,10 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         float confidence = 0;
 
         //get count for player fleet
-        int playerFleetStrength = GameObject.FindObjectsOfType<PlayerShip>().Count();
+        int playerFleetStrength = TurnBasedCombatSystem.Instance.playerShips.Count;
+
         // get count for enemy fleet
-        int aiFleetStrength = GameObject.FindObjectsOfType<AI_Ship>().Count();
+        int aiFleetStrength = TurnBasedCombatSystem.Instance.ai_Ships.Count;
 
         //calculate basis for confidence
         int totalShips = playerFleetStrength + aiFleetStrength;
