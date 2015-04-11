@@ -483,7 +483,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 853403269}
+      - m_Target: {fileID: 11445210, guid: 8fde0fb5db4b2714997f7c03082ecf6a, type: 2}
         m_MethodName: OpenPanel
         m_Mode: 1
         m_Arguments:
@@ -6381,7 +6381,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1807842041}
+      - m_Target: {fileID: 0}
         m_MethodName: OpenPanel
         m_Mode: 1
         m_Arguments:
@@ -6485,6 +6485,7 @@ Prefab:
       objectReference: {fileID: 2072899372}
     m_RemovedComponents:
     - {fileID: 11487024, guid: d011ca6150a83ea4a99d67a6236467ab, type: 2}
+    - {fileID: 11405570, guid: d011ca6150a83ea4a99d67a6236467ab, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: d011ca6150a83ea4a99d67a6236467ab, type: 2}
   m_RootGameObject: {fileID: 2072899364}
   m_IsPrefabParent: 0
@@ -6742,6 +6743,7 @@ Prefab:
       objectReference: {fileID: 1518535574}
     m_RemovedComponents:
     - {fileID: 11401266, guid: 629106e26eaa5484dbd3732c3538183e, type: 2}
+    - {fileID: 11450856, guid: 629106e26eaa5484dbd3732c3538183e, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 629106e26eaa5484dbd3732c3538183e, type: 2}
   m_RootGameObject: {fileID: 1518535566}
   m_IsPrefabParent: 0
@@ -6811,6 +6813,7 @@ Prefab:
       objectReference: {fileID: 1514215449}
     m_RemovedComponents:
     - {fileID: 11410220, guid: 90980d702c296ca41a86cf25570b79e8, type: 2}
+    - {fileID: 11458388, guid: 90980d702c296ca41a86cf25570b79e8, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 90980d702c296ca41a86cf25570b79e8, type: 2}
   m_RootGameObject: {fileID: 1514215441}
   m_IsPrefabParent: 0
@@ -6891,7 +6894,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1514215444}
+      - m_Target: {fileID: 11458388, guid: 90980d702c296ca41a86cf25570b79e8, type: 2}
         m_MethodName: ClosePanel
         m_Mode: 1
         m_Arguments:
@@ -7146,7 +7149,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 907124073}
+      - m_Target: {fileID: 11442562, guid: 7f67cce9528e2c64ebc4a1e91062b0d6, type: 2}
         m_MethodName: OpenPanel
         m_Mode: 1
         m_Arguments:
@@ -9092,7 +9095,6 @@ GameObject:
   - 114: {fileID: 315088965}
   - 135: {fileID: 315088964}
   - 54: {fileID: 315088963}
-  - 114: {fileID: 315088961}
   - 114: {fileID: 315088962}
   - 114: {fileID: 315088967}
   m_Layer: 20
@@ -9118,19 +9120,6 @@ Transform:
   - {fileID: 513299796}
   m_Father: {fileID: 1040438000}
   m_RootOrder: 4
---- !u!114 &315088961
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11408926, guid: 0641a74151cdab8469eb908b60fc6289,
-    type: 2}
-  m_PrefabInternal: {fileID: 1238395093}
-  m_GameObject: {fileID: 315088959}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d14f68bb6e64540489a67b08b8b911d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dialogueText: []
 --- !u!114 &315088962
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9144,10 +9133,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   missionText: {fileID: 0}
-  uiRing: {fileID: 1286539125}
   missionButton: {fileID: 1521011568}
-  dialogueButton: {fileID: 963171522}
-  planetDialog: {fileID: 315088961}
   planetMission: {fileID: 315088967}
   missionPanel: {fileID: 2124642379}
 --- !u!54 &315088963
@@ -10805,7 +10791,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 466085631}
+      - m_Target: {fileID: 11470670, guid: 021f33aab64f0f747a242f5c1ba5db48, type: 2}
         m_MethodName: ClosePanel
         m_Mode: 1
         m_Arguments:
@@ -10913,6 +10899,7 @@ MonoBehaviour:
   - {fileID: 1518535567}
   - {fileID: 2072899365}
   systemRingGUI: {fileID: 1251148692}
+  systemLabel: {fileID: 0}
   OnScreen: 1
 --- !u!23 &360948278
 Renderer:
@@ -11542,7 +11529,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1514215444}
+      - m_Target: {fileID: 11458388, guid: 90980d702c296ca41a86cf25570b79e8, type: 2}
         m_MethodName: OpenPanel
         m_Mode: 1
         m_Arguments:
@@ -11714,6 +11701,7 @@ Prefab:
       objectReference: {fileID: 466085636}
     m_RemovedComponents:
     - {fileID: 11474208, guid: 021f33aab64f0f747a242f5c1ba5db48, type: 2}
+    - {fileID: 11470670, guid: 021f33aab64f0f747a242f5c1ba5db48, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 021f33aab64f0f747a242f5c1ba5db48, type: 2}
   m_RootGameObject: {fileID: 466085628}
   m_IsPrefabParent: 0
@@ -12611,7 +12599,6 @@ GameObject:
   - 114: {fileID: 466085634}
   - 135: {fileID: 466085633}
   - 54: {fileID: 466085632}
-  - 114: {fileID: 466085631}
   - 114: {fileID: 466085630}
   - 114: {fileID: 466085636}
   m_Layer: 20
@@ -12648,25 +12635,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   missionText: {fileID: 0}
-  uiRing: {fileID: 432393442}
   missionButton: {fileID: 452835259}
-  dialogueButton: {fileID: 935914518}
-  planetDialog: {fileID: 466085631}
   planetMission: {fileID: 466085636}
   missionPanel: {fileID: 2004998481}
---- !u!114 &466085631
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11470670, guid: 021f33aab64f0f747a242f5c1ba5db48,
-    type: 2}
-  m_PrefabInternal: {fileID: 433302471}
-  m_GameObject: {fileID: 466085628}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d14f68bb6e64540489a67b08b8b911d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dialogueText: []
 --- !u!54 &466085632
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -21883,7 +21854,6 @@ GameObject:
   - 114: {fileID: 853403272}
   - 135: {fileID: 853403271}
   - 54: {fileID: 853403270}
-  - 114: {fileID: 853403269}
   - 114: {fileID: 853403268}
   - 114: {fileID: 853403274}
   m_Layer: 20
@@ -21920,25 +21890,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   missionText: {fileID: 0}
-  uiRing: {fileID: 419153166}
   missionButton: {fileID: 1161946757}
-  dialogueButton: {fileID: 66492514}
-  planetDialog: {fileID: 853403269}
   planetMission: {fileID: 853403274}
   missionPanel: {fileID: 1686545838}
---- !u!114 &853403269
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11445210, guid: 8fde0fb5db4b2714997f7c03082ecf6a,
-    type: 2}
-  m_PrefabInternal: {fileID: 886468652}
-  m_GameObject: {fileID: 853403266}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d14f68bb6e64540489a67b08b8b911d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dialogueText: []
 --- !u!54 &853403270
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -23556,6 +23510,7 @@ Prefab:
       objectReference: {fileID: 853403274}
     m_RemovedComponents:
     - {fileID: 11404426, guid: 8fde0fb5db4b2714997f7c03082ecf6a, type: 2}
+    - {fileID: 11445210, guid: 8fde0fb5db4b2714997f7c03082ecf6a, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 8fde0fb5db4b2714997f7c03082ecf6a, type: 2}
   m_RootGameObject: {fileID: 853403266}
   m_IsPrefabParent: 0
@@ -23636,7 +23591,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1518535569}
+      - m_Target: {fileID: 11450856, guid: 629106e26eaa5484dbd3732c3538183e, type: 2}
         m_MethodName: ClosePanel
         m_Mode: 1
         m_Arguments:
@@ -24071,7 +24026,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 907124073}
+      - m_Target: {fileID: 11442562, guid: 7f67cce9528e2c64ebc4a1e91062b0d6, type: 2}
         m_MethodName: ClosePanel
         m_Mode: 1
         m_Arguments:
@@ -24125,7 +24080,6 @@ GameObject:
   - 114: {fileID: 907124077}
   - 135: {fileID: 907124076}
   - 54: {fileID: 907124075}
-  - 114: {fileID: 907124073}
   - 114: {fileID: 907124074}
   - 114: {fileID: 907124079}
   m_Layer: 20
@@ -24151,19 +24105,6 @@ Transform:
   - {fileID: 841067719}
   m_Father: {fileID: 1040438000}
   m_RootOrder: 3
---- !u!114 &907124073
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11442562, guid: 7f67cce9528e2c64ebc4a1e91062b0d6,
-    type: 2}
-  m_PrefabInternal: {fileID: 1362729008}
-  m_GameObject: {fileID: 907124071}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d14f68bb6e64540489a67b08b8b911d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dialogueText: []
 --- !u!114 &907124074
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24177,10 +24118,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   missionText: {fileID: 0}
-  uiRing: {fileID: 1072423521}
   missionButton: {fileID: 1475426592}
-  dialogueButton: {fileID: 258610180}
-  planetDialog: {fileID: 907124073}
   planetMission: {fileID: 907124079}
   missionPanel: {fileID: 415071605}
 --- !u!54 &907124075
@@ -24640,7 +24578,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 466085631}
+      - m_Target: {fileID: 11470670, guid: 021f33aab64f0f747a242f5c1ba5db48, type: 2}
         m_MethodName: OpenPanel
         m_Mode: 1
         m_Arguments:
@@ -25157,7 +25095,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 315088961}
+      - m_Target: {fileID: 11408926, guid: 0641a74151cdab8469eb908b60fc6289, type: 2}
         m_MethodName: OpenPanel
         m_Mode: 1
         m_Arguments:
@@ -25261,6 +25199,7 @@ MonoBehaviour:
   planets:
   - {fileID: 1807842039}
   systemRingGUI: {fileID: 1815204978}
+  systemLabel: {fileID: 0}
   OnScreen: 1
 --- !u!23 &967622410
 Renderer:
@@ -26536,7 +26475,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1518535569}
+      - m_Target: {fileID: 11450856, guid: 629106e26eaa5484dbd3732c3538183e, type: 2}
         m_MethodName: OpenPanel
         m_Mode: 1
         m_Arguments:
@@ -27448,6 +27387,7 @@ MonoBehaviour:
   - {fileID: 907124072}
   - {fileID: 315088960}
   systemRingGUI: {fileID: 538669559}
+  systemLabel: {fileID: 0}
   OnScreen: 1
 --- !u!135 &1040438002
 SphereCollider:
@@ -28605,7 +28545,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2091001556}
+      - m_Target: {fileID: 11411092, guid: d0c7aed4c19e9af4a9f6e446f3d6849a, type: 2}
         m_MethodName: OpenPanel
         m_Mode: 1
         m_Arguments:
@@ -31825,6 +31765,7 @@ Prefab:
       objectReference: {fileID: 315088967}
     m_RemovedComponents:
     - {fileID: 11419218, guid: 0641a74151cdab8469eb908b60fc6289, type: 2}
+    - {fileID: 11408926, guid: 0641a74151cdab8469eb908b60fc6289, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 0641a74151cdab8469eb908b60fc6289, type: 2}
   m_RootGameObject: {fileID: 315088959}
   m_IsPrefabParent: 0
@@ -33418,7 +33359,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 315088961}
+      - m_Target: {fileID: 11408926, guid: 0641a74151cdab8469eb908b60fc6289, type: 2}
         m_MethodName: ClosePanel
         m_Mode: 1
         m_Arguments:
@@ -33848,6 +33789,7 @@ Prefab:
       objectReference: {fileID: 907124079}
     m_RemovedComponents:
     - {fileID: 11477312, guid: 7f67cce9528e2c64ebc4a1e91062b0d6, type: 2}
+    - {fileID: 11442562, guid: 7f67cce9528e2c64ebc4a1e91062b0d6, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 7f67cce9528e2c64ebc4a1e91062b0d6, type: 2}
   m_RootGameObject: {fileID: 907124071}
   m_IsPrefabParent: 0
@@ -34506,7 +34448,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2072899367}
+      - m_Target: {fileID: 11405570, guid: d011ca6150a83ea4a99d67a6236467ab, type: 2}
         m_MethodName: ClosePanel
         m_Mode: 1
         m_Arguments:
@@ -36810,7 +36752,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2091001556}
+      - m_Target: {fileID: 11411092, guid: d0c7aed4c19e9af4a9f6e446f3d6849a, type: 2}
         m_MethodName: ClosePanel
         m_Mode: 1
         m_Arguments:
@@ -37053,7 +36995,6 @@ GameObject:
   - 114: {fileID: 1514215447}
   - 135: {fileID: 1514215446}
   - 54: {fileID: 1514215445}
-  - 114: {fileID: 1514215444}
   - 114: {fileID: 1514215443}
   - 114: {fileID: 1514215449}
   m_Layer: 20
@@ -37091,25 +37032,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   missionText: {fileID: 0}
-  uiRing: {fileID: 1440122421}
   missionButton: {fileID: 147790287}
-  dialogueButton: {fileID: 427691037}
-  planetDialog: {fileID: 1514215444}
   planetMission: {fileID: 1514215449}
   missionPanel: {fileID: 2122705329}
---- !u!114 &1514215444
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11458388, guid: 90980d702c296ca41a86cf25570b79e8,
-    type: 2}
-  m_PrefabInternal: {fileID: 249158100}
-  m_GameObject: {fileID: 1514215441}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d14f68bb6e64540489a67b08b8b911d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dialogueText: []
 --- !u!54 &1514215445
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -37244,7 +37169,6 @@ GameObject:
   - 114: {fileID: 1518535572}
   - 135: {fileID: 1518535571}
   - 54: {fileID: 1518535570}
-  - 114: {fileID: 1518535569}
   - 114: {fileID: 1518535568}
   - 114: {fileID: 1518535574}
   m_Layer: 20
@@ -37282,25 +37206,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   missionText: {fileID: 0}
-  uiRing: {fileID: 2077087894}
   missionButton: {fileID: 663749981}
-  dialogueButton: {fileID: 972247831}
-  planetDialog: {fileID: 1518535569}
   planetMission: {fileID: 1518535574}
   missionPanel: {fileID: 410746417}
---- !u!114 &1518535569
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11450856, guid: 629106e26eaa5484dbd3732c3538183e,
-    type: 2}
-  m_PrefabInternal: {fileID: 248636541}
-  m_GameObject: {fileID: 1518535566}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d14f68bb6e64540489a67b08b8b911d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dialogueText: []
 --- !u!54 &1518535570
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -37657,7 +37565,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2072899367}
+      - m_Target: {fileID: 11405570, guid: d011ca6150a83ea4a99d67a6236467ab, type: 2}
         m_MethodName: OpenPanel
         m_Mode: 1
         m_Arguments:
@@ -40899,7 +40807,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 853403269}
+      - m_Target: {fileID: 11445210, guid: 8fde0fb5db4b2714997f7c03082ecf6a, type: 2}
         m_MethodName: ClosePanel
         m_Mode: 1
         m_Arguments:
@@ -42004,6 +41912,7 @@ Prefab:
       objectReference: {fileID: 2091001561}
     m_RemovedComponents:
     - {fileID: 11463356, guid: d0c7aed4c19e9af4a9f6e446f3d6849a, type: 2}
+    - {fileID: 11411092, guid: d0c7aed4c19e9af4a9f6e446f3d6849a, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: d0c7aed4c19e9af4a9f6e446f3d6849a, type: 2}
   m_RootGameObject: {fileID: 2091001554}
   m_IsPrefabParent: 0
@@ -44032,7 +43941,6 @@ GameObject:
   - 114: {fileID: 1807842044}
   - 135: {fileID: 1807842043}
   - 54: {fileID: 1807842042}
-  - 114: {fileID: 1807842041}
   - 114: {fileID: 1807842040}
   - 114: {fileID: 1807842046}
   m_Layer: 20
@@ -44069,27 +43977,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   missionText: {fileID: 0}
-  uiRing: {fileID: 1788469151}
   missionButton: {fileID: 2020485785}
-  dialogueButton: {fileID: 230700428}
-  planetDialog: {fileID: 1807842041}
   planetMission: {fileID: 1807842046}
   missionPanel: {fileID: 1793417847}
---- !u!114 &1807842041
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11469124, guid: 24f1d3ab317d71740a7ca08df6a566fb,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1807842038}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d14f68bb6e64540489a67b08b8b911d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dialogueText:
-  - Welcome to Station Omega
-  - Please enjoy your stay!
 --- !u!54 &1807842042
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -45646,7 +45536,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1807842041}
+      - m_Target: {fileID: 0}
         m_MethodName: ClosePanel
         m_Mode: 1
         m_Arguments:
@@ -49655,6 +49545,7 @@ MonoBehaviour:
   - {fileID: 853403267}
   - {fileID: 466085629}
   systemRingGUI: {fileID: 896700425}
+  systemLabel: {fileID: 0}
   OnScreen: 1
 --- !u!23 &2012445873
 Renderer:
@@ -50319,7 +50210,6 @@ GameObject:
   - 114: {fileID: 2072899370}
   - 135: {fileID: 2072899369}
   - 54: {fileID: 2072899368}
-  - 114: {fileID: 2072899367}
   - 114: {fileID: 2072899366}
   - 114: {fileID: 2072899372}
   m_Layer: 20
@@ -50357,25 +50247,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   missionText: {fileID: 0}
-  uiRing: {fileID: 1487846514}
   missionButton: {fileID: 1959168622}
-  dialogueButton: {fileID: 1528338340}
-  planetDialog: {fileID: 2072899367}
   planetMission: {fileID: 2072899372}
   missionPanel: {fileID: 153916622}
---- !u!114 &2072899367
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11405570, guid: d011ca6150a83ea4a99d67a6236467ab,
-    type: 2}
-  m_PrefabInternal: {fileID: 240061578}
-  m_GameObject: {fileID: 2072899364}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d14f68bb6e64540489a67b08b8b911d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dialogueText: []
 --- !u!54 &2072899368
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -50585,7 +50459,6 @@ GameObject:
   - 114: {fileID: 2091001560}
   - 135: {fileID: 2091001559}
   - 54: {fileID: 2091001558}
-  - 114: {fileID: 2091001556}
   - 114: {fileID: 2091001557}
   - 114: {fileID: 2091001561}
   m_Layer: 20
@@ -50610,19 +50483,6 @@ Transform:
   - {fileID: 942650197}
   m_Father: {fileID: 1040438000}
   m_RootOrder: 0
---- !u!114 &2091001556
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11411092, guid: d0c7aed4c19e9af4a9f6e446f3d6849a,
-    type: 2}
-  m_PrefabInternal: {fileID: 1729426543}
-  m_GameObject: {fileID: 2091001554}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d14f68bb6e64540489a67b08b8b911d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dialogueText: []
 --- !u!114 &2091001557
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -50636,10 +50496,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   missionText: {fileID: 0}
-  uiRing: {fileID: 1454445588}
   missionButton: {fileID: 691472926}
-  dialogueButton: {fileID: 1124262430}
-  planetDialog: {fileID: 2091001556}
   planetMission: {fileID: 2091001561}
   missionPanel: {fileID: 649430989}
 --- !u!54 &2091001558

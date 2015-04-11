@@ -24,9 +24,15 @@ public class SolarSystem : MonoBehaviour
         get { return systemRingGUI; }
         set { systemRingGUI = value; }
     }
+    [SerializeField]
+    private Text systemLabel;
+    public Text SystemLabel
+    {
+        get { return systemLabel; }
+        set { systemLabel = value; }
+    }
     //Internal
     private string systemName;
-    private Text systemLabel;
     private SystemObject[] systemObjects;
     private Dictionary<SystemObject, SystemObjectInfo> systemObject_info_table = new Dictionary<SystemObject, SystemObjectInfo>();
     

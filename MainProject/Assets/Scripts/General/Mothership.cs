@@ -87,8 +87,7 @@ public class Mothership : MonoBehaviour
             float deltaX = otherTrans.position.x - trans.position.x;
             angle = (180.0f + ((Mathf.Atan2(deltaZ,deltaX) * 180.0f) / Mathf.PI))%360.0f;
             orbiting = true;
-            orbitID = otherTrans.gameObject.GetComponent<Planet_Dialogue>().ID;
-            StartCoroutine(otherTrans.gameObject.GetComponent<PlanetUIManager>().enableUIRing());
+            StartCoroutine(otherTrans.gameObject.GetComponent<PlanetUIManager>().enableUI());
             GalaxyCamera.Instance.targetPlanet(otherTrans);
             GalaxyCamera.Instance.changeZoomLevel(CamZoomLevel.PLANET_ZOOM);
         }
@@ -121,10 +120,10 @@ public class Mothership : MonoBehaviour
             GalaxyCamera.Instance.targetMothership();
             GalaxyCamera.Instance.changeZoomLevel(CamZoomLevel.SPACE_ZOOM);
         }
-        if (other.tag == TagsAndLayers.PlanetTag && orbitID == other.gameObject.GetComponent<Planet_Dialogue>().ID)
+        if (other.tag == TagsAndLayers.PlanetTag)
         {
             orbiting = false;
-            StartCoroutine(other.gameObject.GetComponent<PlanetUIManager>().disableUIRing());
+            StartCoroutine(other.gameObject.GetComponent<PlanetUIManager>().disableUI());
             GalaxyCamera.Instance.targetMothership();
             GalaxyCamera.Instance.changeZoomLevel(CamZoomLevel.SYSTEM_ZOOM);
         }

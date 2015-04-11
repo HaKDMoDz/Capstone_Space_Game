@@ -13,34 +13,11 @@ public class PlanetUIManager : MonoBehaviour
     }
 
     [SerializeField]
-    private GameObject uiRing;
-    public GameObject UIRing
-    {
-        get { return uiRing; }
-        set { uiRing = value; }
-    }
-
-    [SerializeField]
     private GameObject missionButton;
     public GameObject MissionButton
     {
         get { return missionButton; }
         set { missionButton = value; }
-    }
-    [SerializeField]
-    private GameObject dialogueButton;
-    public GameObject DialogueButton
-    {
-        get { return dialogueButton; }
-        set { dialogueButton = value; }
-    }
-
-    [SerializeField]
-    private Planet_Dialogue planetDialog;
-    public Planet_Dialogue PlanetDialog
-    {
-        get { return planetDialog; }
-        set { planetDialog = value; }
     }
 
     [SerializeField]
@@ -59,29 +36,21 @@ public class PlanetUIManager : MonoBehaviour
         set { missionPanel = value; }
     }
 
-    public IEnumerator enableUIRing()
+    public IEnumerator enableUI()
     {
         //check for missions
         if (planetMission != null)
         {
             planetMission.Completed = GameController.Instance.GameData.galaxyMapData.completeStatus[planetMission.ID - 1];
-            missionButton.SetActive(!gameObject.GetComponent<Planet_Mission>().Completed);
-        }
-
-        //check for dialog
-        if (planetDialog.DialogueText.Length > 0)
-        {
-            dialogueButton.SetActive(true);
+            missionButton.SetActive(!planetMission.Completed);
         }
 
         yield return null;
     }
 
-    public IEnumerator disableUIRing()
+    public IEnumerator disableUI()
     {
-        dialogueButton.SetActive(false);
         missionButton.SetActive(false);
-        uiRing.SetActive(false);
 
         yield return null;
     }

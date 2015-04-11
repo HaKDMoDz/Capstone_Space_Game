@@ -82,7 +82,6 @@ public class CombatSceneController : Singleton<CombatSceneController>
         //if (pirateFleetData.currentFleet_BlueprintNames.Count == 0)
         {
             Debug.LogWarning("Empty enemy fleet - spawning default fleet");
-            //pirateFleetData.currentFleet_BlueprintNames = new List<string>() { "AI_Corvette", "AI_Frigate" };
             pirateFleetData.currentFleet_BlueprintNames = new List<string>() { "NewAICorv","NewAIFrig"};//, "AI_Test" };
         }
         foreach (string bpTemplateName in pirateFleetData.currentFleet_BlueprintNames)
@@ -96,7 +95,6 @@ public class CombatSceneController : Singleton<CombatSceneController>
             unit.transform.RotateAroundYAxis(180.0f);
         }
         //combat start 
-        //InputManager.Instance.RegisterKeysDown(SkipCutscene, KeyCode.Escape);
 #if UNITY_EDITOR
         if (!GameObject.Find("CombatSystemTester"))
         {
@@ -107,7 +105,6 @@ public class CombatSceneController : Singleton<CombatSceneController>
                 ship.position = ship_gridPos.Value;
                 ship.rotation = Quaternion.identity;
             }
-            //InputManager.Instance.DeregisterKeysDown(SkipCutscene, KeyCode.Escape);
             yield return StartCoroutine(TurnBasedCombatSystem.Instance.StartCombat());
         }
 #else
@@ -118,19 +115,10 @@ public class CombatSceneController : Singleton<CombatSceneController>
                 ship.position = ship_gridPos.Value;
                 ship.rotation = Quaternion.identity;
             }
-        //InputManager.Instance.DeregisterKeysDown(SkipCutscene, KeyCode.Escape);
         yield return StartCoroutine(TurnBasedCombatSystem.Instance.StartCombat());
 #endif
-    }//SetupScene
+    }
 
-    //private void SkipCutscene(KeyCode key)
-    //{
-    //    launchCutscene.enabled = false;
-    //    foreach (var ship_gridPos in ship_gridPos_table)
-    //    {
-    //        ship_gridPos.Key.position = ship_gridPos.Value;
-    //    }
-    //}
     #region UnityCallbacks
 
     private IEnumerator Start()
