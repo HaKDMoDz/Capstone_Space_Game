@@ -154,6 +154,14 @@ public abstract class TurnBasedUnit : MonoBehaviour
             return hpBarTrans.position; 
         }
     }
+
+    [SerializeField]
+    private DisableEffectAfterTime shieldEffectDisabler;
+    public DisableEffectAfterTime ShieldEffectDisabler
+    {
+        get { return shieldEffectDisabler; }
+        set { shieldEffectDisabler = value; }
+    }
     #endregion Fields
 
     #region Methods
@@ -172,7 +180,7 @@ public abstract class TurnBasedUnit : MonoBehaviour
         {
             ShieldStrength -= _amountOfDamage;
             //display shield damage effect
-            StartCoroutine(trans.FindChild("ShieldEffect").GetComponent<DisableEffectAfterTime>().StartEffect());
+            StartCoroutine(shieldEffectDisabler.StartEffect());
         }
         else //damage bleeds over to hull
         {
@@ -217,16 +225,6 @@ public abstract class TurnBasedUnit : MonoBehaviour
         expolosionObject.transform.parent = null;
         yield return new WaitForSeconds(0.75f);
 
-        //remove ship graphics
-        //if (GetComponent<Hull>().hullName == "Organic Corvette")
-        //{
-        //    transform.FindChild("OrganicCorvette").gameObject.SetActive(false);
-        //}
-        //if (GetComponent<Hull>().hullName == "Organic Frigate")
-        //{
-        //    transform.FindChild("OrganicFrigate").gameObject.SetActive(false);
-        //}
-        //transform.FindChild("ComponentGrid").gameObject.SetActive(false);
         ShowHPBars(false);
         //play explosion sound
         //play explosion juice (screen shake, etc)
@@ -367,18 +365,6 @@ public abstract class TurnBasedUnit : MonoBehaviour
         maxPower = ShipBPMetaData.ExcessPower;
         currentPower = MaxPower;
 
-//        int numThrusters = components.Count(c => c is Comp_Eng_Thruster);
-//#if FULL_DEBUG || LOW_DEBUG
-//        if (numThrusters <= 0)
-//        {
-//            Debug.LogError("No Thrusters on Ship");
-//        }
-//#endif
-
-//        float thrust = ((Comp_Eng_Thruster)components.Find(c => c is Comp_Eng_Thruster)).Thrust;
-//        float totalThrust = thrust * numThrusters;
-//        int mass = shipBP.Hull.EmptyComponentGrid.Count;
-//        MoveCost = mass / totalThrust * 1.5f;
         MoveCost = shipBPMetaData.MoveCost;
         //Debug.Log("Move cost " + MoveCost);
     }
@@ -388,7 +374,14 @@ public abstract class TurnBasedUnit : MonoBehaviour
         trans = transform;
         componentGridTrans = shipBP.Hull.ComponnentGridTrans;
 
+        shieldEffectDisabler = trans.FindChild("ShieldEffect").GetComponent<DisableEffectAfterTime>();
+
         #if FULL_DEBUG
+        if (!shieldEffectDisabler)
+        {
+            Debug.LogError("No Shield effect found or shield effect has an incorrect or missing <DisableEffectAfterTime> Component");
+        }
+
         if(!componentGridTrans)
         {
             Debug.LogError("No Component Grid trans found");

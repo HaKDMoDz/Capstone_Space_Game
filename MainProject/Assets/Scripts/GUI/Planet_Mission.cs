@@ -129,7 +129,7 @@ public class Planet_Mission : MonoBehaviour
     {
         if (startDialog.Count != 0)
         {
-            transform.FindChild("PlanetUI").FindChild("MissionPanel").FindChild("Text").GetComponent<Text>().text = startDialog[startDialogIndex++];
+            
             uiManager.MissionText.text = startDialog[startDialogIndex++];
         }
     }
@@ -219,6 +219,7 @@ public class Planet_Mission : MonoBehaviour
 
     private void invasionPlanet09()
     {
+        Debug.LogWarning("MISSION_NINE");
         GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames = new List<string>();
         GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("K-104B");
         GameController.Instance.ChangeScene(GameScene.CombatScene);

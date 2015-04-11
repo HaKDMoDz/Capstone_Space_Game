@@ -265,13 +265,14 @@ public class TurnBasedCombatSystem : Singleton<TurnBasedCombatSystem>
     /// <returns></returns>
     private IEnumerator ExecuteTurnForFirstUnit()
     {
-        firstUnit.transform.FindChild("SelectionHalo").gameObject.SetActive(true);
+        GameObject selectionHalo = firstUnit.transform.FindChild("SelectionHalo").gameObject;
+        selectionHalo.SetActive(true);
         yield return StartCoroutine(CameraDirector.Instance.MoveToFocusOn(firstUnit.transform, GlobalVars.CameraMoveToFocusPeriod));
         yield return StartCoroutine(firstUnit.ExecuteTurn());
         CombatSystemInterface.Instance.EnableComponentSelectionPanel(false);
         if (firstUnit)
         {
-            firstUnit.transform.FindChild("SelectionHalo").gameObject.SetActive(false);
+            selectionHalo.SetActive(false);
         }
     }
     public void EndCombat()

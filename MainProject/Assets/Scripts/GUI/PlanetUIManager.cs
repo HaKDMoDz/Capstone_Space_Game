@@ -61,12 +61,10 @@ public class PlanetUIManager : MonoBehaviour
 
     public IEnumerator enableUIRing()
     {
-        //uiRing.SetActive(true);
-
-        gameObject.GetComponent<Planet_Mission>().Completed = GameController.Instance.GameData.galaxyMapData.completeStatus[gameObject.GetComponent<Planet_Mission>().ID - 1];
         //check for missions
-        if (gameObject.GetComponent<Planet_Mission>() != null)
+        if (planetMission != null)
         {
+            planetMission.Completed = GameController.Instance.GameData.galaxyMapData.completeStatus[planetMission.ID - 1];
             missionButton.SetActive(!gameObject.GetComponent<Planet_Mission>().Completed);
         }
 
@@ -96,7 +94,7 @@ public class PlanetUIManager : MonoBehaviour
     public void enableMissionPanel()
     {
         missionPanel.SetActive(true);
-        GetComponent<Planet_Mission>().advanceStartText();
+        planetMission.advanceStartText();
     }
 
     public void disableMissionPanel()

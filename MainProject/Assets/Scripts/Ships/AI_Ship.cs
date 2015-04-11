@@ -13,11 +13,6 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
     private bool receivedMoveCommand;
     private bool receivedAttackCommand;
 
-    //TEMP
-    //private float range = 50.0f;
-    //TEMP
-    //private float damagePerAttack = 35.0f;
-
     private float frontalAssaultRange = 50.0f;
     private Component_Weapon laser;
     public float laserRange;
@@ -53,12 +48,6 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
     {
         base.Init(shipBP, shipMove);
         this.ai_Attack = ai_Attack;
-
-        //foreach (ShipComponent component in shipBP.slot_component_table.Values)
-        //{
-        //    activeComponents.Add(component);
-        //    component.Init();
-        //}
 
         trans = transform;
 
@@ -126,10 +115,6 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
                             yield return null;
                         }
 
-                        if (targetPlayer)
-                        {
-                            //TargetComponent(targetPlayer, out targetComponent);
-                        }
                         if (targetPlayer.ShieldStrength <= 0.0f)
                         {
                             break;
@@ -142,7 +127,6 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
                 }
             }
         }
-        
         PostTurnActions();
     }
 
@@ -675,23 +659,9 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
 
     private float trialShipVsShip(PlayerShip _targetShip)
     {
-        // calculate ai and player defenses
-        //float aiShield = Components.Where(c => c.CompSpecificType == ComponentSpecificType.SHIELD_G).ToArray().Length;
-        //float aiArmour = Components.Where(c => c.CompSpecificType == ComponentSpecificType.ARMOUR).ToArray().Length;
-        //float playerShield = _targetShip.Components.Where(c => c.CompSpecificType == ComponentSpecificType.SHIELD_G).ToArray().Length;
-        //float playerArmour = _targetShip.Components.Where(c => c.CompSpecificType == ComponentSpecificType.ARMOUR).ToArray().Length;
-
         // calculate ai and player excess power
         float aiExcessPower = CurrentPower;
         float playerExcessPower = _targetShip.CurrentPower;
-
-        // calculate ai and player thrusters
-        //float aiThrusters = Components.Where(c => c.CompSpecificType == ComponentSpecificType.THRUSTER).ToArray().Length;
-        //float playerThrusters = _targetShip.Components.Where(c => c.CompSpecificType == ComponentSpecificType.THRUSTER).ToArray().Length;
-
-        // calculate ai and player max hull HP
-        //float aiMaxHullHP = MaxHullHP;
-        //float playerMaxHullHP = _targetShip.MaxHullHP;
 
         // calculate ai and player  max shield
         float aiMaxShield = ShieldStrength;
@@ -941,13 +911,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
             Debug.LogWarning(item.CompSpecificType);
         }
 
-        //Component_Weapon[] selectedLasers = selectedWeapons.Where(c => c.CompSpecificType == ComponentSpecificType.LASER && c.gameObject.activeSelf).ToArray();
-        //Component_Weapon[] selectedMissiles = selectedWeapons.Where(c => c.CompSpecificType == ComponentSpecificType.MISSILE && c.gameObject.activeSelf).ToArray();
-        //Component_Weapon[] selectedRailguns = selectedWeapons.Where(c => c.CompSpecificType == ComponentSpecificType.MASS_D && c.gameObject.activeSelf).ToArray();
-
         IEnumerable<Component_Weapon> weaponsToFire;
-
-
 
         if (_targetShip.ShieldStrength > 0.0f)
         {
@@ -1027,8 +991,6 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
             Debug.LogWarning("Weapon activation calculation: ");
             Debug.Log("Target shield: " + _targetShip.ShieldStrength + " weapon shield dmg " + weapon.ShieldDamage + " num to kill shield " + numWeaponsToKillShields);
 #endif
-            //List<ShipComponent> selectedComponents = components.Where(c => c.CompType == ComponentType.Weapon && c.gameObject.activeSelf).ToList();
-
             if (numWeaponsToKillShields > numSelectedWeapons)
             {
                 return numSelectedWeapons;
