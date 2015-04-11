@@ -10,6 +10,9 @@ public class Planet_Mission : MonoBehaviour
     public MothershipUIManager mothershipUI;
 
     [SerializeField]
+    public GameObject mothership;
+
+    [SerializeField]
     public PlanetUIManager uiManager;
 
     [SerializeField]
@@ -79,8 +82,6 @@ public class Planet_Mission : MonoBehaviour
         set { id = value; }
     }
 
-    private Transform missionUIPanel;
-
 	void Awake () 
     {
         Action acceptAction;
@@ -121,51 +122,16 @@ public class Planet_Mission : MonoBehaviour
                 break;
         }
         MissionController.Instance.AddMission(ID, acceptAction);
-
-        Action completeAction;
-
-        switch (ID)
-        {
-            case 1:
-                completeAction = (() => mission1());
-                break;
-            case 5:
-                completeAction = (() => missioncomplete2());
-                break;
-            case 0:
-            default:
-                completeAction = (() => invalidMissionComplete());
-                break;
-        }
-        MissionController.Instance.AddMissionComplete(ID, completeAction);
-
         MissionController.Instance.AddPlanetMission(this);
 	}
-
-    public void CompleteMission()
-    {
-        Debug.Log("Mission Completed");
-        MissionController.Instance.CompleteMission(MissionController.currentMissionIndex);
-        uiManager.disableMissionCompleteButton();
-        uiManager.disableMissionCompletePanel();
-        //Debug.LogError(GameObject.Find("Mothership").GetComponent<MothershipUIManager>()); //linkage test
-        //mothershipUI.disableWaypointUI(); //causes a null reference exception
-        GameObject.Find("Mothership").GetComponent<MothershipUIManager>().disableWaypointUI(); //same code with new linkage
-        MissionController.Instance.currentMission.Completed = true;
-        MissionController.Instance.currentMission = null;
-    }
 
     public void advanceStartText()
     {
         if (startDialog.Count != 0)
         {
             transform.FindChild("PlanetUI").FindChild("MissionPanel").FindChild("Text").GetComponent<Text>().text = startDialog[startDialogIndex++];
+            uiManager.MissionText.text = startDialog[startDialogIndex++];
         }
-    }
-
-    public void advanceEndText()
-    {
-        endPlanet.transform.FindChild("PlanetUI").FindChild("MissionCompletePanel").FindChild("Text").GetComponent<Text>().text = endDialog[endPlanet.GetComponent<Planet_MissionComplete>().endDialogIndex++];
     }
 
     public void AcceptMission()
@@ -182,31 +148,6 @@ public class Planet_Mission : MonoBehaviour
             uiManager.disableMissionButton();
             MissionController.Instance.AcceptMission(ID);
         }
-    }
-
-    private void mission1()
-    {
-        Debug.Log("Mission 1 clicked");
-
-        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames = new List<string>();
-        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("AI_Corvette");
-        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("AI_Corvette");
-        GameController.Instance.GameData.pirates_AI_Data.currentFleet_BlueprintNames.Add("AI_Corvette");
-        GameController.Instance.ChangeScene(GameScene.CombatScene);
-    }
-
-    private void mission2()
-    {
-        Debug.Log("Mission 2 clicked");
-        mothershipUI.PlanetDestination = endPlanet.transform;
-        mothershipUI.SystemDestination = endSystem.transform;
-    }
-
-    private void missioncomplete2()
-    {
-        PlanetUIManager planetUIManager = endPlanet.GetComponent<PlanetUIManager>();
-        planetUIManager.disableMissionCompleteButton();
-        planetUIManager.disableMissionCompletePanel();
     }
 
     private void invalidMission()

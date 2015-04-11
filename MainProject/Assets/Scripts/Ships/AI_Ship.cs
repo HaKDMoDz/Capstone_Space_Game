@@ -4,6 +4,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
+public enum PlacementType { FORWARD, AFT, PORT, STARBOARD, COUNT }
+
 public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     #region Fields
@@ -166,7 +168,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
         }
     }
 
-    public void Move(PlayerShip targetPlayer, AI_Fleet.PlacementType _placement)
+    public void Move(PlayerShip targetPlayer, PlacementType _placement)
     {
         if (!receivedMoveCommand)
         {
@@ -177,7 +179,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
             Vector3 desiredPos;
             switch (_placement)
             {
-                case AI_Fleet.PlacementType.FORWARD:
+                case PlacementType.FORWARD:
 
                     desiredPos = enemyPosition + (targetPlayer.transform.forward * (range - 10));
                     while (!CanUnitMoveTo(desiredPos))
@@ -191,7 +193,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
                     shipMove.destination = desiredPos;
 
                     break;
-                case AI_Fleet.PlacementType.AFT:
+                case PlacementType.AFT:
                     desiredPos = enemyPosition + (-targetPlayer.transform.forward * (range - 10));
                     while (!CanUnitMoveTo(desiredPos))
                     {
@@ -203,7 +205,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
 
                     shipMove.destination = desiredPos;
                     break;
-                case AI_Fleet.PlacementType.PORT:
+                case PlacementType.PORT:
                     desiredPos = enemyPosition + (-targetPlayer.transform.right * (range - 10));
                     while (!CanUnitMoveTo(desiredPos))
                     {
@@ -213,7 +215,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
                         desiredPos = enemyPosition + direction3D;
                     }
                     break;
-                case AI_Fleet.PlacementType.STARBOARD:
+                case PlacementType.STARBOARD:
                     desiredPos = enemyPosition + (targetPlayer.transform.right * (range - 10));
                     while (!CanUnitMoveTo(desiredPos))
                     {
@@ -223,7 +225,7 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
                         desiredPos = enemyPosition + direction3D;
                     }
                     break;
-                case AI_Fleet.PlacementType.COUNT:
+                case PlacementType.COUNT:
                 default:
                     break;
             }
@@ -496,13 +498,13 @@ public class AI_Ship : TurnBasedUnit, IPointerEnterHandler, IPointerExitHandler,
 
         //make lists of components by placement
         List<ShipComponent> fwdComponents = new List<ShipComponent>();
-        fwdComponents = _ship.Components.Where(c => c.Placement == AI_Fleet.PlacementType.FORWARD && c.gameObject.activeSelf).ToList<ShipComponent>();
+        fwdComponents = _ship.Components.Where(c => c.Placement == PlacementType.FORWARD && c.gameObject.activeSelf).ToList<ShipComponent>();
         List<ShipComponent> aftComponents = new List<ShipComponent>();
-        aftComponents = _ship.Components.Where(c => c.Placement == AI_Fleet.PlacementType.AFT && c.gameObject.activeSelf).ToList<ShipComponent>();
+        aftComponents = _ship.Components.Where(c => c.Placement == PlacementType.AFT && c.gameObject.activeSelf).ToList<ShipComponent>();
         List<ShipComponent> portComponents = new List<ShipComponent>();
-        portComponents = _ship.Components.Where(c => c.Placement == AI_Fleet.PlacementType.PORT && c.gameObject.activeSelf).ToList<ShipComponent>();
+        portComponents = _ship.Components.Where(c => c.Placement == PlacementType.PORT && c.gameObject.activeSelf).ToList<ShipComponent>();
         List<ShipComponent> starComponents = new List<ShipComponent>();
-        starComponents = _ship.Components.Where(c => c.Placement == AI_Fleet.PlacementType.STARBOARD && c.gameObject.activeSelf).ToList<ShipComponent>();
+        starComponents = _ship.Components.Where(c => c.Placement == PlacementType.STARBOARD && c.gameObject.activeSelf).ToList<ShipComponent>();
 
         Debug.Log("fwd comp: " + fwdComponents.Count());
         Debug.Log("aft comp: " + aftComponents.Count());

@@ -16,8 +16,8 @@ public class ComponentSlot : MonoBehaviour
 
     public int index; //assigned in the prefab in advance when the component grid is created for a given ship model
     [SerializeField]
-    private AI_Fleet.PlacementType placement;
-    public AI_Fleet.PlacementType Placement
+    private PlacementType placement;
+    public PlacementType Placement
     {
         get { return placement; }
         set { placement = value; }

@@ -1,8 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class PlanetUIManager : MonoBehaviour 
 {
+    [SerializeField]
+    private Text missionText;
+    public Text MissionText
+    {
+        get { return missionText; }
+        set { missionText = value; }
+    }
+
     [SerializeField]
     private GameObject uiRing;
     public GameObject UIRing
@@ -17,13 +26,6 @@ public class PlanetUIManager : MonoBehaviour
     {
         get { return missionButton; }
         set { missionButton = value; }
-    }
-    [SerializeField]
-    private GameObject missionCompleteButton;
-    public GameObject MissionCompleteButton
-    {
-        get { return missionCompleteButton; }
-        set { missionCompleteButton = value; }
     }
     [SerializeField]
     private GameObject dialogueButton;
@@ -42,6 +44,14 @@ public class PlanetUIManager : MonoBehaviour
     }
 
     [SerializeField]
+    private Planet_Mission planetMission;
+    public Planet_Mission PlanetMission
+    {
+        get { return planetMission; }
+        set { planetMission = value; }
+    }
+
+    [SerializeField]
     private GameObject missionPanel;
     public GameObject MissionPanel
     {
@@ -49,34 +59,15 @@ public class PlanetUIManager : MonoBehaviour
         set { missionPanel = value; }
     }
 
-    [SerializeField]
-    private GameObject missionCompletePanel;
-    public GameObject MissionCompletePanel
-    {
-        get { return missionCompletePanel; }
-        set { missionCompletePanel = value; }
-    }
-
     public IEnumerator enableUIRing()
     {
         //uiRing.SetActive(true);
+
         gameObject.GetComponent<Planet_Mission>().Completed = GameController.Instance.GameData.galaxyMapData.completeStatus[gameObject.GetComponent<Planet_Mission>().ID - 1];
         //check for missions
         if (gameObject.GetComponent<Planet_Mission>() != null)
         {
             missionButton.SetActive(!gameObject.GetComponent<Planet_Mission>().Completed);
-        }
-        
-        //check for mission complete
-        if (MissionController.Instance.currentMission != null)
-        {
-            if (MissionController.Instance.currentMission.EndPlanet == gameObject)
-            {
-                if (!MissionController.Instance.currentMission.Completed)
-                {
-                    missionCompleteButton.SetActive(true);
-                }
-            }
         }
 
         //check for dialog
@@ -92,7 +83,6 @@ public class PlanetUIManager : MonoBehaviour
     {
         dialogueButton.SetActive(false);
         missionButton.SetActive(false);
-        missionCompleteButton.SetActive(false);
         uiRing.SetActive(false);
 
         yield return null;
@@ -109,24 +99,8 @@ public class PlanetUIManager : MonoBehaviour
         GetComponent<Planet_Mission>().advanceStartText();
     }
 
-    public void disableMissionCompleteButton()
-    {
-        missionCompleteButton.SetActive(false);
-    }
-
     public void disableMissionPanel()
     {
         missionPanel.SetActive(false);
-    }
-
-    public void enableMissionCompletePanel()
-    {
-        missionCompletePanel.SetActive(true);
-        MissionController.Instance.currentMission.advanceEndText();
-    }
-
-    public void disableMissionCompletePanel()
-    {
-        missionCompletePanel.SetActive(false);
     }
 }

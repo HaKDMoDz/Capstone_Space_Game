@@ -5878,7 +5878,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2072899371}
+      - m_Target: {fileID: 11487024, guid: d011ca6150a83ea4a99d67a6236467ab, type: 2}
         m_MethodName: CompleteMission
         m_Mode: 1
         m_Arguments:
@@ -5997,7 +5997,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 907124078}
+      - m_Target: {fileID: 11477312, guid: 7f67cce9528e2c64ebc4a1e91062b0d6, type: 2}
         m_MethodName: CompleteMission
         m_Mode: 1
         m_Arguments:
@@ -6475,7 +6475,12 @@ Prefab:
       propertyPath: endSystem
       value: 
       objectReference: {fileID: 360948274}
-    m_RemovedComponents: []
+    - target: {fileID: 11449264, guid: d011ca6150a83ea4a99d67a6236467ab, type: 2}
+      propertyPath: mothership
+      value: 
+      objectReference: {fileID: 383796676}
+    m_RemovedComponents:
+    - {fileID: 11487024, guid: d011ca6150a83ea4a99d67a6236467ab, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: d011ca6150a83ea4a99d67a6236467ab, type: 2}
   m_RootGameObject: {fileID: 2072899364}
   m_IsPrefabParent: 0
@@ -6723,7 +6728,12 @@ Prefab:
       propertyPath: endSystem
       value: 
       objectReference: {fileID: 360948274}
-    m_RemovedComponents: []
+    - target: {fileID: 11489928, guid: 629106e26eaa5484dbd3732c3538183e, type: 2}
+      propertyPath: mothership
+      value: 
+      objectReference: {fileID: 383796676}
+    m_RemovedComponents:
+    - {fileID: 11401266, guid: 629106e26eaa5484dbd3732c3538183e, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 629106e26eaa5484dbd3732c3538183e, type: 2}
   m_RootGameObject: {fileID: 1518535566}
   m_IsPrefabParent: 0
@@ -6779,7 +6789,12 @@ Prefab:
       propertyPath: endSystem
       value: 
       objectReference: {fileID: 360948274}
-    m_RemovedComponents: []
+    - target: {fileID: 11407766, guid: 90980d702c296ca41a86cf25570b79e8, type: 2}
+      propertyPath: mothership
+      value: 
+      objectReference: {fileID: 383796676}
+    m_RemovedComponents:
+    - {fileID: 11410220, guid: 90980d702c296ca41a86cf25570b79e8, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 90980d702c296ca41a86cf25570b79e8, type: 2}
   m_RootGameObject: {fileID: 1514215441}
   m_IsPrefabParent: 0
@@ -9063,7 +9078,6 @@ GameObject:
   - 54: {fileID: 315088963}
   - 114: {fileID: 315088961}
   - 114: {fileID: 315088962}
-  - 114: {fileID: 315088966}
   - 114: {fileID: 315088967}
   m_Layer: 20
   m_Name: Planet-006
@@ -9113,13 +9127,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06e909cf237a8c648aeefeff8cbb0dfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  missionText: {fileID: 0}
   uiRing: {fileID: 1286539125}
   missionButton: {fileID: 1521011568}
-  missionCompleteButton: {fileID: 720864961}
   dialogueButton: {fileID: 963171522}
   planetDialog: {fileID: 315088961}
+  planetMission: {fileID: 0}
   missionPanel: {fileID: 2124642379}
-  missionCompletePanel: {fileID: 1142292844}
 --- !u!54 &315088963
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -9161,19 +9175,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cb456d5b9b09c24498e8668f842b719, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &315088966
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11419218, guid: 0641a74151cdab8469eb908b60fc6289,
-    type: 2}
-  m_PrefabInternal: {fileID: 1238395093}
-  m_GameObject: {fileID: 315088959}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: feb5df75da6fb5443951623ec9be4b9f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  endDialogIndex: 0
 --- !u!114 &315088967
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9187,6 +9188,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mothershipUI: {fileID: 383796683}
+  mothership: {fileID: 383796676}
   uiManager: {fileID: 315088962}
   startSystem: {fileID: 1040437999}
   endSystem: {fileID: 1040437999}
@@ -11686,7 +11688,12 @@ Prefab:
       propertyPath: m_Radius
       value: 98.0999985
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 11444190, guid: 021f33aab64f0f747a242f5c1ba5db48, type: 2}
+      propertyPath: mothership
+      value: 
+      objectReference: {fileID: 383796676}
+    m_RemovedComponents:
+    - {fileID: 11474208, guid: 021f33aab64f0f747a242f5c1ba5db48, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 021f33aab64f0f747a242f5c1ba5db48, type: 2}
   m_RootGameObject: {fileID: 466085628}
   m_IsPrefabParent: 0
@@ -12586,7 +12593,6 @@ GameObject:
   - 54: {fileID: 466085632}
   - 114: {fileID: 466085631}
   - 114: {fileID: 466085630}
-  - 114: {fileID: 466085635}
   - 114: {fileID: 466085636}
   m_Layer: 20
   m_Name: Planet-008
@@ -12621,13 +12627,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06e909cf237a8c648aeefeff8cbb0dfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  missionText: {fileID: 0}
   uiRing: {fileID: 432393442}
   missionButton: {fileID: 452835259}
-  missionCompleteButton: {fileID: 1653683100}
   dialogueButton: {fileID: 935914518}
   planetDialog: {fileID: 466085631}
+  planetMission: {fileID: 0}
   missionPanel: {fileID: 2004998481}
-  missionCompletePanel: {fileID: 869270788}
 --- !u!114 &466085631
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12682,19 +12688,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cb456d5b9b09c24498e8668f842b719, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &466085635
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11474208, guid: 021f33aab64f0f747a242f5c1ba5db48,
-    type: 2}
-  m_PrefabInternal: {fileID: 433302471}
-  m_GameObject: {fileID: 466085628}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: feb5df75da6fb5443951623ec9be4b9f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  endDialogIndex: 0
 --- !u!114 &466085636
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12708,6 +12701,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mothershipUI: {fileID: 383796683}
+  mothership: {fileID: 383796676}
   uiManager: {fileID: 466085630}
   startSystem: {fileID: 2012445869}
   endSystem: {fileID: 2012445869}
@@ -20119,7 +20113,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1518535573}
+      - m_Target: {fileID: 11401266, guid: 629106e26eaa5484dbd3732c3538183e, type: 2}
         m_MethodName: CompleteMission
         m_Mode: 1
         m_Arguments:
@@ -20238,7 +20232,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1514215448}
+      - m_Target: {fileID: 11410220, guid: 90980d702c296ca41a86cf25570b79e8, type: 2}
         m_MethodName: CompleteMission
         m_Mode: 1
         m_Arguments:
@@ -21871,7 +21865,6 @@ GameObject:
   - 54: {fileID: 853403270}
   - 114: {fileID: 853403269}
   - 114: {fileID: 853403268}
-  - 114: {fileID: 853403273}
   - 114: {fileID: 853403274}
   m_Layer: 20
   m_Name: Planet-007
@@ -21906,13 +21899,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06e909cf237a8c648aeefeff8cbb0dfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  missionText: {fileID: 0}
   uiRing: {fileID: 419153166}
   missionButton: {fileID: 1161946757}
-  missionCompleteButton: {fileID: 452154321}
   dialogueButton: {fileID: 66492514}
   planetDialog: {fileID: 853403269}
+  planetMission: {fileID: 0}
   missionPanel: {fileID: 1686545838}
-  missionCompletePanel: {fileID: 882872991}
 --- !u!114 &853403269
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21967,19 +21960,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cb456d5b9b09c24498e8668f842b719, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &853403273
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11404426, guid: 8fde0fb5db4b2714997f7c03082ecf6a,
-    type: 2}
-  m_PrefabInternal: {fileID: 886468652}
-  m_GameObject: {fileID: 853403266}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: feb5df75da6fb5443951623ec9be4b9f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  endDialogIndex: 0
 --- !u!114 &853403274
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21993,6 +21973,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mothershipUI: {fileID: 383796683}
+  mothership: {fileID: 853403266}
   uiManager: {fileID: 853403268}
   startSystem: {fileID: 2012445869}
   endSystem: {fileID: 2012445869}
@@ -23545,7 +23526,12 @@ Prefab:
       propertyPath: m_Radius
       value: 86
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 11476200, guid: 8fde0fb5db4b2714997f7c03082ecf6a, type: 2}
+      propertyPath: mothership
+      value: 
+      objectReference: {fileID: 853403266}
+    m_RemovedComponents:
+    - {fileID: 11404426, guid: 8fde0fb5db4b2714997f7c03082ecf6a, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 8fde0fb5db4b2714997f7c03082ecf6a, type: 2}
   m_RootGameObject: {fileID: 853403266}
   m_IsPrefabParent: 0
@@ -24117,7 +24103,6 @@ GameObject:
   - 54: {fileID: 907124075}
   - 114: {fileID: 907124073}
   - 114: {fileID: 907124074}
-  - 114: {fileID: 907124078}
   - 114: {fileID: 907124079}
   m_Layer: 20
   m_Name: Planet-005
@@ -24167,13 +24152,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06e909cf237a8c648aeefeff8cbb0dfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  missionText: {fileID: 0}
   uiRing: {fileID: 1072423521}
   missionButton: {fileID: 1475426592}
-  missionCompleteButton: {fileID: 909182542}
   dialogueButton: {fileID: 258610180}
   planetDialog: {fileID: 907124073}
+  planetMission: {fileID: 0}
   missionPanel: {fileID: 415071605}
-  missionCompletePanel: {fileID: 1294268833}
 --- !u!54 &907124075
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -24215,19 +24200,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cb456d5b9b09c24498e8668f842b719, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &907124078
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11477312, guid: 7f67cce9528e2c64ebc4a1e91062b0d6,
-    type: 2}
-  m_PrefabInternal: {fileID: 1362729008}
-  m_GameObject: {fileID: 907124071}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: feb5df75da6fb5443951623ec9be4b9f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  endDialogIndex: 0
 --- !u!114 &907124079
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24241,6 +24213,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mothershipUI: {fileID: 383796683}
+  mothership: {fileID: 383796676}
   uiManager: {fileID: 907124074}
   startSystem: {fileID: 1040437999}
   endSystem: {fileID: 1040437999}
@@ -31818,7 +31791,12 @@ Prefab:
       propertyPath: endSystem
       value: 
       objectReference: {fileID: 1040437999}
-    m_RemovedComponents: []
+    - target: {fileID: 11433484, guid: 0641a74151cdab8469eb908b60fc6289, type: 2}
+      propertyPath: mothership
+      value: 
+      objectReference: {fileID: 383796676}
+    m_RemovedComponents:
+    - {fileID: 11419218, guid: 0641a74151cdab8469eb908b60fc6289, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 0641a74151cdab8469eb908b60fc6289, type: 2}
   m_RootGameObject: {fileID: 315088959}
   m_IsPrefabParent: 0
@@ -32093,7 +32071,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2091001562}
+      - m_Target: {fileID: 11463356, guid: d0c7aed4c19e9af4a9f6e446f3d6849a, type: 2}
         m_MethodName: CompleteMission
         m_Mode: 1
         m_Arguments:
@@ -32412,7 +32390,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 315088966}
+      - m_Target: {fileID: 11419218, guid: 0641a74151cdab8469eb908b60fc6289, type: 2}
         m_MethodName: CompleteMission
         m_Mode: 1
         m_Arguments:
@@ -33678,7 +33656,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 466085635}
+      - m_Target: {fileID: 11474208, guid: 021f33aab64f0f747a242f5c1ba5db48, type: 2}
         m_MethodName: CompleteMission
         m_Mode: 1
         m_Arguments:
@@ -33832,7 +33810,12 @@ Prefab:
       propertyPath: endSystem
       value: 
       objectReference: {fileID: 1040437999}
-    m_RemovedComponents: []
+    - target: {fileID: 11449544, guid: 7f67cce9528e2c64ebc4a1e91062b0d6, type: 2}
+      propertyPath: mothership
+      value: 
+      objectReference: {fileID: 383796676}
+    m_RemovedComponents:
+    - {fileID: 11477312, guid: 7f67cce9528e2c64ebc4a1e91062b0d6, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 7f67cce9528e2c64ebc4a1e91062b0d6, type: 2}
   m_RootGameObject: {fileID: 907124071}
   m_IsPrefabParent: 0
@@ -37040,7 +37023,6 @@ GameObject:
   - 54: {fileID: 1514215445}
   - 114: {fileID: 1514215444}
   - 114: {fileID: 1514215443}
-  - 114: {fileID: 1514215448}
   - 114: {fileID: 1514215449}
   m_Layer: 20
   m_Name: Planet-003
@@ -37076,13 +37058,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06e909cf237a8c648aeefeff8cbb0dfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  missionText: {fileID: 0}
   uiRing: {fileID: 1440122421}
   missionButton: {fileID: 147790287}
-  missionCompleteButton: {fileID: 1806857178}
   dialogueButton: {fileID: 427691037}
   planetDialog: {fileID: 1514215444}
+  planetMission: {fileID: 0}
   missionPanel: {fileID: 2122705329}
-  missionCompletePanel: {fileID: 1728867218}
 --- !u!114 &1514215444
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -37137,19 +37119,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cb456d5b9b09c24498e8668f842b719, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1514215448
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11410220, guid: 90980d702c296ca41a86cf25570b79e8,
-    type: 2}
-  m_PrefabInternal: {fileID: 249158100}
-  m_GameObject: {fileID: 1514215441}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: feb5df75da6fb5443951623ec9be4b9f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  endDialogIndex: 0
 --- !u!114 &1514215449
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -37163,6 +37132,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mothershipUI: {fileID: 383796683}
+  mothership: {fileID: 383796676}
   uiManager: {fileID: 1514215443}
   startSystem: {fileID: 360948274}
   endSystem: {fileID: 360948274}
@@ -37244,7 +37214,6 @@ GameObject:
   - 54: {fileID: 1518535570}
   - 114: {fileID: 1518535569}
   - 114: {fileID: 1518535568}
-  - 114: {fileID: 1518535573}
   - 114: {fileID: 1518535574}
   m_Layer: 20
   m_Name: Planet-001
@@ -37280,13 +37249,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06e909cf237a8c648aeefeff8cbb0dfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  missionText: {fileID: 0}
   uiRing: {fileID: 2077087894}
   missionButton: {fileID: 663749981}
-  missionCompleteButton: {fileID: 1788187645}
   dialogueButton: {fileID: 972247831}
   planetDialog: {fileID: 1518535569}
+  planetMission: {fileID: 0}
   missionPanel: {fileID: 410746417}
-  missionCompletePanel: {fileID: 1269959740}
 --- !u!114 &1518535569
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -37341,19 +37310,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cb456d5b9b09c24498e8668f842b719, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1518535573
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11401266, guid: 629106e26eaa5484dbd3732c3538183e,
-    type: 2}
-  m_PrefabInternal: {fileID: 248636541}
-  m_GameObject: {fileID: 1518535566}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: feb5df75da6fb5443951623ec9be4b9f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  endDialogIndex: 0
 --- !u!114 &1518535574
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -37367,6 +37323,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mothershipUI: {fileID: 383796683}
+  mothership: {fileID: 383796676}
   uiManager: {fileID: 1518535568}
   startSystem: {fileID: 360948274}
   endSystem: {fileID: 360948274}
@@ -41149,7 +41106,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 853403273}
+      - m_Target: {fileID: 11404426, guid: 8fde0fb5db4b2714997f7c03082ecf6a, type: 2}
         m_MethodName: CompleteMission
         m_Mode: 1
         m_Arguments:
@@ -42005,7 +41962,12 @@ Prefab:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 11434538, guid: d0c7aed4c19e9af4a9f6e446f3d6849a, type: 2}
+      propertyPath: mothership
+      value: 
+      objectReference: {fileID: 383796676}
+    m_RemovedComponents:
+    - {fileID: 11463356, guid: d0c7aed4c19e9af4a9f6e446f3d6849a, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: d0c7aed4c19e9af4a9f6e446f3d6849a, type: 2}
   m_RootGameObject: {fileID: 2091001554}
   m_IsPrefabParent: 0
@@ -44036,7 +43998,6 @@ GameObject:
   - 54: {fileID: 1807842042}
   - 114: {fileID: 1807842041}
   - 114: {fileID: 1807842040}
-  - 114: {fileID: 1807842045}
   - 114: {fileID: 1807842046}
   - 114: {fileID: 1807842047}
   m_Layer: 20
@@ -44072,13 +44033,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06e909cf237a8c648aeefeff8cbb0dfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  missionText: {fileID: 0}
   uiRing: {fileID: 1788469151}
   missionButton: {fileID: 2020485785}
-  missionCompleteButton: {fileID: 981674846}
   dialogueButton: {fileID: 230700428}
   planetDialog: {fileID: 1807842041}
+  planetMission: {fileID: 0}
   missionPanel: {fileID: 1793417847}
-  missionCompletePanel: {fileID: 1905544804}
 --- !u!114 &1807842041
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44135,19 +44096,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cb456d5b9b09c24498e8668f842b719, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1807842045
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11453632, guid: 24f1d3ab317d71740a7ca08df6a566fb,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1807842038}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: feb5df75da6fb5443951623ec9be4b9f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  endDialogIndex: 0
 --- !u!114 &1807842046
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44161,6 +44109,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mothershipUI: {fileID: 383796683}
+  mothership: {fileID: 383796676}
   uiManager: {fileID: 1807842040}
   startSystem: {fileID: 967622406}
   endSystem: {fileID: 967622406}
@@ -44184,6 +44133,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mothershipUI: {fileID: 383796683}
+  mothership: {fileID: 0}
   uiManager: {fileID: 1807842040}
   startSystem: {fileID: 967622406}
   endSystem: {fileID: 967622406}
@@ -50360,7 +50310,6 @@ GameObject:
   - 54: {fileID: 2072899368}
   - 114: {fileID: 2072899367}
   - 114: {fileID: 2072899366}
-  - 114: {fileID: 2072899371}
   - 114: {fileID: 2072899372}
   m_Layer: 20
   m_Name: Planet-002
@@ -50396,13 +50345,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06e909cf237a8c648aeefeff8cbb0dfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  missionText: {fileID: 0}
   uiRing: {fileID: 1487846514}
   missionButton: {fileID: 1959168622}
-  missionCompleteButton: {fileID: 1914908597}
   dialogueButton: {fileID: 1528338340}
   planetDialog: {fileID: 2072899367}
+  planetMission: {fileID: 0}
   missionPanel: {fileID: 153916622}
-  missionCompletePanel: {fileID: 254002168}
 --- !u!114 &2072899367
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -50457,19 +50406,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cb456d5b9b09c24498e8668f842b719, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2072899371
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11487024, guid: d011ca6150a83ea4a99d67a6236467ab,
-    type: 2}
-  m_PrefabInternal: {fileID: 240061578}
-  m_GameObject: {fileID: 2072899364}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: feb5df75da6fb5443951623ec9be4b9f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  endDialogIndex: 0
 --- !u!114 &2072899372
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -50483,6 +50419,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mothershipUI: {fileID: 383796683}
+  mothership: {fileID: 383796676}
   uiManager: {fileID: 2072899366}
   startSystem: {fileID: 360948274}
   endSystem: {fileID: 360948274}
@@ -50639,7 +50576,6 @@ GameObject:
   - 54: {fileID: 2091001558}
   - 114: {fileID: 2091001556}
   - 114: {fileID: 2091001557}
-  - 114: {fileID: 2091001562}
   - 114: {fileID: 2091001561}
   m_Layer: 20
   m_Name: Planet-004
@@ -50688,13 +50624,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06e909cf237a8c648aeefeff8cbb0dfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  missionText: {fileID: 0}
   uiRing: {fileID: 1454445588}
   missionButton: {fileID: 691472926}
-  missionCompleteButton: {fileID: 1773537202}
   dialogueButton: {fileID: 1124262430}
   planetDialog: {fileID: 2091001556}
+  planetMission: {fileID: 0}
   missionPanel: {fileID: 649430989}
-  missionCompletePanel: {fileID: 322870244}
 --- !u!54 &2091001558
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -50749,6 +50685,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mothershipUI: {fileID: 383796683}
+  mothership: {fileID: 383796676}
   uiManager: {fileID: 2091001557}
   startSystem: {fileID: 1040437999}
   endSystem: {fileID: 1040437999}
@@ -50759,19 +50696,6 @@ MonoBehaviour:
   rewardAmount: 0
   completed: 0
   id: 1
---- !u!114 &2091001562
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11463356, guid: d0c7aed4c19e9af4a9f6e446f3d6849a,
-    type: 2}
-  m_PrefabInternal: {fileID: 1729426543}
-  m_GameObject: {fileID: 2091001554}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: feb5df75da6fb5443951623ec9be4b9f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  endDialogIndex: 0
 --- !u!1 &2091877257
 GameObject:
   m_ObjectHideFlags: 0
